@@ -1,0 +1,253 @@
+// import Footer from "@/components/Footer/Footer";
+// import Header from "@/components/Header/Header";
+// import ProductsPageHero from "@/components/Sliders/ProductsPageHero";
+// import ProductsPageFilter from "@/components/ProductsPageFilter";
+// import React from "react";
+// import { cookies } from "next/headers";
+// import axiosInstance from "@/lib/axios";
+
+// async function fetchAboutPageData() {
+//   const cookieStore = await cookies();
+//   const lang = cookieStore.get("NEXT_LOCALE");
+
+//   try {
+//     const { data: product } = await axiosInstance.get(`/page-data/product`, {
+//       // headers: { Lang: lang.value },
+//       cache: "no-store",
+//     });
+//     return product.data.data;
+//   } catch (error) {
+//     console.error("Failed to fetch product page data", error);
+//     throw error;
+//   }
+// }
+
+// async function fetchBrandFilterPageData() {
+//   const cookieStore = await cookies();
+//   const lang = cookieStore.get("NEXT_LOCALE");
+
+//   try {
+//     const { data: brands } = await axiosInstance.get(`/page-data/brands`, {
+//       // headers: { Lang: lang.value },
+//       cache: "no-store",
+//     });
+//     return brands.data.data;
+//   } catch (error) {
+//     console.error("Failed to fetch brands page data", error);
+//     throw error;
+//   }
+// }
+
+// async function fetchCategoryPageData() {
+//   const cookieStore = await cookies();
+//   const lang = cookieStore.get("NEXT_LOCALE");
+
+//   try {
+//     const { data: category } = await axiosInstance.get(`/page-data/categories`, {
+//       // headers: { Lang: lang.value },
+//       cache: "no-store",
+//     });
+//     return category.data.data;
+
+//   } catch (error) {
+//     console.error("Failed to fetch category page data", error);
+//     throw error;
+//   }
+// }
+
+// const page = async () => {
+//   // const productResponse = await fetchAboutPageData();
+//   // const productData = productResponse?.data?.data || [];
+//   const productData = await fetchAboutPageData();
+//   const brandsData = await fetchBrandFilterPageData();
+//   const categoryData = await fetchCategoryPageData();
+
+//   return (
+//     <div>
+//       <Header />
+//       <ProductsPageHero productData={productData} />
+//       <ProductsPageFilter productData={productData} categoryData={categoryData} brandsData={brandsData} />
+//       <Footer />
+//     </div>
+//   );
+// };
+
+// export default page;
+
+
+
+
+
+
+
+
+
+
+
+// !Son versiya
+// File: app/products/page.jsx
+import Footer from "@/components/Footer/Footer";
+import Header from "@/components/Header/Header";
+import ProductsPageHero from "@/components/Sliders/ProductsPageHero";
+import ProductsPageFilter from "@/components/ProductsPageFilter";
+import React from "react";
+import { cookies } from "next/headers";
+import axiosInstance from "@/lib/axios";
+
+// Fetch all products (unfiltered)
+async function fetchAboutPageData() {
+  const cookieStore = await cookies();
+  // const lang = cookieStore.get("NEXT_LOCALE"); // Uncomment if needed
+
+  try {
+    const { data: product } = await axiosInstance.get("/page-data/product", {
+      cache: "no-store",
+    });
+    return product.data.data;
+  } catch (error) {
+    console.error("Failed to fetch product page data", error);
+    return [];
+  }
+}
+
+async function getTranslations (){
+  try {
+    const data = axiosInstance.get("/translation-list")
+    return data;
+  }catch(err){
+    console.log(err)
+  }
+}
+
+// Fetch brand list
+async function fetchBrandFilterPageData() {
+  const cookieStore = await cookies();
+  // const lang = cookieStore.get("NEXT_LOCALE");
+
+  try {
+    const { data: brands } = await axiosInstance.get("/page-data/brands", {
+      cache: "no-store",
+    });
+    return brands.data.data;
+  } catch (error) {
+    console.error("Failed to fetch brands page data", error);
+    return [];
+  }
+}
+
+// !category
+// Fetch category list
+async function fetchCategoryPageData() {
+  const cookieStore = await cookies();
+  // const lang = cookieStore.get("NEXT_LOCALE");
+
+  try {
+    const { data: category } = await axiosInstance.get(
+      "/page-data/categories?per_page=999",
+      {
+        cache: "no-store",
+      }
+    );
+    return category.data.data;
+  } catch (error) {
+    console.error("Failed to fetch category page data", error);
+    return [];
+  }
+}
+// async function fetchCategoryPageData() {
+//   const cookieStore = await cookies();
+//   // const lang = cookieStore.get("NEXT_LOCALE");
+
+//   try {
+//     const { data: category } = await axiosInstance.get(
+//       "/page-data/categories",
+//       {
+//         cache: "no-store",
+//       }
+//     );
+//     return category.data.data;
+//   } catch (error) {
+//     console.error("Failed to fetch category page data", error);
+//     return [];
+//   }
+// }
+// !category  
+
+
+
+//! brandsApi
+async function fetchBrandsPageData() {
+  const cookieStore = await cookies();
+  const lang = cookieStore.get("NEXT_LOCALE");
+
+  try {
+    const { data: brands } = await axiosInstance.get(`/page-data/brands`, {
+      // headers: { Lang: lang.value },
+      cache: "no-store",
+    });
+    return brands;
+  } catch (error) {
+    console.error("Failed to fetch brands page data", error);
+    throw error;
+  }
+}
+//! brandsApi
+
+//! eventsApi
+async function fetchEventsPageData() {
+  const cookieStore = await cookies();
+  const lang = cookieStore.get("NEXT_LOCALE");
+
+  try {
+    const { data: events } = await axiosInstance.get(`/page-data/event`, {
+      // headers: { Lang: lang.value },
+      cache: "no-store",
+    });
+    return events;
+  } catch (error) {
+    console.error("Failed to fetch events page data", error);
+    throw error;
+  }
+}
+//! eventsApi
+
+
+
+// Main page component
+export default async function page({ searchParams }) {
+  // Read ?category=ID from URL (e.g. /products?category=3)
+  const categoryParam = searchParams.category || null;
+
+  // Fetch initial data
+  const productData = await fetchAboutPageData();
+  const brandsDataFilter = await fetchBrandFilterPageData();
+  const categoryData = await fetchCategoryPageData();
+  const translations = await getTranslations()
+  const t = translations?.data
+
+  const brandsResponse = await fetchBrandsPageData();
+  const brandsData = brandsResponse?.data?.data || [];
+
+  const eventsResponse = await fetchEventsPageData();
+  const eventsData = eventsResponse?.data?.data || [];
+
+  
+  return (
+    <>
+      {/* <Header /> */}
+      <Header categoryData={categoryData} />
+      <ProductsPageHero t={t} productData={productData} />
+      <ProductsPageFilter
+        productData={productData}
+        categoryData={categoryData}
+        // brandsData={brandsData}
+        brandsDataFilter={brandsDataFilter}
+        categoryParam={categoryParam}
+        t={t}
+      />
+      <Footer categoryData={categoryData}  eventsData={eventsData} brandsData={brandsData} />
+    </>
+  );
+}
+
+// !Son versiya

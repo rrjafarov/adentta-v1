@@ -1,0 +1,51 @@
+{
+  "name": "adentta",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "node server.js",
+    "lint": "next lint"
+  },
+  "dependencies": {
+    "@chakra-ui/react": "^3.8.1",
+    "@fancyapps/ui": "^5.0.36",
+    "@heroui/accordion": "^2.2.8",
+    "@heroui/react": "^2.7.4",
+    "@nextui-org/accordion": "^2.2.7",
+    "@splidejs/splide": "^4.1.4",
+    "@svgr/webpack": "^8.1.0",
+    "axios": "^1.7.9",
+    "framer-motion": "^12.1.0",
+    "i18next": "^25.0.1",
+    "js-cookie": "^3.0.5",
+    "next": "15.1.6",
+    "next-intl": "^4.0.2",
+    "rc-select": "^14.16.6",
+    "react": "^19.0.0",
+    "react-calendar": "^5.1.0",
+    "react-countup": "^6.5.3",
+    "react-date-picker": "^11.0.0",
+    "react-dom": "^19.0.0",
+    "react-i18next": "^15.5.1",
+    "react-icons": "^5.4.0",
+    "react-lazy-load-image-component": "^1.6.3",
+    "react-paginate": "^8.3.0",
+    "react-scroll-parallax": "^3.4.5",
+    "react-select": "^5.10.1",
+    "react-slick": "^0.30.3",
+    "sass": "^1.85.1",
+    "slick-carousel": "^1.8.1",
+    "swiper": "^11.2.1",
+    "uuid": "^11.1.0"
+  },
+  "devDependencies": {
+    "@eslint/eslintrc": "^3",
+    "eslint": "^9",
+    "eslint-config-next": "15.1.6",
+    "postcss": "^8",
+    "tailwindcss": "^3.4.1",
+    "webpack-cli": "^6.0.1"
+  }
+}

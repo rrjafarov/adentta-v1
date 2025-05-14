@@ -1,0 +1,101 @@
+import React from "react";
+import EventsDetailPage from "@/components/EventsDetailPage";
+import Header from "@/components/Header/Header";
+import Footer from "@/components/Footer/Footer";
+// import Header from "@/components/Header/Header";
+import axiosInstance from "@/lib/axios";
+import { cookies } from "next/headers";
+
+
+
+async function fetchEventsPageData() {
+  const cookieStore = await cookies();
+  const lang = cookieStore.get("NEXT_LOCALE");
+
+  const { data: events } = await axiosInstance.get(`/page-data/event`, {
+    cache: "no-store",
+    // headers: { Lang: lang.value },
+  });
+  return events.data.data;
+}
+// *categories
+async function fetchCategoryPageData() {
+  const cookieStore = await cookies();
+  const lang = cookieStore.get("NEXT_LOCALE");
+
+  try {
+    const { data: category } = await axiosInstance.get(`/page-data/categories`, {
+      // headers: { Lang: lang.value },
+      cache: "no-store",
+    });
+    return category;
+  } catch (error) {
+    console.error("Failed to fetch category page data", error);
+    throw error;
+  }
+}
+// *categories
+
+
+async function getTranslations() {
+  try {
+    const data = await axiosInstance.get("/translation-list");
+    return data;
+  } catch (err) {
+    console.log(err);
+  }
+}
+
+//! brandsApi
+async function fetchBrandsPageData() {
+  const cookieStore = await cookies();
+  const lang = cookieStore.get("NEXT_LOCALE");
+
+  try {
+    const { data: brands } = await axiosInstance.get(`/page-data/brands`, {
+      // headers: { Lang: lang.value },
+      cache: "no-store",
+    });
+    return brands;
+  } catch (error) {
+    console.error("Failed to fetch brands page data", error);
+    throw error;
+  }
+}
+//! brandsApi
+
+
+
+
+const page = async ({params}) => {
+
+  const brandsResponse = await fetchBrandsPageData();
+  const brandsData = brandsResponse?.data?.data || [];
+
+  const translations = await getTranslations();
+  const t = translations?.data;
+  const { id } = await params;
+  const slug =  id.split("-").pop(); // URL'den gelen id'yi alıyoruz
+  const eventsData = await fetchEventsPageData(); // Kariyer verilerinin bulunduğu dizi
+  const categoryResponse = await fetchCategoryPageData();
+  const categoryData = categoryResponse?.data?.data || [];
+  // URL'den gelen id ile eşleşen kariyer verisini buluyoruz:
+  const eventsDetail = eventsData.find((item) => item.id.toString() === slug);
+
+  if (!eventsDetail) {
+    return <div>Events not found.</div>;
+  }
+
+   const otherEvents = eventsData.filter((item) => item.id.toString() !== slug);
+  return (
+    <div>
+      <div className="eventDPBack">
+        <Header categoryData={categoryData} />
+        <EventsDetailPage t={t} eventsDetail={eventsDetail} otherEvents={otherEvents} />
+        <Footer categoryData={categoryData}  eventsData={eventsData} brandsData={brandsData} />
+      </div>
+    </div>
+  );
+};
+
+export default page;

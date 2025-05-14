@@ -1,0 +1,132 @@
+import ContactUS from "@/components/ContactUS";
+import Footer from "@/components/Footer/Footer";
+import Header from "@/components/Header/Header";
+import React from "react";
+import { cookies } from "next/headers";
+import axiosInstance from "@/lib/axios";
+
+async function fetchAboutPageData() {
+  const cookieStore = await cookies();
+  const lang = cookieStore.get("NEXT_LOCALE");
+
+  try {
+    const { data: contact } = await axiosInstance.get(`/page-data/contact`, {
+      // headers: { Lang: lang.value },
+      cache: "no-store",
+    });
+    return contact;
+  } catch (error) {
+    console.error("Failed to fetch contact page data", error);
+    throw error;
+  }
+}
+// *categories
+async function fetchCategoryPageData() {
+  const cookieStore = await cookies();
+  const lang = cookieStore.get("NEXT_LOCALE");
+
+  try {
+    const { data: category } = await axiosInstance.get(
+      `/page-data/categories`,
+      {
+        // headers: { Lang: lang.value },
+        cache: "no-store",
+      }
+    );
+    return category;
+  } catch (error) {
+    console.error("Failed to fetch category page data", error);
+    throw error;
+  }
+}
+// *categories
+
+//! brandsApi
+async function fetchBrandsPageData() {
+  const cookieStore = await cookies();
+  const lang = cookieStore.get("NEXT_LOCALE");
+
+  try {
+    const { data: brands } = await axiosInstance.get(`/page-data/brands`, {
+      // headers: { Lang: lang.value },
+      cache: "no-store",
+    });
+    return brands;
+  } catch (error) {
+    console.error("Failed to fetch brands page data", error);
+    throw error;
+  }
+}
+//! brandsApi
+
+//! eventsApi
+async function fetchEventsPageData() {
+  const cookieStore = await cookies();
+  const lang = cookieStore.get("NEXT_LOCALE");
+
+  try {
+    const { data: events } = await axiosInstance.get(`/page-data/event`, {
+      // headers: { Lang: lang.value },
+      cache: "no-store",
+    });
+    return events;
+  } catch (error) {
+    console.error("Failed to fetch events page data", error);
+    throw error;
+  }
+}
+//! eventsApi
+
+async function getTranslations() {
+  try {
+    const data = axiosInstance.get("/translation-list");
+    return data;
+  } catch (err) {
+    console.log(err);
+  }
+}
+
+const page = async () => {
+  const brandsResponse = await fetchBrandsPageData();
+  const brandsData = brandsResponse?.data?.data || [];
+
+  const eventsResponse = await fetchEventsPageData();
+  const eventsData = eventsResponse?.data?.data || [];
+
+  const contact = await fetchAboutPageData();
+  const categoryResponse = await fetchCategoryPageData();
+  const categoryData = categoryResponse?.data?.data || [];
+
+  const translations = await getTranslations();
+  const t = translations?.data;
+
+  return (
+    <div id="contactUS">
+      <Header categoryData={categoryData} />
+      <ContactUS
+        t={t}
+        wpNumber={contact?.data.wp_number}
+        phone={contact?.data.phone}
+        email={contact?.data.email}
+        wpLink={contact?.data.whatsapp_link}
+        linkedin={contact?.data.linkedin}
+        instagram={contact?.data.instagram}
+        facebook={contact?.data.facebook}
+        workHoursMondayFriday={contact?.data.work_hours_monday_friday}
+        workHoursSaturday={contact?.data.work_hours_saturday}
+        map={contact?.data.map}
+        videoUrl={contact?.data.video_url}
+        locationHeadOffice={contact?.data.location_head_office}
+        locationStore={contact?.data.location_store}
+        videoTitle={contact?.data.video_title}
+      />
+      <Footer
+        categoryData={categoryData}
+        eventsData={eventsData}
+        brandsData={brandsData}
+      />
+    </div>
+  );
+};
+
+export default page;
