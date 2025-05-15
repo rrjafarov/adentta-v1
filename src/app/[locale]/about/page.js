@@ -139,7 +139,7 @@ export async function generateMetadata({ params }) {
           height: 630,
         },
       ],
-      site_name: data.meta_title,
+      site_name: data?.meta_title,
     },
     twitter: {
       card: "summary_large_image",
