@@ -1,6 +1,4 @@
-
 // !son veriya
-// File: components/HeaderMenu.jsx
 "use client";
 import Link from "next/link";
 import React, { useState } from "react";
@@ -127,7 +125,7 @@ const HeaderMenu = ({ t, categoryData, isHomePage }) => {
                           </div>
 
                           <div className="xl-9 lg-9">
-                            <div className="rowerd">
+                            {/* <div className="rowerd">
                               {categoryData?.slice(0, 6).map((category) => (
                                 <div key={category.id} className="column">
                                   <Link
@@ -144,8 +142,61 @@ const HeaderMenu = ({ t, categoryData, isHomePage }) => {
                                       <span>{category.title}</span>
                                     </h3>
                                   </Link>
+                                  <div className="columnLinks">
+                                    <Link href="#">{category?.parent_i?.title}</Link>
+                                  </div>
                                 </div>
                               ))}
+                            </div> */}
+                            <div className="rowerd">
+                              {categoryData
+                                .filter((category) => !category.parent_id).slice(0,6)
+                                .map((category) => {
+                                  const children = categoryData.filter((sub) =>
+                                    sub.parent_id?.some(
+                                      (p) => p.id === category.id
+                                    )
+                                  );
+
+                                  return (
+                                    <div key={category.id} className="column">
+                                      {/* Üst kateqoriya adı */}
+                                      <Link
+                                        href={{
+                                          pathname: "/products",
+                                          query: { category: category.id },
+                                        }}
+                                      >
+                                        <h3>
+                                          <img
+                                            src={`https://admin.adentta.az/storage${category.icon}`}
+                                            alt={category.title}
+                                          />
+                                          <span>{category.title}</span>
+                                        </h3>
+                                      </Link>
+
+                                      {/* Alt kateqoriyalar */}
+                                      <div className="columnLinks">
+                                        {children.slice(0,4).map((child) => (
+                                          <Link
+                                            key={child.id}
+                                            href={{
+                                              pathname: "/products",
+                                              query: {
+                                                category: category.id,
+                                                subcategory: child.id,
+                                              },
+                                            }}
+                                            className="subLink"
+                                          >
+                                            {child.title}
+                                          </Link>
+                                        ))}
+                                      </div>
+                                    </div>
+                                  );
+                                })}
                             </div>
                           </div>
                         </div>
@@ -245,7 +296,6 @@ const HeaderMenu = ({ t, categoryData, isHomePage }) => {
                 <img src="/icons/bottomDown.svg" alt="Toggle Language" />
               </div>
 
-
               {isOpen && (
                 <div className="langOptions">
                   {currentLang !== "az" && (
@@ -259,8 +309,6 @@ const HeaderMenu = ({ t, categoryData, isHomePage }) => {
                   )}
                 </div>
               )}
-
-
             </div>
             <button onClick={togglePopup} className="searchButton">
               <HeaderSearchIcon className="searchIconHead" />
@@ -279,3 +327,7 @@ const HeaderMenu = ({ t, categoryData, isHomePage }) => {
 export default HeaderMenu;
 
 // !son veriya
+
+// !
+
+// !

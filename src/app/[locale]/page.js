@@ -118,7 +118,6 @@ async function fetchBannerPageData() {
   }
 }
 //! bannerApi
-
 async function getTranslations (){
   try {
     const data = axiosInstance.get("/translation-list")
@@ -127,8 +126,7 @@ async function getTranslations (){
     console.log(err)
   }
 }
-
-// *categories
+// !categories
 async function fetchCategoryPageData() {
   const cookieStore = await cookies();
   const lang = cookieStore.get("NEXT_LOCALE");
@@ -144,10 +142,7 @@ async function fetchCategoryPageData() {
     throw error;
   }
 }
-
-// *categories
-
-
+// !categories
 
 async function fetchHomePageData() {
   const cookieStore = await cookies();
@@ -164,6 +159,21 @@ async function fetchHomePageData() {
     throw error;
   }
 }
+
+
+
+// !generateMetaData
+
+
+
+// !generateMetaData
+
+
+
+
+
+
+
 
 
 
