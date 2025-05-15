@@ -9,6 +9,8 @@ import Link from "next/link";
 import Image from "next/image";
 import "./[locale]/globals.scss";
 import NotFound from "@/components/NotFound";
+import { cookies } from "next/headers";
+import axiosInstance from "@/lib/axios";
 
 async function getTranslations (){
   try {
