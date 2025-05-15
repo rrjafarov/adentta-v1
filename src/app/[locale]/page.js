@@ -11,7 +11,7 @@ import VideoProviderHomePage from "@/components/VideoProviderHomePage";
 import React from "react";
 import { cookies } from "next/headers";
 import axiosInstance from "@/lib/axios";
-import Logo from "../../../public/icons/logo.svg";
+// import Logo from "../../../public/icons/logo.svg";
 
 //! ProductsApi
 async function fetchProductsPageData() {
@@ -195,13 +195,6 @@ export async function generateMetadata({ params }) {
 
 
 // !generateMetaData
-
-
-
-
-
-
-
 
 
 
