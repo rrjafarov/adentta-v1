@@ -5,7 +5,7 @@ import "./globals.scss";
 export const metadata = {
   title: "Adentta - Dental Supplier",
   description: "Adentta Dental Supplier",
-  icons: "/favicon.ico.svg",
+  // icons: "/favicon.ico.svg",
 };
 
 export default async function RootLayout({ children, params }) {

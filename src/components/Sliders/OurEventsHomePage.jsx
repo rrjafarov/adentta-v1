@@ -162,6 +162,7 @@ import "../../app/[locale]/globals.scss";
 import { Pagination, Autoplay } from "swiper/modules";
 import Link from "next/link";
 import Cookies from "js-cookie";
+import Image from "next/image";
 
 const OurEventsHomePage = ({ eventsData, t }) => {
   const lang = Cookies.get("NEXT_LOCALE") || "az";
@@ -263,9 +264,15 @@ const OurEventsHomePage = ({ eventsData, t }) => {
                 <div className="ourEvents">
                   <div className="ourEvent">
                     <div className="ourEventImage">
-                      <img
+                      {/* <img
                         src={`https://admin.adentta.az/storage${event.image}`}
                         alt={event.title}
+                      /> */}
+                      <Image
+                        src={`https://admin.adentta.az/storage${event.image}`}
+                        alt={event.title}
+                        width={400}
+                        height={400}
                       />
                       <div className="ourEventImageDate">
                         <span className="ourEventDate">
