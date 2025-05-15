@@ -1,78 +1,3 @@
-// "use client";
-// import Image from "next/image";
-// import Link from "next/link";
-// import React from "react";
-// // import ReactSelectFooterLang from "../ReactSelectFooterLang";
-
-
-// const FooterBottom = ({t}) => {
-//   return (
-//     <div className="container footerBottom">
-//       <div className="copyright">
-//         <span>©2025 ADENTTA. {t?.allRightsReserved || "All rights reserved"} </span>
-//       </div>
-
-//       <div className="footerBottomInner">
-//         <div className="footerPolicy">
-//           <div className="footerSelect">
-//             <select className="custom-select" name="" id="">
-//               <option value="en">en</option>
-//               <option value="ru">ru</option>
-//               <option value="az">az</option>
-//             </select>            
-//             {/* <ReactSelectFooterLang /> */}
-//           </div>
-
-//           <Link href="/faq">
-//             <span >{t?.faqPageTitle || "FAQs"}</span>
-//           </Link>
-//           <Image
-//             src="/icons/footerDot.svg"
-//             alt="adentta"
-//             width={4}
-//             height={4}
-//           />
-//           <Link className="" href="/privacy">
-//             <span className="policyBootmLine">{t?.privacyPageTitle || "Privacy&Policy"}</span>
-//           </Link>
-          
-//           <Image
-//             src="/icons/footerDot.svg"
-//             alt="adentta"
-//             width={4}
-//             height={4}
-//           />
-
-//           <Link href="/support">
-//             <span className="policyBootmLine">{t?.userTermsPage || "User Terms"}</span>
-//           </Link>
-//         </div>
-
-
-
-
-
-//         <div className="oneStudio">
-//           <span>{t?.developerBy || "Developed and Designed by	"}</span>
-//           <h4>ONE STUDIO</h4>
-//           <Link href="https://one.az/" target="_blank">
-//             <Image
-//               src="/icons/oneStudio.svg"
-//               alt="one.az"
-//               width={33}
-//               height={33}
-//             />
-//           </Link>
-//         </div>
-//       </div>
-//     </div>
-//   );
-// };
-
-// export default FooterBottom;
-
-
-
 // !
 "use client";
 import Image from "next/image";
@@ -123,7 +48,6 @@ const FooterBottom = ({ t }) => {
               <option value="az">az</option>
             </select>
           </div>
-
           <Link href="/faq">
             <span>{t?.faqPageTitle || "FAQs"}</span>
           </Link>
@@ -133,7 +57,6 @@ const FooterBottom = ({ t }) => {
             width={4}
             height={4}
           />
-
           <Link href="/privacy">
             <span className="policyBootmLine">
               {t?.privacyPageTitle || "Privacy & Policy"}
@@ -145,7 +68,6 @@ const FooterBottom = ({ t }) => {
             width={4}
             height={4}
           />
-
           <Link href="/support">
             <span className="policyBootmLine">
               {t?.userTermsPage || "User Terms"}

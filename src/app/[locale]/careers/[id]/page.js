@@ -1,21 +1,3 @@
-// import Footer from "@/components/Footer/Footer";
-// import CareersDetailPage from "@/components/CareersDetailPage";
-// import Header from "@/components/Header/Header";
-// import React from "react";
-
-// const page = () => {
-//   return (
-//     <div>
-//       <Header />
-//       <CareersDetailPage />
-//       <Footer />
-//     </div>
-//   );
-// };
-
-// export default page;
-
-
 
 
 import Footer from "@/components/Footer/Footer";
@@ -42,7 +24,7 @@ async function fetchCategoryPageData() {
   const lang = cookieStore.get("NEXT_LOCALE");
 
   try {
-    const { data: category } = await axiosInstance.get(`/page-data/categories`, {
+    const { data: category } = await axiosInstance.get(`/page-data/categories?per_page=999`, {
       // headers: { Lang: lang.value },
       cache: "no-store",
     });

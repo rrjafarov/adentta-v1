@@ -21,7 +21,7 @@ async function fetchCategoryPageData() {
 
   try {
     const { data: category } = await axiosInstance.get(
-      `/page-data/categories`,
+      `/page-data/categories?per_page=999`,
       {
         // headers: { Lang: lang.value },
         cache: "no-store",

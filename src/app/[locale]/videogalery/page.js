@@ -10,7 +10,7 @@ async function fetchAboutPageData() {
   const lang = cookieStore.get("NEXT_LOCALE");
 
   try {
-    const { data: videoCategory } = await axiosInstance.get(`/page-data/video-categories`, {
+    const { data: videoCategory } = await axiosInstance.get(`/page-data/video-categories?per_page=999`, {
       // headers: { Lang: lang.value },
       cache: "no-store",
     });

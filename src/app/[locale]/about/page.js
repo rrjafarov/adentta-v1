@@ -7,14 +7,6 @@ import AboutPageParallax from "@/components/AboutPageParallax";
 import { cookies } from "next/headers";
 import axiosInstance from "@/lib/axios";
 
-
-// export const metadata = {
-//   robots: {
-//     index: false,
-//     follow: false,
-//   },
-// };
-
 async function fetchAboutPageData() {
   const cookieStore = await cookies();
   const lang = cookieStore.get("NEXT_LOCALE");
@@ -54,7 +46,7 @@ async function fetchCategoryPageData() {
   const lang = cookieStore.get("NEXT_LOCALE");
 
   try {
-    const { data: category } = await axiosInstance.get(`/page-data/categories`, {
+    const { data: category } = await axiosInstance.get(`/page-data/categories?per_page=999`, {
       // headers: { Lang: lang.value },
       cache: "no-store",
     });
@@ -141,7 +133,7 @@ export async function generateMetadata({ params }) {
       images: [
         {
           // url: `/favicon.ico.svg`,
-          url: `https://admin.adentta.az/storage${data.og_image}`,
+          url: `https://admin.adentta.az/storage${data?.og_image}`,
           alt: data?.meta_title,
           width: 1200,
           height: 630,
@@ -153,7 +145,7 @@ export async function generateMetadata({ params }) {
       card: "summary_large_image",
       title: data?.meta_title || "Adentta – Stomatoloji Məhsullar və Peşəkar Diş Həlləri",
       description: data?.meta_description || "Adentta – Stomatoloji Məhsullar və Peşəkar Diş Həlləri",
-      url: `https://admin.adentta.az/storage${data.og_image}`,
+      url: `https://admin.adentta.az/storage${data?.og_image}`,
     },
   };
 }

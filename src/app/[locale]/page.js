@@ -11,7 +11,6 @@ import VideoProviderHomePage from "@/components/VideoProviderHomePage";
 import React from "react";
 import { cookies } from "next/headers";
 import axiosInstance from "@/lib/axios";
-// import Logo from "../../../public/icons/logo.svg";
 
 //! ProductsApi
 async function fetchProductsPageData() {
@@ -102,6 +101,7 @@ async function fetchHeroSlidePageData() {
   }
 }
 //! heroSliderApi
+
 //! bannerApi
 async function fetchBannerPageData() {
   const cookieStore = await cookies();
@@ -127,6 +127,7 @@ async function getTranslations (){
     console.log(err)
   }
 }
+
 // !categories
 async function fetchCategoryPageData() {
   const cookieStore = await cookies();
