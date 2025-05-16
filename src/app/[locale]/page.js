@@ -169,8 +169,7 @@ async function fetchHomePageData() {
 
 export async function generateMetadata() {
   const seo = await fetchHomePageData();
-  console.log("seo", seo);
-  const imageUrl = seo?.data.video_cover;
+  const imageUrl = seo?.data.og_image;
   const imageAlt = seo?.data.meta_title || "Adentta";
   const canonicalUrl = "https://adentta.az";
   const cookieStore = await cookies();
@@ -187,7 +186,7 @@ export async function generateMetadata() {
       url: canonicalUrl,
       images: [
         {
-          url: process.env.NEXT_PUBLIC_API_URL_IMAGE + imageUrl,
+          url: `https://admin.adentta.az/storage${imageUrl}`,
           alt: imageAlt,
           width: 1200,
           height: 630,

@@ -1,135 +1,62 @@
-// import createMiddleware from "next-intl/middleware";
-// import { NextResponse } from "next/server";
-
-// // Desteklenen diller: az, en, ru; varsayılan dil: az
-// const intlMiddleware = createMiddleware({
-//   locales: ["az", "en", "ru"],
-//   defaultLocale: "az",
-//   localePrefix: "as-needed",
-//   localeDetection: true,
-// });
-
-// export default function middleware(req) {
-//   const { pathname, locale } = req.nextUrl;
-//   const token = req.cookies.get("token");
-//   const allowAccess = req.cookies.get("allow-access");
-
-//   // Locale'a duyarlı route'lar tanımlanıyor
-//   const baseRoutes = ["/success_payment", "/error_payment"];
-//   const restrictedRoutes = baseRoutes.map((route) => `/${locale}${route}`);
-//   const protectedRoute = `/${locale}/account`;
-//   const restrictedRoutesForAuth = [
-//     `/${locale}/login`,
-//     `/${locale}/forgot-password`,
-//   ];
-
-//   // Token kontrolü: Token varsa, süresi kontrol edilir; süresi dolduysa login sayfasına yönlendirilir.
-//   if (token) {
-//     try {
-//       const payload = JSON.parse(atob(token.split(".")[1]));
-//       const exp = payload.exp * 1000;
-//       if (Date.now() >= exp) {
-//         const response = NextResponse.next();
-//         response.cookies.delete("token");
-//         const loginUrl = new URL(`/${locale}/login`, req.url);
-//         return NextResponse.redirect(loginUrl);
-//       }
-//     } catch (error) {
-//       console.error("Invalid token:", error);
-//     }
-//   }
-
-//   // allowAccess cookie'si olmayan kullanıcılar, restrictedRoutes'e erişmeye çalışırsa ana sayfaya yönlendirilir.
-//   if (restrictedRoutes.includes(pathname)) {
-//     if (!allowAccess) {
-//       const homeUrl = new URL(`/${locale}/`, req.url);
-//       return NextResponse.redirect(homeUrl);
-//     }
-//   }
-
-//   // Giriş yapmış kullanıcılar, restrictedRoutesForAuth içerisindeki sayfalara erişmeye çalışırsa profil sayfasına yönlendirilir.
-//   if (token && restrictedRoutesForAuth.includes(pathname)) {
-//     const profileUrl = new URL(`/${locale}/account/profile`, req.url);
-//     return NextResponse.redirect(profileUrl);
-//   }
-
-//   // Korunan route'lara erişmek isteyen token'sız kullanıcılar login sayfasına yönlendirilir.
-//   if (pathname.startsWith(protectedRoute) && !token) {
-//     const loginUrl = new URL(`/${locale}/login`, req.url);
-//     return NextResponse.redirect(loginUrl);
-//   }
-
-//   // Diğer tüm istekler için next-intl middleware'e bırakılır.
-//   return intlMiddleware(req);
-// }
-
-// export const config = {
-//   matcher: ["/((?!api|_next|.*\\..*).*)"],
-// };
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 import createMiddleware from "next-intl/middleware";
 import { NextResponse } from "next/server";
 
 const intlMiddleware = createMiddleware({
-  locales: ["az", "ru", "en"], // Supported locales
-  defaultLocale: "az", // Default locale
-  localePrefix: "as-needed", // Add prefix only when necessary
-  localeDetection: true, // Disable browser locale detection
-  urlMappingStrategy: "rewriteDefault", // Rewrite default locale without prefix
+  locales: ["az", "en", "ru"],
+  defaultLocale: "az",
+  localePrefix: "as-needed",
 });
 
 export default function middleware(req) {
-  const nextLocale = req.cookies.get("NEXT_LOCALE")?.value ?? "az";
-  const { pathname } = req.nextUrl;
+  const { pathname, locale } = req.nextUrl;
+  const token = req.cookies.get("token");
+  const allowAccess = req.cookies.get("allow-access");
 
-  // Exclude static files from localization
-  const isStaticAsset =
-    /\.(jpg|jpeg|png|gif|svg|ttf|woff|woff2|eot|otf|mp4|webm|json|css|js|ico|txt|xml)$/.test(
-      pathname
-    );
-  if (isStaticAsset) {
-    return NextResponse.next(); // Skip processing for static files
+  // Locale'a duyarlı route'lar tanımlanıyor
+  const baseRoutes = ["/success_payment", "/error_payment"];
+  const restrictedRoutes = baseRoutes.map((route) => `/${locale}${route}`);
+  const protectedRoute = `/${locale}/account`;
+  const restrictedRoutesForAuth = [
+    `/${locale}/login`,
+    `/${locale}/forgot-password`,
+  ];
+
+  if (token) {
+    try {
+      const payload = JSON.parse(atob(token.split(".")[1]));
+      const exp = payload.exp * 1000;
+      if (Date.now() >= exp) {
+        const response = NextResponse.next();
+        response.cookies.delete("token");
+        const loginUrl = new URL(`/${locale}/login`, req.url);
+        return NextResponse.redirect(loginUrl);
+      }
+    } catch (error) {
+      console.error("Invalid token:", error);
+    }
   }
 
-  // const disallowedPaths = ["/doctors", "/product", "/concierge"];
-  // const isDisallowedPath =
-  //   disallowedPaths.includes(pathname) || /^\/doctors\/[^/]+$/.test(pathname);
-  // if (isDisallowedPath) {
-  //   return new NextResponse("Access Denied", { status: 403 });
-  // }
-
-  // Check if the pathname includes a locale
-  const hasLocale = /^\/(az|ru|en)(\/|$)/.test(pathname);
-
-  if (!hasLocale && !nextLocale && pathname === "/") {
-    const url = req.nextUrl.clone();
-    url.pathname = "/az" + (pathname === "/" ? "" : pathname);
-    return NextResponse.redirect(url);
+  if (restrictedRoutes.includes(pathname)) {
+    if (!allowAccess) {
+      const homeUrl = new URL(`/${locale}/`, req.url);
+      return NextResponse.redirect(homeUrl);
+    }
   }
 
-  // Handle regular localization using intlMiddleware
+  if (token && restrictedRoutesForAuth.includes(pathname)) {
+    const profileUrl = new URL(`/${locale}/account/profile`, req.url);
+    return NextResponse.redirect(profileUrl);
+  }
+
+  if (pathname.startsWith(protectedRoute) && !token) {
+    const loginUrl = new URL(`/${locale}/login`, req.url);
+    return NextResponse.redirect(loginUrl);
+  }
+
   return intlMiddleware(req);
 }
 
 export const config = {
-  matcher: ["/", "/((?!api|_next|.\\..).*)"], // Match all routes except static files
+  matcher: ["/((?!api|_next|.*\\..*).*)"],
 };
+
