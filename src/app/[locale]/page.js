@@ -173,7 +173,6 @@ export async function generateMetadata({ params }) {
       title: data?.meta_title || "Adentta – Stomatoloji Məhsullar və Peşəkar Diş Həlləri",
       description: data?.meta_description,
       url: canonicalUrl,
-      locale: params.locale,
       images: [
         {
           // url: `/favicon.ico.svg`,
@@ -183,7 +182,7 @@ export async function generateMetadata({ params }) {
           height: 630,
         },
       ],
-      site_name: data.meta_title,
+      site_name: "adentta.az",
       type: "website",
     },
     twitter: {
