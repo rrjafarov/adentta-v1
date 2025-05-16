@@ -178,7 +178,7 @@ export async function generateMetadata() {
     title: seo?.data.meta_title,
     description: seo?.data.meta_description,
     icons: {
-      icon: "https://adentta.az/favicon.ico",
+      icon: "https://adentta.az/favicon.ico.svg",
     },
     openGraph: {
       title: seo?.data.meta_title || "Adentta",
@@ -210,39 +210,7 @@ export async function generateMetadata() {
   };
 }
 
-// export async function generateMetadata({ params }) {
-//   const { data } = await fetchHomePageData();
-//   let canonicalUrl = `https://adentta.az`;
-//   return {
-//     title: data?.meta_title,
-//     description: data?.meta_description,
-//     openGraph: {
-//       title: data?.meta_title || "Adentta – Stomatoloji Məhsullar və Peşəkar Diş Həlləri",
-//       description: data?.meta_description,
-//       url: canonicalUrl,
-//       images: [
-//         {
-//           // url: `/favicon.ico.svg`,
-//           url: `https://admin.adentta.az/storage${data.og_image}`,
-//           alt: data?.meta_title,
-//           width: 1200,
-//           height: 630,
-//         },
-//       ],
-//       site_name: "adentta.az",
-//       type: "website",
-//     },
-//     twitter: {
-//       card: "summary_large_image",
-//       title: data?.meta_title || "Adentta – Stomatoloji Məhsullar və Peşəkar Diş Həlləri",
-//       description: data?.meta_description || "Adentta – Stomatoloji Məhsullar və Peşəkar Diş Həlləri",
-//       url: `https://admin.adentta.az/storage${data.og_image}`,
-//     },
-//     alternates: {
-//       canonical: canonicalUrl,
-//     },
-//   };
-// }
+
 
 // !generateMetaData
 
