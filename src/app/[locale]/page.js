@@ -163,6 +163,42 @@ async function fetchHomePageData() {
 }
 
 // !generateMetaData
+// export async function generateMetadata({ params }) {
+//   const { data } = await fetchHomePageData();
+
+//   return {
+//     title: data?.meta_title,
+//     description: data?.meta_description,
+//     openGraph: {
+//       title: data?.meta_title || "Adentta – Stomatoloji Məhsullar və Peşəkar Diş Həlləri",
+//       description: data?.meta_description,
+//       images: [
+//         {
+//           // url: `/favicon.ico.svg`,
+//           url: `https://admin.adentta.az/storage${data.og_image}`,
+//           alt: data?.meta_title,
+//           width: 1200,
+//           height: 630,
+//         },
+//       ],
+//       site_name: data.meta_title,
+//     },
+//     twitter: {
+//       card: "summary_large_image",
+//       title: data?.meta_title || "Adentta – Stomatoloji Məhsullar və Peşəkar Diş Həlləri",
+//       description: data?.meta_description || "Adentta – Stomatoloji Məhsullar və Peşəkar Diş Həlləri",
+//       url: `https://admin.adentta.az/storage${data.og_image}`,
+//     },
+//   };
+// }
+
+
+
+
+
+
+
+
 export async function generateMetadata({ params }) {
   const { data } = await fetchHomePageData();
 
@@ -170,28 +206,28 @@ export async function generateMetadata({ params }) {
     title: data?.meta_title,
     description: data?.meta_description,
     openGraph: {
-      title: data?.meta_title || "Adentta – Stomatoloji Məhsullar və Peşəkar Diş Həlləri",
+      title: data?.meta_title || "Bakı Psixologiya Mərkəzi",
       description: data?.meta_description,
       images: [
         {
-          // url: `/favicon.ico.svg`,
           url: `https://admin.adentta.az/storage${data.og_image}`,
           alt: data?.meta_title,
           width: 1200,
           height: 630,
         },
       ],
-      site_name: data.meta_title,
+      site_name: "Bakı Psixologiya Mərkəzi",
     },
     twitter: {
       card: "summary_large_image",
-      title: data?.meta_title || "Adentta – Stomatoloji Məhsullar və Peşəkar Diş Həlləri",
-      description: data?.meta_description || "Adentta – Stomatoloji Məhsullar və Peşəkar Diş Həlləri",
+      title: data?.meta_title || "Bakı Psixologiya Mərkəzi",
+      description: data?.meta_description || "Bakı Psixologiya Mərkəzi",
+      // images: https://storage.bakupsychologycenter.az/storage/${data.top_right_gallery},
       url: `https://admin.adentta.az/storage${data.og_image}`,
+
     },
   };
 }
-
 
 // !generateMetaData
 
