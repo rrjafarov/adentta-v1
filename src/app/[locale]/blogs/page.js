@@ -62,8 +62,6 @@ async function getTranslations() {
     console.log(err);
   }
 }
-
-
 //! brandsApi
 async function fetchBrandsPageData() {
   const cookieStore = await cookies();
@@ -99,6 +97,56 @@ async function fetchEventsPageData() {
   }
 }
 //! eventsApi
+
+
+
+
+async function fetchBlogSeoData() {
+  const cookieStore = await cookies();
+  const lang = cookieStore.get("NEXT_LOCALE");
+
+  try {
+    const { data: aboutSeo } = await axiosInstance.get(`/page-data/blog-page-info`, {
+      // headers: { Lang: lang.value },
+      cache: "no-store",
+    });
+    return aboutSeo;
+  } catch (error) {
+    console.error("Failed to fetch aboutSeo page data", error);
+    throw error;
+  }
+}
+// !generateMetaData
+export async function generateMetadata({ params }) {
+  const { data } = await fetchBlogSeoData();
+
+  return {
+    title: data?.meta_title,
+    description: data?.meta_description,
+    openGraph: {
+      title: data?.meta_title || "Adentta – Stomatoloji Məhsullar və Peşəkar Diş Həlləri",
+      description: data?.meta_description,
+      images: [
+        {
+          // url: `/favicon.ico.svg`,
+          url: `https://admin.adentta.az/storage${data?.og_image}`,
+          alt: data?.meta_title,
+          width: 1200,
+          height: 630,
+        },
+      ],
+      site_name: data?.meta_title,
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: data?.meta_title || "Adentta – Stomatoloji Məhsullar və Peşəkar Diş Həlləri",
+      description: data?.meta_description || "Adentta – Stomatoloji Məhsullar və Peşəkar Diş Həlləri",
+      url: `https://admin.adentta.az/storage${data?.og_image}`,
+    },
+  };
+}
+
+// !generateMetaData
 
 
 
