@@ -162,8 +162,6 @@ async function fetchHomePageData() {
   }
 }
 
-
-
 // !generateMetaData
 export async function generateMetadata({ params }) {
   const { data } = await fetchHomePageData();

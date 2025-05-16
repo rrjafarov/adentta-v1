@@ -1,7 +1,7 @@
 // !son veriya
 "use client";
 import Link from "next/link";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import SearchPopup from "../SearchPopup";
 import Image from "next/image";
 import MobileMenu from "@/components/MobileMenu";
@@ -10,36 +10,60 @@ import Cookies from "js-cookie";
 import { useRouter } from "next/navigation";
 
 const HeaderMenu = ({ t, categoryData, isHomePage }) => {
-  const router = useRouter();
-  const [currentLang, setCurrentLang] = useState(
-    () => Cookies.get("NEXT_LOCALE") || "az"
-  );
+ const [selectedLang, setSelectedLang] = useState("az");
+
+  useEffect(() => {
+    const storedLang = Cookies.get("NEXT_LOCALE");
+    if (storedLang) {
+      setSelectedLang(storedLang);
+    }
+  }, []);
+
+  const handleLanguageChange = (lang) => {
+    const newLocale = lang;
+    if (!newLocale || newLocale === selectedLang) return;
+
+    try {
+      Cookies.set("NEXT_LOCALE", newLocale, { path: "/" });
+      setSelectedLang(newLocale);
+
+      const currentPath = window.location.pathname.replace(
+        /^\/[a-z]{2}(?=\/|$)/,
+        ""
+      );
+      const queryString = window.location.search || "";
+      const newPath = `/${newLocale}${currentPath}${queryString}`;
+
+      window.location.href = newPath;
+    } catch (error) {
+      console.error("Language change error:", error);
+    }
+  };
+
   const [isPopupOpen, setIsPopupOpen] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-
   const toggleMenu = () => setIsOpen(!isOpen);
   const togglePopup = () => setIsPopupOpen(!isPopupOpen);
   const toggleMobileMenu = () => setIsMobileMenuOpen((prev) => !prev);
 
-  const handleLangChange = (lang) => {
-    if (lang === currentLang) {
-      setIsOpen(false);
-      return;
-    }
-    Cookies.set("NEXT_LOCALE", lang);
-    setCurrentLang(lang);
-    setIsOpen(false);
+  // const handleLangChange = (lang) => {
+  //   if (lang === currentLang) {
+  //     setIsOpen(false);
+  //     return;
+  //   }
+  //   Cookies.set("NEXT_LOCALE", lang);
+  //   setCurrentLang(lang);
+  //   setIsOpen(false);
 
-    const currentPath =
-      window.location.pathname.replace(/^\/[a-z]{2}(?=\/|$)/, "") || "/";
-    const queryString = window.location.search || "";
-    const prefix = lang === "az" ? "/az" : `/${lang}`;
-    const newPath = `${prefix}${currentPath}${queryString}`;
+  //   const currentPath =
+  //     window.location.pathname.replace(/^\/[a-z]{2}(?=\/|$)/, "") || "/";
+  //   const queryString = window.location.search || "";
+  //   const prefix = lang === "az" ? "/az" : `/${lang}`;
+  //   const newPath = `${prefix}${currentPath}${queryString}`;
 
-    router.replace(newPath).catch(() => window.location.assign(newPath));
-    router.refresh();
-  };
+  //   window.location.href = newPath;
+  // };
 
   return (
     <>
@@ -292,20 +316,20 @@ const HeaderMenu = ({ t, categoryData, isHomePage }) => {
           <div className="headerMenuRight">
             <div className="changeLang" onClick={toggleMenu}>
               <div className="looops">
-                <span>{currentLang}</span>
+                <span>{selectedLang}</span>
                 <img src="/icons/bottomDown.svg" alt="Toggle Language" />
               </div>
 
               {isOpen && (
                 <div className="langOptions">
-                  {currentLang !== "az" && (
-                    <button onClick={() => handleLangChange("az")}>az</button>
+                  {selectedLang !== "az" && (
+                    <button onClick={() => handleLanguageChange("az")}>az</button>
                   )}
-                  {currentLang !== "en" && (
-                    <button onClick={() => handleLangChange("en")}>en</button>
+                  {selectedLang !== "en" && (
+                    <button onClick={() => handleLanguageChange("en")}>en</button>
                   )}
-                  {currentLang !== "ru" && (
-                    <button onClick={() => handleLangChange("ru")}>ru</button>
+                  {selectedLang !== "ru" && (
+                    <button onClick={() => handleLanguageChange("ru")}>ru</button>
                   )}
                 </div>
               )}
