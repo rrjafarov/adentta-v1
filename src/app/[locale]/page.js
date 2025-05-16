@@ -119,12 +119,12 @@ async function fetchBannerPageData() {
   }
 }
 //! bannerApi
-async function getTranslations (){
+async function getTranslations() {
   try {
-    const data = axiosInstance.get("/translation-list")
+    const data = axiosInstance.get("/translation-list");
     return data;
-  }catch(err){
-    console.log(err)
+  } catch (err) {
+    console.log(err);
   }
 }
 
@@ -134,10 +134,13 @@ async function fetchCategoryPageData() {
   const lang = cookieStore.get("NEXT_LOCALE");
 
   try {
-    const { data: category } = await axiosInstance.get(`/page-data/categories?per_page=999`, {
-      // headers: { Lang: lang.value },
-      cache: "no-store",
-    });
+    const { data: category } = await axiosInstance.get(
+      `/page-data/categories?per_page=999`,
+      {
+        // headers: { Lang: lang.value },
+        cache: "no-store",
+      }
+    );
     return category;
   } catch (error) {
     console.error("Failed to fetch category page data", error);
@@ -163,33 +166,44 @@ async function fetchHomePageData() {
 }
 
 // !generateMetaData
-export async function generateMetadata({ params }) {
-  const { data } = await fetchHomePageData();
-  let canonicalUrl = `https://adentta.az`;
+
+export async function generateMetadata() {
+  const seo = await fetchHomePageData();
+  console.log("seo", seo);
+  const imageUrl = seo?.data.video_cover;
+  const imageAlt = seo?.data.meta_title || "Adentta";
+  const canonicalUrl = "https://adentta.az";
+  const cookieStore = await cookies();
+  const lang = cookieStore.get("NEXT_LOCALE");
   return {
-    title: data?.meta_title,
-    description: data?.meta_description,
+    title: seo?.data.meta_title,
+    description: seo?.data.meta_description,
+    icons: {
+      icon: "https://adentta.az/favicon.ico",
+    },
     openGraph: {
-      title: data?.meta_title || "Adentta – Stomatoloji Məhsullar və Peşəkar Diş Həlləri",
-      description: data?.meta_description,
+      title: seo?.data.meta_title || "Adentta",
+      description: seo?.data.meta_description,
       url: canonicalUrl,
       images: [
         {
-          // url: `/favicon.ico.svg`,
-          url: `https://admin.adentta.az/storage${data.og_image}`,
-          alt: data?.meta_title,
+          url: process.env.NEXT_PUBLIC_API_URL_IMAGE + imageUrl,
+          alt: imageAlt,
           width: 1200,
           height: 630,
         },
       ],
       site_name: "adentta.az",
       type: "website",
+      locale: lang?.value,
     },
     twitter: {
       card: "summary_large_image",
-      title: data?.meta_title || "Adentta – Stomatoloji Məhsullar və Peşəkar Diş Həlləri",
-      description: data?.meta_description || "Adentta – Stomatoloji Məhsullar və Peşəkar Diş Həlləri",
-      url: `https://admin.adentta.az/storage${data.og_image}`,
+      title: seo?.data.meta_title || "Adentta",
+      description: seo?.data.meta_description || "Adentta",
+      creator: "@adentta",
+      site: "@adentta",
+      images: [imageUrl],
     },
     alternates: {
       canonical: canonicalUrl,
@@ -197,15 +211,45 @@ export async function generateMetadata({ params }) {
   };
 }
 
+// export async function generateMetadata({ params }) {
+//   const { data } = await fetchHomePageData();
+//   let canonicalUrl = `https://adentta.az`;
+//   return {
+//     title: data?.meta_title,
+//     description: data?.meta_description,
+//     openGraph: {
+//       title: data?.meta_title || "Adentta – Stomatoloji Məhsullar və Peşəkar Diş Həlləri",
+//       description: data?.meta_description,
+//       url: canonicalUrl,
+//       images: [
+//         {
+//           // url: `/favicon.ico.svg`,
+//           url: `https://admin.adentta.az/storage${data.og_image}`,
+//           alt: data?.meta_title,
+//           width: 1200,
+//           height: 630,
+//         },
+//       ],
+//       site_name: "adentta.az",
+//       type: "website",
+//     },
+//     twitter: {
+//       card: "summary_large_image",
+//       title: data?.meta_title || "Adentta – Stomatoloji Məhsullar və Peşəkar Diş Həlləri",
+//       description: data?.meta_description || "Adentta – Stomatoloji Məhsullar və Peşəkar Diş Həlləri",
+//       url: `https://admin.adentta.az/storage${data.og_image}`,
+//     },
+//     alternates: {
+//       canonical: canonicalUrl,
+//     },
+//   };
+// }
 
 // !generateMetaData
 
-
-
-
 const Home = async () => {
-  const translations = await getTranslations()
-  const t = translations?.data
+  const translations = await getTranslations();
+  const t = translations?.data;
 
   const categoryResponse = await fetchCategoryPageData();
   const categoryData = categoryResponse?.data?.data || [];
@@ -231,19 +275,28 @@ const Home = async () => {
   const homepageResponse = await fetchHomePageData();
   const homepageData = homepageResponse?.data || {};
 
-
   return (
     <div>
       <Header categoryData={categoryData} isHomePage={true} />
       <HeroSlider bannerData={bannerData} heroSliderData={heroSliderData} />
       <LittleCard t={t} />
-      <HomePageProducts  t={t} productData={productData} categoryData={categoryData} />
-      <VideoProviderHomePage  t={t} homepageData={homepageData}  />
+      <HomePageProducts
+        t={t}
+        productData={productData}
+        categoryData={categoryData}
+      />
+      <VideoProviderHomePage t={t} homepageData={homepageData} />
       <TopBrandsHomePage t={t} brandsData={brandsData} />
       <OurEventsHomePage t={t} eventsData={eventsData} />
       <GlobalExcellence t={t} brandsData={brandsData} />
-      <OurBlogsHomePage t={t}  blogData={blogData} />
-      <Footer isHomePage={true} t={t} categoryData={categoryData} eventsData={eventsData} brandsData={brandsData} />
+      <OurBlogsHomePage t={t} blogData={blogData} />
+      <Footer
+        isHomePage={true}
+        t={t}
+        categoryData={categoryData}
+        eventsData={eventsData}
+        brandsData={brandsData}
+      />
     </div>
   );
 };
