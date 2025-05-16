@@ -115,7 +115,7 @@ async function fetchCareersSeoData() {
   const lang = cookieStore.get("NEXT_LOCALE");
 
   try {
-    const { data: aboutSeo } = await axiosInstance.get(`/page-data/careers-page-info`, {
+    const { data: aboutSeo } = await axiosInstance.get(`/page-data/careeers-page-info`, {
       // headers: { Lang: lang.value },
       cache: "no-store",
     });

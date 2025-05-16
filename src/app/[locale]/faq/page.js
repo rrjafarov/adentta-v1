@@ -85,6 +85,65 @@ async function getTranslations() {
 }
 
 
+
+
+
+
+
+async function fetchFaqSeoData() {
+  const cookieStore = await cookies();
+  const lang = cookieStore.get("NEXT_LOCALE");
+
+  try {
+    const { data: faqSeo } = await axiosInstance.get(`/page-data/faq-page-info`, {
+      // headers: { Lang: lang.value },
+      cache: "no-store",
+    });
+    return faqSeo;
+  } catch (error) {
+    console.error("Failed to fetch faqSeo page data", error);
+    throw error;
+  }
+}
+// !generateMetaData
+export async function generateMetadata({ params }) {
+  const { data } = await fetchFaqSeoData();
+
+  return {
+    title: data?.meta_title || "Adentta – Stomatoloji Məhsullar və Peşəkar Diş Həlləri",
+    description: data?.meta_description || "Adentta – Stomatoloji Məhsullar və Peşəkar Diş Həlləri",
+    openGraph: {
+      title: data?.meta_title || "Adentta – Stomatoloji Məhsullar və Peşəkar Diş Həlləri",
+      description: data?.meta_description,
+      images: [
+        {
+          // url: `/favicon.ico.svg`,
+          url: `https://admin.adentta.az/storage${data?.og_image}`,
+          alt: data?.meta_title,
+          width: 1200,
+          height: 630,
+        },
+      ],
+      site_name: data?.meta_title,
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: data?.meta_title || "Adentta – Stomatoloji Məhsullar və Peşəkar Diş Həlləri",
+      description: data?.meta_description || "Adentta – Stomatoloji Məhsullar və Peşəkar Diş Həlləri",
+      url: `https://admin.adentta.az/storage${data?.og_image}`,
+    },
+  };
+}
+
+
+// !generateMetaData
+
+
+
+
+
+
+
 const page = async () => {
 
   const translations = await getTranslations();

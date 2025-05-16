@@ -87,6 +87,37 @@ async function getTranslations() {
   }
 }
 
+
+
+export async function generateMetadata({ params }) {
+  const { data } = await fetchSupportPageData();
+
+  return {
+    title: data?.title,
+    description: data?.content,
+    openGraph: {
+      title: data?.title || "Adentta – Stomatoloji Məhsullar və Peşəkar Diş Həlləri",
+      description: data?.content || "Adentta – Stomatoloji Məhsullar və Peşəkar Diş Həlləri",
+      images: [
+        {
+          // url: `/favicon.ico.svg`,
+          url: `https://admin.adentta.az/storage${data?.og_image}`,
+          alt: data?.title,
+          width: 1200,
+          height: 630,
+        },
+      ],
+      site_name: data?.title,
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: data?.title || "Adentta – Stomatoloji Məhsullar və Peşəkar Diş Həlləri",
+      description: data?.content || "Adentta – Stomatoloji Məhsullar və Peşəkar Diş Həlləri",
+      url: `https://admin.adentta.az/storage${data?.og_image}`,
+    },
+  };
+}
+
 const page = async () => {
   const userTerms = await fetchSupportPageData();
   const categoryResponse = await fetchCategoryPageData();

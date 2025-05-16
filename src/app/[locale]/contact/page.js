@@ -8,7 +8,6 @@ import axiosInstance from "@/lib/axios";
 async function fetchAboutPageData() {
   const cookieStore = await cookies();
   const lang = cookieStore.get("NEXT_LOCALE");
-
   try {
     const { data: contact } = await axiosInstance.get(`/page-data/contact`, {
       // headers: { Lang: lang.value },
@@ -20,6 +19,9 @@ async function fetchAboutPageData() {
     throw error;
   }
 }
+
+
+
 // *categories
 async function fetchCategoryPageData() {
   const cookieStore = await cookies();
@@ -94,6 +96,11 @@ const page = async () => {
   const eventsData = eventsResponse?.data?.data || [];
 
   const contact = await fetchAboutPageData();
+  // const contact = contactData?.data?.data || [];
+
+
+
+
   const categoryResponse = await fetchCategoryPageData();
   const categoryData = categoryResponse?.data?.data || [];
 
