@@ -165,7 +165,7 @@ async function fetchHomePageData() {
 // !generateMetaData
 export async function generateMetadata({ params }) {
   const { data } = await fetchHomePageData();
-let canonicalUrl = `https://adentta.az`;
+  let canonicalUrl = `https://adentta.az`;
   return {
     title: data?.meta_title,
     description: data?.meta_description,
