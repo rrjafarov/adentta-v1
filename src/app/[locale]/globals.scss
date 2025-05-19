@@ -3503,10 +3503,10 @@ ul {
     display: flex;
     justify-content: center;
     align-items: center;
-    &:hover {
-      transform: scale(1.2);
-      transition: all 0.4s ease;
-    }
+    // &:hover {
+    //   transform: scale(1.2);
+    //   transition: all 0.4s ease;
+    // }
   }
   .detailPageShareLinkCOPY {
     display: flex;
@@ -3518,10 +3518,10 @@ ul {
     flex-shrink: 0;
     border-radius: 0.6814rem;
     border: 0.852px solid #dee4ec;
-    &:hover {
-      transform: scale(1.1);
-      transition: all 0.4s ease;
-    }
+    // &:hover {
+    //   transform: scale(1.1);
+    //   transition: all 0.4s ease;
+    // }
     span {
       color: #293881;
       text-align: center;

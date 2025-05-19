@@ -110,10 +110,10 @@ export async function generateMetadata({ params }) {
 
   return {
     title: brand.title,
-    description: brand.about_brand,
+    description: brand.title,
     openGraph: {
       title: brand.title,
-      description: brand.about_brand,
+      description: brand.title,
       url: canonicalUrl,
       images: [
         {
@@ -130,7 +130,7 @@ export async function generateMetadata({ params }) {
     twitter: {
       card: "summary_large_image",
       title: brand.title,
-      description: brand.about_brand,
+      description: brand.title,
       creator: "@adentta",
       site: "@adentta",
       images: [imageUrl],

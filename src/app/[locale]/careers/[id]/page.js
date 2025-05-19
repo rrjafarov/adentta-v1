@@ -82,6 +82,73 @@ async function getTranslations() {
   }
 }
 
+
+
+
+
+
+export async function generateMetadata({ params }) {
+  const slug = params.id.split("-").pop();  
+  const allCareers = await fetchCareersPageData();  
+  const careers = allCareers.find(b => b.id.toString() === slug);
+
+  
+  if (!careers) {
+    return {
+      title: "Adentta",
+      description: "Careers not found.",
+    };
+  }
+
+  // brand obyektindən birbaşa götürürük
+  const imageUrl = careers.image;
+  const imageAlt = careers.title || "Adentta";
+  const canonicalUrl = `https://adentta.az/brands/${params.id}`;
+
+  const cookieStore = await cookies();
+  const lang = cookieStore.get("NEXT_LOCALE")?.value;
+
+  return {
+    title: careers.title,
+    description: careers.title,
+    openGraph: {
+      title: careers.title,
+      description: careers.title,
+      url: canonicalUrl,
+      images: [
+        {
+          url: `https://admin.adentta.az/storage${imageUrl}`,
+          alt: imageAlt,
+          width: 1200,
+          height: 630,
+        },
+      ],
+      site_name: "adentta.az",
+      type: "website",
+      locale: lang,
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: careers.title,
+      description: careers.title,
+      creator: "@adentta",
+      site: "@adentta",
+      images: [imageUrl],
+    },
+    alternates: {
+      canonical: canonicalUrl,
+    },
+  };
+}
+
+
+
+
+
+
+
+
+
 export default async function Page({ params }) {
   const { id } = params;
   const slug =  id.split("-").pop(); // URL'den gelen id'yi alıyoruz

@@ -101,7 +101,8 @@ async function fetchEventsPageData() {
 
 
 
-async function fetchBlogSeoData() {
+
+async function fetchEventSeoData() {
   const cookieStore = await cookies();
   const lang = cookieStore.get("NEXT_LOCALE");
 
@@ -116,36 +117,50 @@ async function fetchBlogSeoData() {
     throw error;
   }
 }
-// !generateMetaData
-export async function generateMetadata({ params }) {
-  const { data } = await fetchBlogSeoData();
 
+// !generateMetaData
+export async function generateMetadata() {
+  const seo = await fetchEventSeoData();
+  const imageUrl = seo?.data.og_image;
+  const imageAlt = seo?.data.meta_title || "Adentta";
+  const canonicalUrl = "https://adentta.az";
+  const cookieStore = await cookies();
+  const lang = cookieStore.get("NEXT_LOCALE");
   return {
-    title: data?.meta_title,
-    description: data?.meta_description,
+    title: seo?.data.meta_title,
+    description: seo?.data.meta_description,
+    // icons: {
+    //   icon: "https://adentta.az/favicon.ico.svg",
+    // },
     openGraph: {
-      title: data?.meta_title || "Adentta – Stomatoloji Məhsullar və Peşəkar Diş Həlləri",
-      description: data?.meta_description,
+      title: seo?.data.meta_title || "Adentta",
+      description: seo?.data.meta_description,
+      url: canonicalUrl,
       images: [
         {
-          // url: `/favicon.ico.svg`,
-          url: `https://admin.adentta.az/storage${data?.og_image}`,
-          alt: data?.meta_title,
+          url: `https://admin.adentta.az/storage${imageUrl}`,
+          alt: imageAlt,
           width: 1200,
           height: 630,
         },
       ],
-      site_name: data?.meta_title,
+      site_name: "adentta.az",
+      type: "website",
+      locale: lang?.value,
     },
     twitter: {
       card: "summary_large_image",
-      title: data?.meta_title || "Adentta – Stomatoloji Məhsullar və Peşəkar Diş Həlləri",
-      description: data?.meta_description || "Adentta – Stomatoloji Məhsullar və Peşəkar Diş Həlləri",
-      url: `https://admin.adentta.az/storage${data?.og_image}`,
+      title: seo?.data.meta_title || "Adentta",
+      description: seo?.data.meta_description || "Adentta",
+      creator: "@adentta",
+      site: "@adentta",
+      images: [imageUrl],
+    },
+    alternates: {
+      canonical: canonicalUrl,
     },
   };
 }
-
 // !generateMetaData
 
 

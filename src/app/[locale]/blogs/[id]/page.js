@@ -108,7 +108,58 @@
 
 
 
+export async function generateMetadata({ params }) {
+  
+  const slug = params.id.split("-").pop();
+  const allBlogs = await fetchBlogsPageData();
+  const blog = allBlogs.find(b => b.id.toString() === slug);
 
+  if (!blog) {
+    return {
+      title: "Adentta",
+      description: "Blog not found.",
+    };
+  }
+
+  const imageUrl = blog.image;
+  const imageAlt = blog.title || "Adentta";
+  const canonicalUrl = `https://adentta.az/brands/${params.id}`;
+
+  const cookieStore = await cookies();
+  const lang = cookieStore.get("NEXT_LOCALE")?.value;
+
+  return {
+    title: blog.title,
+    description: blog.title,
+    openGraph: {
+      title: blog.title,
+      description: blog.title,
+      url: canonicalUrl,
+      images: [
+        {
+          url: `https://admin.adentta.az/storage${imageUrl}`,
+          alt: imageAlt,
+          width: 1200,
+          height: 630,
+        },
+      ],
+      site_name: "adentta.az",
+      type: "website",
+      locale: lang,
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: blog.title,
+      description: blog.title,
+      creator: "@adentta",
+      site: "@adentta",
+      images: [imageUrl],
+    },
+    alternates: {
+      canonical: canonicalUrl,
+    },
+  };
+}
    
 
   const page = async ({ params }) => {

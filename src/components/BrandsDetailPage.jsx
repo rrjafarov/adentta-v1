@@ -447,11 +447,13 @@ const BrandsDetailPage = async ({ t, brandsDetailDataDetail, otherBrands }) => {
   // Cari brendin title dəyəri
   const currentBrandTitle = brandsDetailDataDetail.title;
   const [firstCategory] = brandsDetailDataDetail.category || [];
-  const categoryTitle = firstCategory
-    ? firstCategory.title
-    : "Kategoriya yoxdur";
+  // const categoryTitle = firstCategory
+  //   ? firstCategory.title
+  //   : "Kategoriya yoxdur";
+  const categoryTitle = firstCategory?.title;
   const [firstCountry] = brandsDetailDataDetail.country || [];
-  const countryTitle = firstCountry ? firstCountry.title : "Ölkə yoxdur";
+  // const countryTitle = firstCountry ? firstCountry.title : "Ölkə yoxdur";
+  const countryTitle = firstCountry?.title;
 
   // Məhsul datasını əldə edirik
   const productData = await fetchAboutPageData();
@@ -474,16 +476,20 @@ const BrandsDetailPage = async ({ t, brandsDetailDataDetail, otherBrands }) => {
             <Image
               src={`https://admin.adentta.az/storage${brandsDetailDataDetail.image}`}
               alt="brandsDetail"
-              width={800}
-              height={400}
+              width={1400}
+              height={800}
             />
             <div className="brandsDetaiLPageHeroContent">
-              <div>
-                <span>{countryTitle}</span>
-              </div>
-              <div>
-                <span>{categoryTitle}</span>
-              </div>
+              {countryTitle && (
+                <div>
+                  <span>{countryTitle}</span>
+                </div>
+              )}
+              {categoryTitle && (
+                <div>
+                  <span>{categoryTitle}</span>
+                </div>
+              )}
             </div>
           </div>
         </div>
@@ -512,8 +518,8 @@ const BrandsDetailPage = async ({ t, brandsDetailDataDetail, otherBrands }) => {
                   <Image
                     src={`https://admin.adentta.az/storage${brandsDetailDataDetail.logo}`}
                     alt="Brand logo"
-                    width={300}
-                    height={300}
+                    width={400}
+                    height={400}
                   />
                 </div>
               </div>
@@ -622,8 +628,8 @@ const BrandsDetailPage = async ({ t, brandsDetailDataDetail, otherBrands }) => {
                         <Image
                           src={`https://admin.adentta.az/storage${pdf.image}`}
                           alt={pdf.title}
-                          width={300}
-                          height={300}
+                          width={400}
+                          height={400}
                         />
                         <div className="vatech">
                           <span>{brandsDetailDataDetail.title}</span>
@@ -719,9 +725,14 @@ const BrandsDetailPage = async ({ t, brandsDetailDataDetail, otherBrands }) => {
                               height={400}
                             />
                             <div className="blogCardImageDate">
-                              <span className="blogCardDate">
+                              {/* <span className="blogCardDate">
                                 {blog.published_date}
-                              </span>
+                              </span> */}
+                              {blog.published_date && (
+                                <span className="blogCardDate">
+                                  {blog.published_date}
+                                </span>
+                              )}
                             </div>
                           </div>
                           <div className="blogCardContent">
@@ -745,7 +756,7 @@ const BrandsDetailPage = async ({ t, brandsDetailDataDetail, otherBrands }) => {
           </div>
         </section>
       )}
-    
+
       {/* Product video */}
       {videoUrl && videoCover && (
         <section id="brandsDPBVideoProvider">

@@ -66,6 +66,59 @@ async function fetchBrandsPageData() {
 
 
 
+export async function generateMetadata({ params }) {
+  
+  const slug = params.id.split("-").pop();
+  const allEvents = await fetchEventsPageData();
+  const event = allEvents.find(b => b.id.toString() === slug);
+
+  if (!event) {
+    return {
+      title: "Adentta",
+      description: "Event not found.",
+    };
+  }
+
+  const imageUrl = event.image;
+  const imageAlt = event.title || "Adentta";
+  const canonicalUrl = `https://adentta.az/brands/${params.id}`;
+
+  const cookieStore = await cookies();
+  const lang = cookieStore.get("NEXT_LOCALE")?.value; 
+
+  return {
+    title: event.title,
+    description: event.title,
+    openGraph: {
+      title: event.title,
+      description: event.title,
+      url: canonicalUrl,
+      images: [
+        {
+          url: `https://admin.adentta.az/storage${imageUrl}`,
+          alt: imageAlt,
+          width: 1200,
+          height: 630,
+        },
+      ],
+      site_name: "adentta.az",
+      type: "website",
+      locale: lang,
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: event.title,
+      description: event.title,
+      creator: "@adentta",
+      site: "@adentta",
+      images: [imageUrl],
+    },
+    alternates: {
+      canonical: canonicalUrl,
+    },
+  };
+}
+
 
 const page = async ({params}) => {
 

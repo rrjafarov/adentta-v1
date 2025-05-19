@@ -1082,7 +1082,8 @@ const WpLink = ({t}) => {
     }
   }, []);
   const message = encodeURIComponent(
-    `Salam, bu məhsul haqqında məlumat ala bilərəm?: ${currentUrl}`
+    // `Salam, bu məhsul haqqında məlumat ala bilərəm?: ${currentUrl}`
+    `${t?.wpMessage || "Salam, bu məhsul haqqında məlumat ala bilərəm?"}: ${currentUrl}`
   );
   return (
     <Link

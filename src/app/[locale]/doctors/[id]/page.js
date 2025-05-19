@@ -1,4 +1,3 @@
-
 import DoctorsDetailPage from "@/components/DoctorsDetailPage";
 import Footer from "@/components/Footer/Footer";
 import Header from "@/components/Header/Header";
@@ -22,18 +21,20 @@ async function fetchCategoryPageData() {
   const lang = cookieStore.get("NEXT_LOCALE");
 
   try {
-    const { data: category } = await axiosInstance.get(`/page-data/categories?per_page=999`, {
-      // headers: { Lang: lang.value },
-      cache: "no-store",
-    });
+    const { data: category } = await axiosInstance.get(
+      `/page-data/categories?per_page=999`,
+      {
+        // headers: { Lang: lang.value },
+        cache: "no-store",
+      }
+    );
     return category;
   } catch (error) {
     console.error("Failed to fetch category page data", error);
     throw error;
   }
 }
-// *categories 
-
+// *categories
 
 //! brandsApi
 async function fetchBrandsPageData() {
@@ -71,7 +72,6 @@ async function fetchEventsPageData() {
 }
 //! eventsApi
 
-
 async function getTranslations() {
   try {
     const data = axiosInstance.get("/translation-list");
@@ -81,8 +81,60 @@ async function getTranslations() {
   }
 }
 
-const page = async ({ params }) => {
+export async function generateMetadata({ params }) {
+  const slug = params.id.split("-").pop();
+  const allDoctors = await fetchDoctorsDetailPageData();
+  const doctor = allDoctors.find((b) => b.id.toString() === slug);
 
+  if (!doctor) {
+    return {
+      title: "Adentta",
+      description: "Doctor not found.",
+    };
+  }
+
+  // brand obyektindən birbaşa götürürük
+  const imageUrl = doctor.image;
+  const imageAlt = doctor.title || "Adentta";
+  const canonicalUrl = `https://adentta.az/brands/${params.id}`;
+
+  const cookieStore = await cookies();
+  const lang = cookieStore.get("NEXT_LOCALE")?.value;
+
+  return {
+    title: doctor.title,
+    description: doctor.title,
+    openGraph: {
+      title: doctor.title,
+      description: doctor.title,
+      url: canonicalUrl,
+      images: [
+        {
+          url: `https://admin.adentta.az/storage${imageUrl}`,
+          alt: imageAlt,
+          width: 1200,
+          height: 630,
+        },
+      ],
+      site_name: "adentta.az",
+      type: "website",
+      locale: lang,
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: doctor.title,
+      description: doctor.title,
+      creator: "@adentta",
+      site: "@adentta",
+      images: [imageUrl],
+    },
+    alternates: {
+      canonical: canonicalUrl,
+    },
+  };
+}
+
+const page = async ({ params }) => {
   const brandsResponse = await fetchBrandsPageData();
   const brandsData = brandsResponse?.data?.data || [];
 
@@ -100,7 +152,9 @@ const page = async ({ params }) => {
   console.log("doctorsDetailData", doctorsDetailData);
 
   // URL'den gelen id ile eşleşen kariyer verisini buluyoruz:
-  const doctorsDetailDataDetail = doctorsDetailData.find((item) => item.id.toString() === slug);
+  const doctorsDetailDataDetail = doctorsDetailData.find(
+    (item) => item.id.toString() === slug
+  );
 
   if (!doctorsDetailDataDetail) {
     return <div>Doctor not found.</div>;
@@ -109,13 +163,23 @@ const page = async ({ params }) => {
   const categoryResponse = await fetchCategoryPageData();
   const categoryData = categoryResponse?.data?.data || [];
 
-  const otherDoctors = doctorsDetailData.filter((item) => item.id.toString() !== slug);
+  const otherDoctors = doctorsDetailData.filter(
+    (item) => item.id.toString() !== slug
+  );
 
   return (
     <div>
       <Header categoryData={categoryData} />
-      <DoctorsDetailPage t={t} doctorsDetailDataDetail={doctorsDetailDataDetail} otherDoctors={otherDoctors}  />
-      <Footer categoryData={categoryData}  eventsData={eventsData} brandsData={brandsData} />
+      <DoctorsDetailPage
+        t={t}
+        doctorsDetailDataDetail={doctorsDetailDataDetail}
+        otherDoctors={otherDoctors}
+      />
+      <Footer
+        categoryData={categoryData}
+        eventsData={eventsData}
+        brandsData={brandsData}
+      />
     </div>
   );
 };
