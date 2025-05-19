@@ -20,8 +20,6 @@ async function fetchAboutPageData() {
   }
 }
 
-
-
 // *categories
 async function fetchCategoryPageData() {
   const cookieStore = await cookies();
@@ -88,6 +86,71 @@ async function getTranslations() {
   }
 }
 
+async function fetchContactSeoData() {
+  const cookieStore = await cookies();
+  const lang = cookieStore.get("NEXT_LOCALE");
+
+  try {
+    const { data: aboutSeo } = await axiosInstance.get(
+      `/page-data/contact-page-info`,
+      {
+        // headers: { Lang: lang.value },
+        cache: "no-store",
+      }
+    );
+    return aboutSeo;
+  } catch (error) {
+    console.error("Failed to fetch aboutSeo page data", error);
+    throw error;
+  }
+}
+
+// !generateMetaData
+export async function generateMetadata() {
+  const seo = await fetchContactSeoData();
+  const imageUrl = seo?.data.og_image;
+  const imageAlt = seo?.data.meta_title || "Adentta";
+  const canonicalUrl = "https://adentta.az";
+  const cookieStore = await cookies();
+  const lang = cookieStore.get("NEXT_LOCALE");
+  return {
+    title: seo?.data.meta_title,
+    description: seo?.data.meta_description,
+    icons: {
+      icon: "https://adentta.az/favicon.ico.svg",
+    },
+    openGraph: {
+      title: seo?.data.meta_title || "Adentta",
+      description: seo?.data.meta_description,
+      url: canonicalUrl,
+      images: [
+        {
+          url: `https://admin.adentta.az/storage${imageUrl}`,
+          alt: imageAlt,
+          width: 1200,
+          height: 630,
+        },
+      ],
+      site_name: "adentta.az",
+      type: "website",
+      locale: lang?.value,
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: seo?.data.meta_title || "Adentta",
+      description: seo?.data.meta_description || "Adentta",
+      creator: "@adentta",
+      site: "@adentta",
+      images: [imageUrl],
+    },
+    alternates: {
+      canonical: canonicalUrl,
+    },
+  };
+}
+
+// !generateMetaData
+
 const page = async () => {
   const brandsResponse = await fetchBrandsPageData();
   const brandsData = brandsResponse?.data?.data || [];
@@ -98,9 +161,6 @@ const page = async () => {
   const contact = await fetchAboutPageData();
   // const contact = contactData?.data?.data || [];
 
-
-
-
   const categoryResponse = await fetchCategoryPageData();
   const categoryData = categoryResponse?.data?.data || [];
 
@@ -109,7 +169,9 @@ const page = async () => {
 
   return (
     <div id="contactUS">
-      <Header categoryData={categoryData} />
+      <div className="headerTopNoneBack">
+        <Header categoryData={categoryData} />
+      </div>
       <ContactUS
         t={t}
         wpNumber={contact?.data.wp_number}

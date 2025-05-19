@@ -21,7 +21,6 @@ async function fetchPdfPageData() {
   }
 }
 
-
 async function getTranslations() {
   try {
     const data = axiosInstance.get("/translation-list");
@@ -36,10 +35,13 @@ async function fetchCategoryPageData() {
   const lang = cookieStore.get("NEXT_LOCALE");
 
   try {
-    const { data: category } = await axiosInstance.get(`/page-data/categories?per_page=999`, {
-      // headers: { Lang: lang.value },
-      cache: "no-store",
-    });
+    const { data: category } = await axiosInstance.get(
+      `/page-data/categories?per_page=999`,
+      {
+        // headers: { Lang: lang.value },
+        cache: "no-store",
+      }
+    );
     return category;
   } catch (error) {
     console.error("Failed to fetch category page data", error);
@@ -47,7 +49,6 @@ async function fetchCategoryPageData() {
   }
 }
 // *categories
-
 
 //! brandsApi
 async function fetchBrandsPageData() {
@@ -86,6 +87,71 @@ async function fetchEventsPageData() {
 //! eventsApi
 
 
+
+async function fetchPdfSeoData() {
+  const cookieStore = await cookies();
+  const lang = cookieStore.get("NEXT_LOCALE");
+
+  try {
+    const { data: pdfSeo } = await axiosInstance.get(`/page-data/pdf-page-info`, {
+      // headers: { Lang: lang.value },
+      cache: "no-store",
+    });
+    return pdfSeo;
+  } catch (error) {
+    console.error("Failed to fetch pdfSeo page data", error);
+    throw error;
+  }
+}
+
+// !generateMetaData
+export async function generateMetadata() {
+  const seo = await fetchPdfSeoData();
+  const imageUrl = seo?.data.og_image;
+  const imageAlt = seo?.data.meta_title || "Adentta";
+  const canonicalUrl = "https://adentta.az";
+  const cookieStore = await cookies();
+  const lang = cookieStore.get("NEXT_LOCALE");
+  return {
+    title: seo?.data.meta_title,
+    description: seo?.data.meta_description,
+    icons: {
+      icon: "https://adentta.az/favicon.ico.svg",
+    },
+    openGraph: {
+      title: seo?.data.meta_title || "Adentta",
+      description: seo?.data.meta_description,
+      url: canonicalUrl,
+      images: [
+        {
+          url: `https://admin.adentta.az/storage${imageUrl}`,
+          alt: imageAlt,
+          width: 1200,
+          height: 630,
+        },
+      ],
+      site_name: "adentta.az",
+      type: "website",
+      locale: lang?.value,
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: seo?.data.meta_title || "Adentta",
+      description: seo?.data.meta_description || "Adentta",
+      creator: "@adentta",
+      site: "@adentta",
+      images: [imageUrl],
+    },
+    alternates: {
+      canonical: canonicalUrl,
+    },
+  };
+}
+
+// !generateMetaData
+
+
+
 const page = async () => {
   const brandsResponse = await fetchBrandsPageData();
   const brandsData = brandsResponse?.data?.data || [];
@@ -102,7 +168,11 @@ const page = async () => {
     <div>
       <Header categoryData={categoryData} />
       <PdfCatalog t={t} pdfMembers={pdfMembers} />
-      <Footer categoryData={categoryData}  eventsData={eventsData} brandsData={brandsData} />
+      <Footer
+        categoryData={categoryData}
+        eventsData={eventsData}
+        brandsData={brandsData}
+      />
     </div>
   );
 };
