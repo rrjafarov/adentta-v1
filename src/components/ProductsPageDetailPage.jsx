@@ -1078,7 +1078,9 @@ const WpLink = ({t}) => {
   const [currentUrl, setCurrentUrl] = useState("");
   useEffect(() => {
     if (typeof window !== "undefined") {
-      setCurrentUrl(window.location.href);
+      // setCurrentUrl(window.location.href);
+      setCurrentUrl(window.location.pathname);
+
     }
   }, []);
   const message = encodeURIComponent(
@@ -1088,6 +1090,7 @@ const WpLink = ({t}) => {
   return (
     <Link
       href={`https://wa.me/994554099878?text=${message}`}
+      prefetch={false}
       target="_blank"
       rel="noopener noreferrer"
       className="wpButton"
