@@ -1,5 +1,4 @@
 
-
 import "./globals.scss";
 
 export const metadata = {
