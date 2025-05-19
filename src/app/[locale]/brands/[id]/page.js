@@ -44,9 +44,6 @@ async function getTranslations() {
 }
 
 
-
-
-
 //! brandsApi
 async function fetchBrandsPageDataFoot() {
   const cookieStore = await cookies();
@@ -82,6 +79,71 @@ async function fetchEventsPageData() {
   }
 }
 //! eventsApi
+
+
+
+export async function generateMetadata({ params }) {
+  // URL-dən slug-u ayırırıq
+  const slug = params.id.split("-").pop();
+
+  // Bütün brendləri çəkirik
+  const allBrands = await fetchBrandsPageData();
+
+  // Cari brendi tapırıq
+  const brand = allBrands.find(b => b.id.toString() === slug);
+
+  // Brand yoxdursa fallback
+  if (!brand) {
+    return {
+      title: "Adentta",
+      description: "Brand not found.",
+    };
+  }
+
+  // brand obyektindən birbaşa götürürük
+  const imageUrl = brand.logo;
+  const imageAlt = brand.title || "Adentta";
+  const canonicalUrl = `https://adentta.az/brands/${params.id}`;
+
+  const cookieStore = await cookies();
+  const lang = cookieStore.get("NEXT_LOCALE")?.value;
+
+  return {
+    title: brand.title,
+    description: brand.about_brand,
+    openGraph: {
+      title: brand.title,
+      description: brand.about_brand,
+      url: canonicalUrl,
+      images: [
+        {
+          url: `https://admin.adentta.az/storage${imageUrl}`,
+          alt: imageAlt,
+          width: 1200,
+          height: 630,
+        },
+      ],
+      site_name: "adentta.az",
+      type: "website",
+      locale: lang,
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: brand.title,
+      description: brand.about_brand,
+      creator: "@adentta",
+      site: "@adentta",
+      images: [imageUrl],
+    },
+    alternates: {
+      canonical: canonicalUrl,
+    },
+  };
+}
+
+
+
+
 
 const page = async ({ params }) => {
 
@@ -125,3 +187,32 @@ const page = async ({ params }) => {
 };
 
 export default page;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// !
+
+// !

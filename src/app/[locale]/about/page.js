@@ -132,9 +132,9 @@ export async function generateMetadata() {
   return {
     title: seo?.data.meta_title,
     description: seo?.data.meta_description,
-    icons: {
-      icon: "https://adentta.az/favicon.ico.svg",
-    },
+    // icons: {
+    //   icon: "https://adentta.az/favicon.ico.svg",
+    // },
     openGraph: {
       title: seo?.data.meta_title || "Adentta",
       description: seo?.data.meta_description,
@@ -164,7 +164,6 @@ export async function generateMetadata() {
     },
   };
 }
-
 // !generateMetaData
 
 const page = async () => {
