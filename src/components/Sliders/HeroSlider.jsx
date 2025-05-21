@@ -16,7 +16,7 @@ const SwiperJS = ({ heroSliderData, bannerData }) => {
       <section id="homePageHero">
         <div className="container">
           <div className="homePageHero">
-            <div className="row">
+            <div className="row ">
               <div className="xl-8 lg-8 md-8 sm-12">
                 <Swiper
                   slidesPerView={"auto"}
@@ -90,7 +90,7 @@ const SwiperJS = ({ heroSliderData, bannerData }) => {
                         src={`https://admin.adentta.az/storage/${banner.image}`}
                         alt="banner"
                         width={400}
-                        height={400}  
+                        height={400}
                       />
                       {/* <div className="swiperSlideContent-smalltext">
                       <span>Product</span>
@@ -127,6 +127,38 @@ const SwiperJS = ({ heroSliderData, bannerData }) => {
               </div>
             </div>
           </div>
+          {/* <div className="mobileBannerSlider">
+            <Swiper
+              slidesPerView={"auto"}
+              spaceBetween={20}
+              pagination={{
+                clickable: true,
+                el: ".custom-pagination",
+              }}
+              autoplay={{
+                delay: 3000,
+                disableOnInteraction: false,
+              }}
+              speed={3000}
+              modules={[Pagination, Autoplay]}
+              className="mySwiper"
+            >
+              {heroSliderData.map((slider) => (
+                <SwiperSlide key={slider.id} className="swprSld">
+                  <Link href={slider.link}>
+                    <div className="swiperSlideContent">
+                      <Image
+                        src={`https://admin.adentta.az/storage${slider.image}`}
+                        alt=""
+                        width={840}
+                        height={500}
+                      />
+                    </div>
+                  </Link>
+                </SwiperSlide>
+              ))}
+            </Swiper>
+          </div> */}
         </div>
       </section>
     </>

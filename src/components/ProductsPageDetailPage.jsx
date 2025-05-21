@@ -1154,18 +1154,39 @@ const ProductsPageDetailPage = ({ t, productData, similarProducts = [] }) => {
     setLastViewed(updated);
   }, [productData]);
 
+  // const shareUrls = {
+  //   telegram: `https://t.me/share/url?url=${encodeURIComponent(currentUrl)}`,
+  //   facebook: `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(
+  //     currentUrl
+  //   )}`,
+  //   linkedin: `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(
+  //     currentUrl
+  //   )}`,
+  //   whatsapp: `https://api.whatsapp.com/send?text=${encodeURIComponent(
+  //     currentUrl
+  //   )}`,
+  // };
+
+
   const shareUrls = {
-    telegram: `https://t.me/share/url?url=${encodeURIComponent(currentUrl)}`,
-    facebook: `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(
-      currentUrl
-    )}`,
-    linkedin: `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(
-      currentUrl
-    )}`,
-    whatsapp: `https://api.whatsapp.com/send?text=${encodeURIComponent(
-      currentUrl
-    )}`,
-  };
+  telegram: `https://t.me/share/url?url=${encodeURIComponent(
+    currentUrl
+  )}&text=${encodeURIComponent(productData.title)}`,
+  facebook: `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(
+    currentUrl
+  )}"e=${encodeURIComponent(productData.title)}`,
+  linkedin: `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(
+    currentUrl
+  )}&title=${encodeURIComponent(
+    productData.title
+  )}&summary=${encodeURIComponent(currentUrl)}`,
+  whatsapp: `https://api.whatsapp.com/send?text=${encodeURIComponent(
+    `${productData.title} - ${currentUrl}`
+  )}`,
+};
+
+
+
 
   const handleCopy = () => {
     if (!currentUrl) return;
@@ -1358,6 +1379,7 @@ const ProductsPageDetailPage = ({ t, productData, similarProducts = [] }) => {
           </div>
         </div>
       </section>
+      
       {/* Similar Products */}
       {similarProducts.length > 0 && (
         <section id="detailPagesSimilarsBottom">

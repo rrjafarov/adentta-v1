@@ -444,21 +444,16 @@ const BrandsDetailPage = async ({ t, brandsDetailDataDetail, otherBrands }) => {
   const videoUrl = brandsDetailDataDetail.video_1_url;
   const videoCover = brandsDetailDataDetail.video_1_cover;
   const videoTitle = brandsDetailDataDetail.video_1_title;
-  // Cari brendin title dəyəri
+
   const currentBrandTitle = brandsDetailDataDetail.title;
   const [firstCategory] = brandsDetailDataDetail.category || [];
-  // const categoryTitle = firstCategory
-  //   ? firstCategory.title
-  //   : "Kategoriya yoxdur";
+
   const categoryTitle = firstCategory?.title;
   const [firstCountry] = brandsDetailDataDetail.country || [];
-  // const countryTitle = firstCountry ? firstCountry.title : "Ölkə yoxdur";
   const countryTitle = firstCountry?.title;
 
-  // Məhsul datasını əldə edirik
   const productData = await fetchAboutPageData();
 
-  // Brendə aid məhsulları filtrləyirik
   const filteredProducts = productData.filter((product) => {
     return (
       product.brands &&
@@ -538,7 +533,6 @@ const BrandsDetailPage = async ({ t, brandsDetailDataDetail, otherBrands }) => {
         </section>
       </div>
 
-      {/* Brand products bölməsi */}
       {filteredProducts.length > 0 && (
         <section id="brandDPProducts">
           <div className="container">
@@ -593,7 +587,6 @@ const BrandsDetailPage = async ({ t, brandsDetailDataDetail, otherBrands }) => {
         </section>
       )}
 
-      {/* Photo Gallery Slider */}
       {brandsDetailDataDetail.image_gallery?.length > 0 && (
         <section id="brandsDPSlider">
           <div className="brandsDPSliderHeadText">
@@ -612,7 +605,6 @@ const BrandsDetailPage = async ({ t, brandsDetailDataDetail, otherBrands }) => {
         </section>
       )}
 
-      {/* PDF Catalog */}
       {brandsDetailDataDetail.pdf?.length > 0 && (
         <section id="brandsDPCatalog">
           <div className="container">
@@ -664,7 +656,6 @@ const BrandsDetailPage = async ({ t, brandsDetailDataDetail, otherBrands }) => {
         </section>
       )}
 
-      {/* Certificates */}
       {brandsDetailDataDetail.certificates?.length > 0 && (
         <section id="brandsDPCertificates">
           <div className="container">
@@ -699,7 +690,6 @@ const BrandsDetailPage = async ({ t, brandsDetailDataDetail, otherBrands }) => {
         </section>
       )}
 
-      {/* Blogs related to brand */}
       {brandsDetailDataDetail.blogs?.length > 0 && (
         <section id="brandsDPBlogCards">
           <div className="container">
@@ -724,16 +714,22 @@ const BrandsDetailPage = async ({ t, brandsDetailDataDetail, otherBrands }) => {
                               width={400}
                               height={400}
                             />
-                            <div className="blogCardImageDate">
-                              {/* <span className="blogCardDate">
-                                {blog.published_date}
-                              </span> */}
+                            {/* <div className="blogCardImageDate">
+                              
                               {blog.published_date && (
                                 <span className="blogCardDate">
                                   {blog.published_date}
                                 </span>
                               )}
-                            </div>
+                            </div> */}
+                            {blog.published_date &&
+                              !isNaN(Date.parse(blog.published_date)) && (
+                                <div className="blogCardImageDate">
+                                  <span className="blogCardDate">
+                                    {formatDate(blog.published_date)}
+                                  </span>
+                                </div>
+                              )}
                           </div>
                           <div className="blogCardContent">
                             <span>{blog.title}</span>

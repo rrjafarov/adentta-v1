@@ -410,6 +410,10 @@ export default function ProductsPageFilter({
             {/* Page Description */}
           </div>
         </div>
+
+
+
+        
         <div className="productsPageDescription">
           <h6>{t?.productsPageCeoDescription || "Ceo description - Addenta product category"}</h6>
           <p>

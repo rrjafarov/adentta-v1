@@ -1,37 +1,48 @@
 
-// *
 "use client";
 import Image from "next/image";
 import Link from "next/link";
 import React, { useState, useMemo } from "react";
 
 const BlogPages = ({ t, blogData = [], blogsCategoryData = [] }) => {
-  // "All" etiketini dinamik olarak alıyoruz
   const allLabel = t?.allSelect || "All";
   const [selectedCategory, setSelectedCategory] = useState(allLabel);
 
-  // Prepare category list including dynamic "All"
   const categoryList = useMemo(
     () => [allLabel, ...blogsCategoryData.map((cat) => cat.title)],
     [blogsCategoryData, allLabel]
   );
 
-  // Filter blogs based on selected category
   const filteredBlogs = useMemo(() => {
-    // Eğer seçili kategori "All" (veya t?.allSelect) ise, tüm blogları döndür
-    if (selectedCategory === allLabel) {
-      return blogData;
-    }
-    return blogData.filter(
-      (blog) =>
-        Array.isArray(blog.category) &&
-        blog.category.some((c) => c.title === selectedCategory)
-    );
+    // 1) Orijinalı korumak için klon al
+    const list = Array.isArray(blogData) ? [...blogData] : [];
+
+    // 2) Kategoriye göre filtrele (All seçiliyse direk tüm liste)
+    const byCategory =
+      selectedCategory === allLabel
+        ? list
+        : list.filter(
+            (blog) =>
+              Array.isArray(blog.category) &&
+              blog.category.some((c) => c.title === selectedCategory)
+          );
+
+    // 3) Tarihe göre sırala (yeniden eskiye doğru)
+    byCategory.sort((a, b) => {
+      const dateA = Date.parse(a.published_date);
+      const dateB = Date.parse(b.published_date);
+      return dateB - dateA; // büyük (yeni) önce
+    });
+
+    return byCategory;
   }, [blogData, selectedCategory, allLabel]);
 
-  // Tarihleri Azerbaycan dillerine uygun formatlama fonksiyonu
   const formatDate = (dateString) => {
-    const date = new Date(dateString);
+    if (!dateString) return "";
+    const timestamp = Date.parse(dateString);
+    if (isNaN(timestamp)) return "";
+
+    const date = new Date(timestamp);
     const day = date.getDate().toString().padStart(2, "0");
     const year = date.getFullYear();
     const azMonths = {
@@ -102,16 +113,21 @@ const BlogPages = ({ t, blogData = [], blogsCategoryData = [] }) => {
                             height={400}
                           />
                         )}
-                        <div className="blogCardImageDate">
-                          <span className="blogCardDate">
-                            {formatDate(blog.published_date)}
-                          </span>
-                        </div>
+                        {blog.published_date &&
+                          !isNaN(Date.parse(blog.published_date)) && (
+                            <div className="blogCardImageDate">
+                              <span className="blogCardDate">
+                                {formatDate(blog.published_date)}
+                              </span>
+                            </div>
+                          )}
                       </div>
 
                       <div className="blogCardContent">
                         <span>{blog.title}</span>
-                        <div dangerouslySetInnerHTML={{ __html: blog.content }} />
+                        <div
+                          dangerouslySetInnerHTML={{ __html: blog.content }}
+                        />
                       </div>
 
                       <div className="blogCardBottom">
@@ -131,5 +147,3 @@ const BlogPages = ({ t, blogData = [], blogsCategoryData = [] }) => {
 };
 
 export default BlogPages;
-
-// *

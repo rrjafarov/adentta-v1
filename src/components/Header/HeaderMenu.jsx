@@ -33,7 +33,6 @@ const HeaderMenu = ({ t, categoryData, isHomePage }) => {
       );
       const queryString = window.location.search || "";
       const newPath = `/${newLocale}${currentPath}${queryString}`;
-
       window.location.href = newPath;
     } catch (error) {
       console.error("Language change error:", error);

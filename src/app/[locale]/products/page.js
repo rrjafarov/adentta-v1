@@ -14,7 +14,7 @@ async function fetchAboutPageData() {
   // const lang = cookieStore.get("NEXT_LOCALE"); // Uncomment if needed
 
   try {
-    const { data: product } = await axiosInstance.get("/page-data/product", {
+    const { data: product } = await axiosInstance.get("/page-data/product?per_page=999", {
       cache: "no-store",
     });
     return product.data.data;
@@ -68,23 +68,7 @@ async function fetchCategoryPageData() {
     return [];
   }
 }
-// async function fetchCategoryPageData() {
-//   const cookieStore = await cookies();
-//   // const lang = cookieStore.get("NEXT_LOCALE");
 
-//   try {
-//     const { data: category } = await axiosInstance.get(
-//       "/page-data/categories",
-//       {
-//         cache: "no-store",
-//       }
-//     );
-//     return category.data.data;
-//   } catch (error) {
-//     console.error("Failed to fetch category page data", error);
-//     return [];
-//   }
-// }
 // !category  
 
 

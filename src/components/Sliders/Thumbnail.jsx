@@ -62,7 +62,6 @@
 //       ? productData.images
 //       : [productData.image];
 
-
 //   const handleCopy = () => {
 //     navigator.clipboard.writeText(currentUrl);
 //     setCopied(true);
@@ -184,14 +183,6 @@
 
 // export default Thumbnail;
 
-
-
-
-
-
-
-
-
 // *
 "use client";
 import React, { useState, useEffect } from "react";
@@ -220,7 +211,6 @@ const Thumbnail = ({ productData, t }) => {
   const [currentUrl, setCurrentUrl] = useState("");
   const [copied, setCopied] = useState(false);
 
-  // Ekran genişliğini takip et
   useEffect(() => {
     const handleResize = () => setIsMobile(window.innerWidth < 768);
     handleResize();
@@ -228,28 +218,42 @@ const Thumbnail = ({ productData, t }) => {
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
-  // Mevcut sayfa URL'sini al
   useEffect(() => {
     if (typeof window !== "undefined") {
       setCurrentUrl(window.location.href);
     }
   }, []);
 
-  // Paylaşım URL'leri
+  // const shareUrls = {
+  //   telegram: `https://t.me/share/url?url=${encodeURIComponent(currentUrl)}`,
+  //   facebook: `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(
+  //     currentUrl
+  //   )}`,
+  //   linkedin: `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(
+  //     currentUrl
+  //   )}`,
+  //   whatsapp: `https://api.whatsapp.com/send?text=${encodeURIComponent(
+  //     currentUrl
+  //   )}`,
+  // };
+
   const shareUrls = {
-    telegram: `https://t.me/share/url?url=${encodeURIComponent(currentUrl)}`,
+    telegram: `https://t.me/share/url?url=${encodeURIComponent(
+      currentUrl
+    )}&text=${encodeURIComponent(productData.title)}`,
     facebook: `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(
       currentUrl
-    )}`,
+    )}"e=${encodeURIComponent(productData.title)}`,
     linkedin: `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(
       currentUrl
-    )}`,
+    )}&title=${encodeURIComponent(
+      productData.title
+    )}&summary=${encodeURIComponent(currentUrl)}`,
     whatsapp: `https://api.whatsapp.com/send?text=${encodeURIComponent(
-      currentUrl
+      `${productData.title} - ${currentUrl}`
     )}`,
   };
 
-  // Slaytları hazırla: önce ana resim, sonra ek resimler
   const slides = [productData.image]
     .concat(Array.isArray(productData.images) ? productData.images : [])
     .filter(Boolean);
@@ -330,16 +334,36 @@ const Thumbnail = ({ productData, t }) => {
         {/* Paylaşım linkleri */}
         <div className="detailPageShareLinks desktopProductLink topper flex items-center">
           <span>{t?.productsPageShare || "Paylaş"}:</span>
-          <Link href={shareUrls.telegram} target="_blank" rel="noopener noreferrer" className="detailPageShareLink ml-2">
+          <Link
+            href={shareUrls.telegram}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="detailPageShareLink ml-2"
+          >
             <img src="/icons/telegramBold.svg" alt="Telegram" />
           </Link>
-          <Link href={shareUrls.facebook} target="_blank" rel="noopener noreferrer" className="detailPageShareLink ml-2">
+          <Link
+            href={shareUrls.facebook}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="detailPageShareLink ml-2"
+          >
             <img src="/icons/facebookBold.svg" alt="Facebook" />
           </Link>
-          <Link href={shareUrls.linkedin} target="_blank" rel="noopener noreferrer" className="detailPageShareLink ml-2">
+          <Link
+            href={shareUrls.linkedin}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="detailPageShareLink ml-2"
+          >
             <img src="/icons/linkedinBold.svg" alt="LinkedIn" />
           </Link>
-          <Link href={shareUrls.whatsapp} target="_blank" rel="noopener noreferrer" className="detailPageShareLink ml-2">
+          <Link
+            href={shareUrls.whatsapp}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="detailPageShareLink ml-2"
+          >
             <img src="/icons/whatsappBold.svg" alt="WhatsApp" />
           </Link>
           <button onClick={handleCopy} className="detailPageShareLinkCOPY ml-2">
@@ -356,12 +380,3 @@ const Thumbnail = ({ productData, t }) => {
 export default Thumbnail;
 
 // *
-
-
-
-
-
-
-
-
-
