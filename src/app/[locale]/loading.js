@@ -13,7 +13,7 @@ const Loading = () => {
           // Simulyasiya üçün 1 saniyə sonra yükləmə bitsin
           setTimeout(() => {
             setProgress(100);
-            setTimeout(() => setLoadingDone(true), 300);
+            setTimeout(() => setLoadingDone(true), 150);
           }, 100);
         }
         return prev + 1;
@@ -31,7 +31,7 @@ const Loading = () => {
         position: "fixed",
         top: 0,
         left: 0,
-        height: "7px",
+        height: "5px",
         width: "100%",
         zIndex: 9999,
         backgroundColor: "#98B4DE",

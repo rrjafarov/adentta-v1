@@ -10,7 +10,7 @@ async function fetchDoctorsPageData() {
   const lang = cookieStore.get("NEXT_LOCALE");
 
   try {
-    const { data: doctors } = await axiosInstance.get(`/page-data/doctors`, {
+    const { data: doctors } = await axiosInstance.get(`/page-data/doctors?per_page=999`, {
       // headers: { Lang: lang.value },
       cache: "no-store",
     });
@@ -52,10 +52,10 @@ async function getTranslations() {
 //! brandsApi
 async function fetchBrandsPageData() {
   const cookieStore = await cookies();
-  const lang = cookieStore.get("NEXT_LOCALE");
+  const lang = cookieStore.get("NEXT_LOCALE");  
 
   try {
-    const { data: brands } = await axiosInstance.get(`/page-data/brands`, {
+    const { data: brands } = await axiosInstance.get(`/page-data/brands?per_page=999`, {
       // headers: { Lang: lang.value },
       cache: "no-store",
     });

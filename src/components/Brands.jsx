@@ -161,8 +161,7 @@ const Brands = ({ brandsData, t }) => {
             {filteredBrands.map((brand) => (
               <div key={brand.id} className="xl-3 lg-3 md-6 sm-12">
                 <Link
-                  href={`/brands/${brand.title
-                    .toLowerCase()
+                  href={`/brands/${brand?.title?.toLowerCase()
                     .replace(/\s+/g, "-")}-${brand.id}`}
                   className="block"
                 >

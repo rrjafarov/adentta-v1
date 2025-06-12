@@ -14,7 +14,7 @@ const ProductsPageHero = ({t ,productData}) => {
     <section id="productsPageHero">
       <div className="container productsPageHero">
         <div className="productsPageHeroHeader">
-          <span>{t?.productsPageFilterTitle || "Filter"}</span>
+          {/* <span>{t?.productsPageFilterTitle || "Filter"}</span> */}
           <div className="productsPageHeaderText">
             <h4>{t?.productsPageAllEquipments || "All Equipments Category"}</h4>
             <p>

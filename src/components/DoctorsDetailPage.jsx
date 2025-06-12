@@ -228,11 +228,10 @@ const DoctorsDetailPage = ({ t, doctorsDetailDataDetail, otherDoctors }) => {
             <span>{t?.doctorsPageOtherDoctors || "Other Doctors"}</span>
           </div>
           <div className="row">
-            {otherDoctors.splice(0, 3).map((doctor) => (
-              <div key={doctor.id} className="xl-4 lg-4 md-6 sm-12">
+            {otherDoctors.splice(0, 4).map((doctor) => (
+              <div key={doctor.id} className="xl-3 lg-3 md-6 sm-12">
                 <Link
-                  href={`/doctors/${doctor.slug
-                    .toLowerCase()
+                  href={`/doctors/${doctor?.slug?.toLowerCase()
                     .replace(/\s+/g, "-")}-${doctor.id}`}
                   className="block"
                 >

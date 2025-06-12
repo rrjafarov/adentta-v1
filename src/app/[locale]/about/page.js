@@ -177,8 +177,8 @@ const page = async () => {
   const t = translations?.data;
   const about = await fetchAboutPageData();
   const aboutYears = about?.data?.data || [];
-  const history = await fetchHistoryPageData(); // History verisini çekiyoruz
-  const historyYears = history?.data?.data || []; // History verilerini alıyoruz
+  const history = await fetchHistoryPageData(); 
+  const historyYears = history?.data?.data || []; 
 
   const categoryResponse = await fetchCategoryPageData();
   const categoryData = categoryResponse?.data?.data || [];

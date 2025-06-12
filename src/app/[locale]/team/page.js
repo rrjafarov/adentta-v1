@@ -21,6 +21,7 @@ async function fetchAboutPageData() {
     throw error;
   }
 }
+
 async function getTranslations() {
   try {
     const data = axiosInstance.get("/translation-list");

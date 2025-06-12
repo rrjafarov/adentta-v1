@@ -68,10 +68,7 @@ async function fetchCategoryPageData() {
     return [];
   }
 }
-
 // !category  
-
-
 
 //! brandsApi
 async function fetchBrandsPageData() {
@@ -108,13 +105,6 @@ async function fetchEventsPageData() {
   }
 }
 //! eventsApi
-
-
-
-
-
-
-
 
 async function fetchProductsSeoData() {
   const cookieStore = await cookies();
@@ -185,6 +175,7 @@ export async function generateMetadata() {
 export default async function page({ searchParams }) {
   // Read ?category=ID from URL (e.g. /products?category=3)
   const categoryParam = searchParams.category || null;
+  console.log( categoryParam  , "categoryParam");   
 
   // Fetch initial data
   const productData = await fetchAboutPageData();

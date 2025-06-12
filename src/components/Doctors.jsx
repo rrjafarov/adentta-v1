@@ -240,19 +240,17 @@ const Doctors = ({ doctorsData, t }) => {
       : true; // Doktor tipi seçilmemişse, tüm doktorlar geçer
     const matchesBrand = selectedBrand
       ? doctor.brand?.some((brand) => brand.title === selectedBrand.label)
-      : true; // Marka seçilmemişse, tüm markalar geçer
+      : true; 
 
-    return matchesDoctorType && matchesBrand; // Her iki filtreyi geçiren doktorlar döndürülür
+    return matchesDoctorType && matchesBrand;
   });
 
-  // ✅ onChange fonksiyonu (Doktor tipi)
   const handleDoctorTypeChange = (value) => {
-    setSelectedDoctorType(value); // Seçilen doktor tipi
+    setSelectedDoctorType(value); 
   };
 
-  // ✅ onChange fonksiyonu (Marka)
   const handleBrandChange = (value) => {
-    setSelectedBrand(value); // Seçilen marka
+    setSelectedBrand(value); 
   };
 
   return (
@@ -296,10 +294,9 @@ const Doctors = ({ doctorsData, t }) => {
           <div className="row">
             {/* ✅ Filtrlənmiş data ilə map olunur */}
             {filteredDoctors.map((doctor) => (
-              <div key={doctor.id} className="xl-4 lg-4 md-6 sm-12">
+              <div key={doctor.id} className="xl-3 lg-3 md-6 sm-12">
                 <Link
-                  href={`/doctors/${doctor.slug
-                    .toLowerCase()
+                  href={`/doctors/${doctor?.slug?.toLowerCase()
                     .replace(/\s+/g, "-")}-${doctor.id}`}
                   className="block"
                 >

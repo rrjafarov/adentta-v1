@@ -545,8 +545,7 @@ const BrandsDetailPage = async ({ t, brandsDetailDataDetail, otherBrands }) => {
                 {filteredProducts.slice(0, 4).map((product, index) => (
                   <div key={index} className="xl-3 lg-3 md-6 sm-6">
                     <Link
-                      href={`/products/${product.title
-                        .toLowerCase()
+                      href={`/products/${product?.title?.toLowerCase()
                         .replace(/\s+/g, "-")}-${product.id}`}
                       className="block"
                     >
@@ -702,8 +701,7 @@ const BrandsDetailPage = async ({ t, brandsDetailDataDetail, otherBrands }) => {
                   <div key={index} className="xl-3 lg-4 md-6 sm-12">
                     <div className="ourBlog">
                       <Link
-                        href={`/blogs/${blog.title
-                          .toLowerCase()
+                        href={`/blogs/${blog?.title?.toLowerCase()
                           .replace(/\s+/g, "-")}-${blog.id}`}
                       >
                         <div className="blogCard">
@@ -797,11 +795,10 @@ const BrandsDetailPage = async ({ t, brandsDetailDataDetail, otherBrands }) => {
             </div>
             <div className="brandsDPOtherBrandCards">
               <div className="row">
-                {otherBrands.map((brand) => (
+                {otherBrands.splice(0,4).map((brand) => (
                   <div key={brand.id} className="xl-3 lg-4 md-6 sm-12">
                     <Link
-                      href={`/brands/${brand.title
-                        .toLowerCase()
+                      href={`/brands/${brand?.title?.toLowerCase()
                         .replace(/\s+/g, "-")}-${brand.id}`}
                       className="block"
                     >

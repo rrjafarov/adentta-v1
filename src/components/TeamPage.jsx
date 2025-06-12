@@ -29,7 +29,7 @@ const TeamPage = ({ t, teamMembers = [] }) => {
         <div className="teamsPageCards">
           <div className="row-gap">
             {teamMembers.map((member) => (
-              <div key={member.id} className="xl-4 lg-4 md-6 sm-12">
+              <div key={member.id} className="xl-3 lg-3 md-6 sm-12">
                 <div className="teamsCards">
                   <div className="teamsPageCard">
                     <div className="teamsPageCardImg">

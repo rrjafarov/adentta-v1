@@ -9,7 +9,6 @@ const PdfCatalog = ({ t, pdfMembers }) => {
   const [selectedBrand, setSelectedBrand] = useState(null);
   const [selectedProductType, setSelectedProductType] = useState(null);
 
-  // ✅ Filterləmə loqikası
 
   const filteredDoctors = pdfMembers.filter((doctor) => {
     const matchesBrand = selectedBrand
@@ -22,7 +21,7 @@ const PdfCatalog = ({ t, pdfMembers }) => {
         )
       : true;
 
-    return matchesBrand && matchesProductType; // Həm marka, həm də məhsul növü uyğun gəlməlidir
+    return matchesBrand && matchesProductType; 
   });
 
   const handleBrandChange = (value) => {

@@ -60,8 +60,7 @@ const OurBlogsHomePage = ({ blogData, t }) => {
           {blogData.map((blog) => (
             <SwiperSlide key={blog.id}>
               <Link
-                href={`/blogs/${blog.title
-                  .toLowerCase()
+                href={`/blogs/${blog?.title?.toLowerCase()
                   .replace(/\s+/g, "-")}-${blog.id}`}
                 className="block"
               >

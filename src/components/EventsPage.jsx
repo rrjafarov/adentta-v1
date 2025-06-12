@@ -145,8 +145,7 @@ const EventsPage = ({ eventsData, t }) => {
                   <div key={event.id} className="xl-4 lg-4 md-6 sm-12">
                     <div className="ourEvent">
                       <Link
-                        href={`/events/${event.title
-                          .toLowerCase()
+                        href={`/events/${event?.title?.toLowerCase()
                           .replace(/\s+/g, "-")}-${event.id}`}
                       >
                         <div className="eventCard">

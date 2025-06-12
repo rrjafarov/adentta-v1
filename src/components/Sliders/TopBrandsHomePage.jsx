@@ -66,7 +66,7 @@ const TopBrandsHomePage = ({ brandsData, t }) => {
           >
             {brandsData.map((brand) => (
               <SwiperSlide key={brand.id}>
-                <Link href={`/brands/${brand.title.toLowerCase().replace(/\s+/g, '-')}-${brand.id}`} className="block">
+                <Link href={`/brands/${brand?.title?.toLowerCase().replace(/\s+/g, '-')}-${brand.id}`} className="block">
                   <div className="topBrand">
                     <div className="topBrandImg">
                       <div className="topBrandLittleImg">

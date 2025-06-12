@@ -166,7 +166,6 @@ async function fetchHomePageData() {
 }
 
 // !generateMetaData
-
 export async function generateMetadata() {
   const seo = await fetchHomePageData();
   const imageUrl = seo?.data.og_image;
@@ -209,9 +208,6 @@ export async function generateMetadata() {
     },
   };
 }
-
-
-
 // !generateMetaData
 
 const Home = async () => {
@@ -222,7 +218,7 @@ const Home = async () => {
   const categoryData = categoryResponse?.data?.data || [];
 
   const productData = await fetchProductsPageData();
-  //
+  
   const brandsResponse = await fetchBrandsPageData();
   const brandsData = brandsResponse?.data?.data || [];
 

@@ -14,7 +14,7 @@ const VacancyOpen = ({ vacancy ,t }) => {
 
             {vacancy.map((vacancyData) => (
               <div key={vacancyData.id} className="xl-6 lg-6 md-6 sm-12">
-                <Link href={`/careers/${vacancyData.title.toLowerCase().replace(/\s+/g, '-')}-${vacancyData.id}`} className="block">
+                <Link href={`/careers/${vacancyData?.title?.toLowerCase().replace(/\s+/g, '-')}-${vacancyData.id}`} className="block">
                   <div className="vacancyCard">
                     <div className="vacancyCardHead">
                       <span>{vacancyData.title}</span>

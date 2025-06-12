@@ -6,7 +6,7 @@ import LoadMoreBTN from "./LoadMoreBTN";
 import ApplyBTN from "./ApplyBTN";
 import ReactSelect from "./ReactSelect";
 import Manat from "../../public/icons/manat.svg";
-import axiosInstance from "@/lib/axios"; 
+import axiosInstance from "@/lib/axios";
 
 // Accordion başlıq komponenti
 const FilterAccordion = ({ title, children }) => {
@@ -256,10 +256,52 @@ export default function ProductsPageFilter({
                  */}
 
                 {/* Category Accordion */}
-                <FilterAccordion
+
+                {/*AccorionFilter  */}
+                {/* <FilterAccordion
                   title={t?.productsPageFilterCategoryTitle || "Category"}
                 >
                   <ul>
+                    {categoryData.map((cat) => {
+                      const productCount = productData.filter((product) =>
+                        product.categories?.some((c) => c.id === cat.id)
+                      ).length;
+                      return (
+                        <li
+                          key={cat.id}
+                          onClick={() => handleCategoryToggle(cat)}
+                          style={{
+                            cursor: "pointer",
+                            display: "flex",
+                            alignItems: "center",
+                            gap: "0.5rem",
+                            fontWeight: selectedCategories.some(
+                              (c) => c.id === cat.id
+                            )
+                              ? "bold"
+                              : "normal",
+                          }}
+                        >
+                          <span>{cat.title}</span>
+                          <p>({productCount})</p>
+                        </li>
+                      );
+                    })}
+                  </ul>
+                </FilterAccordion> */}
+                {/*AccorionFilter  */}
+
+
+                <FilterAccordion
+                  title={t?.productsPageFilterCategoryTitle || "Category"}
+                >
+                  <ul
+                    style={{
+                      maxHeight: "250px",
+                      overflowY: "auto",
+                      paddingRight: "4px",
+                    }}
+                  >
                     {categoryData.map((cat) => {
                       const productCount = productData.filter((product) =>
                         product.categories?.some((c) => c.id === cat.id)
@@ -306,9 +348,9 @@ export default function ProductsPageFilter({
                     {brandsDataFilter
                       // brandsData
                       .filter((brand) =>
-                        brand.title
-                          .toLowerCase()
-                          .includes(brandSearchTerm.toLowerCase())
+                        brand?.title
+                          ?.toLowerCase()
+                          .includes(brandSearchTerm?.toLowerCase())
                       )
                       .map((brand) => (
                         <li
@@ -367,7 +409,7 @@ export default function ProductsPageFilter({
                     <div key={d.id} className="xl-4 lg-4 md-6 sm-6">
                       <Link
                         href={`/products/${d.title
-                          .toLowerCase()
+                          ?.toLowerCase()
                           .replace(/\s+/g, "-")}-${d.id}`}
                         className="block"
                       >
@@ -411,14 +453,12 @@ export default function ProductsPageFilter({
           </div>
         </div>
 
-
-
-        
         <div className="productsPageDescription">
-          <h6>{t?.productsPageCeoDescription || "Ceo description - Addenta product category"}</h6>
-          <p>
-            {t?.productsPageDescriptionText || "Ceo Text"}
-          </p>
+          <h6>
+            {t?.productsPageCeoDescription ||
+              "Ceo description - Addenta product category"}
+          </h6>
+          <p>{t?.productsPageDescriptionText || "Ceo Text"}</p>
           <div className="productsPageDescriptionLink">
             <Link href={"/"}>{t?.seeMoreBtn || "see more"}</Link>
             <img src="/icons/rightDown.svg" alt="" />

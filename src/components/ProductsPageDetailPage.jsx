@@ -1060,11 +1060,6 @@
 
 // export default ProductsPageDetailPage;
 
-
-
-
-
-
 // //! son versiya
 
 "use client";
@@ -1074,18 +1069,19 @@ import Image from "next/image";
 import Thumbnail from "./Sliders/Thumbnail";
 import Manat from "../../public/icons/manat.svg";
 
-const WpLink = ({t}) => {
+const WpLink = ({ t }) => {
   const [currentUrl, setCurrentUrl] = useState("");
   useEffect(() => {
     if (typeof window !== "undefined") {
       // setCurrentUrl(window.location.href);
       setCurrentUrl(window.location.pathname);
-
     }
   }, []);
   const message = encodeURIComponent(
     // `Salam, bu məhsul haqqında məlumat ala bilərəm?: ${currentUrl}`
-    `${t?.wpMessage || "Salam, bu məhsul haqqında məlumat ala bilərəm?"}: ${currentUrl}`
+    `${
+      t?.wpMessage || "Salam, bu məhsul haqqında məlumat ala bilərəm?"
+    }: ${currentUrl}`
   );
   return (
     <Link
@@ -1167,26 +1163,22 @@ const ProductsPageDetailPage = ({ t, productData, similarProducts = [] }) => {
   //   )}`,
   // };
 
-
   const shareUrls = {
-  telegram: `https://t.me/share/url?url=${encodeURIComponent(
-    currentUrl
-  )}&text=${encodeURIComponent(productData.title)}`,
-  facebook: `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(
-    currentUrl
-  )}"e=${encodeURIComponent(productData.title)}`,
-  linkedin: `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(
-    currentUrl
-  )}&title=${encodeURIComponent(
-    productData.title
-  )}&summary=${encodeURIComponent(currentUrl)}`,
-  whatsapp: `https://api.whatsapp.com/send?text=${encodeURIComponent(
-    `${productData.title} - ${currentUrl}`
-  )}`,
-};
-
-
-
+    telegram: `https://t.me/share/url?url=${encodeURIComponent(
+      currentUrl
+    )}&text=${encodeURIComponent(productData.title)}`,
+    facebook: `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(
+      currentUrl
+    )}"e=${encodeURIComponent(productData.title)}`,
+    linkedin: `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(
+      currentUrl
+    )}&title=${encodeURIComponent(
+      productData.title
+    )}&summary=${encodeURIComponent(currentUrl)}`,
+    whatsapp: `https://api.whatsapp.com/send?text=${encodeURIComponent(
+      `${productData.title} - ${currentUrl}`
+    )}`,
+  };
 
   const handleCopy = () => {
     if (!currentUrl) return;
@@ -1201,6 +1193,18 @@ const ProductsPageDetailPage = ({ t, productData, similarProducts = [] }) => {
       {/* Product Detail */}
       <section id="productPageDPsection">
         <div className="container">
+          <div className="filterTop dptopper topper">
+            <Link href="/">
+              <h1>Adentta</h1>
+            </Link>
+            <img src="/icons/rightDown.svg" alt="Adentta" />
+            <Link href="/products">
+              <h4>{t?.products || "Products"}</h4>
+            </Link>
+            <img src="/icons/rightDown.svg" alt="Adentta" />
+            <h4>{productData.title}</h4>
+          </div>
+
           <div className="row">
             {/* Left: thumbnails & main image */}
             <div className="xl-6 md-6 lg-6 sm-12">
@@ -1217,7 +1221,8 @@ const ProductsPageDetailPage = ({ t, productData, similarProducts = [] }) => {
             <div className="xl-6 md-6 lg-6 sm-12">
               <div className="productDetailRight">
                 <span>
-                  {t?.productsPageProductCode || "Product code"}: # <span>{productData.code}</span>
+                  {t?.productsPageProductCode || "Product code"}: #{" "}
+                  <span>{productData.code}</span>
                 </span>
                 <div className="productDetailRightTitle">
                   <h3>{productData.title}</h3>
@@ -1250,16 +1255,22 @@ const ProductsPageDetailPage = ({ t, productData, similarProducts = [] }) => {
                 <WpLink t={t} />
 
                 <div className="detailPageAccordion">
-                  <DetailPageAccordion title={t?.productsPageAboutProducts || "About products"}>
+                  <DetailPageAccordion
+                    title={t?.productsPageAboutProducts || "About products"}
+                  >
                     <div
                       dangerouslySetInnerHTML={{ __html: productData.content }}
                     />
                   </DetailPageAccordion>
                   <div className="lines" />
-                  <DetailPageAccordion title={t?.productsPageDetailsProducts || "Details Products"}>
+                  <DetailPageAccordion
+                    title={t?.productsPageDetailsProducts || "Details Products"}
+                  >
                     <div className="row">
                       <div className="xl-6 lg-6 md-6 sm-12">
-                        <span className="paramTitle">{t?.productsPageDetailsParameters || "parametrs"}</span>
+                        <span className="paramTitle">
+                          {t?.productsPageDetailsParameters || "parametrs"}
+                        </span>
                         <div className="productParametrs">
                           <span>
                             {productData.parametrs?.[0]?.title ?? "Yoxdur"}
@@ -1267,7 +1278,9 @@ const ProductsPageDetailPage = ({ t, productData, similarProducts = [] }) => {
                         </div>
                       </div>
                       <div className="xl-6 lg-6 md-6 sm-12">
-                        <span className="paramTitle">{t?.productsPageDetailsSize || "Size"}</span>
+                        <span className="paramTitle">
+                          {t?.productsPageDetailsSize || "Size"}
+                        </span>
                         <div className="productParametrs">
                           <span>
                             {productData.sizes?.[0]?.title ?? "Yoxdur"}
@@ -1275,7 +1288,9 @@ const ProductsPageDetailPage = ({ t, productData, similarProducts = [] }) => {
                         </div>
                       </div>
                       <div className="xl-6 lg-6 md-6 sm-12">
-                        <span className="paramTitle">{t?.productsPageDetailsCategory || "Size"}</span>
+                        <span className="paramTitle">
+                          {t?.productsPageDetailsCategory || "Size"}
+                        </span>
                         <div className="productParametrs">
                           <span>
                             {productData.categories?.[0]?.title ?? "Yoxdur"}
@@ -1300,8 +1315,13 @@ const ProductsPageDetailPage = ({ t, productData, similarProducts = [] }) => {
                       <div className="littleCartDP">
                         <img src="/icons/percentIcon.svg" alt="Discount Icon" />
                         <div className="littleCartDPinner">
-                          <span>{t?.affordablePrice || "Affrodable Price"}</span>
-                          <p>{t?.affordablePriceContent || "With a 20% down payment"}</p>
+                          <span>
+                            {t?.affordablePrice || "Affrodable Price"}
+                          </span>
+                          <p>
+                            {t?.affordablePriceContent ||
+                              "With a 20% down payment"}
+                          </p>
                         </div>
                       </div>
                       <div className="littleCartDP">
@@ -1311,7 +1331,9 @@ const ProductsPageDetailPage = ({ t, productData, similarProducts = [] }) => {
                         />
                         <div className="littleCartDPinner">
                           <span>{t?.ourService || "Our Service"}</span>
-                          <p>{t?.ourServiceContent || "Always at your service!"}</p>
+                          <p>
+                            {t?.ourServiceContent || "Always at your service!"}
+                          </p>
                         </div>
                       </div>
                       <div className="littleCartDP">
@@ -1320,16 +1342,23 @@ const ProductsPageDetailPage = ({ t, productData, similarProducts = [] }) => {
                           alt="Education Icon"
                         />
                         <div className="littleCartDPinner">
-                          <span>{t?.traningAndEducation || "Training and Education"}</span>
+                          <span>
+                            {t?.traningAndEducation || "Training and Education"}
+                          </span>
                           <p>
-                          {t?.traningAndEducationContent || "Practical and theoretical sessions"}
+                            {t?.traningAndEducationContent ||
+                              "Practical and theoretical sessions"}
                           </p>
                         </div>
                       </div>
                     </div>
                   </DetailPageAccordion>
                   <div className="lines"></div>
-                  <DetailPageAccordion title={t?.productsPagePayCards || "Pay in Easy Installments"}>
+                  <DetailPageAccordion
+                    title={
+                      t?.productsPagePayCards || "Pay in Easy Installments"
+                    }
+                  >
                     <div className="bankCarts">
                       <div className="bankCart">
                         <img
@@ -1379,7 +1408,7 @@ const ProductsPageDetailPage = ({ t, productData, similarProducts = [] }) => {
           </div>
         </div>
       </section>
-      
+
       {/* Similar Products */}
       {similarProducts.length > 0 && (
         <section id="detailPagesSimilarsBottom">
@@ -1389,8 +1418,8 @@ const ProductsPageDetailPage = ({ t, productData, similarProducts = [] }) => {
               {similarProducts.map((prod) => (
                 <div key={prod.id} className="xl-3 lg-3 md-6 sm-6">
                   <Link
-                    href={`/products/${prod.title
-                      .toLowerCase()
+                    href={`/products/${prod?.title
+                      ?.toLowerCase()
                       .replace(/\s+/g, "-")}-${prod.id}`}
                     className="block"
                   >
@@ -1444,8 +1473,8 @@ const ProductsPageDetailPage = ({ t, productData, similarProducts = [] }) => {
               {lastViewed.map((prod) => (
                 <div key={prod.id} className="xl-3 lg-3 md-6 sm-6">
                   <Link
-                    href={`/products/${prod.title
-                      .toLowerCase()
+                    href={`/products/${prod?.title
+                      ?.toLowerCase()
                       .replace(/\s+/g, "-")}-${prod.id}`}
                     className="block"
                   >
