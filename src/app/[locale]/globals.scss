@@ -2618,7 +2618,8 @@ ul {
     cursor: pointer;
   }
 }
-.dptopper{
+
+.dptopper {
   padding-bottom: 4rem;
 }
 
@@ -3168,7 +3169,7 @@ ul {
 .productsPageDescription {
   padding-top: 6rem;
 
-  h6 {
+  h1 {
     color: #293881;
     font-size: 2rem;
     font-style: normal;
@@ -3176,15 +3177,14 @@ ul {
     line-height: 0%;
     letter-spacing: -0.0016rem;
   }
-
   p {
     padding-top: 1.74rem;
-    padding-bottom: 3.65rem;
+    padding-bottom: 2.65rem;
     font-size: 1.35rem;
     font-style: normal;
     font-weight: 400;
     line-height: 155%;
-    opacity: 0.7;
+    // opacity: 0.7;
     background: linear-gradient(180deg, #1c1c1c -52.81%, #fff 201.54%);
     background-clip: text;
     -webkit-background-clip: text;
@@ -3203,6 +3203,29 @@ ul {
     align-items: center;
     margin-bottom: 5rem;
     margin-top: 1rem;
+  }
+}
+.productsPageDetailsCEO {
+  h1 {
+    color: #293881;
+    font-size: 2rem;
+    font-style: normal;
+    font-weight: 500;
+    line-height: 0%;
+    letter-spacing: -0.0016rem;
+  }
+  .page-description-content {
+    padding-top: 1.74rem;
+    padding-bottom: 3.65rem;
+    font-size: 1.35rem;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 155%;
+    // opacity: 0.7;
+    background: linear-gradient(180deg, #1c1c1c -52.81%, #fff 201.54%);
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
   }
 }
 
