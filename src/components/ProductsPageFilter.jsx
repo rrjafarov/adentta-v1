@@ -291,7 +291,6 @@
 //                 </FilterAccordion> */}
 //                 {/*AccorionFilter  */}
 
-
 //                 <FilterAccordion
 //                   title={t?.productsPageFilterCategoryTitle || "Category"}
 //                 >
@@ -504,15 +503,11 @@
 
 
 
-
-
-
-
-
+// * ---------------AAAAAAAAAAAAA-AAAAAAAAAAAAAAAA-A
 // File: components/ProductsPageFilter.jsx
 "use client";
 import Link from "next/link";
-import React, { useState, useEffect, useMemo } from "react";
+import React, { useState, useEffect, useMemo, useCallback } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import LoadMoreBTN from "./LoadMoreBTN";
 import ApplyBTN from "./ApplyBTN";
@@ -520,7 +515,7 @@ import ReactSelect from "./ReactSelect";
 import Manat from "../../public/icons/manat.svg";
 import axiosInstance from "@/lib/axios";
 
-// Accordion başlık komponenti
+// Accordion başlık komponenti (className’ler orijinal)
 const FilterAccordion = ({ title, children }) => {
   const [isOpen, setIsOpen] = useState(false);
   return (
@@ -538,7 +533,7 @@ const FilterAccordion = ({ title, children }) => {
   );
 };
 
-// Client-side filtre fetch fonksiyonu
+// Client-side filtre fetch fonksiyonu (isteğe bağlı; server-side navigation tercih edersen bu fonksiyonu ve useEffect içindeki fetch’i kaldırabilirsin)
 async function fetchProducts(categoryIds = [], brandIds = []) {
   const filters = [];
 
@@ -577,7 +572,9 @@ async function fetchProducts(categoryIds = [], brandIds = []) {
     })
     .join("&");
   try {
-    const res = await axiosInstance.get(`/page-data/product?per_page=999&${query}`);
+    const res = await axiosInstance.get(
+      `/page-data/product?per_page=999&${query}`
+    );
     return res.data.data.data;
   } catch (err) {
     console.error("Filter fetch error (client)", err);
@@ -585,24 +582,39 @@ async function fetchProducts(categoryIds = [], brandIds = []) {
   }
 }
 
+// Güvenli slugify utility (istersen koru ya da kendi slug mantığını uygula)
+function slugify(text) {
+  if (!text) return "";
+  return text
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/(^-|-$)/g, "");
+}
+
 export default function ProductsPageFilter({
   t,
-  initialProducts = [], // Server'dan gelen başlangıç listesi
-  categoryData = [], // [{id, title, url_slug, meta_title, meta_description, page_title, page_description, ...}, ...]
-  brandsDataFilter = [], // [{id, title, ...}, ...]
-  initialSelectedBrands = [], // [{id, title, ...}]
-  initialSelectedCategories = [], // [{...}] veya empty
-  categoryMetaTitle = null, // Dinamik meta_title
-  categoryMetaDescription = null, // Dinamik meta_description
-  categoryPageTitle = null, // Dinamik page_title
-  categoryPageDescription = null, // Dinamik page_description (HTML içerebilir)
-  categoryId = null, // Seçili kategori ID (slug yerine)
+  allProducts = [], // Yeni: global tüm ürün listesi
+  initialProducts = [], // Server-side filtreli başlangıç listesi
+  categoryData = [],
+  brandsDataFilter = [],
+  initialSelectedBrands = [],
+  initialSelectedCategories = [],
+  categoryMetaTitle = null,
+  categoryMetaDescription = null,
+  categoryPageTitle = null,
+  categoryPageDescription = null,
+  categoryId = null,
 }) {
   const router = useRouter();
   const searchParams = useSearchParams();
 
+  // filteredProducts: geçerli filtreye göre gösterilecek ürünler
   const [filteredProducts, setFilteredProducts] = useState(initialProducts);
-  const [selectedCategories, setSelectedCategories] = useState(initialSelectedCategories);
+  const [selectedCategories, setSelectedCategories] = useState(
+    initialSelectedCategories
+  );
   const [selectedBrands, setSelectedBrands] = useState(initialSelectedBrands);
   const [sortOption, setSortOption] = useState({
     value: "az",
@@ -611,28 +623,29 @@ export default function ProductsPageFilter({
   const [isMobileFilterOpen, setIsMobileFilterOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [brandSearchTerm, setBrandSearchTerm] = useState("");
-  // Toggle durumu: See more link tıklanınca true/göster, tekrar tıklanınca false/gizle
   const [showDetails, setShowDetails] = useState(false);
 
-  // URL'deki değişikliklere tepki: searchParams değiştiğinde state ve ürün listesini güncelle
+  // URL değiştiğinde selectedCategories/Brands ve filteredProducts güncelle
   useEffect(() => {
-    const categoryParam = searchParams.get("category"); // ID veya virgülle ayrılmış ID listesi
-    const brandsParam = searchParams.get("brands"); // "17,53" vs.
+    const categoryParam = searchParams.get("category");
+    const brandsParam = searchParams.get("brands");
 
-    // ID'leri al
     let categoryIds = [];
     if (categoryParam) {
       const idParts = categoryParam.split(",");
-      categoryIds = idParts.map((id) => parseInt(id, 10)).filter((n) => !isNaN(n));
+      categoryIds = idParts
+        .map((id) => parseInt(id, 10))
+        .filter((n) => !isNaN(n));
     }
 
     let brandIds = [];
     if (brandsParam) {
-      const parts = Array.isArray(brandsParam) ? brandsParam : brandsParam.split(",");
+      const parts = Array.isArray(brandsParam)
+        ? brandsParam
+        : brandsParam.split(",");
       brandIds = parts.map((p) => parseInt(p, 10)).filter((n) => !isNaN(n));
     }
 
-    // Seçili objeleri güncelle
     const newSelectedCategories = categoryData.filter((c) =>
       categoryIds.includes(c.id)
     );
@@ -642,10 +655,9 @@ export default function ProductsPageFilter({
 
     setSelectedCategories(newSelectedCategories);
     setSelectedBrands(newSelectedBrands);
-    // Kategori veya brand değişince detay gizlensin
     setShowDetails(false);
 
-    // Yeni filtre kombinasyonuna göre fetch
+    // Eğer client-side fetch istersen, aşağıyı kullan:
     const fetchAndSet = async () => {
       setIsLoading(true);
       try {
@@ -659,10 +671,14 @@ export default function ProductsPageFilter({
       }
     };
     fetchAndSet();
+
+    // Eğer yalnızca server-side navigation tercih edersen:
+    // setFilteredProducts(initialProducts);
+    // şeklinde bırakabilirsin ve fetchAndSet bloğunu kaldırabilirsin.
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [searchParams.toString(), categoryData, brandsDataFilter]);
 
-  // Sort edilmiş ürün dizisi
+  // Sıralı ürünler
   const sortedProducts = useMemo(() => {
     return [...filteredProducts].sort((a, b) =>
       sortOption.value === "az"
@@ -671,47 +687,51 @@ export default function ProductsPageFilter({
     );
   }, [filteredProducts, sortOption]);
 
-  // URL'i güncelle: seçili kategori ID ve brand ID dizilerini parametrelere ekle
-  const updateUrlWithFilters = (newBrands, newCategories) => {
-    const params = new URLSearchParams();
+  // URL güncelleme
+  const updateUrlWithFilters = useCallback(
+    (newBrands, newCategories) => {
+      const params = new URLSearchParams();
 
-    // Kategori ID'lerini set et
-    if (newCategories.length) {
-      const categoryIds = newCategories.map((c) => c.id);
-      params.set("category", categoryIds.join(","));
-    }
+      if (newCategories.length) {
+        const categoryIds = newCategories.map((c) => c.id);
+        params.set("category", categoryIds.join(","));
+      }
+      if (newBrands.length) {
+        params.set("brands", newBrands.map((b) => b.id).join(","));
+      }
 
-    // Brand ID'leri set et
-    if (newBrands.length) {
-      params.set("brands", newBrands.map((b) => b.id).join(","));
-    }
+      const queryString = params.toString();
+      const href = queryString ? `/products?${queryString}` : `/products`;
+      router.push(href);
+    },
+    [router]
+  );
 
-    const queryString = params.toString();
-    const href = queryString ? `/products?${queryString}` : `/products`;
-    router.push(href);
-  };
+  const handleCategoryToggle = useCallback(
+    (category) => {
+      let newSelected;
+      if (selectedCategories.some((c) => c.id === category.id)) {
+        newSelected = selectedCategories.filter((c) => c.id !== category.id);
+      } else {
+        newSelected = [...selectedCategories, category];
+      }
+      updateUrlWithFilters(selectedBrands, newSelected);
+    },
+    [selectedCategories, selectedBrands, updateUrlWithFilters]
+  );
 
-  // Kategori toggle handler (checkbox yok, tıklanabilir satır)
-  const handleCategoryToggle = (category) => {
-    let newSelected;
-    if (selectedCategories.some((c) => c.id === category.id)) {
-      newSelected = selectedCategories.filter((c) => c.id !== category.id);
-    } else {
-      newSelected = [...selectedCategories, category];
-    }
-    updateUrlWithFilters(selectedBrands, newSelected);
-  };
-
-  // Marka toggle handler (checkbox var)
-  const handleBrandToggle = (brand) => {
-    let newSelected;
-    if (selectedBrands.some((b) => b.id === brand.id)) {
-      newSelected = selectedBrands.filter((b) => b.id !== brand.id);
-    } else {
-      newSelected = [...selectedBrands, brand];
-    }
-    updateUrlWithFilters(newSelected, selectedCategories);
-  };
+  const handleBrandToggle = useCallback(
+    (brand) => {
+      let newSelected;
+      if (selectedBrands.some((b) => b.id === brand.id)) {
+        newSelected = selectedBrands.filter((b) => b.id !== brand.id);
+      } else {
+        newSelected = [...selectedBrands, brand];
+      }
+      updateUrlWithFilters(newSelected, selectedCategories);
+    },
+    [selectedBrands, selectedCategories, updateUrlWithFilters]
+  );
 
   return (
     <div>
@@ -745,14 +765,19 @@ export default function ProductsPageFilter({
                   </div>
                 ))}
                 {selectedBrands.map((brand) => (
-                  <div className="selectedFilterInner" key={`brand-${brand.id}`}>
+                  <div
+                    className="selectedFilterInner"
+                    key={`brand-${brand.id}`}
+                  >
                     <span onClick={() => handleBrandToggle(brand)}>×</span>
                     <p>{brand.title}</p>
                   </div>
                 ))}
               </div>
 
-              <div className={`filter-panel ${isMobileFilterOpen ? "active" : ""}`}>
+              <div
+                className={`filter-panel ${isMobileFilterOpen ? "active" : ""}`}
+              >
                 <button className="filter-titless">
                   {t?.productsPageFilterTitle || "Filter"}
                 </button>
@@ -766,7 +791,10 @@ export default function ProductsPageFilter({
                     </div>
                   ))}
                   {selectedBrands.map((brand) => (
-                    <div className="selectedFilterInner" key={`brand-${brand.id}`}>
+                    <div
+                      className="selectedFilterInner"
+                      key={`brand-${brand.id}`}
+                    >
                       <span onClick={() => handleBrandToggle(brand)}>×</span>
                       <p>{brand.title}</p>
                     </div>
@@ -794,10 +822,13 @@ export default function ProductsPageFilter({
                     }}
                   >
                     {categoryData.map((cat) => {
-                      const productCount = initialProducts.filter((product) =>
+                      // Burada sayımı global allProducts üzerinden yapıyoruz:
+                      const productCount = allProducts.filter((product) =>
                         product.categories?.some((c) => c.id === cat.id)
                       ).length;
-                      const isSelected = selectedCategories.some((c) => c.id === cat.id);
+                      const isSelected = selectedCategories.some(
+                        (c) => c.id === cat.id
+                      );
                       return (
                         <li
                           key={cat.id}
@@ -810,7 +841,6 @@ export default function ProductsPageFilter({
                             fontWeight: isSelected ? "bold" : "normal",
                           }}
                         >
-                          {/* Checkbox kaldırıldı */}
                           <span>{cat.title}</span>
                           <p>({productCount})</p>
                         </li>
@@ -847,7 +877,9 @@ export default function ProductsPageFilter({
                           .includes(brandSearchTerm?.toLowerCase())
                       )
                       .map((brand) => {
-                        const isSelected = selectedBrands.some((b) => b.id === brand.id);
+                        const isSelected = selectedBrands.some(
+                          (b) => b.id === brand.id
+                        );
                         return (
                           <li
                             key={brand.id}
@@ -860,8 +892,11 @@ export default function ProductsPageFilter({
                               fontWeight: isSelected ? "bold" : "normal",
                             }}
                           >
-                            {/* Checkbox input yalnız burada */}
-                            <input type="checkbox" checked={isSelected} readOnly />
+                            <input
+                              type="checkbox"
+                              checked={isSelected}
+                              readOnly
+                            />
                             <span>{brand.title}</span>
                           </li>
                         );
@@ -901,9 +936,7 @@ export default function ProductsPageFilter({
                   sortedProducts.map((d) => (
                     <div key={d.id} className="xl-4 lg-4 md-6 sm-6">
                       <Link
-                        href={`/products/${d.title
-                          ?.toLowerCase()
-                          .replace(/\s+/g, "-")}-${d.id}`}
+                        href={`/products/${slugify(d.title)}-${d.id}`}
                         className="block"
                       >
                         <div className="homePageProductCardContent">
@@ -945,7 +978,6 @@ export default function ProductsPageFilter({
 
         {/* Dinamik meta_title / meta_description gösterimi ve toggle ile detay gösterme */}
         <div className="productsPageDescription">
-          {/* Meta kısmı */}
           <h1>
             {categoryMetaTitle
               ? categoryMetaTitle
@@ -958,9 +990,11 @@ export default function ProductsPageFilter({
               : t?.productsPageDescriptionText || "Ceo Text"}
           </p>
 
-          {/* Açılan detay kısmı (showDetails true olduğunda) */}
           {showDetails && (
-            <div className="productsPageDetailsCEO" style={{ marginTop: "1rem" }}>
+            <div
+              className="productsPageDetailsCEO"
+              style={{ marginTop: "1rem" }}
+            >
               {categoryPageTitle && <h1>{categoryPageTitle}</h1>}
               {categoryPageDescription && (
                 <div
@@ -971,8 +1005,10 @@ export default function ProductsPageFilter({
             </div>
           )}
 
-          {/* See more / Hide toggle link: her zaman en altta ve her zaman görünür */}
-          <div className="productsPageDescriptionLink" style={{ marginTop: "1rem" }}>
+          <div
+            className="productsPageDescriptionLink"
+            style={{ marginTop: "1rem" }}
+          >
             <a
               href="#"
               onClick={(e) => {
@@ -987,8 +1023,8 @@ export default function ProductsPageFilter({
               }}
             >
               {showDetails
-                ? (t?.hideDetailsBtn || "Hide")
-                : (t?.seeMoreBtn || "See more")}
+                ? t?.hideDetailsBtn || "Hide"
+                : t?.seeMoreBtn || "See more"}
               <img
                 src="/icons/rightDown.svg"
                 alt=""
@@ -1001,669 +1037,45 @@ export default function ProductsPageFilter({
             </a>
           </div>
         </div>
-      </div>
 
-      {/* Spinner Styles */}
-      <style jsx>{`
-        .loader-container {
-          width: 100% !important;
-          min-width: 97rem;
-          min-height: 30rem;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          padding: 5rem auto;
-        }
-        .loader {
-          border: 5px solid #98b4de;
-          border-top: 5px solid #293881;
-          border-radius: 50%;
-          width: 40px;
-          height: 40px;
-          animation: spin 0.8s linear infinite;
-        }
-        @keyframes spin {
-          to {
-            transform: rotate(360deg);
+        {/* style jsx kısmı unchanged */}
+        <style jsx>{`
+          .loader-container {
+            width: 100% !important;
+            min-width: 97rem;
+            min-height: 30rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 5rem auto;
           }
-        }
-        /* Accordion içeriğinde scroll için */
-        .accordion-content {
-          max-height: 250px;
-          overflow-y: auto;
-        }
-        /* İsteğe bağlı: detay kısmı stilleri */
-        .productsPageDetailsCEO h1 {
-          margin-bottom: 0.5rem;
-        }
-        .page-description-content {
-          margin-bottom: 0.5rem;
-        }
-      `}</style>
+          .loader {
+            border: 5px solid #98b4de;
+            border-top: 5px solid #293881;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 0.8s linear infinite;
+          }
+          @keyframes spin {
+            to {
+              transform: rotate(360deg);
+            }
+          }
+          .accordion-content {
+            max-height: 250px;
+            overflow-y: auto;
+          }
+          .productsPageDetailsCEO h1 {
+            margin-bottom: 0.5rem;
+          }
+          .page-description-content {
+            margin-bottom: 0.5rem;
+          }
+        `}</style>
+      </div>
     </div>
   );
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-// // File: components/ProductsPageFilter.jsx
-// "use client";
-// import Link from "next/link";
-// import React, { useState, useEffect, useMemo } from "react";
-// import { useRouter, useSearchParams } from "next/navigation";
-// import LoadMoreBTN from "./LoadMoreBTN";
-// import ApplyBTN from "./ApplyBTN";
-// import ReactSelect from "./ReactSelect";
-// import Manat from "../../public/icons/manat.svg";
-// import axiosInstance from "@/lib/axios";
-
-// // Accordion başlık komponenti
-// const FilterAccordion = ({ title, children }) => {
-//   const [isOpen, setIsOpen] = useState(false);
-//   return (
-//     <div className="accordion">
-//       <button className="accordion-header" onClick={() => setIsOpen(!isOpen)}>
-//         {title}
-//         <img
-//           src={isOpen ? "/icons/minus.svg" : "/icons/plusIcon.svg"}
-//           alt="Toggle Icon"
-//           className="toggle-icon"
-//         />
-//       </button>
-//       {isOpen && <div className="accordion-content">{children}</div>}
-//     </div>
-//   );
-// };
-
-// // Client-side filtre fetch fonksiyonu
-// async function fetchProducts(categoryIds = [], brandIds = []) {
-//   const filters = [];
-
-//   if (categoryIds.length) {
-//     filters.push({
-//       key: "categories",
-//       operator: "IN",
-//       values: categoryIds,
-//     });
-//   }
-//   if (brandIds.length) {
-//     filters.push({
-//       key: "brands",
-//       operator: "IN",
-//       values: brandIds,
-//     });
-//   }
-//   if (!filters.length) {
-//     try {
-//       const res = await axiosInstance.get("/page-data/product?per_page=999");
-//       return res.data.data.data;
-//     } catch (err) {
-//       console.error("Fetch all products error", err);
-//       return [];
-//     }
-//   }
-//   const query = filters
-//     .map((f, idx) => {
-//       const base = `filters[${idx}][key]=${encodeURIComponent(
-//         f.key
-//       )}&filters[${idx}][operator]=${encodeURIComponent(f.operator)}`;
-//       const vals = f.values
-//         .map((v) => `filters[${idx}][value][]=${encodeURIComponent(v)}`)
-//         .join("&");
-//       return `${base}&${vals}`;
-//     })
-//     .join("&");
-//   try {
-//     const res = await axiosInstance.get(`/page-data/product?per_page=999&${query}`);
-//     return res.data.data.data;
-//   } catch (err) {
-//     console.error("Filter fetch error (client)", err);
-//     return [];
-//   }
-// }
-
-// export default function ProductsPageFilter({
-//   t,
-//   initialProducts = [], // Server’dan gelen başlangıç listesi
-//   categoryData = [], // [{id, title, url_slug, meta_title, meta_description, page_title, page_description, ...}, ...]
-//   brandsDataFilter = [], // [{id, title, ...}, ...]
-//   initialSelectedBrands = [], // [{id, title, ...}]
-//   initialSelectedCategories = [], // [{...}] veya empty
-//   categoryMetaTitle = null, // Dinamik meta_title
-//   categoryMetaDescription = null, // Dinamik meta_description
-//   categoryPageTitle = null, // Dinamik page_title
-//   categoryPageDescription = null, // Dinamik page_description (HTML içerebilir)
-//   categorySlug = null, // Seçili kategori slug
-// }) {
-//   const router = useRouter();
-//   const searchParams = useSearchParams();
-
-//   const [filteredProducts, setFilteredProducts] = useState(initialProducts);
-//   const [selectedCategories, setSelectedCategories] = useState(initialSelectedCategories);
-//   const [selectedBrands, setSelectedBrands] = useState(initialSelectedBrands);
-//   const [sortOption, setSortOption] = useState({
-//     value: "az",
-//     label: t?.from || "From A-Z",
-//   });
-//   const [isMobileFilterOpen, setIsMobileFilterOpen] = useState(false);
-//   const [isLoading, setIsLoading] = useState(false);
-//   const [brandSearchTerm, setBrandSearchTerm] = useState("");
-//   // Toggle durumu: See more link tıklanınca true/göster, tekrar tıklanınca false/gizle
-//   const [showDetails, setShowDetails] = useState(false);
-
-//   // URL'deki değişikliklere tepki: searchParams değiştiğinde state ve ürün listesini güncelle
-//   useEffect(() => {
-//     const categoryParam = searchParams.get("category"); // slug veya virgülle ayrılmış slug listesi
-//     const brandsParam = searchParams.get("brands"); // "17,53" vs.
-
-//     // Slug → ID eşleştirmesi
-//     let categoryIds = [];
-//     if (categoryParam) {
-//       const slugParts = categoryParam.split(",");
-//       const matchedIds = slugParts
-//         .map((slug) => {
-//           const matched = categoryData.find((c) => {
-//             if (c.url_slug) {
-//               return c.url_slug === slug;
-//             }
-//             // fallback slugify title
-//             const normalized = c.title
-//               .toString()
-//               .normalize("NFD")
-//               .replace(/[\u0300-\u036f]/g, "")
-//               .toLowerCase()
-//               .trim()
-//               .replace(/\s+/g, "-")
-//               .replace(/[^\w\-]+/g, "")
-//               .replace(/\-\-+/g, "-");
-//             return normalized === slug;
-//           });
-//           return matched ? matched.id : null;
-//         })
-//         .filter((id) => id !== null);
-//       categoryIds = matchedIds;
-//     }
-
-//     let brandIds = [];
-//     if (brandsParam) {
-//       const parts = Array.isArray(brandsParam) ? brandsParam : brandsParam.split(",");
-//       brandIds = parts.map((p) => parseInt(p, 10)).filter((n) => !isNaN(n));
-//     }
-
-//     // Seçili objeleri güncelle
-//     const newSelectedCategories = categoryData.filter((c) =>
-//       categoryIds.includes(c.id)
-//     );
-//     const newSelectedBrands = brandsDataFilter.filter((b) =>
-//       brandIds.includes(b.id)
-//     );
-
-//     setSelectedCategories(newSelectedCategories);
-//     setSelectedBrands(newSelectedBrands);
-//     // Kategori veya brand değişince detay gizlensin
-//     setShowDetails(false);
-
-//     // Yeni filtre kombinasyonuna göre fetch
-//     const fetchAndSet = async () => {
-//       setIsLoading(true);
-//       try {
-//         const prods = await fetchProducts(categoryIds, brandIds);
-//         setFilteredProducts(prods);
-//       } catch (err) {
-//         console.error("Client fetch error in useEffect", err);
-//         setFilteredProducts([]);
-//       } finally {
-//         setIsLoading(false);
-//       }
-//     };
-//     fetchAndSet();
-//     // eslint-disable-next-line react-hooks/exhaustive-deps
-//   }, [searchParams.toString(), categoryData, brandsDataFilter]);
-
-//   // Sort edilmiş ürün dizisi
-//   const sortedProducts = useMemo(() => {
-//     return [...filteredProducts].sort((a, b) =>
-//       sortOption.value === "az"
-//         ? a.title.localeCompare(b.title)
-//         : b.title.localeCompare(a.title)
-//     );
-//   }, [filteredProducts, sortOption]);
-
-//   // URL'i güncelle: seçili kategori slug ve brand ID dizilerini parametrelere ekle
-//   const updateUrlWithFilters = (newBrands, newCategories) => {
-//     const params = new URLSearchParams();
-
-//     // Kategori slug’u set et
-//     if (newCategories.length === 1) {
-//       const slug = newCategories[0].url_slug
-//         ? newCategories[0].url_slug
-//         : newCategories[0].title
-//             .toString()
-//             .normalize("NFD")
-//             .replace(/[\u0300-\u036f]/g, "")
-//             .toLowerCase()
-//             .trim()
-//             .replace(/\s+/g, "-")
-//             .replace(/[^\w\-]+/g, "")
-//             .replace(/\-\-+/g, "-");
-//       params.set("category", slug);
-//     } else if (newCategories.length > 1) {
-//       const slugs = newCategories.map((c) =>
-//         c.url_slug
-//           ? c.url_slug
-//           : c.title
-//               .toString()
-//               .normalize("NFD")
-//               .replace(/[\u0300-\u036f]/g, "")
-//               .toLowerCase()
-//               .trim()
-//               .replace(/\s+/g, "-")
-//               .replace(/[^\w\-]+/g, "")
-//               .replace(/\-\-+/g, "-")
-//       );
-//       params.set("category", slugs.join(","));
-//     }
-
-//     // Brand ID’leri set et
-//     if (newBrands.length) {
-//       params.set("brands", newBrands.map((b) => b.id).join(","));
-//     }
-
-//     const queryString = params.toString();
-//     const href = queryString ? `/products?${queryString}` : `/products`;
-//     router.push(href);
-//   };
-
-//   // Kategori toggle handler (checkbox yok, tıklanabilir satır)
-//   const handleCategoryToggle = (category) => {
-//     let newSelected;
-//     if (selectedCategories.some((c) => c.id === category.id)) {
-//       newSelected = selectedCategories.filter((c) => c.id !== category.id);
-//     } else {
-//       newSelected = [...selectedCategories, category];
-//     }
-//     updateUrlWithFilters(selectedBrands, newSelected);
-//   };
-
-//   // Marka toggle handler (checkbox var)
-//   const handleBrandToggle = (brand) => {
-//     let newSelected;
-//     if (selectedBrands.some((b) => b.id === brand.id)) {
-//       newSelected = selectedBrands.filter((b) => b.id !== brand.id);
-//     } else {
-//       newSelected = [...selectedBrands, brand];
-//     }
-//     updateUrlWithFilters(newSelected, selectedCategories);
-//   };
-
-//   return (
-//     <div>
-//       <div className="container">
-//         {/* Başlık */}
-//         <div className="filterTop topper">
-//           <Link href="/">
-//             <h1>Adentta</h1>
-//           </Link>
-//           <img src="/icons/rightDown.svg" alt="Adentta" />
-//           <h4>{t?.products || "Products"}</h4>
-//         </div>
-
-//         <div className="row">
-//           {/* Sidebar Filter */}
-//           <div className="xl-3 lg-3 md-3 sm-12">
-//             <div className="filter-container">
-//               <button
-//                 className="filter-title"
-//                 onClick={() => setIsMobileFilterOpen(!isMobileFilterOpen)}
-//               >
-//                 {t?.productsPageFilterTitle || "Filter"}
-//               </button>
-
-//               {/* Seçilmiş kategori ve markalar - Desktop */}
-//               <div className="selectedFilter desktop-only">
-//                 {selectedCategories.map((cat) => (
-//                   <div className="selectedFilterInner" key={`cat-${cat.id}`}>
-//                     <span onClick={() => handleCategoryToggle(cat)}>×</span>
-//                     <p>{cat.title}</p>
-//                   </div>
-//                 ))}
-//                 {selectedBrands.map((brand) => (
-//                   <div className="selectedFilterInner" key={`brand-${brand.id}`}>
-//                     <span onClick={() => handleBrandToggle(brand)}>×</span>
-//                     <p>{brand.title}</p>
-//                   </div>
-//                 ))}
-//               </div>
-
-//               <div className={`filter-panel ${isMobileFilterOpen ? "active" : ""}`}>
-//                 <button className="filter-titless">
-//                   {t?.productsPageFilterTitle || "Filter"}
-//                 </button>
-
-//                 {/* Seçilmiş kategori ve markalar - Mobile */}
-//                 <div className="selectedFilter mobile-only">
-//                   {selectedCategories.map((cat) => (
-//                     <div className="selectedFilterInner" key={`cat-${cat.id}`}>
-//                       <span onClick={() => handleCategoryToggle(cat)}>×</span>
-//                       <p>{cat.title}</p>
-//                     </div>
-//                   ))}
-//                   {selectedBrands.map((brand) => (
-//                     <div className="selectedFilterInner" key={`brand-${brand.id}`}>
-//                       <span onClick={() => handleBrandToggle(brand)}>×</span>
-//                       <p>{brand.title}</p>
-//                     </div>
-//                   ))}
-//                 </div>
-
-//                 <button
-//                   className="close-btn"
-//                   onClick={() => setIsMobileFilterOpen(false)}
-//                 >
-//                   <img src="/icons/popupCloseIcon.svg" alt="close" />
-//                 </button>
-
-//                 <div className="lineFiltered"></div>
-
-//                 {/* Category Accordion */}
-//                 <FilterAccordion
-//                   title={t?.productsPageFilterCategoryTitle || "Category"}
-//                 >
-//                   <ul
-//                     style={{
-//                       maxHeight: "250px",
-//                       overflowY: "auto",
-//                       paddingRight: "4px",
-//                     }}
-//                   >
-//                     {categoryData.map((cat) => {
-//                       const productCount = initialProducts.filter((product) =>
-//                         product.categories?.some((c) => c.id === cat.id)
-//                       ).length;
-//                       const isSelected = selectedCategories.some((c) => c.id === cat.id);
-//                       return (
-//                         <li
-//                           key={cat.id}
-//                           onClick={() => handleCategoryToggle(cat)}
-//                           style={{
-//                             cursor: "pointer",
-//                             display: "flex",
-//                             alignItems: "center",
-//                             gap: "0.5rem",
-//                             fontWeight: isSelected ? "bold" : "normal",
-//                           }}
-//                         >
-//                           {/* Checkbox kaldırıldı */}
-//                           <span>{cat.title}</span>
-//                           <p>({productCount})</p>
-//                         </li>
-//                       );
-//                     })}
-//                   </ul>
-//                 </FilterAccordion>
-
-//                 {/* Brand Accordion */}
-//                 <FilterAccordion
-//                   title={t?.productsPageFilterBrandsTitle || "Brands"}
-//                 >
-//                   <div className="filteredSearch">
-//                     <img src="/icons/searchIcon.svg" alt="" />
-//                     <input
-//                       className="filterSrch"
-//                       type="text"
-//                       placeholder={t?.searchText || "Search..."}
-//                       value={brandSearchTerm}
-//                       onChange={(e) => setBrandSearchTerm(e.target.value)}
-//                     />
-//                   </div>
-//                   <ul
-//                     style={{
-//                       maxHeight: "250px",
-//                       overflowY: "auto",
-//                       paddingRight: "4px",
-//                     }}
-//                   >
-//                     {brandsDataFilter
-//                       .filter((brand) =>
-//                         brand?.title
-//                           ?.toLowerCase()
-//                           .includes(brandSearchTerm?.toLowerCase())
-//                       )
-//                       .map((brand) => {
-//                         const isSelected = selectedBrands.some((b) => b.id === brand.id);
-//                         return (
-//                           <li
-//                             key={brand.id}
-//                             onClick={() => handleBrandToggle(brand)}
-//                             style={{
-//                               cursor: "pointer",
-//                               display: "flex",
-//                               alignItems: "center",
-//                               gap: "0.5rem",
-//                               fontWeight: isSelected ? "bold" : "normal",
-//                             }}
-//                           >
-//                             {/* Checkbox input yalnız burada */}
-//                             <input type="checkbox" checked={isSelected} readOnly />
-//                             <span>{brand.title}</span>
-//                           </li>
-//                         );
-//                       })}
-//                   </ul>
-//                 </FilterAccordion>
-
-//                 {/* Mobile Apply Button */}
-//                 <div
-//                   className="applyBTN flex items-center mt-4 justify-center"
-//                   onClick={() => setIsMobileFilterOpen(false)}
-//                 >
-//                   <ApplyBTN t={t} />
-//                 </div>
-//               </div>
-//             </div>
-//           </div>
-
-//           {/* Products Grid */}
-//           <div className="xl-9 lg-9 md-9 sm-12">
-//             <div className="productPageCards">
-//               <div className="productPageSorting">
-//                 <span>{t?.sortBy || "Sort by"}</span>
-//                 <ReactSelect
-//                   t={t}
-//                   value={sortOption}
-//                   onChange={setSortOption}
-//                 />
-//               </div>
-
-//               <div className="row">
-//                 {isLoading ? (
-//                   <div className="loader-container">
-//                     <div className="loader" />
-//                   </div>
-//                 ) : (
-//                   sortedProducts.map((d) => (
-//                     <div key={d.id} className="xl-4 lg-4 md-6 sm-6">
-//                       <Link
-//                         href={`/products/${d.title
-//                           ?.toLowerCase()
-//                           .replace(/\s+/g, "-")}-${d.id}`}
-//                         className="block"
-//                       >
-//                         <div className="homePageProductCardContent">
-//                           <div className="homePageProCardImgs">
-//                             <div className="homePageProductCardContentImage">
-//                               <img
-//                                 src={`https://admin.adentta.az/storage${d.image}`}
-//                                 alt={d.title}
-//                               />
-//                             </div>
-//                           </div>
-//                           <div className="homePageProductCardContentInner">
-//                             <div className="homePageProductCardContentText">
-//                               <span>{d.title}</span>
-//                             </div>
-//                             <div className="price">
-//                               <div className="priceItem">
-//                                 <strong id="prices">{d.price}</strong>
-//                                 <Manat />
-//                               </div>
-//                             </div>
-//                           </div>
-//                           <div className="homePageProductCardContentBottom">
-//                             <span>{t?.learnMore || "Learn More"}</span>
-//                             <img src="/icons/arrowTopRight.svg" alt="" />
-//                           </div>
-//                         </div>
-//                       </Link>
-//                     </div>
-//                   ))
-//                 )}
-//               </div>
-//             </div>
-//             <div className="flex items-center justify-center">
-//               <LoadMoreBTN t={t} className="buttonNoneDesktop" />
-//             </div>
-//           </div>
-//         </div>
-
-//         {/* Dinamik meta_title / meta_description gösterimi ve toggle ile detay gösterme */}
-//         <div className="productsPageDescription">
-//           {/* Meta kısmı */}
-//           <h1>
-//             {categoryMetaTitle
-//               ? categoryMetaTitle
-//               : t?.productsPageCeoDescription ||
-//                 "Ceo description - Addenta product category"}
-//           </h1>
-//           <p>
-//             {categoryMetaDescription
-//               ? categoryMetaDescription
-//               : t?.productsPageDescriptionText || "Ceo Text"}
-//           </p>
-
-//           {/* Açılan detay kısmı (showDetails true olduğunda) */}
-//           {showDetails && (
-//             <div className="productsPageDetailsCEO" style={{ marginTop: "1rem" }}>
-//               {categoryPageTitle && <h1>{categoryPageTitle}</h1>}
-//               {categoryPageDescription && (
-//                 <div
-//                   className="page-description-content"
-//                   dangerouslySetInnerHTML={{ __html: categoryPageDescription }}
-//                 />
-//               )}
-//             </div>
-//           )}
-
-//           {/* See more / Hide toggle link: her zaman en altta ve her zaman görünür */}
-//           <div className="productsPageDescriptionLink" style={{ marginTop: "1rem" }}>
-//             <a
-//               href="#"
-//               onClick={(e) => {
-//                 e.preventDefault();
-//                 setShowDetails((prev) => !prev);
-//               }}
-//               style={{
-//                 display: "inline-flex",
-//                 alignItems: "center",
-//                 cursor: "pointer",
-//                 textDecoration: "none",
-//               }}
-//             >
-//               {showDetails
-//                 ? (t?.hideDetailsBtn || "Hide")
-//                 : (t?.seeMoreBtn || "See more")}
-//               <img
-//                 src="/icons/rightDown.svg"
-//                 alt=""
-//                 style={{
-//                   marginLeft: "0.25rem",
-//                   transform: showDetails ? "rotate(180deg)" : "none",
-//                   transition: "transform 0.2s",
-//                 }}
-//               />
-//             </a>
-//           </div>
-//         </div>
-//       </div>
-
-//       {/* Spinner Styles */}
-//       <style jsx>{`
-//         .loader-container {
-//           width: 100% !important;
-//           min-width: 97rem;
-//           min-height: 30rem;
-//           display: flex;
-//           align-items: center;
-//           justify-content: center;
-//           padding: 5rem auto;
-//         }
-//         .loader {
-//           border: 5px solid #98b4de;
-//           border-top: 5px solid #293881;
-//           border-radius: 50%;
-//           width: 40px;
-//           height: 40px;
-//           animation: spin 0.8s linear infinite;
-//         }
-//         @keyframes spin {
-//           to {
-//             transform: rotate(360deg);
-//           }
-//         }
-//         /* Accordion içeriğinde scroll için */
-//         .accordion-content {
-//           max-height: 250px;
-//           overflow-y: auto;
-//         }
-//         /* İsteğe bağlı: detay kısmı stilleri */
-//         .productsPageDetailsCEO h1 {
-//           margin-bottom: 0.5rem;
-//         }
-//         .page-description-content {
-//           margin-bottom: 0.5rem;
-//         }
-//       `}</style>
-//     </div>
-//   );
-// }
-
-
-
-
-
+// * ---------------AAAAAAAAAAAAA-AAAAAAAAAAAAAAAA-A

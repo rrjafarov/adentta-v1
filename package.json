@@ -22,6 +22,7 @@
     "js-cookie": "^3.0.5",
     "next": "15.1.6",
     "next-intl": "^4.0.2",
+    "nprogress": "^0.2.0",
     "rc-select": "^14.16.6",
     "react": "^19.0.0",
     "react-calendar": "^5.1.0",
