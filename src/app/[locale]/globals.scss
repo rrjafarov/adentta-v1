@@ -1816,7 +1816,7 @@ ul {
 }
 
 .ourBlogshh {
-  height: 45rem !important;
+  height: 49rem !important;
 }
 
 .ourEventImageBlog {
@@ -5790,7 +5790,8 @@ ul {
   background-color: #fafafa;
 
   .blogDetailTop {
-    padding-top: 1.95rem;
+    padding-top: 4.95rem;
+    padding-bottom: 1rem;
     padding-left: 0.55rem;
     display: flex;
     gap: 1.15rem;
@@ -6679,7 +6680,8 @@ ul {
   background-color: #fafafa;
 
   .eventDetailTop {
-    padding-top: 1.95rem;
+    padding-top: 4.95rem;
+    padding-bottom: 1rem;
     padding-left: 0.55rem;
     display: flex;
     gap: 1.15rem;
@@ -8683,12 +8685,13 @@ ul {
 
 .careersSliderGalleryImg {
   width: 100%;
-  height: auto;
+  height: 34.5rem;
 }
 
 .careersSliderCardImg {
   width: 100%;
-  height: auto;
+  height: 100%;
+  object-fit: contain;
 }
 
 .careersSwiper {

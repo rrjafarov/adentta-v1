@@ -182,7 +182,7 @@ const HomePageProductCard = ({ productData , t}) => {
                         unoptimized
                       />
                     ) : (
-                      <p>Görsel bulunamadı</p>
+                      <p>NotFound</p>
                     )}
                   </div>
                 </div>

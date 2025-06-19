@@ -1,4 +1,3 @@
-
 // !Son versiya
 import Image from "next/image";
 import Link from "next/link";
@@ -13,7 +12,11 @@ const DoctorsDetailPage = ({ t, doctorsDetailDataDetail, otherDoctors }) => {
             <h1>Adentta</h1>
           </Link>
           <img src="/icons/rightDown.svg" alt="Adentta" />
-          <h4>{t?.doctors || "Doctors"}</h4>
+          <Link href="/doctors">
+            <h4>{t?.doctors || "Doctors"}</h4>
+          </Link>
+          <img src="/icons/rightDown.svg" alt="Adentta" />
+          <h4>{doctorsDetailDataDetail.title}</h4>
         </div>
 
         <div className="doctorsDetailProfile">
@@ -231,7 +234,8 @@ const DoctorsDetailPage = ({ t, doctorsDetailDataDetail, otherDoctors }) => {
             {otherDoctors.splice(0, 4).map((doctor) => (
               <div key={doctor.id} className="xl-3 lg-3 md-6 sm-12">
                 <Link
-                  href={`/doctors/${doctor?.slug?.toLowerCase()
+                  href={`/doctors/${doctor?.slug
+                    ?.toLowerCase()
                     .replace(/\s+/g, "-")}-${doctor.id}`}
                   className="block"
                 >

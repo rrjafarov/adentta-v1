@@ -4,8 +4,6 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
 import "swiper/css/pagination";
 import "swiper/css/autoplay";
-
-// import "../../app/globals.scss";
 import "../../app/[locale]/globals.scss";
 
 import { Pagination, Autoplay } from "swiper/modules";
@@ -75,9 +73,6 @@ const OurBlogsHomePage = ({ blogData, t }) => {
 
                     <div className="ourEventContent">
                       <span> {blog.title}</span>
-                      <p>
-                        {/* {blog.content} */}
-                      </p>
                         <div
                           dangerouslySetInnerHTML={{ __html: blog.content }}
                         ></div>

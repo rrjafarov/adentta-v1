@@ -12,22 +12,29 @@ const BlogsDetailPage = ({ t, blogDetail, otherBlogs }) => {
             <h1 className="topper">Adentta</h1>
           </Link>
           <img className="topper" src="/icons/rightDown.svg" alt="Adentta" />
-          <h4 className="topper">{t?.blogs || "Blogs"}</h4>
+          <Link href="/blogs">
+            <h4 className="topper">{t?.blogs || "Blogs"}</h4>
+          </Link>
+          <img className="topper" src="/icons/rightDown.svg" alt="Adentta" />
+          <h4 className="topper">{blogDetail.title}</h4>
         </div>
 
         <div className="blogDetailPage">
           <div className="blogDetailInner">
             <div className="blogDetailHeaderText">
-              {/* <h5>Top 5 Innovations Transforming Dentistry</h5> */}
               <h5>{blogDetail.title}</h5>
               <div className="seeView">
-                {/* <span>Tuesday 6 / 2025</span> */}
-                <span>{blogDetail.published_date}</span>
-                <span>{blogDetail.read_time} {t?.blogsPageRead || "minutes read"}</span>
-                {/* <span className="eye">
-                  <Image src="/icons/eye.svg" alt="/" width={15} height={15} />
-                  223
+                {/* <span>{blogDetail.published_date}</span> */}
+
+                {blogDetail?.published_date && (
+                  <span>{blogDetail.published_date}</span>
+                )}
+
+
+                {/* <span>
+                  {blogDetail.read_time} {t?.blogsPageRead || "minutes read"}
                 </span> */}
+
               </div>
             </div>
             <div className="blogDetailImage">
@@ -67,11 +74,12 @@ const BlogsDetailPage = ({ t, blogDetail, otherBlogs }) => {
           <span>{t?.blogsPageOtherBlogs || "Other Blogs"}</span>
           <div className="blogCards">
             <div className="row">
-              {otherBlogs.map((blog) => (
+              {otherBlogs.splice(0, 4).map((blog) => (
                 <div key={blog.id} className="xl-3 lg-4 md-6 sm-12">
                   <div className="ourBlog">
                     <Link
-                      href={`/blogs/${blog?.title?.toLowerCase()
+                      href={`/blogs/${blog?.title
+                        ?.toLowerCase()
                         .replace(/\s+/g, "-")}-${blog.id}`}
                     >
                       <div className="blogCard">
@@ -84,12 +92,11 @@ const BlogsDetailPage = ({ t, blogDetail, otherBlogs }) => {
                               height={400}
                             />
                           )}
-                          <div className="blogCardImageDate">
+                          {/* <div className="blogCardImageDate">
                             <span className="blogCardDate">
-                              {/* January 28, 2025 */}
                               {blog.published_date}
                             </span>
-                          </div>
+                          </div> */}
                         </div>
 
                         <div className="blogCardContent">

@@ -601,7 +601,11 @@ const HomePageProducts = ({ categoryData, productData, t }) => {
   const filteredProducts = useMemo(() => {
     if (selectedCategory === null) return productData;
     return productData.filter((p) =>
-      p.categories.some((c) => Number(c.id) === Number(selectedCategory))
+      // p.categories.some((c) => Number(c.id) === Number(selectedCategory))
+
+
+     Array.isArray(p.categories) &&
+     p.categories.some((c) => Number(c.id) === Number(selectedCategory))
     );
   }, [selectedCategory, productData]);
 

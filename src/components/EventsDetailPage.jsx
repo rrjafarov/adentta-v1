@@ -46,7 +46,11 @@ const EventsDetailPage = ({ t, eventsDetail, otherEvents }) => {
             <h1>Adentta</h1>
           </Link>
           <img className="topper" src="/icons/rightDown.svg" alt="Adentta" />
-          <h4>{t?.events || "Events"}</h4>
+          <Link href="/events">
+            <h4>{t?.events || "Events"}</h4>
+          </Link>
+          <img className="topper" src="/icons/rightDown.svg" alt="Adentta" />
+          <h4>{eventsDetail.title}</h4>
         </div>
 
         <div className="eventDetailPage">
@@ -95,11 +99,12 @@ const EventsDetailPage = ({ t, eventsDetail, otherEvents }) => {
             <span>{t?.eventsPageOtherEvents || "Other Events"}</span>
           </div>
           <div className="row">
-            {otherEvents.map((event) => (
+            {otherEvents.splice(0,3).map((event) => (
               <div key={event.id} className="xl-4 lg-4 md-6 sm-12">
                 <div className="ourEvent">
                   <Link
-                    href={`/events/${event?.title?.toLowerCase()
+                    href={`/events/${event?.title
+                      ?.toLowerCase()
                       .replace(/\s+/g, "-")}-${event.id}`}
                   >
                     <div className="eventCard">

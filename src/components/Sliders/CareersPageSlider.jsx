@@ -4,12 +4,10 @@ import React, { useState, useRef, useEffect } from "react";
 import Link from "next/link";
 import { Fancybox } from "@fancyapps/ui";
 import "@fancyapps/ui/dist/fancybox/fancybox.css";
-
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/autoplay";
-// import "../../app/globals.scss";
 import "../../app/[locale]/globals.scss";
 import { Autoplay, Navigation } from "swiper/modules";
 
@@ -49,16 +47,12 @@ const CareersPageSlider = ({ lifeOnHereData }) => {
           lifeOnHereData.photos.map((photo, index) => (
             <SwiperSlide key={index}>
               <Link
-                // href={photo}
                 href={`https://admin.adentta.az/storage${photo}`}
-
                 className="careersSliderGalleryImg"
                 data-fancybox="videos"
               >
                 <Image
-                  // src={photo}
                   src={`https://admin.adentta.az/storage${photo}`}
-
                   className="careersSliderCardImg"
                   alt={`Slide ${index}`}
                   width={400}
@@ -68,106 +62,6 @@ const CareersPageSlider = ({ lifeOnHereData }) => {
             </SwiperSlide>
           ))}
 
-        {/* <SwiperSlide>
-          <Link
-            href="/images/careersPhoto.png"
-            className="careersSliderGalleryImg"
-            data-fancybox="videos"
-          >
-            <div className="videoGaleryImg">
-              <Image
-                src="/images/careersPhoto.png"
-                // effect="blur"
-                className="careersSliderCardImg"
-                alt="22"
-                width={100}
-                height={100}
-                // placeholder="blur"
-                // blurDataURL={Blur.src}
-              />
-            </div>
-          </Link>
-        </SwiperSlide>
-        <SwiperSlide>
-          <Link
-            href="/images/careersPhoto.png"
-            className="careersSliderGalleryImg"
-            data-fancybox="videos"
-          >
-            <div className="videoGaleryImg">
-              <Image
-                src="/images/careersPhoto.png"
-                // effect="blur"
-                className="careersSliderCardImg"
-                alt="22"
-                width={100}
-                height={100}
-                // placeholder="blur"
-                // blurDataURL={Blur.src}
-              />
-            </div>
-          </Link>
-        </SwiperSlide>
-        <SwiperSlide>
-          <Link
-            href="/images/careersPhoto.png"
-            className="careersSliderGalleryImg"
-            data-fancybox="videos"
-          >
-            <div className="videoGaleryImg">
-              <Image
-                src="/images/careersPhoto.png"
-                // effect="blur"
-                className="careersSliderCardImg"
-                alt="22"
-                width={100}
-                height={100}
-                // placeholder="blur"
-                // blurDataURL={Blur.src}
-              />
-            </div>
-          </Link>
-        </SwiperSlide>
-        <SwiperSlide>
-          <Link
-            href="/images/careersPhoto.png"
-            className="careersSliderGalleryImg"
-            data-fancybox="videos"
-          >
-            <div className="videoGaleryImg">
-              <Image
-                src="/images/careersPhoto.png"
-                // effect="blur"
-                className="careersSliderCardImg"
-                alt="22"
-                width={100}
-                height={100}
-                // placeholder="blur"
-                // blurDataURL={Blur.src}
-              />
-            </div>
-          </Link>
-        </SwiperSlide>
-        <SwiperSlide>
-          <Link
-            href="/images/careersPhoto.png"
-            className="careersSliderGalleryImg"
-            data-fancybox="videos"
-          >
-            <div className="videoGaleryImg">
-              <Image
-                src="/images/careersPhoto.png"
-                // effect="blur"
-                className="careersSliderCardImg"
-                alt="22"
-                width={100}
-                height={100}
-                // placeholder="blur"
-                // blurDataURL={Blur.src}
-              />
-            </div>
-          </Link>
-        </SwiperSlide> */}
       </Swiper>
 
       <div className="careersCustom-navigation">

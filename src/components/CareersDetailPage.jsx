@@ -12,7 +12,11 @@ const CareersDetailPage = ({ careerData, t }) => {
             <h1 className="topper">Adentta</h1>
           </Link>
           <img className="topper" src="/icons/rightDown.svg" alt="Adentta" />
-          <h4 className="topper">{t?.careers || "Careers"}</h4>
+          <Link href="/careers">
+            <h4 className="topper">{t?.careers || "Careers"}</h4>
+          </Link>
+          <img className="topper" src="/icons/rightDown.svg" alt="Adentta" />
+          <h4 className="topper">{careerData.title}</h4>
         </div>
         <div className="careersDetailPageHeaderContent">
           <span className="vacancyPage">

@@ -1236,20 +1236,34 @@ const ProductsPageDetailPage = ({ t, productData, similarProducts = [] }) => {
                 <div className="brandAndCountry">
                   <div className="detailBrand">
                     <span>{t?.productsPageBrandName || "Brand Name"}:</span>
-                    <div className="detailBrandInner">
+                    {productData?.brands?.[0]?.logo && (
+                      <div className="detailBrandInner">
+                        <Image
+                          src={`https://admin.adentta.az/storage${productData.brands[0].logo}`}
+                          alt={productData.brands[0].name || "Brand"}
+                          width={400}
+                          height={400}
+                        />
+                      </div>
+                    )}
+                    {/* <div className="detailBrandInner">
                       <Image
                         src={`https://admin.adentta.az/storage${productData.brands[0].logo}`}
                         alt={productData.brands[0].name}
                         width={400}
                         height={400}
                       />
-                    </div>
+                    </div> */}
                   </div>
                   <div className="detailCountry">
-                    <span>{t?.productsPageCountryName || "Brand Name"}:</span>
-                    <div className="detailCountryInner">
-                      <span>{productData.country?.[0]?.title ?? "Yoxdur"}</span>
-                    </div>
+                    <span>{t?.productsPageCountryName || "Country Name"}:</span>
+                    {productData.country?.[0]?.title  && (
+                      <div className="detailCountryInner">
+                        <span>
+                          {productData.country?.[0]?.title ?? "Country name"}
+                        </span>
+                      </div>
+                    )}
                   </div>
                 </div>
                 <WpLink t={t} />

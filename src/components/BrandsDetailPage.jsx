@@ -501,7 +501,17 @@ const BrandsDetailPage = async ({ t, brandsDetailDataDetail, otherBrands }) => {
             width={8}
             height={8}
           />
-          <h4 className="topper">{t?.brands || "Brands"}</h4>
+          <Link href="/brands">
+            <h4 className="topper">{t?.brands || "Brands"}</h4>
+          </Link>
+          <Image
+            className="topper"
+            src="/icons/rightDown.svg"
+            alt="Adentta"
+            width={8}
+            height={8}
+          />
+          <h4 className="topper">{brandsDetailDataDetail.title}</h4>
         </div>
 
         {/* About brand */}
@@ -545,7 +555,8 @@ const BrandsDetailPage = async ({ t, brandsDetailDataDetail, otherBrands }) => {
                 {filteredProducts.slice(0, 4).map((product, index) => (
                   <div key={index} className="xl-3 lg-3 md-6 sm-6">
                     <Link
-                      href={`/products/${product?.title?.toLowerCase()
+                      href={`/products/${product?.title
+                        ?.toLowerCase()
                         .replace(/\s+/g, "-")}-${product.id}`}
                       className="block"
                     >
@@ -701,7 +712,8 @@ const BrandsDetailPage = async ({ t, brandsDetailDataDetail, otherBrands }) => {
                   <div key={index} className="xl-3 lg-4 md-6 sm-12">
                     <div className="ourBlog">
                       <Link
-                        href={`/blogs/${blog?.title?.toLowerCase()
+                        href={`/blogs/${blog?.title
+                          ?.toLowerCase()
                           .replace(/\s+/g, "-")}-${blog.id}`}
                       >
                         <div className="blogCard">
@@ -720,14 +732,17 @@ const BrandsDetailPage = async ({ t, brandsDetailDataDetail, otherBrands }) => {
                                 </span>
                               )}
                             </div> */}
-                            {blog.published_date &&
+
+                            {/* ! */}
+                            {/* {blog.published_date &&
                               !isNaN(Date.parse(blog.published_date)) && (
                                 <div className="blogCardImageDate">
                                   <span className="blogCardDate">
                                     {formatDate(blog.published_date)}
                                   </span>
                                 </div>
-                              )}
+                              )} */}
+                            {/* ! */}
                           </div>
                           <div className="blogCardContent">
                             <span>{blog.title}</span>
@@ -795,10 +810,11 @@ const BrandsDetailPage = async ({ t, brandsDetailDataDetail, otherBrands }) => {
             </div>
             <div className="brandsDPOtherBrandCards">
               <div className="row">
-                {otherBrands.splice(0,4).map((brand) => (
+                {otherBrands.splice(0, 4).map((brand) => (
                   <div key={brand.id} className="xl-3 lg-4 md-6 sm-12">
                     <Link
-                      href={`/brands/${brand?.title?.toLowerCase()
+                      href={`/brands/${brand?.title
+                        ?.toLowerCase()
                         .replace(/\s+/g, "-")}-${brand.id}`}
                       className="block"
                     >
