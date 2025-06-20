@@ -18,7 +18,7 @@ async function fetchProductsPageData() {
   const lang = cookieStore.get("NEXT_LOCALE");
 
   try {
-    const { data: product } = await axiosInstance.get(`/page-data/product`, {
+    const { data: product } = await axiosInstance.get(`/page-data/product?per_page=999`, {
       // headers: { Lang: lang.value },
       cache: "no-store",
     });

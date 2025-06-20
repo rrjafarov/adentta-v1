@@ -1150,19 +1150,6 @@ const ProductsPageDetailPage = ({ t, productData, similarProducts = [] }) => {
     setLastViewed(updated);
   }, [productData]);
 
-  // const shareUrls = {
-  //   telegram: `https://t.me/share/url?url=${encodeURIComponent(currentUrl)}`,
-  //   facebook: `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(
-  //     currentUrl
-  //   )}`,
-  //   linkedin: `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(
-  //     currentUrl
-  //   )}`,
-  //   whatsapp: `https://api.whatsapp.com/send?text=${encodeURIComponent(
-  //     currentUrl
-  //   )}`,
-  // };
-
   const shareUrls = {
     telegram: `https://t.me/share/url?url=${encodeURIComponent(
       currentUrl
@@ -1232,6 +1219,14 @@ const ProductsPageDetailPage = ({ t, productData, similarProducts = [] }) => {
                       <Manat />
                     </div>
                   </div>
+
+                  {productData.quantity > 0 && (
+                    <div className="detailPageQuantity">
+                      <div className="dpQuantityItem">
+                        <span>{t?.inStock || "Stoktadır"} : </span>
+                      </div>
+                    </div>
+                  )}
                 </div>
                 <div className="brandAndCountry">
                   <div className="detailBrand">
@@ -1257,7 +1252,7 @@ const ProductsPageDetailPage = ({ t, productData, similarProducts = [] }) => {
                   </div>
                   <div className="detailCountry">
                     <span>{t?.productsPageCountryName || "Country Name"}:</span>
-                    {productData.country?.[0]?.title  && (
+                    {productData.country?.[0]?.title && (
                       <div className="detailCountryInner">
                         <span>
                           {productData.country?.[0]?.title ?? "Country name"}
