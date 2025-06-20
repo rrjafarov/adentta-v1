@@ -503,11 +503,654 @@
 
 
 
+
+
+
 // * ---------------AAAAAAAAAAAAA-AAAAAAAAAAAAAAAA-A
 // File: components/ProductsPageFilter.jsx
+// "use client";
+// import Link from "next/link";
+// import React, { useState, useEffect, useMemo, useCallback } from "react";
+// import { useRouter, useSearchParams } from "next/navigation";
+// import LoadMoreBTN from "./LoadMoreBTN";
+// import ApplyBTN from "./ApplyBTN";
+// import ReactSelect from "./ReactSelect";
+// import Manat from "../../public/icons/manat.svg";
+// import axiosInstance from "@/lib/axios";
+
+// // Accordion başlık komponenti (className’ler orijinal)
+// const FilterAccordion = ({ title, children }) => {
+//   const [isOpen, setIsOpen] = useState(false);
+//   return (
+//     <div className="accordion">
+//       <button className="accordion-header" onClick={() => setIsOpen(!isOpen)}>
+//         {title}
+//         <img
+//           src={isOpen ? "/icons/minus.svg" : "/icons/plusIcon.svg"}
+//           alt="Toggle Icon"
+//           className="toggle-icon"
+//         />
+//       </button>
+//       {isOpen && <div className="accordion-content">{children}</div>}
+//     </div>
+//   );
+// };
+
+// // Client-side filtre fetch fonksiyonu (isteğe bağlı; server-side navigation tercih edersen bu fonksiyonu ve useEffect içindeki fetch’i kaldırabilirsin)
+// async function fetchProducts(categoryIds = [], brandIds = []) {
+//   const filters = [];
+
+//   if (categoryIds.length) {
+//     filters.push({
+//       key: "categories",
+//       operator: "IN",
+//       values: categoryIds,
+//     });
+//   }
+//   if (brandIds.length) {
+//     filters.push({
+//       key: "brands",
+//       operator: "IN",
+//       values: brandIds,
+//     });
+//   }
+//   if (!filters.length) {
+//     try {
+//       const res = await axiosInstance.get("/page-data/product?per_page=999");
+//       return res.data.data.data;
+//     } catch (err) {
+//       console.error("Fetch all products error", err);
+//       return [];
+//     }
+//   }
+//   const query = filters
+//     .map((f, idx) => {
+//       const base = `filters[${idx}][key]=${encodeURIComponent(
+//         f.key
+//       )}&filters[${idx}][operator]=${encodeURIComponent(f.operator)}`;
+//       const vals = f.values
+//         .map((v) => `filters[${idx}][value][]=${encodeURIComponent(v)}`)
+//         .join("&");
+//       return `${base}&${vals}`;
+//     })
+//     .join("&");
+//   try {
+//     const res = await axiosInstance.get(
+//       `/page-data/product?per_page=999&${query}`
+//     );
+//     return res.data.data.data;
+//   } catch (err) {
+//     console.error("Filter fetch error (client)", err);
+//     return [];
+//   }
+// }
+
+// // Güvenli slugify utility (istersen koru ya da kendi slug mantığını uygula)
+// function slugify(text) {
+//   if (!text) return "";
+//   return text
+//     .normalize("NFD")
+//     .replace(/[\u0300-\u036f]/g, "")
+//     .toLowerCase()
+//     .replace(/[^a-z0-9]+/g, "-")
+//     .replace(/(^-|-$)/g, "");
+// }
+
+// export default function ProductsPageFilter({
+//   t,
+//   allProducts = [], // Yeni: global tüm ürün listesi
+//   initialProducts = [], // Server-side filtreli başlangıç listesi
+//   categoryData = [],
+//   brandsDataFilter = [],
+//   initialSelectedBrands = [],
+//   initialSelectedCategories = [],
+//   categoryMetaTitle = null,
+//   categoryMetaDescription = null,
+//   categoryPageTitle = null,
+//   categoryPageDescription = null,
+//   categoryId = null,
+// }) {
+//   const router = useRouter();
+//   const searchParams = useSearchParams();
+
+//   // filteredProducts: geçerli filtreye göre gösterilecek ürünler
+//   const [filteredProducts, setFilteredProducts] = useState(initialProducts);
+//   const [selectedCategories, setSelectedCategories] = useState(
+//     initialSelectedCategories
+//   );
+//   const [selectedBrands, setSelectedBrands] = useState(initialSelectedBrands);
+//   const [sortOption, setSortOption] = useState({
+//     value: "az",
+//     label: t?.from || "From A-Z",
+//   });
+//   const [isMobileFilterOpen, setIsMobileFilterOpen] = useState(false);
+//   const [isLoading, setIsLoading] = useState(false);
+//   const [brandSearchTerm, setBrandSearchTerm] = useState("");
+//   const [showDetails, setShowDetails] = useState(false);
+
+//   // URL değiştiğinde selectedCategories/Brands ve filteredProducts güncelle
+//   useEffect(() => {
+//     const categoryParam = searchParams.get("category");
+//     const brandsParam = searchParams.get("brands");
+
+//     let categoryIds = [];
+//     if (categoryParam) {
+//       const idParts = categoryParam.split(",");
+//       categoryIds = idParts
+//         .map((id) => parseInt(id, 10))
+//         .filter((n) => !isNaN(n));
+//     }
+
+//     let brandIds = [];
+//     if (brandsParam) {
+//       const parts = Array.isArray(brandsParam)
+//         ? brandsParam
+//         : brandsParam.split(",");
+//       brandIds = parts.map((p) => parseInt(p, 10)).filter((n) => !isNaN(n));
+//     }
+
+//     const newSelectedCategories = categoryData.filter((c) =>
+//       categoryIds.includes(c.id)
+//     );
+//     const newSelectedBrands = brandsDataFilter.filter((b) =>
+//       brandIds.includes(b.id)
+//     );
+
+//     setSelectedCategories(newSelectedCategories);
+//     setSelectedBrands(newSelectedBrands);
+//     setShowDetails(false);
+
+//     // Eğer client-side fetch istersen, aşağıyı kullan:
+//     const fetchAndSet = async () => {
+//       setIsLoading(true);
+//       try {
+//         const prods = await fetchProducts(categoryIds, brandIds);
+//         setFilteredProducts(prods);
+//       } catch (err) {
+//         console.error("Client fetch error in useEffect", err);
+//         setFilteredProducts([]);
+//       } finally {
+//         setIsLoading(false);
+//       }
+//     };
+//     fetchAndSet();
+
+//     // Eğer yalnızca server-side navigation tercih edersen:
+//     // setFilteredProducts(initialProducts);
+//     // şeklinde bırakabilirsin ve fetchAndSet bloğunu kaldırabilirsin.
+//     // eslint-disable-next-line react-hooks/exhaustive-deps
+//   }, [searchParams.toString(), categoryData, brandsDataFilter]);
+
+//   // Sıralı ürünler
+//   const sortedProducts = useMemo(() => {
+//     return [...filteredProducts].sort((a, b) =>
+//       sortOption.value === "az"
+//         ? a.title.localeCompare(b.title)
+//         : b.title.localeCompare(a.title)
+//     );
+//   }, [filteredProducts, sortOption]);
+
+//   // URL güncelleme
+//   const updateUrlWithFilters = useCallback(
+//     (newBrands, newCategories) => {
+//       const params = new URLSearchParams();
+
+//       if (newCategories.length) {
+//         const categoryIds = newCategories.map((c) => c.id);
+//         params.set("category", categoryIds.join(","));
+//       }
+//       if (newBrands.length) {
+//         params.set("brands", newBrands.map((b) => b.id).join(","));
+//       }
+
+//       const queryString = params.toString();
+//       const href = queryString ? `/products?${queryString}` : `/products`;
+//       router.push(href);
+//     },
+//     [router]
+//   );
+
+//   const handleCategoryToggle = useCallback(
+//     (category) => {
+//       let newSelected;
+//       if (selectedCategories.some((c) => c.id === category.id)) {
+//         newSelected = selectedCategories.filter((c) => c.id !== category.id);
+//       } else {
+//         newSelected = [...selectedCategories, category];
+//       }
+//       updateUrlWithFilters(selectedBrands, newSelected);
+//     },
+//     [selectedCategories, selectedBrands, updateUrlWithFilters]
+//   );
+
+//   const handleBrandToggle = useCallback(
+//     (brand) => {
+//       let newSelected;
+//       if (selectedBrands.some((b) => b.id === brand.id)) {
+//         newSelected = selectedBrands.filter((b) => b.id !== brand.id);
+//       } else {
+//         newSelected = [...selectedBrands, brand];
+//       }
+//       updateUrlWithFilters(newSelected, selectedCategories);
+//     },
+//     [selectedBrands, selectedCategories, updateUrlWithFilters]
+//   );
+
+//   return (
+//     <div>
+//       <div className="container">
+//         {/* Başlık */}
+//         <div className="filterTop topper">
+//           <Link href="/">
+//             <h1>Adentta</h1>
+//           </Link>
+//           <img src="/icons/rightDown.svg" alt="Adentta" />
+//           <h4>{t?.products || "Products"}</h4>
+//         </div>
+
+//         <div className="row">
+//           {/* Sidebar Filter */}
+//           <div className="xl-3 lg-3 md-3 sm-12">
+//             <div className="filter-container">
+//               <button
+//                 className="filter-title"
+//                 onClick={() => setIsMobileFilterOpen(!isMobileFilterOpen)}
+//               >
+//                 {t?.productsPageFilterTitle || "Filter"}
+//               </button>
+
+//               {/* Seçilmiş kategori ve markalar - Desktop */}
+//               <div className="selectedFilter desktop-only">
+//                 {selectedCategories.map((cat) => (
+//                   <div className="selectedFilterInner" key={`cat-${cat.id}`}>
+//                     <span onClick={() => handleCategoryToggle(cat)}>×</span>
+//                     <p>{cat.title}</p>
+//                   </div>
+//                 ))}
+//                 {selectedBrands.map((brand) => (
+//                   <div
+//                     className="selectedFilterInner"
+//                     key={`brand-${brand.id}`}
+//                   >
+//                     <span onClick={() => handleBrandToggle(brand)}>×</span>
+//                     <p>{brand.title}</p>
+//                   </div>
+//                 ))}
+//               </div>
+
+//               <div
+//                 className={`filter-panel ${isMobileFilterOpen ? "active" : ""}`}
+//               >
+//                 <button className="filter-titless">
+//                   {t?.productsPageFilterTitle || "Filter"}
+//                 </button>
+
+//                 {/* Seçilmiş kategori ve markalar - Mobile */}
+//                 <div className="selectedFilter mobile-only">
+//                   {selectedCategories.map((cat) => (
+//                     <div className="selectedFilterInner" key={`cat-${cat.id}`}>
+//                       <span onClick={() => handleCategoryToggle(cat)}>×</span>
+//                       <p>{cat.title}</p>
+//                     </div>
+//                   ))}
+//                   {selectedBrands.map((brand) => (
+//                     <div
+//                       className="selectedFilterInner"
+//                       key={`brand-${brand.id}`}
+//                     >
+//                       <span onClick={() => handleBrandToggle(brand)}>×</span>
+//                       <p>{brand.title}</p>
+//                     </div>
+//                   ))}
+//                 </div>
+
+//                 <button
+//                   className="close-btn"
+//                   onClick={() => setIsMobileFilterOpen(false)}
+//                 >
+//                   <img src="/icons/popupCloseIcon.svg" alt="close" />
+//                 </button>
+
+//                 <div className="lineFiltered"></div>
+
+//                 {/* Category Accordion */}
+//                 <FilterAccordion
+//                   title={t?.productsPageFilterCategoryTitle || "Category"}
+//                 >
+//                   <ul
+//                     style={{
+//                       maxHeight: "250px",
+//                       overflowY: "auto",
+//                       paddingRight: "4px",
+//                     }}
+//                   >
+//                     {categoryData.map((cat) => {
+//                       // Burada sayımı global allProducts üzerinden yapıyoruz:
+//                       const productCount = allProducts.filter((product) =>
+//                         product.categories?.some((c) => c.id === cat.id)
+//                       ).length;
+//                       const isSelected = selectedCategories.some(
+//                         (c) => c.id === cat.id
+//                       );
+//                       return (
+//                         <li
+//                           key={cat.id}
+//                           onClick={() => handleCategoryToggle(cat)}
+//                           style={{
+//                             cursor: "pointer",
+//                             display: "flex",
+//                             alignItems: "center",
+//                             gap: "0.5rem",
+//                             fontWeight: isSelected ? "bold" : "normal",
+//                           }}
+//                         >
+//                           <span>{cat.title}</span>
+//                           <p>({productCount})</p>
+//                         </li>
+//                       );
+//                     })}
+//                   </ul>
+//                 </FilterAccordion>
+
+//                 {/* Brand Accordion */}
+//                 <FilterAccordion
+//                   title={t?.productsPageFilterBrandsTitle || "Brands"}
+//                 >
+//                   <div className="filteredSearch">
+//                     <img src="/icons/searchIcon.svg" alt="" />
+//                     <input
+//                       className="filterSrch"
+//                       type="text"
+//                       placeholder={t?.searchText || "Search..."}
+//                       value={brandSearchTerm}
+//                       onChange={(e) => setBrandSearchTerm(e.target.value)}
+//                     />
+//                   </div>
+//                   <ul
+//                     style={{
+//                       maxHeight: "250px",
+//                       overflowY: "auto",
+//                       paddingRight: "4px",
+//                     }}
+//                   >
+//                     {brandsDataFilter
+//                       .filter((brand) =>
+//                         brand?.title
+//                           ?.toLowerCase()
+//                           .includes(brandSearchTerm?.toLowerCase())
+//                       )
+//                       .map((brand) => {
+//                         const isSelected = selectedBrands.some(
+//                           (b) => b.id === brand.id
+//                         );
+//                         return (
+//                           <li
+//                             key={brand.id}
+//                             onClick={() => handleBrandToggle(brand)}
+//                             style={{
+//                               cursor: "pointer",
+//                               display: "flex",
+//                               alignItems: "center",
+//                               gap: "0.5rem",
+//                               fontWeight: isSelected ? "bold" : "normal",
+//                             }}
+//                           >
+//                             <input
+//                               type="checkbox"
+//                               checked={isSelected}
+//                               readOnly
+//                             />
+//                             <span>{brand.title}</span>
+//                           </li>
+//                         );
+//                       })}
+//                   </ul>
+//                 </FilterAccordion>
+
+//                 {/* Mobile Apply Button */}
+//                 <div
+//                   className="applyBTN flex items-center mt-4 justify-center"
+//                   onClick={() => setIsMobileFilterOpen(false)}
+//                 >
+//                   <ApplyBTN t={t} />
+//                 </div>
+//               </div>
+//             </div>
+//           </div>
+
+//           {/* Products Grid */}
+//           <div className="xl-9 lg-9 md-9 sm-12">
+//             <div className="productPageCards">
+//               <div className="productPageSorting">
+//                 <span>{t?.sortBy || "Sort by"}</span>
+//                 <ReactSelect
+//                   t={t}
+//                   value={sortOption}
+//                   onChange={setSortOption}
+//                 />
+//               </div>
+
+//               <div className="row">
+//                 {isLoading ? (
+//                   <div className="loader-container">
+//                     <div className="loader" />
+//                   </div>
+//                 ) : (
+//                   sortedProducts.map((d) => (
+//                     <div key={d.id} className="xl-4 lg-4 md-6 sm-6">
+//                       <Link
+//                         href={`/products/${slugify(d.title)}-${d.id}`}
+//                         className="block"
+//                       >
+//                         <div className="homePageProductCardContent">
+//                           <div className="homePageProCardImgs">
+//                             <div className="homePageProductCardContentImage">
+//                               <img
+//                                 src={`https://admin.adentta.az/storage${d.image}`}
+//                                 alt={d.title}
+//                               />
+//                             </div>
+//                           </div>
+//                           <div className="homePageProductCardContentInner">
+//                             <div className="homePageProductCardContentText">
+//                               <span>{d.title}</span>
+//                             </div>
+//                             <div className="price">
+//                               <div className="priceItem">
+//                                 <strong id="prices">{d.price}</strong>
+//                                 <Manat />
+//                               </div>
+//                             </div>
+//                           </div>
+//                           <div className="homePageProductCardContentBottom">
+//                             <span>{t?.learnMore || "Learn More"}</span>
+//                             <img src="/icons/arrowTopRight.svg" alt="" />
+//                           </div>
+//                         </div>
+//                       </Link>
+//                     </div>
+//                   ))
+//                 )}
+//               </div>
+//             </div>
+//             <div className="flex items-center justify-center">
+//               <LoadMoreBTN t={t} className="buttonNoneDesktop" />
+//             </div>
+//           </div>
+//         </div>
+
+//         {/* Dinamik meta_title / meta_description gösterimi ve toggle ile detay gösterme */}
+//         <div className="productsPageDescription">
+//           <h1>
+//             {categoryMetaTitle
+//               ? categoryMetaTitle
+//               : t?.productsPageCeoDescription ||
+//                 "Ceo description - Addenta product category"}
+//           </h1>
+//           <p>
+//             {categoryMetaDescription
+//               ? categoryMetaDescription
+//               : t?.productsPageDescriptionText || "Ceo Text"}
+//           </p>
+
+//           {showDetails && (
+//             <div
+//               className="productsPageDetailsCEO"
+//               style={{ marginTop: "1rem" }}
+//             >
+//               {categoryPageTitle && <h1>{categoryPageTitle}</h1>}
+//               {categoryPageDescription && (
+//                 <div
+//                   className="page-description-content"
+//                   dangerouslySetInnerHTML={{ __html: categoryPageDescription }}
+//                 />
+//               )}
+//             </div>
+//           )}
+
+//           <div
+//             className="productsPageDescriptionLink"
+//             style={{ marginTop: "1rem" }}
+//           >
+//             <a
+//               href="#"
+//               onClick={(e) => {
+//                 e.preventDefault();
+//                 setShowDetails((prev) => !prev);
+//               }}
+//               style={{
+//                 display: "inline-flex",
+//                 alignItems: "center",
+//                 cursor: "pointer",
+//                 textDecoration: "none",
+//               }}
+//             >
+//               {showDetails
+//                 ? t?.hideDetailsBtn || "Hide"
+//                 : t?.seeMoreBtn || "See more"}
+//               <img
+//                 src="/icons/rightDown.svg"
+//                 alt=""
+//                 style={{
+//                   marginLeft: "0.25rem",
+//                   transform: showDetails ? "rotate(180deg)" : "none",
+//                   transition: "transform 0.2s",
+//                 }}
+//               />
+//             </a>
+//           </div>
+//         </div>
+
+//         {/* style jsx kısmı unchanged */}
+//         <style jsx>{`
+//           .loader-container {
+//             width: 100% !important;
+//             min-width: 97rem;
+//             min-height: 30rem;
+//             display: flex;
+//             align-items: center;
+//             justify-content: center;
+//             padding: 5rem auto;
+//           }
+//           .loader {
+//             border: 5px solid #98b4de;
+//             border-top: 5px solid #293881;
+//             border-radius: 50%;
+//             width: 40px;
+//             height: 40px;
+//             animation: spin 0.8s linear infinite;
+//           }
+//           @keyframes spin {
+//             to {
+//               transform: rotate(360deg);
+//             }
+//           }
+//           .accordion-content {
+//             max-height: 250px;
+//             overflow-y: auto;
+//           }
+//           .productsPageDetailsCEO h1 {
+//             margin-bottom: 0.5rem;
+//           }
+//           .page-description-content {
+//             margin-bottom: 0.5rem;
+//           }
+//         `}</style>
+//       </div>
+//     </div>
+//   );
+// }
+
+// * ---------------AAAAAAAAAAAAA-AAAAAAAAAAAAAAAA-A
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 "use client";
 import Link from "next/link";
-import React, { useState, useEffect, useMemo, useCallback } from "react";
+import React, {
+  useState,
+  useEffect,
+  useMemo,
+  useCallback,
+  useRef,
+} from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import LoadMoreBTN from "./LoadMoreBTN";
 import ApplyBTN from "./ApplyBTN";
@@ -582,7 +1225,7 @@ async function fetchProducts(categoryIds = [], brandIds = []) {
   }
 }
 
-// Güvenli slugify utility (istersen koru ya da kendi slug mantığını uygula)
+// Güvenli slugify utility (orijinal)
 function slugify(text) {
   if (!text) return "";
   return text
@@ -610,7 +1253,7 @@ export default function ProductsPageFilter({
   const router = useRouter();
   const searchParams = useSearchParams();
 
-  // filteredProducts: geçerli filtreye göre gösterilecek ürünler
+  // Filtrelenmiş ve sıralı ürünler:
   const [filteredProducts, setFilteredProducts] = useState(initialProducts);
   const [selectedCategories, setSelectedCategories] = useState(
     initialSelectedCategories
@@ -624,6 +1267,12 @@ export default function ProductsPageFilter({
   const [isLoading, setIsLoading] = useState(false);
   const [brandSearchTerm, setBrandSearchTerm] = useState("");
   const [showDetails, setShowDetails] = useState(false);
+
+  // ==== Aşağıdaki üç satır sadece infinite scroll eklemesi için eklendi, diğer bölümler birebir aynı kalacak ====
+  const [visibleCount, setVisibleCount] = useState(12);
+  const [isLoadingMore, setIsLoadingMore] = useState(false);
+  const loadMoreRef = useRef(null);
+  // ================================================================================================
 
   // URL değiştiğinde selectedCategories/Brands ve filteredProducts güncelle
   useEffect(() => {
@@ -657,7 +1306,7 @@ export default function ProductsPageFilter({
     setSelectedBrands(newSelectedBrands);
     setShowDetails(false);
 
-    // Eğer client-side fetch istersen, aşağıyı kullan:
+    // Client-side fetch:
     const fetchAndSet = async () => {
       setIsLoading(true);
       try {
@@ -672,9 +1321,8 @@ export default function ProductsPageFilter({
     };
     fetchAndSet();
 
-    // Eğer yalnızca server-side navigation tercih edersen:
-    // setFilteredProducts(initialProducts);
-    // şeklinde bırakabilirsin ve fetchAndSet bloğunu kaldırabilirsin.
+    // Filtre değiştiğinde infinite scroll'u reset etmek için:
+    setVisibleCount(12);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [searchParams.toString(), categoryData, brandsDataFilter]);
 
@@ -686,6 +1334,11 @@ export default function ProductsPageFilter({
         : b.title.localeCompare(a.title)
     );
   }, [filteredProducts, sortOption]);
+
+  // sortedProducts değiştiğinde infinite scroll'u resetle
+  useEffect(() => {
+    setVisibleCount(12);
+  }, [sortedProducts]);
 
   // URL güncelleme
   const updateUrlWithFilters = useCallback(
@@ -733,6 +1386,50 @@ export default function ProductsPageFilter({
     [selectedBrands, selectedCategories, updateUrlWithFilters]
   );
 
+  // ==== Aşağıda sadece infinite scroll için eklenen useEffect’ler var; diğer kod tamamen aynı ====
+
+  // Infinite scroll: Intersection Observer
+  useEffect(() => {
+    if (!loadMoreRef.current) return;
+    const observer = new IntersectionObserver(
+      (entries) => {
+        const entry = entries[0];
+        if (
+          entry.isIntersecting &&
+          !isLoading &&
+          !isLoadingMore &&
+          visibleCount < sortedProducts.length
+        ) {
+          setIsLoadingMore(true);
+        }
+      },
+      {
+        root: null,
+        rootMargin: "200px", // isterseniz azaltabilirsiniz
+        threshold: 0.1,
+      }
+    );
+    observer.observe(loadMoreRef.current);
+    return () => {
+      observer.disconnect();
+    };
+  }, [isLoading, isLoadingMore, visibleCount, sortedProducts.length]);
+
+  // isLoadingMore true olduğunda visibleCount artır ve spinner'ı gizle
+  useEffect(() => {
+    if (isLoadingMore) {
+      const timer = setTimeout(() => {
+        setVisibleCount((prev) =>
+          Math.min(prev + 12, sortedProducts.length)
+        );
+        setIsLoadingMore(false);
+      }, 500);
+      return () => clearTimeout(timer);
+    }
+  }, [isLoadingMore, sortedProducts.length]);
+
+  // ============================================================================================
+
   return (
     <div>
       <div className="container">
@@ -776,7 +1473,9 @@ export default function ProductsPageFilter({
               </div>
 
               <div
-                className={`filter-panel ${isMobileFilterOpen ? "active" : ""}`}
+                className={`filter-panel ${
+                  isMobileFilterOpen ? "active" : ""
+                }`}
               >
                 <button className="filter-titless">
                   {t?.productsPageFilterTitle || "Filter"}
@@ -920,11 +1619,7 @@ export default function ProductsPageFilter({
             <div className="productPageCards">
               <div className="productPageSorting">
                 <span>{t?.sortBy || "Sort by"}</span>
-                <ReactSelect
-                  t={t}
-                  value={sortOption}
-                  onChange={setSortOption}
-                />
+                <ReactSelect t={t} value={sortOption} onChange={setSortOption} />
               </div>
 
               <div className="row">
@@ -933,12 +1628,10 @@ export default function ProductsPageFilter({
                     <div className="loader" />
                   </div>
                 ) : (
-                  sortedProducts.map((d) => (
+                  // Sadece visibleCount kadarını göster
+                  sortedProducts.slice(0, visibleCount).map((d) => (
                     <div key={d.id} className="xl-4 lg-4 md-6 sm-6">
-                      <Link
-                        href={`/products/${slugify(d.title)}-${d.id}`}
-                        className="block"
-                      >
+                      <Link href={`/products/${slugify(d.title)}-${d.id}`} className="block">
                         <div className="homePageProductCardContent">
                           <div className="homePageProCardImgs">
                             <div className="homePageProductCardContentImage">
@@ -970,9 +1663,15 @@ export default function ProductsPageFilter({
                 )}
               </div>
             </div>
-            <div className="flex items-center justify-center">
-              <LoadMoreBTN t={t} className="buttonNoneDesktop" />
-            </div>
+            {/* Infinite scroll için gözlem div’i */}
+            <div ref={loadMoreRef} style={{ height: "1px" }} />
+
+            {/* Loading more spinner */}
+            {isLoadingMore && (
+              <div className="loader-container" style={{ margin: "1rem 0" }}>
+                <div className="loader" />
+              </div>
+            )}
           </div>
         </div>
 
@@ -991,10 +1690,7 @@ export default function ProductsPageFilter({
           </p>
 
           {showDetails && (
-            <div
-              className="productsPageDetailsCEO"
-              style={{ marginTop: "1rem" }}
-            >
+            <div className="productsPageDetailsCEO" style={{ marginTop: "1rem" }}>
               {categoryPageTitle && <h1>{categoryPageTitle}</h1>}
               {categoryPageDescription && (
                 <div
@@ -1005,10 +1701,7 @@ export default function ProductsPageFilter({
             </div>
           )}
 
-          <div
-            className="productsPageDescriptionLink"
-            style={{ marginTop: "1rem" }}
-          >
+          <div className="productsPageDescriptionLink" style={{ marginTop: "1rem" }}>
             <a
               href="#"
               onClick={(e) => {
@@ -1038,8 +1731,11 @@ export default function ProductsPageFilter({
           </div>
         </div>
 
-        {/* style jsx kısmı unchanged */}
+        {/* style jsx kısmı unchanged, sadece className’larda ufak düzeltme yaptık */}
         <style jsx>{`
+
+
+
           .loader-container {
             width: 100% !important;
             min-width: 97rem;
@@ -1077,5 +1773,3 @@ export default function ProductsPageFilter({
     </div>
   );
 }
-
-// * ---------------AAAAAAAAAAAAA-AAAAAAAAAAAAAAAA-A
