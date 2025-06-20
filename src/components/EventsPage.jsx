@@ -6,7 +6,7 @@ import ReactPaginate from "react-paginate";
 import DataPicker from "@/components/DataPicker";
 import Cookies from "js-cookie";
 
-const itemsPerPage = 6;
+const itemsPerPage = 9;
 
 const EventsPage = ({ eventsData, t }) => {
   const [currentPage, setCurrentPage] = useState(0);
@@ -193,8 +193,8 @@ const EventsPage = ({ eventsData, t }) => {
           {pageCount > 1 && (
             <div className="eventsPaginate">
               <ReactPaginate
-                previousLabel="Previous"
-                nextLabel="Next"
+                previousLabel={t?.paginatePrev || "Previous"}
+                nextLabel={t?.paginateNext || "Next"}
                 breakLabel="..."
                 pageCount={pageCount}
                 marginPagesDisplayed={2}

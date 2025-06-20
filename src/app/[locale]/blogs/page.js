@@ -11,7 +11,7 @@ async function fetchBlogsPageData() {
   const lang = cookieStore.get("NEXT_LOCALE");
 
   try {
-    const { data: blogs } = await axiosInstance.get(`/page-data/blog`, {
+    const { data: blogs } = await axiosInstance.get(`/page-data/blog?per_page=999`, {
       // headers: { Lang: lang.value },
       cache: "no-store",
     });
