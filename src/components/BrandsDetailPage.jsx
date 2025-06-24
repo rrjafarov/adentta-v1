@@ -712,7 +712,10 @@ const BrandsDetailPage = async ({ t, brandsDetailDataDetail, otherBrands }) => {
                   <div key={index} className="xl-3 lg-4 md-6 sm-12">
                     <div className="ourBlog">
                       <Link
-                        href={`/blogs/${blog?.title
+                        // href={`/blogs/${blog?.title
+                        //   ?.toLowerCase()
+                        //   .replace(/\s+/g, "-")}-${blog.id}`}
+                        href={`/blogs/${(blog?.slug || blog?.title)
                           ?.toLowerCase()
                           .replace(/\s+/g, "-")}-${blog.id}`}
                       >

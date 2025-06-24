@@ -1,4 +1,3 @@
-
 "use client";
 import Image from "next/image";
 import Link from "next/link";
@@ -99,7 +98,10 @@ const BlogPages = ({ t, blogData = [], blogsCategoryData = [] }) => {
               <div key={blog.id} className="xl-3 lg-4 md-6 sm-12">
                 <div className="ourBlog">
                   <Link
-                    href={`/blogs/${blog?.title?.toLowerCase()
+                    // href={`/blogs/${blog?.slug?.toLowerCase()
+                    //   .replace(/\s+/g, "-")}-${blog.id}`}
+                    href={`/blogs/${(blog?.slug || blog?.title)
+                      ?.toLowerCase()
                       .replace(/\s+/g, "-")}-${blog.id}`}
                   >
                     <div className="blogCard">

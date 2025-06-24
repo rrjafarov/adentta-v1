@@ -73,8 +73,8 @@ const EventsDetailPage = ({ t, eventsDetail, otherEvents }) => {
                 // src="/images/eventDetailBanner.png"
                 src={`https://admin.adentta.az/storage${eventsDetail.image}`}
                 alt="eventDetail"
-                width={600}
-                height={400}
+                width={2000}
+                height={1000}
               />
             </div>
 
@@ -99,11 +99,14 @@ const EventsDetailPage = ({ t, eventsDetail, otherEvents }) => {
             <span>{t?.eventsPageOtherEvents || "Other Events"}</span>
           </div>
           <div className="row">
-            {otherEvents.splice(0,3).map((event) => (
+            {otherEvents.splice(0, 3).map((event) => (
               <div key={event.id} className="xl-4 lg-4 md-6 sm-12">
                 <div className="ourEvent">
                   <Link
-                    href={`/events/${event?.title
+                    // href={`/events/${event?.title
+                    //   ?.toLowerCase()
+                    //   .replace(/\s+/g, "-")}-${event.id}`}
+                    href={`/events/${(event?.slug || event?.title)
                       ?.toLowerCase()
                       .replace(/\s+/g, "-")}-${event.id}`}
                   >

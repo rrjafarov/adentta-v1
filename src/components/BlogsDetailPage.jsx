@@ -30,11 +30,9 @@ const BlogsDetailPage = ({ t, blogDetail, otherBlogs }) => {
                   <span>{blogDetail.published_date}</span>
                 )}
 
-
                 {/* <span>
                   {blogDetail.read_time} {t?.blogsPageRead || "minutes read"}
                 </span> */}
-
               </div>
             </div>
             <div className="blogDetailImage">
@@ -42,8 +40,8 @@ const BlogsDetailPage = ({ t, blogDetail, otherBlogs }) => {
                 // src="/images/blogDetailImg.png"
                 src={`https://admin.adentta.az/storage${blogDetail.image}`}
                 alt="blogDetail"
-                width={800}
-                height={500}
+                width={1500}
+                height={800}
               />
             </div>
             <div className="blogDetailText">
@@ -78,7 +76,10 @@ const BlogsDetailPage = ({ t, blogDetail, otherBlogs }) => {
                 <div key={blog.id} className="xl-3 lg-4 md-6 sm-12">
                   <div className="ourBlog">
                     <Link
-                      href={`/blogs/${blog?.title
+                      // href={`/blogs/${blog?.slug
+                      //   ?.toLowerCase()
+                      //   .replace(/\s+/g, "-")}-${blog.id}`}
+                      href={`/blogs/${(blog?.slug || blog?.title)
                         ?.toLowerCase()
                         .replace(/\s+/g, "-")}-${blog.id}`}
                     >
@@ -100,11 +101,7 @@ const BlogsDetailPage = ({ t, blogDetail, otherBlogs }) => {
                         </div>
 
                         <div className="blogCardContent">
-                          {/* <span>Top 5 Innovations Transforming Dentistry</span>
-                          <p>
-                            Discover the latest advancements revolutionizing
-                            dental care..
-                          </p> */}
+                          
                           <span>{blog.title}</span>
                           <div
                             className="porto"

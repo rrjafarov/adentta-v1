@@ -309,7 +309,7 @@ export default function VerticalCenteredSlider({ historyYears, t }) {
                 direction={isMobile ? "horizontal" : "vertical"}
                 slidesPerView={isMobile ? 5 : 7}
                 centeredSlides={true}
-                loop={true}
+                // loop={true}
                 spaceBetween={10}
                 onSlideChange={(swiper) => setActiveIndex(swiper.realIndex)}
                 slideToClickedSlide={true}
@@ -341,20 +341,23 @@ export default function VerticalCenteredSlider({ historyYears, t }) {
             <div className="vertical-content">
               <span>{historyYears[activeIndex]?.title}</span>
               <p
+                className="changeYearDesc"
                 dangerouslySetInnerHTML={{
                   __html: historyYears[activeIndex]?.content,
                 }}
               ></p>
             </div>
-            
-            {historyYears[activeIndex]?.image && (
-              <Image
-                src={`https://admin.adentta.az/storage${historyYears[activeIndex].image}`}
-                alt={historyYears[activeIndex]?.title || "banner"}
-                width={600} 
-                height={600} 
-              />
-            )}
+
+            <div className="verticalImages">
+              {historyYears[activeIndex]?.image && (
+                <Image
+                  src={`https://admin.adentta.az/storage${historyYears[activeIndex].image}`}
+                  alt={historyYears[activeIndex]?.title || "banner"}
+                  width={600}
+                  height={600}
+                />
+              )}
+            </div>
           </div>
         </div>
       </div>

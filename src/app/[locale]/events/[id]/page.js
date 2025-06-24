@@ -12,7 +12,7 @@ async function fetchEventsPageData() {
   const cookieStore = await cookies();
   const lang = cookieStore.get("NEXT_LOCALE");
 
-  const { data: events } = await axiosInstance.get(`/page-data/event`, {
+  const { data: events } = await axiosInstance.get(`/page-data/event?per_page=999`, {
     cache: "no-store",
     // headers: { Lang: lang.value },
   });
@@ -52,7 +52,7 @@ async function fetchBrandsPageData() {
   const lang = cookieStore.get("NEXT_LOCALE");
 
   try {
-    const { data: brands } = await axiosInstance.get(`/page-data/brands`, {
+    const { data: brands } = await axiosInstance.get(`/page-data/brands?per_page=999`, {
       // headers: { Lang: lang.value },
       cache: "no-store",
     });

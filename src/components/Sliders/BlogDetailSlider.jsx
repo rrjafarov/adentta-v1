@@ -267,8 +267,8 @@ const BlogDetailSlider = ({ t, eventsDetail }) => {
                   src={`https://admin.adentta.az/storage${img}`}
                   className="blogSliderCardImg"
                   alt="gallery"
-                  width={400}
-                  height={400}
+                  width={1000}
+                  height={800}
                 />
               </Link>
             </SwiperSlide>
@@ -297,7 +297,7 @@ const BlogDetailSlider = ({ t, eventsDetail }) => {
                 src={`https://admin.adentta.az/storage${eventsDetail.video_cover}`}
                 className="blogSliderCardImgVideo"
                 alt="gallery"
-                width={850}
+                width={1000}
                 height={800}
               />
               <div className="eventsPageAdressVideoText">

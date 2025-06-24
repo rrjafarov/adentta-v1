@@ -58,7 +58,10 @@ const OurBlogsHomePage = ({ blogData, t }) => {
           {blogData.map((blog) => (
             <SwiperSlide key={blog.id}>
               <Link
-                href={`/blogs/${blog?.title?.toLowerCase()
+                // href={`/blogs/${blog?.title?.toLowerCase()
+                //   .replace(/\s+/g, "-")}-${blog.id}`}
+                href={`/blogs/${(blog?.slug || blog?.title)
+                  ?.toLowerCase()
                   .replace(/\s+/g, "-")}-${blog.id}`}
                 className="block"
               >
@@ -73,9 +76,9 @@ const OurBlogsHomePage = ({ blogData, t }) => {
 
                     <div className="ourEventContent">
                       <span> {blog.title}</span>
-                        <div
-                          dangerouslySetInnerHTML={{ __html: blog.content }}
-                        ></div>
+                      <div
+                        dangerouslySetInnerHTML={{ __html: blog.content }}
+                      ></div>
                     </div>
 
                     <div className="ourEventBottom">

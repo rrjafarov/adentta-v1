@@ -70,7 +70,6 @@ const TopBrandsHomePage = ({ brandsData, t }) => {
                   <div className="topBrand">
                     <div className="topBrandImg">
                       <div className="topBrandLittleImg">
-                        {/* <img src="/images/topBrandImg.png" alt="" /> */}
                         <img
                           src={`https://admin.adentta.az/storage${brand.logo}`}
                           alt=""
@@ -81,6 +80,19 @@ const TopBrandsHomePage = ({ brandsData, t }) => {
                   </div>
                 </Link>
               </SwiperSlide>
+
+
+
+
+
+
+
+
+
+
+
+
+
               // <SwiperSlide>
               //   <Link href={`/products/${product.id}`} className="block ">
               //     <div className="homePageProductCardContent ">

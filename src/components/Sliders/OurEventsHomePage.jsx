@@ -103,8 +103,14 @@ const OurEventsHomePage = ({ eventsData, t }) => {
           {eventsData.map((event) => (
             <SwiperSlide key={event.id}>
               <Link
-                href={`/events/${event?.title?.toLowerCase()
+                // href={`/events/${event?.title?.toLowerCase()
+                //   .replace(/\s+/g, "-")}-${event.id}`}
+
+                href={`/events/${(event?.slug || event?.title )
+                  ?.toLowerCase()
                   .replace(/\s+/g, "-")}-${event.id}`}
+
+
                 className="block"
               >
                 <div className="ourEvents">
