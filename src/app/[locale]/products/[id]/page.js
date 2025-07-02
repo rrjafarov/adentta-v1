@@ -224,7 +224,7 @@ async function fetchSettingsPageData() {
 async function fetchAllProducts() {
   const cookieStore = await cookies();
   const lang = cookieStore.get("NEXT_LOCALE");
-  const { data: productRes } = await axiosInstance.get(`/page-data/product`, {
+  const { data: productRes } = await axiosInstance.get(`/page-data/product?per_page=999`, {
     cache: "no-store",
   });
   return productRes.data.data; // bütün məhsullar array-i

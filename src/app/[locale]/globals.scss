@@ -5669,7 +5669,6 @@ ul {
         border-radius: 3rem;
         border: 1px solid #dee4ec;
         height: 49.3rem !important;
-
         &:hover {
           img {
             transform: scale(1.1);
@@ -5737,6 +5736,7 @@ ul {
           display: flex;
           flex-direction: column;
           height: 16.5rem;
+          overflow: hidden !important;
           gap: 1rem;
 
           span {
@@ -5748,10 +5748,9 @@ ul {
             width: 95% !important;
             display: -webkit-box;
             overflow: hidden;
-            text-overflow: ellipsis;
-            -webkit-line-clamp: 2;
-            /* Maksimum göstəriləcək sətir sayı */
-            -webkit-box-orient: vertical;
+            text-overflow: ellipsis !important;
+            -webkit-line-clamp: 2 !important;
+            -webkit-box-orient: vertical !important;
           }
 
           p {
@@ -5761,20 +5760,21 @@ ul {
             font-weight: 400;
             line-height: 129.5%;
             width: 95% !important;
-            display: -webkit-box;
+            display: -webkit-box !important;
             overflow: hidden;
-            text-overflow: ellipsis;
-            -webkit-line-clamp: 2;
-            /* Maksimum göstəriləcək sətir sayı */
-            -webkit-box-orient: vertical;
+            text-overflow: ellipsis !important;
+            -webkit-line-clamp: 2 !important;
+            -webkit-box-orient: vertical !important; 
+            display: none !important;
+            &:first-child{
+                  display: -webkit-box !important;
+            }
+          }
+          ul,ol{
+            display: none !important;
           }
         }
 
-        // .blogCartLine {
-        //   width: 100%;
-        //   height: 0.1rem;
-        //   background: #dee4ec;
-        // }
         .blogCardBottom {
           border-top: 1px solid #dee4ec;
           padding-top: 1.7rem;
