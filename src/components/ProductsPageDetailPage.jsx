@@ -1264,14 +1264,27 @@ const ProductsPageDetailPage = ({ t, productData, similarProducts = [] }) => {
                 <WpLink t={t} />
 
                 <div className="detailPageAccordion">
-                  <DetailPageAccordion
+                  {/* <DetailPageAccordion
                     title={t?.productsPageAboutProducts || "About products"}
                   >
                     <div
                       dangerouslySetInnerHTML={{ __html: productData.content }}
                     />
-                  </DetailPageAccordion>
+                  </DetailPageAccordion> */}
+
+                  {productData?.content && (
+                    <DetailPageAccordion
+                      title={t?.productsPageAboutProducts || "About products"}
+                    >
+                      <div
+                        dangerouslySetInnerHTML={{
+                          __html: productData.content,
+                        }}
+                      />
+                    </DetailPageAccordion>
+                  )}
                   <div className="lines" />
+
                   <DetailPageAccordion
                     title={t?.productsPageDetailsProducts || "Details Products"}
                   >
@@ -1309,6 +1322,7 @@ const ProductsPageDetailPage = ({ t, productData, similarProducts = [] }) => {
                     </div>
                   </DetailPageAccordion>
                   <div className="lines" />
+
                   <DetailPageAccordion title={t?.deliver || "Delivery"}>
                     <div className="detailPageDelivery">
                       <div className="littleCartDP">
@@ -1363,6 +1377,7 @@ const ProductsPageDetailPage = ({ t, productData, similarProducts = [] }) => {
                     </div>
                   </DetailPageAccordion>
                   <div className="lines"></div>
+
                   <DetailPageAccordion
                     title={
                       t?.productsPagePayCards || "Pay in Easy Installments"

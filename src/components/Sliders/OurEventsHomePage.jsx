@@ -137,6 +137,10 @@ const OurEventsHomePage = ({ eventsData, t }) => {
                     <div className="ourEventContent ourEventContentEvent">
                       <span>{event.title}</span>
                       <p>{event.sub_title}</p>
+                      {/* <div
+                      className="eventStopTitle"
+                        dangerouslySetInnerHTML={{ __html: event.sub_title }}
+                      ></div> */}
                     </div>
 
                     <div className="ourEventBottom">

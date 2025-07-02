@@ -74,7 +74,7 @@ const OurBlogsHomePage = ({ blogData, t }) => {
                       />
                     </div>
 
-                    <div className="ourEventContent">
+                    <div className="ourEventContent thisIsBlog">
                       <span> {blog.title}</span>
                       <div
                         dangerouslySetInnerHTML={{ __html: blog.content }}
