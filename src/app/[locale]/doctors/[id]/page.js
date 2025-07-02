@@ -5,6 +5,22 @@ import React from "react";
 import axiosInstance from "@/lib/axios";
 import { cookies } from "next/headers";
 
+
+async function fetchSettingsPageData() {
+  const cookieStore = await cookies();
+  const lang = cookieStore.get("NEXT_LOCALE");
+
+  try {
+    const { data: setting } = await axiosInstance.get(`/page-data/setting`, {
+      // headers: { Lang: lang.value },
+      cache: "no-store",
+    });
+    return setting;
+  } catch (error) {
+    console.error("Failed to fetch setting page data", error);
+    throw error;
+  }
+}
 async function fetchDoctorsDetailPageData() {
   const cookieStore = await cookies();
   const lang = cookieStore.get("NEXT_LOCALE");
@@ -147,9 +163,7 @@ const page = async ({ params }) => {
   const { id } = params; // Updated: removed await to correctly destructure params
   const slug = id.split("-").pop(); // URL'den gelen id'yi alıyoruz
 
-  console.log("id", id);
   const doctorsDetailData = await fetchDoctorsDetailPageData();
-  console.log("doctorsDetailData", doctorsDetailData);
 
   // URL'den gelen id ile eşleşen kariyer verisini buluyoruz:
   const doctorsDetailDataDetail = doctorsDetailData.find(
@@ -163,13 +177,16 @@ const page = async ({ params }) => {
   const categoryResponse = await fetchCategoryPageData();
   const categoryData = categoryResponse?.data?.data || [];
 
+  const setting = await fetchSettingsPageData();
+  const settingData = setting?.data || [];
+
   const otherDoctors = doctorsDetailData.filter(
     (item) => item.id.toString() !== slug
   );
 
   return (
     <div>
-      <Header categoryData={categoryData} />
+      <Header settingData={settingData} categoryData={categoryData} />
       <DoctorsDetailPage
         t={t}
         doctorsDetailDataDetail={doctorsDetailDataDetail}

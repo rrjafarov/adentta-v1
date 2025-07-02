@@ -24,6 +24,22 @@ async function fetchVacancyPageData() {
   }
 }
 
+async function fetchSettingsPageData() {
+  const cookieStore = await cookies();
+  const lang = cookieStore.get("NEXT_LOCALE");
+
+  try {
+    const { data: setting } = await axiosInstance.get(`/page-data/setting`, {
+      // headers: { Lang: lang.value },
+      cache: "no-store",
+    });
+    return setting;
+  } catch (error) {
+    console.error("Failed to fetch setting page data", error);
+    throw error;
+  }
+}
+
 // *categories
 async function fetchCategoryPageData() {
   const cookieStore = await cookies();
@@ -75,7 +91,7 @@ async function fetchBrandsPageData() {
   const lang = cookieStore.get("NEXT_LOCALE");
 
   try {
-    const { data: brands } = await axiosInstance.get(`/page-data/brands`, {
+    const { data: brands } = await axiosInstance.get(`/page-data/brands?per_page=999`, {
       // headers: { Lang: lang.value },
       cache: "no-store",
     });
@@ -93,7 +109,7 @@ async function fetchEventsPageData() {
   const lang = cookieStore.get("NEXT_LOCALE");
 
   try {
-    const { data: events } = await axiosInstance.get(`/page-data/event`, {
+    const { data: events } = await axiosInstance.get(`/page-data/event?per_page=999`, {
       // headers: { Lang: lang.value },
       cache: "no-store",
     });
@@ -182,10 +198,13 @@ const page = async () => {
   const lifeOnHereData = lifeOnHere?.data || [];
   const categoryResponse = await fetchCategoryPageData();
   const categoryData = categoryResponse?.data?.data || [];
+
+  const setting = await fetchSettingsPageData();
+  const settingData = setting?.data || [];
   
   return (
     <div>
-      <Header categoryData={categoryData} />
+      <Header settingData={settingData} categoryData={categoryData} />
 
       <Careers
       t={t}

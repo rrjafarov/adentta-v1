@@ -244,6 +244,22 @@ async function fetchAboutPageData() {
   }
 }
 
+async function fetchSettingsPageData() {
+  const cookieStore = await cookies();
+  const lang = cookieStore.get("NEXT_LOCALE");
+
+  try {
+    const { data: setting } = await axiosInstance.get(`/page-data/setting`, {
+      // headers: { Lang: lang.value },
+      cache: "no-store",
+    });
+    return setting;
+  } catch (error) {
+    console.error("Failed to fetch setting page data", error);
+    throw error;
+  }
+}
+
 // Fetch translations
 async function getTranslations() {
   try {
@@ -258,7 +274,7 @@ async function getTranslations() {
 // Fetch brand list
 async function fetchBrandFilterPageData() {
   try {
-    const { data: brands } = await axiosInstance.get("/page-data/brands", {
+    const { data: brands } = await axiosInstance.get("/page-data/brands?per_page=999", {
       cache: "no-store",
     });
     return brands.data.data;
@@ -284,7 +300,7 @@ async function fetchCategoryPageData() {
 // Fetch brands (üst seviye detay)
 async function fetchBrandsPageData() {
   try {
-    const { data: brands } = await axiosInstance.get(`/page-data/brands`, {
+    const { data: brands } = await axiosInstance.get(`/page-data/brands?per_page=999`, {
       cache: "no-store",
     });
     return brands;
@@ -297,7 +313,7 @@ async function fetchBrandsPageData() {
 // Fetch events
 async function fetchEventsPageData() {
   try {
-    const { data: events } = await axiosInstance.get(`/page-data/event`, {
+    const { data: events } = await axiosInstance.get(`/page-data/event?per_page=999`, {
       cache: "no-store",
     });
     return events;
@@ -506,12 +522,15 @@ export default async function page({ searchParams }) {
   const eventsResponse = await fetchEventsPageData();
   const eventsData = eventsResponse?.data?.data || [];
 
+  const setting = await fetchSettingsPageData();
+  const settingData = setting?.data || [];
+
   // 10. Hero için tüm ürünleri kullanıyoruz
   const allProductsForHero = productData;
 
   return (
     <>
-      <Header categoryData={categoryData} />
+      <Header settingData={settingData} categoryData={categoryData} />
 
       <ProductsPageHero
         t={t}
@@ -521,8 +540,8 @@ export default async function page({ searchParams }) {
       />
 
       <ProductsPageFilter
-        allProducts={productData}               // Yeni prop: global tüm ürün listesi
-        initialProducts={initialProducts}       // Server-side filtreli başlangıç listesi
+        allProducts={productData}              
+        initialProducts={initialProducts}       
         categoryData={categoryData}
         brandsDataFilter={brandsDataFilter}
         initialSelectedBrands={initialSelectedBrands}

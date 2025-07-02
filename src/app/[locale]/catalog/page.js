@@ -20,7 +20,21 @@ async function fetchPdfPageData() {
     throw error;
   }
 }
+async function fetchSettingsPageData() {
+  const cookieStore = await cookies();
+  const lang = cookieStore.get("NEXT_LOCALE");
 
+  try {
+    const { data: setting } = await axiosInstance.get(`/page-data/setting`, {
+      // headers: { Lang: lang.value },
+      cache: "no-store",
+    });
+    return setting;
+  } catch (error) {
+    console.error("Failed to fetch setting page data", error);
+    throw error;
+  }
+}
 async function getTranslations() {
   try {
     const data = axiosInstance.get("/translation-list");
@@ -164,9 +178,12 @@ const page = async () => {
   const pdfMembers = pdfResponse?.data?.data || [];
   const categoryResponse = await fetchCategoryPageData();
   const categoryData = categoryResponse?.data?.data || [];
+
+  const setting = await fetchSettingsPageData();
+  const settingData = setting?.data || [];
   return (
     <div>
-      <Header categoryData={categoryData} />
+      <Header settingData={settingData} categoryData={categoryData} />
       <PdfCatalog t={t} pdfMembers={pdfMembers} />
       <Footer
         categoryData={categoryData}

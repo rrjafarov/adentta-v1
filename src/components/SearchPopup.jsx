@@ -107,7 +107,7 @@ const SearchPopup = ({t, closePopup }) => {
                       
 
                       {/* Həkimlər - 1 saniyə sonra */}
-                      {showDoctors && product.doctors?.length > 0 && (
+                      {/* {showDoctors && product.doctors?.length > 0 && (
                         <div className="searchDoctorSection">
                           {product.doctors.map((doctor) => (
                             <div key={doctor.id}>
@@ -117,7 +117,7 @@ const SearchPopup = ({t, closePopup }) => {
                             </div>
                           ))}
                         </div>
-                      )}
+                      )} */}
                       
                       <div className="productInfo">
                         <h3>{product.title}</h3>
@@ -131,7 +131,7 @@ const SearchPopup = ({t, closePopup }) => {
                       </div>
 
                       {/* Tədbirlər - 1.5 saniyə sonra */}
-                      {showEvents && product.events?.length > 0 && (
+                      {/* {showEvents && product.events?.length > 0 && (
                         <div className="searchEventSection">
                           {product.events.map((event) => (
                             <div key={event.id}>
@@ -140,7 +140,7 @@ const SearchPopup = ({t, closePopup }) => {
                             </div>
                           ))}
                         </div>
-                      )}
+                      )} */}
                     </div>
                   </Link>
                 ))

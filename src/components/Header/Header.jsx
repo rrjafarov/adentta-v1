@@ -12,13 +12,13 @@ async function getTranslations() {
   }
 }
 
-const Header = async ({categoryDropData, categoryData ,isHomePage  }) => {
+const Header = async ({categoryDropData, categoryData ,isHomePage ,settingData }) => {
   const translations = await getTranslations();
   const t = translations?.data;
 
   return (
     <div>
-      <HeaderTop t={t} />
+      <HeaderTop settingData={settingData} t={t} />
       <HeaderMenu isHomePage={isHomePage} categoryData={categoryData} t={t} />
     </div>
   );

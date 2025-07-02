@@ -166,7 +166,27 @@ export async function generateMetadata() {
 }
 // !generateMetaData
 
+
+async function fetchSettingsPageData() {
+  const cookieStore = await cookies();
+  const lang = cookieStore.get("NEXT_LOCALE");
+
+  try {
+    const { data: setting } = await axiosInstance.get(`/page-data/setting`, {
+      // headers: { Lang: lang.value },
+      cache: "no-store",
+    });
+    return setting;
+  } catch (error) {
+    console.error("Failed to fetch setting page data", error);
+    throw error;
+  }
+}
+
 const page = async () => {
+  const setting = await fetchSettingsPageData();
+  const settingData = setting?.data || [];
+
   const brandsResponse = await fetchBrandsPageData();
   const brandsData = brandsResponse?.data?.data || [];
 
@@ -185,7 +205,7 @@ const page = async () => {
 
   return (
     <div>
-      <Header categoryData={categoryData} />
+      <Header settingData={settingData} categoryData={categoryData} />
       <AboutPageBanner
         t={t}
         image={about?.data.image}

@@ -143,7 +143,21 @@ export async function generateMetadata({ params }) {
 
 
 
+async function fetchSettingsPageData() {
+  const cookieStore = await cookies();
+  const lang = cookieStore.get("NEXT_LOCALE");
 
+  try {
+    const { data: setting } = await axiosInstance.get(`/page-data/setting`, {
+      // headers: { Lang: lang.value },
+      cache: "no-store",
+    });
+    return setting;
+  } catch (error) {
+    console.error("Failed to fetch setting page data", error);
+    throw error;
+  }
+}
 
 const page = async ({ params }) => {
 
@@ -169,10 +183,13 @@ const page = async ({ params }) => {
   const categoryResponse = await fetchCategoryPageData();
   const categoryData = categoryResponse?.data?.data || [];
 
+  const setting = await fetchSettingsPageData();
+  const settingData = setting?.data || [];
+
   return (
     <div>
       <div className="bradsBackColor">
-        <Header categoryData={categoryData} />
+        <Header settingData={settingData}  categoryData={categoryData} />
       </div>
 
 

@@ -18,6 +18,22 @@ async function fetchCareersPageData() {
   return careers.data.data;
 }
 
+async function fetchSettingsPageData() {
+  const cookieStore = await cookies();
+  const lang = cookieStore.get("NEXT_LOCALE");
+
+  try {
+    const { data: setting } = await axiosInstance.get(`/page-data/setting`, {
+      // headers: { Lang: lang.value },
+      cache: "no-store",
+    });
+    return setting;
+  } catch (error) {
+    console.error("Failed to fetch setting page data", error);
+    throw error;
+  }
+}
+
 // *categories
 async function fetchCategoryPageData() {
   const cookieStore = await cookies();
@@ -167,13 +183,17 @@ export default async function Page({ params }) {
   // URL'den gelen id ile eşleşen kariyer verisini buluyoruz:
   const careerDetail = careersData.find((item) => item.id.toString() === slug);
 
+
+  const setting = await fetchSettingsPageData();
+  const settingData = setting?.data || [];
+
   if (!careerDetail) {
     return <div>Career not found.</div>;
   }
 
   return (
     <div>
-      <Header categoryData={categoryData} />
+      <Header settingData={settingData}  categoryData={categoryData} />
       <CareersDetailPage t={t} careerData={careerDetail} />
       <Footer categoryData={categoryData}  eventsData={eventsData} brandsData={brandsData} />
     </div>

@@ -6,7 +6,21 @@ import Footer from "@/components/Footer/Footer";
 import axiosInstance from "@/lib/axios";
 import { cookies } from "next/headers";
 
+async function fetchSettingsPageData() {
+  const cookieStore = await cookies();
+  const lang = cookieStore.get("NEXT_LOCALE");
 
+  try {
+    const { data: setting } = await axiosInstance.get(`/page-data/setting`, {
+      // headers: { Lang: lang.value },
+      cache: "no-store",
+    });
+    return setting;
+  } catch (error) {
+    console.error("Failed to fetch setting page data", error);
+    throw error;
+  }
+}
 
 async function fetchEventsPageData() {
   const cookieStore = await cookies();
@@ -135,6 +149,10 @@ const page = async ({params}) => {
   // URL'den gelen id ile eşleşen kariyer verisini buluyoruz:
   const eventsDetail = eventsData.find((item) => item.id.toString() === slug);
 
+
+  const setting = await fetchSettingsPageData();
+  const settingData = setting?.data || [];
+
   if (!eventsDetail) {
     return <div>Events not found.</div>;
   }
@@ -143,7 +161,7 @@ const page = async ({params}) => {
   return (
     <div>
       <div className="eventDPBack">
-        <Header categoryData={categoryData} />
+        <Header settingData={settingData} categoryData={categoryData} />
         <EventsDetailPage t={t} eventsDetail={eventsDetail} otherEvents={otherEvents} />
         <Footer categoryData={categoryData}  eventsData={eventsData} brandsData={brandsData} />
       </div>

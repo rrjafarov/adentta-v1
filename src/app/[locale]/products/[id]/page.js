@@ -204,6 +204,23 @@ import ProductsPageDetailPage from "@/components/ProductsPageDetailPage";
 import axiosInstance from "@/lib/axios";
 import { cookies } from "next/headers";
 
+
+async function fetchSettingsPageData() {
+  const cookieStore = await cookies();
+  const lang = cookieStore.get("NEXT_LOCALE");
+
+  try {
+    const { data: setting } = await axiosInstance.get(`/page-data/setting`, {
+      // headers: { Lang: lang.value },
+      cache: "no-store",
+    });
+    return setting;
+  } catch (error) {
+    console.error("Failed to fetch setting page data", error);
+    throw error;
+  }
+}
+
 async function fetchAllProducts() {
   const cookieStore = await cookies();
   const lang = cookieStore.get("NEXT_LOCALE");
@@ -265,7 +282,7 @@ async function fetchEventsPageData() {
   const lang = cookieStore.get("NEXT_LOCALE");
 
   try {
-    const { data: events } = await axiosInstance.get(`/page-data/event`, {
+    const { data: events } = await axiosInstance.get(`/page-data/event?per_page=999`, {
       cache: "no-store",
     });
     return events;
@@ -352,6 +369,9 @@ export default async function Page({ params }) {
   const eventsResponse = await fetchEventsPageData();
   const eventsData = eventsResponse?.data?.data || [];
 
+  const setting = await fetchSettingsPageData();
+  const settingData = setting?.data || [];
+
   if (!productDetail) return <div>Product not found.</div>;
 
   // Oxşar 4 məhsulu filterlə:
@@ -363,7 +383,7 @@ export default async function Page({ params }) {
   return (
     <>
       <div className="productBackground">
-        <Header categoryData={categoryData} />
+        <Header settingData={settingData} categoryData={categoryData} />
       </div>
       <ProductsPageDetailPage
         t={t}

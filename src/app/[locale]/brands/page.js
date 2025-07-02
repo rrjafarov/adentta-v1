@@ -10,10 +10,13 @@ async function fetchBrandsPageData() {
   const lang = cookieStore.get("NEXT_LOCALE");
 
   try {
-    const { data: brands } = await axiosInstance.get(`/page-data/brands?per_page=999`, {
-      // headers: { Lang: lang.value },
-      cache: "no-store",
-    });
+    const { data: brands } = await axiosInstance.get(
+      `/page-data/brands?per_page=999`,
+      {
+        // headers: { Lang: lang.value },
+        cache: "no-store",
+      }
+    );
     return brands;
   } catch (error) {
     console.error("Failed to fetch brands page data", error);
@@ -35,10 +38,13 @@ async function fetchCategoryPageData() {
   const lang = cookieStore.get("NEXT_LOCALE");
 
   try {
-    const { data: category } = await axiosInstance.get(`/page-data/categories?per_page=999`, {
-      // headers: { Lang: lang.value },
-      cache: "no-store",
-    });
+    const { data: category } = await axiosInstance.get(
+      `/page-data/categories?per_page=999`,
+      {
+        // headers: { Lang: lang.value },
+        cache: "no-store",
+      }
+    );
     return category;
   } catch (error) {
     console.error("Failed to fetch category page data", error);
@@ -53,7 +59,7 @@ async function fetchEventsPageData() {
   const lang = cookieStore.get("NEXT_LOCALE");
 
   try {
-    const { data: events } = await axiosInstance.get(`/page-data/event`, {
+    const { data: events } = await axiosInstance.get(`/page-data/event?per_page=999`, {
       // headers: { Lang: lang.value },
       cache: "no-store",
     });
@@ -65,19 +71,18 @@ async function fetchEventsPageData() {
 }
 //! eventsApi
 
-
-
-
-
 async function fetchBrandsSeoData() {
   const cookieStore = await cookies();
   const lang = cookieStore.get("NEXT_LOCALE");
 
   try {
-    const { data: aboutSeo } = await axiosInstance.get(`/page-data/brand-page-info`, {
-      // headers: { Lang: lang.value },
-      cache: "no-store",
-    });
+    const { data: aboutSeo } = await axiosInstance.get(
+      `/page-data/brand-page-info`,
+      {
+        // headers: { Lang: lang.value },
+        cache: "no-store",
+      }
+    );
     return aboutSeo;
   } catch (error) {
     console.error("Failed to fetch aboutSeo page data", error);
@@ -130,10 +135,24 @@ export async function generateMetadata() {
 }
 // !generateMetaData
 
+async function fetchSettingsPageData() {
+  const cookieStore = await cookies();
+  const lang = cookieStore.get("NEXT_LOCALE");
+
+  try {
+    const { data: setting } = await axiosInstance.get(`/page-data/setting`, {
+      // headers: { Lang: lang.value },
+      cache: "no-store",
+    });
+    return setting;
+  } catch (error) {
+    console.error("Failed to fetch setting page data", error);
+    throw error;
+  }
+}
 
 
 const page = async () => {
-
   const eventsResponse = await fetchEventsPageData();
   const eventsData = eventsResponse?.data?.data || [];
   const translations = await getTranslations();
@@ -144,13 +163,18 @@ const page = async () => {
   const categoryResponse = await fetchCategoryPageData();
   const categoryData = categoryResponse?.data?.data || [];
 
-
+  const setting = await fetchSettingsPageData();
+  const settingData = setting?.data || [];
 
   return (
     <div>
-      <Header  categoryData={categoryData} />
+      <Header settingData={settingData} categoryData={categoryData} />
       <Brands t={t} brandsData={brandsData} />
-      <Footer categoryData={categoryData}  eventsData={eventsData} brandsData={brandsData} />
+      <Footer
+        categoryData={categoryData}
+        eventsData={eventsData}
+        brandsData={brandsData}
+      />
     </div>
   );
 };

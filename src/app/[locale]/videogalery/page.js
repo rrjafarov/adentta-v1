@@ -5,6 +5,24 @@ import React from 'react'
 import { cookies } from "next/headers";
 import axiosInstance from "@/lib/axios";
 
+
+
+
+async function fetchSettingsPageData() {
+  const cookieStore = await cookies();
+  const lang = cookieStore.get("NEXT_LOCALE");
+
+  try {
+    const { data: setting } = await axiosInstance.get(`/page-data/setting`, {
+      // headers: { Lang: lang.value },
+      cache: "no-store",
+    });
+    return setting;
+  } catch (error) {
+    console.error("Failed to fetch setting page data", error);
+    throw error;
+  }
+}
 async function fetchAboutPageData() {
   const cookieStore = await cookies();
   const lang = cookieStore.get("NEXT_LOCALE");
@@ -37,7 +55,7 @@ async function fetchVideoPageData() {
   const lang = cookieStore.get("NEXT_LOCALE");
 
   try {
-    const { data: videos } = await axiosInstance.get(`/page-data/video`, {
+    const { data: videos } = await axiosInstance.get(`/page-data/video?per_page=999`, {
       // headers: { Lang: lang.value },
       cache: "no-store",
     });
@@ -53,7 +71,7 @@ async function fetchCategoryPageData() {
   const lang = cookieStore.get("NEXT_LOCALE");
 
   try {
-    const { data: category } = await axiosInstance.get(`/page-data/categories`, {
+    const { data: category } = await axiosInstance.get(`/page-data/categories?per_page=999`, {
       // headers: { Lang: lang.value },
       cache: "no-store",
     });
@@ -71,7 +89,7 @@ async function fetchBrandsPageData() {
   const lang = cookieStore.get("NEXT_LOCALE");
 
   try {
-    const { data: brands } = await axiosInstance.get(`/page-data/brands`, {
+    const { data: brands } = await axiosInstance.get(`/page-data/brands?per_page=999`, {
       // headers: { Lang: lang.value },
       cache: "no-store",
     });
@@ -89,7 +107,7 @@ async function fetchEventsPageData() {
   const lang = cookieStore.get("NEXT_LOCALE");
 
   try {
-    const { data: events } = await axiosInstance.get(`/page-data/event`, {
+    const { data: events } = await axiosInstance.get(`/page-data/event?per_page=999`, {
       // headers: { Lang: lang.value },
       cache: "no-store",
     });
@@ -181,9 +199,12 @@ const page = async () => {
   const videosData = videos?.data?.data || [];
   const categoryResponse = await fetchCategoryPageData();
   const categoryData = categoryResponse?.data?.data || [];
+
+  const setting = await fetchSettingsPageData();
+  const settingData = setting?.data || [];
   return (
     <div>
-        <Header categoryData={categoryData} />
+        <Header settingData={settingData} categoryData={categoryData} />
         <VideoGalery t={t} videosData={videosData} videoCategoryData={videoCategoryData} />
         <Footer categoryData={categoryData}  eventsData={eventsData} brandsData={brandsData} />
     </div>
