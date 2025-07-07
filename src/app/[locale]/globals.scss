@@ -1931,7 +1931,8 @@ ul {
     font-size: 4rem;
     font-style: normal;
     font-weight: 600;
-    line-height: normal;
+    // line-height: normal;
+    line-height: 1.15;
     color: $adentta-01;
     width: 47.1rem;
   }
@@ -1957,9 +1958,9 @@ ul {
   padding-bottom: 3.4rem;
 }
 
-.globalBrandSliderItem {
-  background-color: #fff;
-}
+// .globalBrandSliderItem {
+//   // background-color: #fff;
+// }
 
 .seeMoreGlobal {
   margin-top: 3.4rem;
@@ -1981,7 +1982,8 @@ ul {
   img {
     flex-shrink: 0;
     object-fit: contain;
-    padding: 2.3rem 3.2rem;
+    // padding: 2.3rem 3.2rem;
+    padding: 0.2rem 0.2rem;
     background: transparent;
     position: absolute;
     z-index: 99;
@@ -2058,14 +2060,12 @@ ul {
 
       .footerBrand {
         grid-column: span 1.9;
-
         .footerLogo {
           width: 26.4rem;
           cursor: pointer;
         }
-
-        p {
-          color: #59649b;
+        h1 {
+          color: #A8AEC8;
           font-size: 1.2rem;
           font-style: normal;
           font-weight: 400;
@@ -2329,7 +2329,7 @@ ul {
         }
 
         .oneStudio {
-          cursor: pointer;
+          // cursor: pointer;
           padding-top: 1.8rem;
           display: flex;
           justify-content: flex-end;
@@ -2345,6 +2345,12 @@ ul {
             line-height: 145%;
             letter-spacing: 0.042rem;
             opacity: 0.5;
+          }
+          a{
+            display: flex;
+            gap: 1.2rem;
+            justify-content: center;
+            align-items: center;
           }
 
           h4 {
@@ -9828,7 +9834,7 @@ ul {
         display: flex;
         justify-content: center;
         align-items: center;
-        gap: 1.7rem;
+        gap: 1.5rem;
 
         li {
           border: 1.5px solid $adentta-02;

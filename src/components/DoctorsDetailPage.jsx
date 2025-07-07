@@ -38,32 +38,46 @@ const DoctorsDetailPage = ({ t, doctorsDetailDataDetail, otherDoctors }) => {
                 </span>
                 <br />
                 <span>{doctorsDetailDataDetail.workplace}</span>
+
                 <div className="doctorsNumbers">
                   <div className="doctorNumber">
-                    <span>{t?.doctorsPageNumber || "number:"}:</span>
-                    <div className="doctorNumberIcon">
-                      <Image
-                        src="/icons/boldPhone.svg"
-                        alt="phone"
-                        width={10}
-                        height={10}
-                      />
-                      <p>{doctorsDetailDataDetail.phone || "N/A"}</p>
-                    </div>
-                    <div className="doctorNumberIcon">
-                      <Image
-                        src="/icons/whatsappBold.svg"
-                        alt="phone"
-                        width={10}
-                        height={10}
-                      />
-                      <Link
-                        href={doctorsDetailDataDetail.whatsapp_link || "N/A"}
-                      >
-                        <p>WhatsApp</p>
-                      </Link>
-                    </div>
-                    <span>{t?.doctorsPageLocation || "location"}:</span>
+                    {(doctorsDetailDataDetail.phone ||
+                      doctorsDetailDataDetail.whatsapp_link) && (
+                      <div className="doctorNumber">
+                        <span>{t?.doctorsPageNumber || "number:"}:</span>
+
+                        {doctorsDetailDataDetail.phone && (
+                          <div className="doctorNumberIcon">
+                            <Image
+                              src="/icons/boldPhone.svg"
+                              alt="phone"
+                              width={10}
+                              height={10}
+                            />
+                            <p>{doctorsDetailDataDetail.phone}</p>
+                          </div>
+                        )}
+
+                        {doctorsDetailDataDetail.whatsapp_link && (
+                          <div className="doctorNumberIcon">
+                            <Image
+                              src="/icons/whatsappBold.svg"
+                              alt="phone"
+                              width={10}
+                              height={10}
+                            />
+                            <Link
+                              href={doctorsDetailDataDetail.whatsapp_link}
+                              target="_blank"
+                            >
+                              <p>WhatsApp</p>
+                            </Link>
+                          </div>
+                        )}
+                      </div>
+                    )}
+
+                    {/* <span>{t?.doctorsPageLocation || "location"}:</span>
                     <div className="doctorNumberIcon">
                       <Image
                         src="/icons/boldLocation.svg"
@@ -72,8 +86,24 @@ const DoctorsDetailPage = ({ t, doctorsDetailDataDetail, otherDoctors }) => {
                         height={10}
                       />
                       <p>{doctorsDetailDataDetail.location || "N/A"}</p>
-                    </div>
-                    <div className="doctorsSocialLinks">
+                    </div> */}
+
+                    {doctorsDetailDataDetail.location && (
+                      <>
+                        <span>{t?.doctorsPageLocation || "location"}:</span>
+                        <div className="doctorNumberIcon">
+                          <Image
+                            src="/icons/boldLocation.svg"
+                            alt="location"
+                            width={10}
+                            height={10}
+                          />
+                          <p>{doctorsDetailDataDetail.location}</p>
+                        </div>
+                      </>
+                    )}
+
+                    {/* <div className="doctorsSocialLinks">
                       <ul>
                         <li>
                           <Link
@@ -105,6 +135,54 @@ const DoctorsDetailPage = ({ t, doctorsDetailDataDetail, otherDoctors }) => {
                             <img src="/icons/facebookNormal.svg" alt="" />
                           </Link>
                         </li>
+                      </ul>
+                    </div> */}
+
+                    <div className="doctorsSocialLinks">
+                      <ul>
+                        {doctorsDetailDataDetail.whatsapp_link && (
+                          <Link href={doctorsDetailDataDetail.whatsapp_link}>
+                            <li>
+                              <img
+                                src="/icons/whatsappNormal.svg"
+                                alt="WhatsApp"
+                              />
+                            </li>
+                          </Link>
+                        )}
+
+                        {doctorsDetailDataDetail.linkedin && (
+                          <Link href={doctorsDetailDataDetail.linkedin}>
+                            <li>
+                              <img
+                                src="/icons/linkedinNormal.svg"
+                                alt="LinkedIn"
+                              />
+                            </li>
+                          </Link>
+                        )}
+
+                        {doctorsDetailDataDetail.instagram && (
+                          <Link href={doctorsDetailDataDetail.instagram}>
+                            <li>
+                              <img
+                                src="/icons/instagramNormal.svg"
+                                alt="Instagram"
+                              />
+                            </li>
+                          </Link>
+                        )}
+
+                        {doctorsDetailDataDetail.facebook && (
+                          <Link href={doctorsDetailDataDetail.facebook}>
+                            <li>
+                              <img
+                                src="/icons/facebookNormal.svg"
+                                alt="Facebook"
+                              />
+                            </li>
+                          </Link>
+                        )}
                       </ul>
                     </div>
                   </div>

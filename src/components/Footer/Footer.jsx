@@ -39,8 +39,7 @@ const Footer = async ({ brandsData, eventsData, categoryData, isHomePage }) => {
                 className="footerLogo"
               />
             </Link>
-            <p>{t?.footerSeoText || "No results found"}</p>
-            {/* <div dangerouslySetInnerHTML={{ __html: t?.footerSeoText || "No results found" }}></div> */}
+            <h1>{t?.footerSeoText || "No results found"}</h1>
             <div className="socialIcons">
               <ul>
                 <li>

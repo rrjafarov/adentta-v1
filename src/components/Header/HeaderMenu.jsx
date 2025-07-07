@@ -187,7 +187,8 @@ const HeaderMenu = ({ t, categoryData, isHomePage }) => {
                                       <Link
                                         href={{
                                           pathname: "/products",
-                                          query: { category: category.id },
+                                          // query: { category: category.id },
+                                          query: { category: category.url_slug },
                                         }}
                                       >
                                         <h3>
@@ -207,8 +208,10 @@ const HeaderMenu = ({ t, categoryData, isHomePage }) => {
                                             href={{
                                               pathname: "/products",
                                               query: {
-                                                category: category.id,
-                                                subcategory: child.id,
+                                                // category: category.id,
+                                                // subcategory: child.id,
+                                                category: category.url_slug,
+                                                subcategory: child.url_slug,
                                               },
                                             }}
                                             className="subLink"

@@ -3,14 +3,11 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
 import "swiper/css/pagination";
 import "swiper/css/autoplay";
-
-// import "../../app/globals.scss";
 import "../../app/[locale]/globals.scss";
 import { Pagination, Autoplay } from "swiper/modules";
 import Link from "next/link";
 import SeeMore from "../SeeMore";
 import Image from "next/image";
-// import Megagen from "../../../public/images/megagen.svg";
 
 const GlobalExcellence = ({ brandsData, t }) => {
   return (
@@ -22,7 +19,6 @@ const GlobalExcellence = ({ brandsData, t }) => {
         <p>
           {t?.homeBrandsContent ||
             "Our trusted brands hail from countries known for innovation and  quality, including Sweden, Poland, Italy, Germany, China, Korea, Japan, and Taiwan. Discover the difference global expertise makes."}
-
         </p>
       </div>
 
@@ -69,7 +65,6 @@ const GlobalExcellence = ({ brandsData, t }) => {
         {brandsData.map((brand) => (
           <SwiperSlide key={brand.id} className="globalBrandSliderItem">
             <div className="globalExBrands">
-              {/* <img src="/images/topBrandImg.png" alt="" /> */}
               <img
                 src={`https://admin.adentta.az/storage${brand.logo}`}
                 alt=""
@@ -98,4 +93,3 @@ const GlobalExcellence = ({ brandsData, t }) => {
 };
 
 export default GlobalExcellence;
-

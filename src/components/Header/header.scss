@@ -273,10 +273,12 @@ $adentta-06: #29282f !important;
     box-shadow: 1px 4.5px 4.5px 0px rgba(141, 141, 141, 0.2);
     transition: all 0.5s ease;
     .dropCompany {
-      padding: 3rem;
+      padding: 2rem 3rem;
+      // padding: 3rem;
       ul {
         display: flex;
         flex-direction: column;
+        gap: 0.5rem;
         li {
           &:hover {
             transform: scale(1.05);
@@ -338,6 +340,7 @@ $adentta-06: #29282f !important;
   //   }
   // }
   //-----------------------------------
+
   .dropdownMedia {
     position: relative;
   }
@@ -357,12 +360,14 @@ $adentta-06: #29282f !important;
     box-shadow: 1px 4.5px 4.5px 0px rgba(141, 141, 141, 0.2);
     transition: all 0.5s ease;
     .dropMedia {
-      padding: 3rem;
+      // padding: 3rem;
+      padding: 2rem 3rem;
+
       ul {
         display: flex;
         flex-direction: column;
+        gap: 0.5rem;
         li {
-          // border-bottom: 1px solid #cbd9ef;
           &:hover {
             transform: scale(1.05);
             transition: all 0.4s ease;
