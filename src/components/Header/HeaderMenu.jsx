@@ -46,24 +46,6 @@ const HeaderMenu = ({ t, categoryData, isHomePage }) => {
   const togglePopup = () => setIsPopupOpen(!isPopupOpen);
   const toggleMobileMenu = () => setIsMobileMenuOpen((prev) => !prev);
 
-  // const handleLangChange = (lang) => {
-  //   if (lang === currentLang) {
-  //     setIsOpen(false);
-  //     return;
-  //   }
-  //   Cookies.set("NEXT_LOCALE", lang);
-  //   setCurrentLang(lang);
-  //   setIsOpen(false);
-
-  //   const currentPath =
-  //     window.location.pathname.replace(/^\/[a-z]{2}(?=\/|$)/, "") || "/";
-  //   const queryString = window.location.search || "";
-  //   const prefix = lang === "az" ? "/az" : `/${lang}`;
-  //   const newPath = `${prefix}${currentPath}${queryString}`;
-
-  //   window.location.href = newPath;
-  // };
-
   return (
     <>
       <div className="container">
@@ -102,7 +84,7 @@ const HeaderMenu = ({ t, categoryData, isHomePage }) => {
               <ul>
                 <div className="dropdown">
                   <li>
-                    <Link className="productsLinkName" href="/products">
+                    <Link className="productsLinkName" href="#">
                       {t?.products || "products"}
                     </Link>
                     <img
@@ -116,7 +98,7 @@ const HeaderMenu = ({ t, categoryData, isHomePage }) => {
                       </div>
                       <div className="rower">
                         <div className="row">
-                          <div className="xl-3 lg-3">
+                          {/* <div className="xl-3 lg-3">
                             <div className="column">
                               <div className="productDropMenuImages">
                                 <Image
@@ -145,9 +127,9 @@ const HeaderMenu = ({ t, categoryData, isHomePage }) => {
                               </div>
                             </div>
                             <div className="dropLine"></div>
-                          </div>
+                          </div> */}
 
-                          <div className="xl-9 lg-9">
+                          <div className="xl-12 lg-12">
                             {/* <div className="rowerd">
                               {categoryData?.slice(0, 6).map((category) => (
                                 <div key={category.id} className="column">
@@ -171,9 +153,13 @@ const HeaderMenu = ({ t, categoryData, isHomePage }) => {
                                 </div>
                               ))}
                             </div> */}
+
+
+                            
                             <div className="rowerd">
                               {categoryData
-                                .filter((category) => !category.parent_id).slice(0,6)
+                                // .filter((category) => !category.parent_id).slice(0,6)
+                                .filter((category) => !category.parent_id)
                                 .map((category) => {
                                   const children = categoryData.filter((sub) =>
                                     sub.parent_id?.some(
@@ -202,7 +188,7 @@ const HeaderMenu = ({ t, categoryData, isHomePage }) => {
 
                                       {/* Alt kateqoriyalar */}
                                       <div className="columnLinks">
-                                        {children.slice(0,4).map((child) => (
+                                        {children.slice(0,5).map((child) => (
                                           <Link
                                             key={child.id}
                                             href={{

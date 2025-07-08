@@ -37,6 +37,7 @@
     "react-scroll-parallax": "^3.4.5",
     "react-select": "^5.10.1",
     "react-slick": "^0.30.3",
+    "react-youtube": "^10.1.0",
     "sass": "^1.85.1",
     "slick-carousel": "^1.8.1",
     "swiper": "^11.2.1",

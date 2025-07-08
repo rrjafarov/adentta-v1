@@ -103,7 +103,7 @@ $adentta-06: #29282f !important;
       position: relative;
     }
     .dropdown-content {
-      max-height: 67rem;
+      // max-height: 67rem;
       overflow-y: auto;
       display: none;
       position: absolute;
@@ -118,8 +118,10 @@ $adentta-06: #29282f !important;
       border-top: none;
       background: #fff;
       box-shadow: 1px 4.5px 4.5px 0px rgba(141, 141, 141, 0.2);
-      padding-right: 10rem;
-      padding-left: 10rem;
+      // padding-right: 10rem;
+      // padding-left: 10rem;
+      padding-right: 3rem;
+      padding-left: 3rem;
       transition: all 0.5s ease;
       .dropHeader {
         h4 {
@@ -141,8 +143,8 @@ $adentta-06: #29282f !important;
         padding-bottom: 4.5rem;
         .rowerd {
           display: flex;
-          justify-content: space-between;
-          gap: 4rem;
+          // justify-content: space-between;
+          gap: 2rem;
           flex-wrap: wrap;
         }
         .column {
