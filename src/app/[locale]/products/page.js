@@ -20,7 +20,20 @@ async function fetchAboutPageData() {
     return [];
   }
 }
-
+async function fetchContactPageData() {
+  const cookieStore = await cookies();
+  const lang = cookieStore.get("NEXT_LOCALE");
+  try {
+    const { data: contact } = await axiosInstance.get(`/page-data/contact`, {
+      // headers: { Lang: lang.value },
+      cache: "no-store",
+    });
+    return contact;
+  } catch (error) {
+    console.error("Failed to fetch contact page data", error);
+    throw error;
+  }
+}
 async function fetchSettingsPageData() {
   const cookieStore = await cookies();
   const lang = cookieStore.get("NEXT_LOCALE");
@@ -223,6 +236,7 @@ export default async function page({ searchParams }) {
         .map((slug) => categoryData.find((c) => c.url_slug === slug))
         .filter(Boolean)
     : [];
+  const contact = await fetchContactPageData();
 
   const categoryMetaTitle = selectedCategoryObj?.meta_title || null;
   const categoryMetaDescription = selectedCategoryObj?.meta_description || null;
@@ -294,6 +308,7 @@ export default async function page({ searchParams }) {
         categoryData={categoryData}
         eventsData={eventsData}
         brandsData={brandsData}
+        contact={contact}
       />
     </>
   );

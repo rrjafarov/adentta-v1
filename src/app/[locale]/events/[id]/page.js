@@ -132,7 +132,20 @@ export async function generateMetadata({ params }) {
     },
   };
 }
-
+async function fetchContactPageData() {
+  const cookieStore = await cookies();
+  const lang = cookieStore.get("NEXT_LOCALE");
+  try {
+    const { data: contact } = await axiosInstance.get(`/page-data/contact`, {
+      // headers: { Lang: lang.value },
+      cache: "no-store",
+    });
+    return contact;
+  } catch (error) {
+    console.error("Failed to fetch contact page data", error);
+    throw error;
+  }
+}
 
 const page = async ({params}) => {
 
@@ -148,6 +161,7 @@ const page = async ({params}) => {
   const categoryData = categoryResponse?.data?.data || [];
   // URL'den gelen id ile eşleşen kariyer verisini buluyoruz:
   const eventsDetail = eventsData.find((item) => item.id.toString() === slug);
+  const contact = await fetchContactPageData();
 
 
   const setting = await fetchSettingsPageData();
@@ -163,7 +177,7 @@ const page = async ({params}) => {
       <div className="eventDPBack">
         <Header settingData={settingData} categoryData={categoryData} />
         <EventsDetailPage t={t} eventsDetail={eventsDetail} otherEvents={otherEvents} />
-        <Footer categoryData={categoryData}  eventsData={eventsData} brandsData={brandsData} />
+        <Footer contact={contact} categoryData={categoryData}  eventsData={eventsData} brandsData={brandsData} />
       </div>
     </div>
   );

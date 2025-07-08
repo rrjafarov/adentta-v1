@@ -354,6 +354,22 @@ export async function generateMetadata({ params }) {
 }
 // !generateMetadata
 
+
+async function fetchContactPageData() {
+  const cookieStore = await cookies();
+  const lang = cookieStore.get("NEXT_LOCALE");
+  try {
+    const { data: contact } = await axiosInstance.get(`/page-data/contact`, {
+      // headers: { Lang: lang.value },
+      cache: "no-store",
+    });
+    return contact;
+  } catch (error) {
+    console.error("Failed to fetch contact page data", error);
+    throw error;
+  }
+}
+
 export default async function Page({ params }) {
   const { id } = params;
   const slug = id.split("-").pop();
@@ -371,6 +387,8 @@ export default async function Page({ params }) {
 
   const setting = await fetchSettingsPageData();
   const settingData = setting?.data || [];
+    const contact = await fetchContactPageData();
+
 
   if (!productDetail) return <div>Product not found.</div>;
 
@@ -390,7 +408,7 @@ export default async function Page({ params }) {
         productData={productDetail}
         similarProducts={similarProducts}
       />
-      <Footer categoryData={categoryData}  eventsData={eventsData} brandsData={brandsData} />
+      <Footer contact={contact} categoryData={categoryData}  eventsData={eventsData} brandsData={brandsData} />
     </>
   );
 }

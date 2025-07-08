@@ -7,7 +7,20 @@ import axiosInstance from "@/lib/axios";
 
 
 
-
+async function fetchContactPageData() {
+  const cookieStore = await cookies();
+  const lang = cookieStore.get("NEXT_LOCALE");
+  try {
+    const { data: contact } = await axiosInstance.get(`/page-data/contact`, {
+      // headers: { Lang: lang.value },
+      cache: "no-store",
+    });
+    return contact;
+  } catch (error) {
+    console.error("Failed to fetch contact page data", error);
+    throw error;
+  }
+}
 async function fetchSettingsPageData() {
   const cookieStore = await cookies();
   const lang = cookieStore.get("NEXT_LOCALE");
@@ -199,6 +212,7 @@ const page = async () => {
   const videosData = videos?.data?.data || [];
   const categoryResponse = await fetchCategoryPageData();
   const categoryData = categoryResponse?.data?.data || [];
+  const contact = await fetchContactPageData();
 
   const setting = await fetchSettingsPageData();
   const settingData = setting?.data || [];
@@ -206,7 +220,7 @@ const page = async () => {
     <div>
         <Header settingData={settingData} categoryData={categoryData} />
         <VideoGalery t={t} videosData={videosData} videoCategoryData={videoCategoryData} />
-        <Footer categoryData={categoryData}  eventsData={eventsData} brandsData={brandsData} />
+        <Footer contact={contact} categoryData={categoryData}  eventsData={eventsData} brandsData={brandsData} />
     </div>
   )
 }

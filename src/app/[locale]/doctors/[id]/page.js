@@ -97,6 +97,22 @@ async function getTranslations() {
   }
 }
 
+async function fetchContactPageData() {
+  const cookieStore = await cookies();
+  const lang = cookieStore.get("NEXT_LOCALE");
+  try {
+    const { data: contact } = await axiosInstance.get(`/page-data/contact`, {
+      // headers: { Lang: lang.value },
+      cache: "no-store",
+    });
+    return contact;
+  } catch (error) {
+    console.error("Failed to fetch contact page data", error);
+    throw error;
+  }
+}
+
+
 export async function generateMetadata({ params }) {
   const slug = params.id.split("-").pop();
   const allDoctors = await fetchDoctorsDetailPageData();
@@ -153,6 +169,7 @@ export async function generateMetadata({ params }) {
 const page = async ({ params }) => {
   const brandsResponse = await fetchBrandsPageData();
   const brandsData = brandsResponse?.data?.data || [];
+  const contact = await fetchContactPageData();
 
   const translations = await getTranslations();
   const t = translations?.data;
@@ -196,6 +213,7 @@ const page = async ({ params }) => {
         categoryData={categoryData}
         eventsData={eventsData}
         brandsData={brandsData}
+        contact={contact}
       />
     </div>
   );

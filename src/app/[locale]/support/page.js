@@ -5,7 +5,20 @@ import React from "react";
 import { cookies } from "next/headers";
 import axiosInstance from "@/lib/axios";
 
-
+async function fetchContactPageData() {
+  const cookieStore = await cookies();
+  const lang = cookieStore.get("NEXT_LOCALE");
+  try {
+    const { data: contact } = await axiosInstance.get(`/page-data/contact`, {
+      // headers: { Lang: lang.value },
+      cache: "no-store",
+    });
+    return contact;
+  } catch (error) {
+    console.error("Failed to fetch contact page data", error);
+    throw error;
+  }
+}
 async function fetchSettingsPageData() {
   const cookieStore = await cookies();
   const lang = cookieStore.get("NEXT_LOCALE");
@@ -141,6 +154,9 @@ const page = async () => {
   const brandsResponse = await fetchBrandsPageData();
   const brandsData = brandsResponse?.data?.data || [];
 
+    const contact = await fetchContactPageData();
+
+
   const translations = await getTranslations();
   const t = translations?.data;
   const eventsResponse = await fetchEventsPageData();
@@ -154,7 +170,7 @@ const page = async () => {
       <div className="faqBackImg">
         <Header settingData={settingData} categoryData={categoryData} />
         <Support t={t} title={userTerms?.data.title} content={userTerms?.data.content}  />
-        <Footer categoryData={categoryData}  eventsData={eventsData} brandsData={brandsData} />
+        <Footer contact={contact} categoryData={categoryData}  eventsData={eventsData} brandsData={brandsData} />
       </div>
     </div>
   );

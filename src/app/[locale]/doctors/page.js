@@ -127,6 +127,21 @@ async function fetchDoctorsSeoData() {
   }
 }
 
+async function fetchContactPageData() {
+  const cookieStore = await cookies();
+  const lang = cookieStore.get("NEXT_LOCALE");
+  try {
+    const { data: contact } = await axiosInstance.get(`/page-data/contact`, {
+      // headers: { Lang: lang.value },
+      cache: "no-store",
+    });
+    return contact;
+  } catch (error) {
+    console.error("Failed to fetch contact page data", error);
+    throw error;
+  }
+}
+
 // !generateMetaData
 export async function generateMetadata() {
   const seo = await fetchDoctorsSeoData();
@@ -189,6 +204,7 @@ const page = async () => {
   const doctorsData = doctorsResponse?.data?.data || [];
   const categoryResponse = await fetchCategoryPageData();
   const categoryData = categoryResponse?.data?.data || [];
+  const contact = await fetchContactPageData();
 
 
   const setting = await fetchSettingsPageData();
@@ -198,7 +214,7 @@ const page = async () => {
     <div>
       <Header settingData={settingData} categoryData={categoryData} />
       <Doctors t={t} doctorsData={doctorsData} />
-      <Footer categoryData={categoryData}  eventsData={eventsData} brandsData={brandsData} />
+      <Footer contact={contact} categoryData={categoryData}  eventsData={eventsData} brandsData={brandsData} />
     </div>
   );
 };

@@ -143,8 +143,8 @@ $adentta-06: #29282f !important;
         padding-bottom: 4.5rem;
         .rowerd {
           display: flex;
-          // justify-content: space-between;
-          gap: 2rem;
+          // justify-content: space-evenly;
+          gap: 2.5rem;
           flex-wrap: wrap;
         }
         .column {

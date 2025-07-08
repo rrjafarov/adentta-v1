@@ -59,13 +59,31 @@ async function fetchEventsPageData() {
   const lang = cookieStore.get("NEXT_LOCALE");
 
   try {
-    const { data: events } = await axiosInstance.get(`/page-data/event?per_page=999`, {
-      // headers: { Lang: lang.value },
-      cache: "no-store",
-    });
+    const { data: events } = await axiosInstance.get(
+      `/page-data/event?per_page=999`,
+      {
+        // headers: { Lang: lang.value },
+        cache: "no-store",
+      }
+    );
     return events;
   } catch (error) {
     console.error("Failed to fetch events page data", error);
+    throw error;
+  }
+}
+
+async function fetchContactPageData() {
+  const cookieStore = await cookies();
+  const lang = cookieStore.get("NEXT_LOCALE");
+  try {
+    const { data: contact } = await axiosInstance.get(`/page-data/contact`, {
+      // headers: { Lang: lang.value },
+      cache: "no-store",
+    });
+    return contact;
+  } catch (error) {
+    console.error("Failed to fetch contact page data", error);
     throw error;
   }
 }
@@ -151,8 +169,9 @@ async function fetchSettingsPageData() {
   }
 }
 
-
 const page = async () => {
+  const contact = await fetchContactPageData();
+
   const eventsResponse = await fetchEventsPageData();
   const eventsData = eventsResponse?.data?.data || [];
   const translations = await getTranslations();
@@ -171,6 +190,7 @@ const page = async () => {
       <Header settingData={settingData} categoryData={categoryData} />
       <Brands t={t} brandsData={brandsData} />
       <Footer
+        contact={contact}
         categoryData={categoryData}
         eventsData={eventsData}
         brandsData={brandsData}

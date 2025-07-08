@@ -5,7 +5,6 @@ import React from "react";
 import { cookies } from "next/headers";
 import axiosInstance from "@/lib/axios";
 
-
 async function fetchSettingsPageData() {
   const cookieStore = await cookies();
   const lang = cookieStore.get("NEXT_LOCALE");
@@ -21,6 +20,7 @@ async function fetchSettingsPageData() {
     throw error;
   }
 }
+
 async function fetchAboutPageData() {
   const cookieStore = await cookies();
   const lang = cookieStore.get("NEXT_LOCALE");
@@ -63,10 +63,13 @@ async function fetchBrandsPageData() {
   const lang = cookieStore.get("NEXT_LOCALE");
 
   try {
-    const { data: brands } = await axiosInstance.get(`/page-data/brands`, {
-      // headers: { Lang: lang.value },
-      cache: "no-store",
-    });
+    const { data: brands } = await axiosInstance.get(
+      `/page-data/brands?per_page=999`,
+      {
+        // headers: { Lang: lang.value },
+        cache: "no-store",
+      }
+    );
     return brands;
   } catch (error) {
     console.error("Failed to fetch brands page data", error);
@@ -81,10 +84,13 @@ async function fetchEventsPageData() {
   const lang = cookieStore.get("NEXT_LOCALE");
 
   try {
-    const { data: events } = await axiosInstance.get(`/page-data/event`, {
-      // headers: { Lang: lang.value },
-      cache: "no-store",
-    });
+    const { data: events } = await axiosInstance.get(
+      `/page-data/event?per_page=999`,
+      {
+        // headers: { Lang: lang.value },
+        cache: "no-store",
+      }
+    );
     return events;
   } catch (error) {
     console.error("Failed to fetch events page data", error);
@@ -209,6 +215,7 @@ const page = async () => {
         videoTitle={contact?.data.video_title}
       />
       <Footer
+        contact={contact}
         categoryData={categoryData}
         eventsData={eventsData}
         brandsData={brandsData}

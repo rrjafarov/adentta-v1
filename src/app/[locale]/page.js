@@ -18,10 +18,13 @@ async function fetchProductsPageData() {
   const lang = cookieStore.get("NEXT_LOCALE");
 
   try {
-    const { data: product } = await axiosInstance.get(`/page-data/product?per_page=999`, {
-      // headers: { Lang: lang.value },
-      cache: "no-store",
-    });
+    const { data: product } = await axiosInstance.get(
+      `/page-data/product?per_page=999`,
+      {
+        // headers: { Lang: lang.value },
+        cache: "no-store",
+      }
+    );
     return product.data.data;
   } catch (error) {
     console.error("Failed to fetch product page data", error);
@@ -36,10 +39,13 @@ async function fetchBrandsPageData() {
   const lang = cookieStore.get("NEXT_LOCALE");
 
   try {
-    const { data: brands } = await axiosInstance.get(`/page-data/brands?per_page=999`, {
-      // headers: { Lang: lang.value },
-      cache: "no-store",
-    });
+    const { data: brands } = await axiosInstance.get(
+      `/page-data/brands?per_page=999`,
+      {
+        // headers: { Lang: lang.value },
+        cache: "no-store",
+      }
+    );
     return brands;
   } catch (error) {
     console.error("Failed to fetch brands page data", error);
@@ -54,10 +60,13 @@ async function fetchEventsPageData() {
   const lang = cookieStore.get("NEXT_LOCALE");
 
   try {
-    const { data: events } = await axiosInstance.get(`/page-data/event?per_page=999`, {
-      // headers: { Lang: lang.value },
-      cache: "no-store",
-    });
+    const { data: events } = await axiosInstance.get(
+      `/page-data/event?per_page=999`,
+      {
+        // headers: { Lang: lang.value },
+        cache: "no-store",
+      }
+    );
     return events;
   } catch (error) {
     console.error("Failed to fetch events page data", error);
@@ -72,10 +81,13 @@ async function fetchBlogsPageData() {
   const lang = cookieStore.get("NEXT_LOCALE");
 
   try {
-    const { data: blogs } = await axiosInstance.get(`/page-data/blog?per_page=999`, {
-      // headers: { Lang: lang.value },
-      cache: "no-store",
-    });
+    const { data: blogs } = await axiosInstance.get(
+      `/page-data/blog?per_page=999`,
+      {
+        // headers: { Lang: lang.value },
+        cache: "no-store",
+      }
+    );
     return blogs;
   } catch (error) {
     console.error("Failed to fetch blogs page data", error);
@@ -226,8 +238,23 @@ async function fetchSettingsPageData() {
   }
 }
 
+async function fetchContactPageData() {
+  const cookieStore = await cookies();
+  const lang = cookieStore.get("NEXT_LOCALE");
+  try {
+    const { data: contact } = await axiosInstance.get(`/page-data/contact`, {
+      // headers: { Lang: lang.value },
+      cache: "no-store",
+    });
+    return contact;
+  } catch (error) {
+    console.error("Failed to fetch contact page data", error);
+    throw error;
+  }
+}
 
 const Home = async () => {
+  const contact = await fetchContactPageData();
   const translations = await getTranslations();
   const t = translations?.data;
 
@@ -235,7 +262,7 @@ const Home = async () => {
   const categoryData = categoryResponse?.data?.data || [];
 
   const productData = await fetchProductsPageData();
-  
+
   const brandsResponse = await fetchBrandsPageData();
   const brandsData = brandsResponse?.data?.data || [];
 
@@ -260,7 +287,11 @@ const Home = async () => {
 
   return (
     <div>
-      <Header settingData={settingData}  categoryData={categoryData} isHomePage={true} />
+      <Header
+        settingData={settingData}
+        categoryData={categoryData}
+        isHomePage={true}
+      />
       <HeroSlider bannerData={bannerData} heroSliderData={heroSliderData} />
       <LittleCard t={t} />
       <HomePageProducts
@@ -274,6 +305,7 @@ const Home = async () => {
       <GlobalExcellence t={t} brandsData={brandsData} />
       <OurBlogsHomePage t={t} blogData={blogData} />
       <Footer
+        contact={contact}
         isHomePage={true}
         t={t}
         categoryData={categoryData}

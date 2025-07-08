@@ -18,8 +18,15 @@ async function getTranslations() {
   }
 }
 
-const Footer = async ({ brandsData, eventsData, categoryData, isHomePage }) => {
+const Footer = async ({
+  contact,
+  brandsData,
+  eventsData,
+  categoryData,
+  isHomePage,
+}) => {
   const t = await getTranslations();
+  const contactData = contact?.data || {};
 
   return (
     <footer id="footer">
@@ -43,38 +50,29 @@ const Footer = async ({ brandsData, eventsData, categoryData, isHomePage }) => {
             <div className="socialIcons">
               <ul>
                 <li>
-                  <Link href="https://wa.me/994554099878" target="_blank">
+                  <Link href={contactData?.whatsapp_link} target="_blank">
                     <WhatsApp />
                   </Link>
                 </li>
                 <li>
-                  <Link
-                    href="https://www.linkedin.com/company/adentta/"
-                    target="_blank"
-                  >
+                  <Link href={contactData?.linkedin} target="_blank">
                     <Linkedin />
                   </Link>
                 </li>
                 <li>
-                  <Link
-                    href="https://www.instagram.com/adentta.az/"
-                    target="_blank"
-                  >
+                  <Link href={contactData?.instagram} target="_blank">
                     <Instagram />
                   </Link>
                 </li>
                 <li>
-                  <Link
-                    href="https://www.facebook.com/adentta.az"
-                    target="_blank"
-                  >
+                  <Link href={contactData?.facebook} target="_blank">
                     <Facebook />
                   </Link>
                 </li>
               </ul>
             </div>
             <div className="contactButtons">
-              <Link href={`tel:${t.phoneNumber || "+994554099878"}`}>
+              <Link href={`tel:${contactData.phone || "+994554099878fr"}`}>
                 <div className="contactButtonCall">
                   <Image
                     src="/icons/phoneicon.svg"
@@ -85,7 +83,7 @@ const Footer = async ({ brandsData, eventsData, categoryData, isHomePage }) => {
                   <button>{t.call || "Call us"}</button>
                 </div>
               </Link>
-              <Link href={`mailto:${t.emailAddress || "info@adentta.com"}`}>
+              <Link href={`mailto:${contactData.email || "info@adentta.com"}`}>
                 <div className="contactButtonEmail">
                   <Image
                     src="/icons/email.svg"
@@ -129,7 +127,8 @@ const Footer = async ({ brandsData, eventsData, categoryData, isHomePage }) => {
               {brandsData?.slice(0, 6).map((brand) => (
                 <li key={brand.id}>
                   <Link
-                    href={`/brands/${brand?.title?.toLowerCase()
+                    href={`/brands/${brand?.title
+                      ?.toLowerCase()
                       .replace(/\s+/g, "-")}-${brand.id}`}
                   >
                     {brand.title}
@@ -148,7 +147,8 @@ const Footer = async ({ brandsData, eventsData, categoryData, isHomePage }) => {
               {eventsData?.slice(0, 6).map((event) => (
                 <li key={event.id}>
                   <Link
-                    href={`/events/${event?.title?.toLowerCase()
+                    href={`/events/${event?.title
+                      ?.toLowerCase()
                       .replace(/\s+/g, "-")}-${event.id}`}
                   >
                     {event.title}

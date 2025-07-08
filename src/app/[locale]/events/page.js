@@ -145,7 +145,20 @@ export async function generateMetadata() {
   };
 }
 // !generateMetaData
-
+async function fetchContactPageData() {
+  const cookieStore = await cookies();
+  const lang = cookieStore.get("NEXT_LOCALE");
+  try {
+    const { data: contact } = await axiosInstance.get(`/page-data/contact`, {
+      // headers: { Lang: lang.value },
+      cache: "no-store",
+    });
+    return contact;
+  } catch (error) {
+    console.error("Failed to fetch contact page data", error);
+    throw error;
+  }
+}
 
 const page = async () => {
   const brandsResponse = await fetchBrandsPageData();
@@ -159,6 +172,7 @@ const page = async () => {
   const categoryData = categoryResponse?.data?.data || [];
   const setting = await fetchSettingsPageData();
   const settingData = setting?.data || [];
+  const contact = await fetchContactPageData();
 
   // Tarixə görə köhnədən yeniyə sıralama
   const sortedEvents = [...eventsData].sort((a, b) => {
@@ -173,7 +187,7 @@ const page = async () => {
       <Header settingData={settingData} categoryData={categoryData} />
       <EventsPage t={t} eventsData={sortedEvents} />
       <div className="eventsFooterBack">
-        <Footer categoryData={categoryData}  eventsData={eventsData} brandsData={brandsData} />
+        <Footer contact={contact} categoryData={categoryData}  eventsData={eventsData} brandsData={brandsData} />
       </div>
     </div>
   );

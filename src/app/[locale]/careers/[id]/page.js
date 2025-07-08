@@ -158,7 +158,20 @@ export async function generateMetadata({ params }) {
 }
 
 
-
+async function fetchContactPageData() {
+  const cookieStore = await cookies();
+  const lang = cookieStore.get("NEXT_LOCALE");
+  try {
+    const { data: contact } = await axiosInstance.get(`/page-data/contact`, {
+      // headers: { Lang: lang.value },
+      cache: "no-store",
+    });
+    return contact;
+  } catch (error) {
+    console.error("Failed to fetch contact page data", error);
+    throw error;
+  }
+}
 
 
 
@@ -174,6 +187,7 @@ export default async function Page({ params }) {
 
   const brandsResponse = await fetchBrandsPageData();
   const brandsData = brandsResponse?.data?.data || [];
+    const contact = await fetchContactPageData();
 
   const eventsResponse = await fetchEventsPageData();
   const eventsData = eventsResponse?.data?.data || [];
@@ -195,7 +209,7 @@ export default async function Page({ params }) {
     <div>
       <Header settingData={settingData}  categoryData={categoryData} />
       <CareersDetailPage t={t} careerData={careerDetail} />
-      <Footer categoryData={categoryData}  eventsData={eventsData} brandsData={brandsData} />
+      <Footer contact={contact} categoryData={categoryData}  eventsData={eventsData} brandsData={brandsData} />
     </div>
   );
 }

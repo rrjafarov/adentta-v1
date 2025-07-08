@@ -62,6 +62,21 @@ async function fetchBrandsPageDataFoot() {
 }
 //! brandsApi
 
+async function fetchContactPageData() {
+  const cookieStore = await cookies();
+  const lang = cookieStore.get("NEXT_LOCALE");
+  try {
+    const { data: contact } = await axiosInstance.get(`/page-data/contact`, {
+      // headers: { Lang: lang.value },
+      cache: "no-store",
+    });
+    return contact;
+  } catch (error) {
+    console.error("Failed to fetch contact page data", error);
+    throw error;
+  }
+}
+
 //! eventsApi
 async function fetchEventsPageData() {
   const cookieStore = await cookies();
@@ -160,6 +175,7 @@ async function fetchSettingsPageData() {
 }
 
 const page = async ({ params }) => {
+    const contact = await fetchContactPageData();
 
   const brandsResponse = await fetchBrandsPageDataFoot();
   const brandsData = brandsResponse?.data?.data || [];
@@ -197,7 +213,7 @@ const page = async ({ params }) => {
 
 
       <div className="bradsBackColor">
-        <Footer categoryData={categoryData}  eventsData={eventsData} brandsData={brandsData} />
+        <Footer contact={contact} categoryData={categoryData}  eventsData={eventsData} brandsData={brandsData} />
       </div>
     </div>
   );
