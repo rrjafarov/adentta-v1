@@ -84,7 +84,7 @@ const VideoProviderHomePage = ({ homepageData, t }) => {
                     <CountUp
                       end={homepageData.customer_count}
                       suffix="+"
-                      duration={3}
+                      duration={4}
                       className="stats-number"
                     />
                   </span>
@@ -111,3 +111,36 @@ const VideoProviderHomePage = ({ homepageData, t }) => {
 };
 
 export default VideoProviderHomePage;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

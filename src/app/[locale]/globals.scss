@@ -1765,6 +1765,7 @@ ul {
             /* Maksimum göstəriləcək sətir sayı */
             -webkit-box-orient: vertical;
           }
+
           p {
             color: #787d95;
             font-size: 1.5rem;
@@ -1783,11 +1784,13 @@ ul {
             //   display: -webkit-box !important;
             // }
           }
+
           // ul,ol{
           //   display: none !important;
           // }
-          
+
         }
+
         .thisIsBlog {
           padding: 1.5rem 2rem 3rem 1.2rem;
           display: flex;
@@ -1816,6 +1819,7 @@ ul {
             /* Maksimum göstəriləcək sətir sayı */
             -webkit-box-orient: vertical;
           }
+
           p {
             color: #787d95;
             font-size: 1.5rem;
@@ -1830,14 +1834,17 @@ ul {
             /* Maksimum göstəriləcək sətir sayı */
             -webkit-box-orient: vertical;
             display: none !important;
-            &:first-child{
+
+            &:first-child {
               display: -webkit-box !important;
             }
           }
-          ul,ol{
+
+          ul,
+          ol {
             display: none !important;
           }
-          
+
         }
 
         .ourEventContentEvent {
@@ -2060,10 +2067,12 @@ ul {
 
       .footerBrand {
         grid-column: span 1.9;
+
         .footerLogo {
           width: 26.4rem;
           cursor: pointer;
         }
+
         h1 {
           color: #A8AEC8;
           font-size: 1.2rem;
@@ -2346,7 +2355,8 @@ ul {
             letter-spacing: 0.042rem;
             opacity: 0.5;
           }
-          a{
+
+          a {
             display: flex;
             gap: 1.2rem;
             justify-content: center;
@@ -3244,20 +3254,49 @@ ul {
     font-weight: 500;
     line-height: 0%;
     letter-spacing: -0.0016rem;
+    // padding-bottom: 2.65rem;
   }
 
-  p {
-    padding-top: 1.74rem;
+
+  p .page-description-content {
+    // padding-top: 1.74rem;
     padding-bottom: 2.65rem;
-    font-size: 1.35rem;
+    font-size: 1.5rem;
     font-style: normal;
     font-weight: 400;
     line-height: 155%;
-    // opacity: 0.7;
     background: linear-gradient(180deg, #1c1c1c -52.81%, #fff 201.54%);
     background-clip: text;
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
+  }
+  .seoPtagOnly{
+    // padding-top: 1.74rem;
+    // padding-bottom: 2.65rem;
+    padding-top: 1rem;
+    font-size: 1.4rem;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 155%;
+    background: linear-gradient(180deg, #1c1c1c -52.81%, #fff 201.54%);
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    // color: #293881 !important;
+    font-size: 1.8rem;
+    font-style: normal;
+    font-weight: 500;
+    line-height: 1.15;
+    letter-spacing: -0.0016rem;
+    // padding-bottom: 2.65rem;
+    padding: 1.5rem 0 1rem; 
   }
 
   .productsPageDescriptionLink {
@@ -3271,7 +3310,7 @@ ul {
     display: flex;
     align-items: center;
     margin-bottom: 5rem;
-    margin-top: 1rem;
+    margin-top: 3rem !important;
   }
 }
 
@@ -3286,9 +3325,9 @@ ul {
   }
 
   .page-description-content {
-    padding-top: 1.74rem;
+    // padding-top: 1.74rem;
     padding-bottom: 3.65rem;
-    font-size: 1.35rem;
+    font-size: 1.5rem;
     font-style: normal;
     font-weight: 400;
     line-height: 155%;
@@ -5733,6 +5772,7 @@ ul {
         border-radius: 3rem;
         border: 1px solid #dee4ec;
         height: 49.3rem !important;
+
         &:hover {
           img {
             transform: scale(1.1);
@@ -5828,13 +5868,16 @@ ul {
             overflow: hidden;
             text-overflow: ellipsis !important;
             -webkit-line-clamp: 2 !important;
-            -webkit-box-orient: vertical !important; 
+            -webkit-box-orient: vertical !important;
             display: none !important;
-            &:first-child{
-                  display: -webkit-box !important;
+
+            &:first-child {
+              display: -webkit-box !important;
             }
           }
-          ul,ol{
+
+          ul,
+          ol {
             display: none !important;
           }
         }
@@ -6267,12 +6310,15 @@ ul {
             /* Maksimum göstəriləcək sətir sayı */
             -webkit-box-orient: vertical;
             display: none !important;
-            &:first-child{
-             display: -webkit-box !important;
+
+            &:first-child {
+              display: -webkit-box !important;
             }
-          ul,ol{
-            display: none !important;
-          }
+
+            ul,
+            ol {
+              display: none !important;
+            }
           }
         }
 
