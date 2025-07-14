@@ -1,4 +1,3 @@
-
 import "./globals.scss";
 
 export const metadata = {
@@ -6,6 +5,7 @@ export const metadata = {
   description: "Adentta Dental Supplier",
   icons: "/favicon.ico.svg",
 };
+import NavigationProgress from "@/components/NavigationLoading";
 
 export default async function RootLayout({ children, params }) {
   const { locale } = await params;
@@ -19,6 +19,7 @@ export default async function RootLayout({ children, params }) {
         />
       </head>
       <body suppressHydrationWarning>
+        <NavigationProgress />
         {children}
       </body>
     </html>

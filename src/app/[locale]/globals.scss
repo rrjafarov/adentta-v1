@@ -2716,7 +2716,8 @@ ul {
   font-weight: 500;
   line-height: normal;
   letter-spacing: -0.034rem;
-  margin-top: 6.4rem;
+  // margin-top: 6.4rem;
+  margin-top: 4.5rem;
   padding: 0;
   // border: 1px solid #d7e0ed;
 }
@@ -3038,9 +3039,17 @@ ul {
     display: flex;
     justify-content: flex-end;
     align-items: center;
+    width: 100%;
     padding-right: 2rem;
     padding-bottom: 2.06rem;
     gap: 1.5rem;
+    .productPageSortingInner{
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 1.5rem;
+    }
+
 
     span {
       color: #293881;
@@ -3068,7 +3077,6 @@ ul {
       appearance: none;
       -webkit-appearance: none;
       -moz-appearance: none;
-      // background-image: url(../../public/icons/bottomDown.svg);
       background-image: url(../../../public/icons/bottomDown.svg);
       color: $adentta-01;
       background-repeat: no-repeat;
@@ -11188,4 +11196,46 @@ ul {
 
 .html5-video-player {
   border-radius: 4.7rem !important;
+}
+
+
+
+
+
+.searchResultsProductCount{
+  padding: 4rem 0 0;
+  color: #293881;
+  font-size: 1.6rem;
+  p{
+    display: flex;
+    gap: 1.5rem;
+  }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+#nprogress .bar {
+  height: 6px !important; // default 2px-dir
+  border-radius: 1rem;
+}
+
+#nprogress .bar {
+  background: #293881 !important; // Burada istədiyin rəngi yaz (məs: #08316F, red, green)
+}
+
+/* Spinner varsa, onu da dəyişə bilərsən */
+#nprogress .spinner-icon {
+  border-top-color: red;
+  border-left-color: red;
 }
