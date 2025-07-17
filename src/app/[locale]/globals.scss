@@ -11233,7 +11233,9 @@ ul {
 #nprogress .bar {
   background: #293881 !important; // Burada istədiyin rəngi yaz (məs: #08316F, red, green)
 }
-
+#nprogress .peg {
+  box-shadow: 0 0 10px #293881, 0 0 5px #293881 !important;
+}
 /* Spinner varsa, onu da dəyişə bilərsən */
 #nprogress .spinner-icon {
   border-top-color: red;
