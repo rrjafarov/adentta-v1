@@ -41,7 +41,7 @@ async function fetchAboutPageData() {
   const lang = cookieStore.get("NEXT_LOCALE");
 
   try {
-    const { data: team } = await axiosInstance.get(`/page-data/team`, {
+    const { data: team } = await axiosInstance.get(`/page-data/team?per_page=999`, {
       // headers: { Lang: lang.value },
       cache: "no-store",
     });

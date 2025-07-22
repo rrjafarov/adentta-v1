@@ -3043,7 +3043,8 @@ ul {
     padding-right: 2rem;
     padding-bottom: 2.06rem;
     gap: 1.5rem;
-    .productPageSortingInner{
+
+    .productPageSortingInner {
       display: flex;
       align-items: center;
       justify-content: center;
@@ -7678,9 +7679,13 @@ ul {
 
   .pdfCatalogCardImg {
     position: relative;
+    border-radius: 1.5rem;
+
 
     img {
       width: 100%;
+      border-radius: 1.5rem;
+
     }
 
     .vatech {
@@ -11202,11 +11207,12 @@ ul {
 
 
 
-.searchResultsProductCount{
+.searchResultsProductCount {
   padding: 4rem 0 0;
   color: #293881;
   font-size: 1.6rem;
-  p{
+
+  p {
     display: flex;
     gap: 1.5rem;
   }
@@ -11233,9 +11239,11 @@ ul {
 #nprogress .bar {
   background: #293881 !important; // Burada istədiyin rəngi yaz (məs: #08316F, red, green)
 }
+
 #nprogress .peg {
   box-shadow: 0 0 10px #293881, 0 0 5px #293881 !important;
 }
+
 /* Spinner varsa, onu da dəyişə bilərsən */
 #nprogress .spinner-icon {
   border-top-color: red;
