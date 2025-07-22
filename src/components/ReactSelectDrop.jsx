@@ -9,7 +9,7 @@ const Select = dynamic(() => import("react-select"), { ssr: false });
 // ✅ Fetch function for brand categories
 async function fetchBrandCategories() {
   try {
-    const { data } = await axiosInstance.get(`/page-data/brands`, {
+    const { data } = await axiosInstance.get(`/page-data/brands?per_page=999`, {
       cache: "no-store", // Cache disabled for fresh data
     });
     return data.data.data; // Return brand data as per API structure

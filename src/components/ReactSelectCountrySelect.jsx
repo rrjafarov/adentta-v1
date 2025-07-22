@@ -362,7 +362,7 @@ const customComponents = {
 // ✅ Əlavə olundu: "All" (Hamısı) seçimi siyahının əvvəlinə əlavə edilir
 async function fetchProductsPageData(t) {
   try {
-    const { data } = await axiosInstance.get(`/page-data/countries`, {
+    const { data } = await axiosInstance.get(`/page-data/countries?per_page=999`, {
       cache: "no-store",
     });
 

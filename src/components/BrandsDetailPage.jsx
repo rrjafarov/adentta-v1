@@ -404,6 +404,15 @@
 // export default BrandsDetailPage;
 // // ! SON VERSIYA
 
+
+
+
+
+
+
+
+
+
 // !
 import Image from "next/image";
 import Link from "next/link";
@@ -423,10 +432,13 @@ async function fetchAboutPageData() {
   const lang = cookieStore.get("NEXT_LOCALE");
 
   try {
-    const { data: product } = await axiosInstance.get(`/page-data/product`, {
-      // headers: { Lang: lang.value },
-      cache: "no-store",
-    });
+    const { data: product } = await axiosInstance.get(
+      `/page-data/product?per_page=9999999999`,
+      {
+        // headers: { Lang: lang.value },
+        cache: "no-store",
+      }
+    );
     return product.data.data;
   } catch (error) {
     console.error("Failed to fetch product page data", error);
@@ -640,7 +652,14 @@ const BrandsDetailPage = async ({ t, brandsDetailDataDetail, otherBrands }) => {
                       <div className="pdfCatalogCardInfo">
                         <div className="pdfCatalogCardInfoContent">
                           <span>{pdf.title}</span>
-                          {pdf.short_text && <p>{pdf.short_text}</p>}
+                          {pdf.short_text && (
+                            <div
+                              dangerouslySetInnerHTML={{
+                                __html: pdf.short_text,
+                              }}
+                            ></div>
+                          )}
+
                           <a
                             href={`https://admin.adentta.az/storage/uploads/pdf/${pdf.id}.pdf`}
                             download

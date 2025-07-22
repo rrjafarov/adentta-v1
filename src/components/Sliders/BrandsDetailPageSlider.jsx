@@ -266,13 +266,13 @@ const CareersPageSlider = ({ brandsDetailDataDetail }) => {
           <SwiperSlide key={index}>
             <Link
               href={`https://admin.adentta.az/storage${image}`}
-              className="careersSliderGalleryImg"
+              className="careersSliderGalleryImg brandsSliderGalleryImgDetail"
               data-fancybox="videos"
             >
-              <div className="videoGaleryImg">
+              <div className="videoGaleryImg brandsGalleryImgDetail" >
                 <Image
                   src={`https://admin.adentta.az/storage${image}`}
-                  className="careersSliderCardImg"
+                  // className="careersSliderCardImg"
                   alt={`Gallery image ${index + 1}`}
                   width={400}
                   height={400}
