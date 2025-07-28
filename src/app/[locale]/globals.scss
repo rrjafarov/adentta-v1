@@ -6453,6 +6453,7 @@ ul {
   }
 
   .eventPageHeaderText {
+    width: 80rem;
     padding-top: 4.24rem;
     display: flex;
     flex-direction: column;
@@ -6482,7 +6483,7 @@ ul {
     p {
       padding-top: 2.15rem;
       width: 100%;
-      max-width: 39.7rem;
+      max-width: 30.7rem;
       color: $adentta-01;
       font-size: 1.6rem;
       font-style: normal;
@@ -6708,9 +6709,9 @@ ul {
 }
 
 .page-link-pervious {
-  padding: 0.5rem 1rem;
+  padding: 0.5rem;
   color: #293881;
-  font-size: 1.4rem;
+  font-size: 1.25rem;
   font-style: normal;
   font-weight: 500;
   line-height: 122%;
@@ -6733,7 +6734,7 @@ ul {
 
 .page-link-next {
   padding: 0.5rem 1rem;
-  font-size: 1.6rem;
+  font-size: 1.25rem;
   font-style: normal;
   font-weight: 500;
   line-height: 122%;
@@ -6978,8 +6979,9 @@ ul {
       }
 
       .eventDetailText {
-        padding-top: 8.08rem;
+        padding-top: 4.08rem;
         padding-left: 9rem;
+        padding-bottom: 1rem;
         width: 100%;
         margin-top: 2rem;
         border-radius: 3.5rem;
