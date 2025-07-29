@@ -18,10 +18,12 @@ const CareersDetailPage = ({ careerData, t }) => {
           <img className="topper" src="/icons/rightDown.svg" alt="Adentta" />
           <h4 className="topper">{careerData.title}</h4>
         </div>
+
         <div className="careersDetailPageHeaderContent">
           <span className="vacancyPage">
             {t?.careersPageVacancyPage || "VACANCY PAGE"}
           </span>
+          
           <p className="vacancyName">
             {t?.careersPageVacancyName || "Vacancy name"}:
             <span>{careerData.title}</span>

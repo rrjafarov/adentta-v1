@@ -274,8 +274,8 @@ const CareersPageSlider = ({ brandsDetailDataDetail }) => {
                   src={`https://admin.adentta.az/storage${image}`}
                   // className="careersSliderCardImg"
                   alt={`Gallery image ${index + 1}`}
-                  width={400}
-                  height={400}
+                  width={1200}
+                  height={1200}
                 />
               </div>
             </Link>
