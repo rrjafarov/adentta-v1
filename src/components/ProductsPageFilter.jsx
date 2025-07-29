@@ -1736,6 +1736,8 @@ export default function ProductsPageFilter({
                   </ul>
                 </FilterAccordion>
 
+                
+
                 {/* Brand Accordion */}
                 <FilterAccordion
                   title={t?.productsPageFilterBrandsTitle || "Brands"}
