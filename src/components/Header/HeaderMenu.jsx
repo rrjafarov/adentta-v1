@@ -173,7 +173,6 @@ const HeaderMenu = ({ t, categoryData, isHomePage }) => {
                                       <Link
                                         href={{
                                           pathname: "/products",
-                                          // query: { category: category.id },
                                           query: { category: category.url_slug },
                                         }}
                                       >
