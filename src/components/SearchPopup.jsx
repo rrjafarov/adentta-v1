@@ -307,6 +307,7 @@ export default function SearchPopup({ t, closePopup }) {
                     </Link>
                   );
                 })
+                
               ) : (
                 <p className="infoMessageSearch">{t?.searchNoResults || "No results found"}</p>
               )}
