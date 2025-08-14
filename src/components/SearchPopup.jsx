@@ -1,10 +1,15 @@
 
+//! kapitalist amerika 09.07
+
 // "use client";
 // import Link from "next/link";
 // import React, { useEffect, useState } from "react";
+// import { useRouter } from "next/navigation";
 // import axiosInstance from "@/lib/axios";
 
-// const SearchPopup = ({t, closePopup }) => {
+// export default function SearchPopup({ t, closePopup }) {
+//   const router = useRouter();
+
 //   const [productData, setProductData] = useState([]);
 //   const [searchTerm, setSearchTerm] = useState("");
 //   const [filteredProducts, setFilteredProducts] = useState([]);
@@ -12,11 +17,12 @@
 //   const [showDoctors, setShowDoctors] = useState(false);
 //   const [showEvents, setShowEvents] = useState(false);
 
+//   // Fetch ve filtreleme
 //   useEffect(() => {
 //     const fetchData = async () => {
 //       try {
 //         const res = await axiosInstance.get(
-//           `/page-data/product?per_page=999999&search_keywords=${searchTerm}`
+//           `/page-data/product?per_page=12&search_text=${encodeURIComponent(searchTerm)}`
 //         );
 //         const products = res.data.data?.data || [];
 //         setProductData(products);
@@ -49,7 +55,7 @@
 //     );
 //   }, [searchTerm, productData]);
 
-//   // Həkimlər üçün 1 saniyə, eventlər üçün 1.5 saniyə gecikmə
+//   // Doktor ve event gecikmeleri
 //   useEffect(() => {
 //     setShowDoctors(false);
 //     setShowEvents(false);
@@ -69,6 +75,14 @@
 //     }
 //   };
 
+//   // Enter tuşu ile yönlendirme
+//   const handleKeyDown = (e) => {
+//     if (e.key === "Enter" && searchTerm.trim() !== "") {
+//       router.push(`/products?per_page=12&search_text=${encodeURIComponent(searchTerm)}`);
+//       closePopup();
+//     }
+//   };
+
 //   return (
 //     <div>
 //       <div onClick={handleOverlayClick} className="overlay">
@@ -81,9 +95,10 @@
 //               <img src="/icons/searchIcon.svg" alt="search" />
 //               <input
 //                 type="text"
-//                 placeholder={t?.searchPleaceholder || "Search..."} 
+//                 placeholder={t?.searchPleaceholder || "Search..."}
 //                 value={searchTerm}
 //                 onChange={(e) => setSearchTerm(e.target.value)}
+//                 onKeyDown={handleKeyDown}
 //               />
 //             </div>
 
@@ -103,22 +118,6 @@
 //                       .replace(/\s+/g, "-")}-${product.id}`}
 //                   >
 //                     <div className="searchPopupContent">
-//                       {/* Məhsul məlumatları dərhal göstərilir */}
-                      
-
-//                       {/* Həkimlər - 1 saniyə sonra */}
-//                       {/* {showDoctors && product.doctors?.length > 0 && (
-//                         <div className="searchDoctorSection">
-//                           {product.doctors.map((doctor) => (
-//                             <div key={doctor.id}>
-//                               <h3>{doctor.title}</h3>
-//                               <p>{doctor.workplace}</p>
-//                               <p>{doctor.location}</p>
-//                             </div>
-//                           ))}
-//                         </div>
-//                       )} */}
-                      
 //                       <div className="productInfo">
 //                         <h3>{product.title}</h3>
 //                         <div className="searchPopupContentInner">
@@ -129,18 +128,6 @@
 //                           <p dangerouslySetInnerHTML={{ __html: product.content }} />
 //                         </div>
 //                       </div>
-
-//                       {/* Tədbirlər - 1.5 saniyə sonra */}
-//                       {/* {showEvents && product.events?.length > 0 && (
-//                         <div className="searchEventSection">
-//                           {product.events.map((event) => (
-//                             <div key={event.id}>
-//                               <h3>{event.title}</h3>
-//                               {event.sub_title && <p>{event.sub_title}</p>}
-//                             </div>
-//                           ))}
-//                         </div>
-//                       )} */}
 //                     </div>
 //                   </Link>
 //                 ))
@@ -149,7 +136,11 @@
 //               )}
 
 //               <div className="popupSeeMore">
-//                 <Link href="/products">{t?.searchShowMore || "No results found"}</Link>
+//                 <Link
+//                   href={`/products?per_page=12&search_text=${encodeURIComponent(searchTerm)}`}
+//                 >
+//                   {t?.searchShowMore || "Show more"}
+//                 </Link>
 //                 <img src="/icons/arrowTopRight.svg" alt="arrow" />
 //               </div>
 //             </div>
@@ -158,24 +149,13 @@
 //       </div>
 //     </div>
 //   );
-// };
-
-// export default SearchPopup;
+// }
 
 
 
 
 
-
-
-
-
-
-
-
-
-//! kapitalist amerika 09.07
-
+// ! olsun kominizm
 
 
 "use client";
@@ -193,6 +173,19 @@ export default function SearchPopup({ t, closePopup }) {
   const [debounceTimeout, setDebounceTimeout] = useState(null);
   const [showDoctors, setShowDoctors] = useState(false);
   const [showEvents, setShowEvents] = useState(false);
+
+  // Güvənli slug yaratma (slash və digər xüsusi simvolları - ilə əvəz edir)
+  const slugify = (str) => {
+    if (!str) return "";
+    return str
+      .toString()
+      .toLowerCase()
+      .trim()
+      .replace(/\s+/g, "-")         // boşluqları -
+      .replace(/[^a-z0-9-]/g, "-") // hər şeyi a-z,0-9 və - xaricində -
+      .replace(/-+/g, "-")         // çoxlu - => bir -
+      .replace(/^-|-$/g, "");      // baş və sondakı - sil
+  };
 
   // Fetch ve filtreleme
   useEffect(() => {
@@ -287,27 +280,33 @@ export default function SearchPopup({ t, closePopup }) {
               {searchTerm.trim() === "" ? (
                 <p className="infoMessageSearch">{t?.searchText || "Search"}</p>
               ) : filteredProducts.length > 0 ? (
-                filteredProducts.map((product) => (
-                  <Link
-                    key={product.id}
-                    href={`/products/${product.title
-                      .toLowerCase()
-                      .replace(/\s+/g, "-")}-${product.id}`}
-                  >
-                    <div className="searchPopupContent">
-                      <div className="productInfo">
-                        <h3>{product.title}</h3>
-                        <div className="searchPopupContentInner">
-                          <img
-                            src={`https://admin.adentta.az/storage${product.image}`}
-                            alt={product.title}
-                          />
-                          <p dangerouslySetInnerHTML={{ __html: product.content }} />
+                filteredProducts.map((product) => {
+                  // Ən təhlükəsiz slug: backend-dən gələn slug varsa onu istifadə et, yoxdursa bizim slugify
+                  const safeSlug =
+                    (product.slug && slugify(product.slug)) ||
+                    slugify(product.title) ||
+                    String(product.id);
+
+                  return (
+                    <Link
+                      key={product.id}
+                      href={`/products/${safeSlug}-${product.id}`}
+                    >
+                      <div className="searchPopupContent">
+                        <div className="productInfo">
+                          <h3>{product.title}</h3>
+                          <div className="searchPopupContentInner">
+                            <img
+                              src={`https://admin.adentta.az/storage${product.image}`}
+                              alt={product.title}
+                            />
+                            <p dangerouslySetInnerHTML={{ __html: product.content }} />
+                          </div>
                         </div>
                       </div>
-                    </div>
-                  </Link>
-                ))
+                    </Link>
+                  );
+                })
               ) : (
                 <p className="infoMessageSearch">{t?.searchNoResults || "No results found"}</p>
               )}

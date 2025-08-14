@@ -727,6 +727,1559 @@
 
 
 
+// "use client";
+// import Link from "next/link";
+// import React, {
+//   useState,
+//   useEffect,
+//   useMemo,
+//   useCallback,
+//   useRef,
+// } from "react";
+// import { useRouter, useSearchParams } from "next/navigation";
+// import LoadMoreBTN from "./LoadMoreBTN";
+// import ApplyBTN from "./ApplyBTN";
+// import ReactSelect from "./ReactSelect";
+// import Manat from "../../public/icons/manat.svg";
+// import axiosInstance from "@/lib/axios";
+
+// // Accordion başlık komponenti
+// const FilterAccordion = ({ title, children }) => {
+//   const [isOpen, setIsOpen] = useState(true);
+//   return (
+//     <div className="accordion">
+//       <button className="accordion-header" onClick={() => setIsOpen(!isOpen)}>
+//         {title}
+//         <img
+//           src={isOpen ? "/icons/minus.svg" : "/icons/plusIcon.svg"}
+//           alt="Toggle Icon"
+//           className="toggle-icon"
+//         />
+//       </button>
+//       {isOpen && <div className="accordion-content">{children}</div>}
+//     </div>
+//   );
+// };
+
+// // Cache və utility-lər
+// const productCache = new Map();
+// const CACHE_DURATION = 5 * 60 * 1000; // 5 dəq
+
+// async function fetchProducts(
+//   categoryIds = [],
+//   brandIds = [],
+//   searchText = "",
+//   page = 1,
+//   perPage = 24
+// ) {
+//   const cacheKey = JSON.stringify({
+//     categoryIds,
+//     brandIds,
+//     searchText,
+//     page,
+//     perPage,
+//   });
+
+//   const cached = productCache.get(cacheKey);
+//   if (cached && Date.now() - cached.timestamp < CACHE_DURATION) {
+//     return cached.data;
+//   }
+
+//   const filters = [];
+//   if (categoryIds.length) {
+//     filters.push({ key: "categories", operator: "IN", values: categoryIds });
+//   }
+//   if (brandIds.length) {
+//     filters.push({ key: "brands", operator: "IN", values: brandIds });
+//   }
+
+//   let url = `/page-data/product?per_page=${perPage}&page=${page}`;
+//   if (searchText) url += `&search_text=${encodeURIComponent(searchText)}`;
+
+//   if (filters.length) {
+//     const query = filters
+//       .map((f, idx) => {
+//         const base = `filters[${idx}][key]=${encodeURIComponent(
+//           f.key
+//         )}&filters[${idx}][operator]=${encodeURIComponent(f.operator)}`;
+//         const vals = f.values
+//           .map((v) => `filters[${idx}][value][]=${encodeURIComponent(v)}`)
+//           .join("&");
+//         return `${base}&${vals}`;
+//       })
+//       .join("&");
+//     url += `&${query}`;
+//   }
+
+//   try {
+//     const res = await axiosInstance.get(url);
+//     const result = {
+//       products: res.data.data.data,
+//       pagination: res.data.data,
+//     };
+//     productCache.set(cacheKey, {
+//       data: result,
+//       timestamp: Date.now(),
+//     });
+//     return result;
+//   } catch (err) {
+//     console.error("Filter fetch error (client)", err);
+//     return { products: [], pagination: null };
+//   }
+// }
+
+// // slugify
+// function slugify(text) {
+//   if (!text) return "";
+//   return text
+//     .normalize("NFD")
+//     .replace(/[\u0300-\u036f]/g, "")
+//     .toLowerCase()
+//     .replace(/[^a-z0-9]+/g, "-")
+//     .replace(/(^-|-$)/g, "");
+// }
+
+// // normalize id array (numeric, unique)
+// const normalizeIds = (arr = []) =>
+//   Array.from(new Set((arr || []).map((v) => Number(v)).filter((v) => !Number.isNaN(v))));
+
+// // extract category ids from product robustly
+// function extractCategoryIdsFromProduct(product) {
+//   const ids = new Set();
+//   if (!product) return [];
+//   const raw =
+//     product.categories ?? product.category_ids ?? product.category_list ?? product.category ?? null;
+
+//   const pushId = (v) => {
+//     if (v == null) return;
+//     const n = typeof v === "number" ? v : Number(v);
+//     if (!Number.isNaN(n)) ids.add(n);
+//   };
+
+//   if (Array.isArray(raw)) {
+//     for (const item of raw) {
+//       if (item == null) continue;
+//       if (typeof item === "object") {
+//         if (item.id) pushId(item.id);
+//         else if (item.category_id) pushId(item.category_id);
+//         else if (item.value) pushId(item.value);
+//       } else {
+//         pushId(item);
+//       }
+//     }
+//   } else if (typeof raw === "object" && raw !== null) {
+//     if (raw.id) pushId(raw.id);
+//     else if (raw.category_id) pushId(raw.category_id);
+//     else Object.keys(raw).forEach((k) => pushId(k));
+//   } else if (typeof raw === "number" || typeof raw === "string") {
+//     pushId(raw);
+//   }
+
+//   if (product.category_id) pushId(product.category_id);
+//   if (product.category) pushId(product.category);
+
+//   return Array.from(ids);
+// }
+
+// // Product card (memo)
+// const ProductCard = React.memo(({ product, t }) => (
+//   <div className="xl-4 lg-4 md-6 sm-6">
+//     <Link href={`/products/${slugify(product.title)}-${product.id}`} className="block">
+//       <div className="homePageProductCardContent">
+//         <div className="homePageProCardImgs">
+//           <div className="homePageProductCardContentImage">
+//             <img src={`https://admin.adentta.az/storage${product.image}`} alt={product.title} loading="lazy" />
+//           </div>
+//         </div>
+//         <div className="homePageProductCardContentInner">
+//           <div className="homePageProductCardContentText">
+//             <span>{product.title}</span>
+//           </div>
+//           <div className="price">
+//             <div className="priceItem">
+//               <strong id="prices">{product.price}</strong>
+//               <Manat />
+//             </div>
+//           </div>
+//         </div>
+//         <div className="homePageProductCardContentBottom">
+//           <span>{t?.learnMore || "Learn More"}</span>
+//           <img src="/icons/arrowTopRight.svg" alt="" />
+//         </div>
+//       </div>
+//     </Link>
+//   </div>
+// ));
+
+// export default function ProductsPageFilter({
+//   t,
+//   allProducts = [],
+//   initialProducts = [],
+//   categoryData = [],
+//   brandsDataFilter = [],
+//   initialSelectedBrands = [],
+//   initialSelectedCategories = [],
+//   categoryMetaTitle = null,
+//   categoryMetaDescription = null,
+//   categoryPageTitle = null,
+//   categoryPageDescription = null,
+//   categoryId = null,
+//   searchText = null,
+//   perPage = 24,
+//   pagination = null,
+//   productCounts = {},
+// }) {
+//   const router = useRouter();
+//   const searchParams = useSearchParams();
+
+//   // initial selected ids (normalize)
+//   const initialCatIds = normalizeIds(
+//     (initialSelectedCategories || []).map((c) => (c && c.id ? c.id : null))
+//   );
+//   const initialBrandIds = normalizeIds(
+//     (initialSelectedBrands || []).map((b) => (b && b.id ? b.id : null))
+//   );
+
+//   const [filteredProducts, setFilteredProducts] = useState(initialProducts);
+//   const [currentPagination, setPagination] = useState(pagination);
+//   const [selectedCategoryIds, setSelectedCategoryIds] = useState(initialCatIds);
+//   const [selectedBrandIds, setSelectedBrandIds] = useState(initialBrandIds);
+//   const [sortOption, setSortOption] = useState({
+//     value: "az",
+//     label: t?.from || "From A-Z",
+//   });
+//   const [isMobileFilterOpen, setIsMobileFilterOpen] = useState(false);
+//   const [isLoading, setIsLoading] = useState(false);
+//   const [brandSearchTerm, setBrandSearchTerm] = useState("");
+//   const [showDetails, setShowDetails] = useState(false);
+//   const [currentPage, setCurrentPage] = useState(1);
+//   const [isLoadingMore, setIsLoadingMore] = useState(false);
+
+//   const loadMoreRef = useRef(null);
+//   const debounceTimeoutRef = useRef(null);
+
+//   const fetchProductsDebounced = useCallback(
+//     async (categoryIds, brandIds, searchTextParam, page = 1) => {
+//       if (debounceTimeoutRef.current) clearTimeout(debounceTimeoutRef.current);
+//       debounceTimeoutRef.current = setTimeout(async () => {
+//         setIsLoading(true);
+//         try {
+//           const { products, pagination: newPagination } = await fetchProducts(
+//             categoryIds,
+//             brandIds,
+//             searchTextParam,
+//             page,
+//             perPage
+//           );
+//           if (page === 1) setFilteredProducts(products);
+//           else setFilteredProducts((prev) => [...prev, ...products]);
+//           setPagination(newPagination);
+//           setCurrentPage(page);
+//         } catch {
+//           if (page === 1) setFilteredProducts([]);
+//         } finally {
+//           setIsLoading(false);
+//           setIsLoadingMore(false);
+//         }
+//       }, 300);
+//     },
+//     [perPage]
+//   );
+
+//   // map: categoryId -> Set(productId)  (built once from allProducts)
+//   const categoryToProducts = useMemo(() => {
+//     const map = new Map();
+//     if (!Array.isArray(allProducts)) return map;
+//     for (const p of allProducts) {
+//       const pId = p?.id ?? p?.product_id;
+//       if (!pId) continue;
+//       const cids = extractCategoryIdsFromProduct(p);
+//       for (const cid of cids) {
+//         const n = Number(cid);
+//         if (Number.isNaN(n)) continue;
+//         if (!map.has(n)) map.set(n, new Set());
+//         map.get(n).add(Number(pId));
+//       }
+//     }
+//     return map;
+//   }, [allProducts]);
+
+//   // descendant helper
+//   const getDescendantCategoryIds = useCallback(
+//     (startId) => {
+//       const numericStart = typeof startId === "number" ? startId : parseInt(startId, 10);
+//       const result = new Set();
+//       const stack = [numericStart];
+//       while (stack.length) {
+//         const cur = stack.pop();
+//         if (result.has(cur)) continue;
+//         result.add(cur);
+//         for (const c of categoryData) {
+//           const parentRaw = c.parent_id;
+//           let parents = [];
+//           if (Array.isArray(parentRaw)) {
+//             parents = parentRaw.map((p) => (typeof p === "object" ? p.id : p));
+//           } else if (parentRaw && typeof parentRaw === "object" && parentRaw.id != null) {
+//             parents = [parentRaw.id];
+//           } else if (parentRaw) {
+//             parents = [parentRaw];
+//           }
+//           const numericParents = parents
+//             .map((p) => (typeof p === "number" ? p : parseInt(p, 10)))
+//             .filter(Boolean);
+//           if (numericParents.includes(cur)) {
+//             const childId = typeof c.id === "number" ? c.id : parseInt(c.id, 10);
+//             if (!result.has(childId)) stack.push(childId);
+//           }
+//         }
+//       }
+//       return Array.from(result);
+//     },
+//     [categoryData]
+//   );
+
+//   // robust getProductCountForCategory: use categoryToProducts map + descendants and return unique product count
+//   const getProductCountForCategory = useCallback(
+//     (id) => {
+//       const numericId = typeof id === "number" ? id : parseInt(id, 10);
+//       const cats = productCounts?.categories;
+//       // try backend productCounts first (robust checks)
+//       if (cats) {
+//         if (!Array.isArray(cats) && typeof cats === "object") {
+//           const byKey = cats[numericId] ?? cats[numericId.toString()];
+//           if (typeof byKey === "number") return byKey;
+//         }
+//         if (Array.isArray(cats)) {
+//           const found = cats.find(
+//             (c) =>
+//               (c?.id !== undefined && Number(c.id) === numericId) ||
+//               (c?.category_id !== undefined && Number(c.category_id) === numericId)
+//           );
+//           if (found) return found.count ?? found.total ?? found.product_count ?? 0;
+//         }
+//         // nested checks could be added if needed
+//       }
+
+//       try {
+//         const descendantIds = getDescendantCategoryIds(numericId);
+//         const matchedProductIds = new Set();
+//         for (const cid of descendantIds) {
+//           const set = categoryToProducts.get(cid);
+//           if (!set) continue;
+//           for (const pid of set) matchedProductIds.add(pid);
+//         }
+//         return matchedProductIds.size;
+//       } catch (e) {
+//         console.error("Error in getProductCountForCategory", e);
+//         return 0;
+//       }
+//     },
+//     [productCounts, categoryToProducts, getDescendantCategoryIds]
+//   );
+
+//   // When URL/search change -> derive ids and fetch
+//   useEffect(() => {
+//     const catParam = searchParams.get("category");
+//     const brParam = searchParams.get("brands");
+//     const stParam = searchParams.get("search_text");
+
+//     const slugs = catParam ? catParam.split(",").filter(Boolean) : [];
+//     const slugToId = (slug) => {
+//       const found = categoryData.find((c) => c.url_slug === slug);
+//       return found ? Number(found.id) : null;
+//     };
+//     const newCatIds = normalizeIds(slugs.map(slugToId));
+
+//     const brIds = brParam
+//       ? brParam
+//           .split(",")
+//           .map((s) => Number(s))
+//           .filter((n) => !Number.isNaN(n))
+//       : [];
+//     const newBrandIds = normalizeIds(brIds);
+
+//     setSelectedCategoryIds(newCatIds);
+//     setSelectedBrandIds(newBrandIds);
+//     setShowDetails(false);
+//     fetchProductsDebounced(newCatIds, newBrandIds, stParam, 1);
+//   }, [searchParams.toString(), categoryData, brandsDataFilter, fetchProductsDebounced]);
+
+//   const sortedProducts = useMemo(() => {
+//     return sortOption.value === "az"
+//       ? [...filteredProducts].sort((a, b) => a.title.localeCompare(b.title))
+//       : [...filteredProducts].sort((a, b) => b.title.localeCompare(a.title));
+//   }, [filteredProducts, sortOption.value]);
+
+//   // update URL with unique slugs
+//   const updateUrlWithFilters = useCallback(
+//     (brandIdsArr = [], categoryIdsArr = []) => {
+//       const params = new URLSearchParams();
+
+//       const uniqueCatIds = normalizeIds(categoryIdsArr);
+//       const catSlugs = uniqueCatIds
+//         .map((id) => {
+//           const found = categoryData.find((c) => Number(c.id) === Number(id));
+//           return found ? found.url_slug : null;
+//         })
+//         .filter(Boolean);
+//       const uniqueSlugs = Array.from(new Set(catSlugs));
+//       if (uniqueSlugs.length) params.set("category", uniqueSlugs.join(","));
+
+//       const uniqueBrandIds = normalizeIds(brandIdsArr);
+//       if (uniqueBrandIds.length) params.set("brands", uniqueBrandIds.join(","));
+
+//       const cs = searchParams.get("search_text");
+//       const pp = searchParams.get("per_page");
+//       if (cs) params.set("search_text", cs);
+//       if (pp) params.set("per_page", pp);
+
+//       const qs = params.toString();
+//       router.push(qs ? `/products?${qs}` : `/products`);
+//     },
+//     [router, searchParams, categoryData]
+//   );
+
+//   // toggle by numeric id (ensures uniqueness)
+//   const handleCategoryToggleById = useCallback(
+//     (id) => {
+//       const numeric = Number(id);
+//       setSelectedCategoryIds((prev) => {
+//         const set = new Set(prev.map((v) => Number(v)));
+//         if (set.has(numeric)) set.delete(numeric);
+//         else set.add(numeric);
+//         const arr = normalizeIds(Array.from(set));
+//         updateUrlWithFilters(selectedBrandIds, arr);
+//         return arr;
+//       });
+//     },
+//     [selectedBrandIds, updateUrlWithFilters]
+//   );
+
+//   const handleBrandToggleById = useCallback(
+//     (id) => {
+//       const numeric = Number(id);
+//       setSelectedBrandIds((prev) => {
+//         const set = new Set(prev.map((v) => Number(v)));
+//         if (set.has(numeric)) set.delete(numeric);
+//         else set.add(numeric);
+//         const arr = normalizeIds(Array.from(set));
+//         updateUrlWithFilters(arr, selectedCategoryIds);
+//         return arr;
+//       });
+//     },
+//     [selectedCategoryIds, updateUrlWithFilters]
+//   );
+
+//   // infinite scroll observer
+//   useEffect(() => {
+//     if (!loadMoreRef.current) return;
+//     const obs = new IntersectionObserver(
+//       ([entry]) => {
+//         if (entry.isIntersecting && !isLoading && !isLoadingMore && currentPagination?.next_page_url) {
+//           setIsLoadingMore(true);
+//           setTimeout(() => {
+//             const nextPage = currentPage + 1;
+//             const catIds = normalizeIds(selectedCategoryIds);
+//             const brIds = normalizeIds(selectedBrandIds);
+//             const st = searchParams.get("search_text");
+//             fetchProductsDebounced(catIds, brIds, st, nextPage);
+//           }, 2000);
+//         }
+//       },
+//       { root: null, rootMargin: "200px", threshold: 0.1 }
+//     );
+//     obs.observe(loadMoreRef.current);
+//     return () => obs.disconnect();
+//   }, [
+//     isLoading,
+//     isLoadingMore,
+//     currentPagination,
+//     currentPage,
+//     selectedCategoryIds,
+//     selectedBrandIds,
+//     searchParams,
+//     fetchProductsDebounced,
+//   ]);
+
+//   // grouped categories for UI (parent -> children)
+//   const groupedCategories = useMemo(() => {
+//     const parentCategories = categoryData.filter((category) => !category.parent_id);
+//     return parentCategories.map((parentCategory) => {
+//       const children = categoryData.filter((sub) => {
+//         const parentRaw = sub.parent_id;
+//         if (!parentRaw) return false;
+//         let parents = [];
+//         if (Array.isArray(parentRaw)) parents = parentRaw.map((p) => (typeof p === "object" ? p.id : p));
+//         else if (typeof parentRaw === "object" && parentRaw.id != null) parents = [parentRaw.id];
+//         else parents = [parentRaw];
+//         const numericParents = parents.map((p) => (typeof p === "number" ? p : parseInt(p, 10))).filter(Boolean);
+//         return numericParents.includes(parentCategory.id);
+//       });
+//       return { parent: parentCategory, children };
+//     });
+//   }, [categoryData]);
+
+//   // helpers to render selected items (pull title from categoryData/brandsData)
+//   const renderSelectedCategories = useMemo(() => {
+//     return selectedCategoryIds.map((id) => {
+//       const cat = categoryData.find((c) => Number(c.id) === Number(id));
+//       return {
+//         id,
+//         title: cat ? cat.title : `Category ${id}`,
+//       };
+//     });
+//   }, [selectedCategoryIds, categoryData]);
+
+//   const renderSelectedBrands = useMemo(() => {
+//     return selectedBrandIds.map((id) => {
+//       const br = brandsDataFilter.find((b) => Number(b.id) === Number(id));
+//       return {
+//         id,
+//         title: br ? br.title : `Brand ${id}`,
+//       };
+//     });
+//   }, [selectedBrandIds, brandsDataFilter]);
+
+//   const filteredBrands = useMemo(() => {
+//     return brandsDataFilter.filter((b) => b.title.toLowerCase().includes(brandSearchTerm.toLowerCase()));
+//   }, [brandsDataFilter, brandSearchTerm]);
+
+//   return (
+//     <div>
+//       <div className="container">
+//         {/* Başlıq */}
+//         <div className="filterTop topper">
+//           <Link href="/">
+//             <h1>Adentta</h1>
+//           </Link>
+//           <img src="/icons/rightDown.svg" alt="Adentta" />
+//           <h4>{t?.products || "Products"}</h4>
+//         </div>
+
+//         <div className="searchResultsProductCount">
+//           {searchText && (
+//             <div className="search-results-info">
+//               <p>
+//                 {t?.searchResults || "results found for"} "{searchText}" ( {currentPagination?.total || filteredProducts.length} )
+//               </p>
+//             </div>
+//           )}
+//         </div>
+
+//         <div className="row">
+//           {/* Sidebar */}
+//           <div className="xl-3 lg-3 md-3 sm-12">
+//             <div className="filter-container">
+//               <button className="filter-title" onClick={() => setIsMobileFilterOpen(!isMobileFilterOpen)}>
+//                 {t?.productsPageFilterTitle || "Filter"}
+//               </button>
+
+//               {/* Selected filters - desktop */}
+//               <div className="selectedFilter desktop-only">
+//                 {renderSelectedCategories.map((cat) => (
+//                   <div className="selectedFilterInner" key={`cat-${cat.id}`}>
+//                     <span onClick={() => handleCategoryToggleById(cat.id)}>×</span>
+//                     <p>{cat.title}</p>
+//                   </div>
+//                 ))}
+//                 {renderSelectedBrands.map((br) => (
+//                   <div className="selectedFilterInner" key={`brand-${br.id}`}>
+//                     <span onClick={() => handleBrandToggleById(br.id)}>×</span>
+//                     <p>{br.title}</p>
+//                   </div>
+//                 ))}
+//               </div>
+
+//               <div className={`filter-panel ${isMobileFilterOpen ? "active" : ""}`}>
+//                 <button className="filter-titless">{t?.productsPageFilterTitle || "Filter"}</button>
+
+//                 {/* Selected - mobile */}
+//                 <div className="selectedFilter mobile-only">
+//                   {renderSelectedCategories.map((cat) => (
+//                     <div className="selectedFilterInner" key={`cat-${cat.id}`}>
+//                       <span onClick={() => handleCategoryToggleById(cat.id)}>×</span>
+//                       <p>{cat.title}</p>
+//                     </div>
+//                   ))}
+//                   {renderSelectedBrands.map((br) => (
+//                     <div className="selectedFilterInner" key={`brand-${br.id}`}>
+//                       <span onClick={() => handleBrandToggleById(br.id)}>×</span>
+//                       <p>{br.title}</p>
+//                     </div>
+//                   ))}
+//                 </div>
+
+//                 <button className="close-btn" onClick={() => setIsMobileFilterOpen(false)}>
+//                   <img src="/icons/popupCloseIcon.svg" alt="close" />
+//                 </button>
+
+//                 <div className="lineFiltered" />
+
+//                 {/* Categories */}
+//                 <FilterAccordion title={t?.productsPageFilterCategoryTitle || "Category"}>
+//                   <ul style={{ maxHeight: "300px", overflowY: "auto", paddingRight: "4px" }}>
+//                     {groupedCategories.map(({ parent, children }) => {
+//                       const parentProductCount = getProductCountForCategory(parent.id);
+//                       const isParentSelected = selectedCategoryIds.some((c) => Number(c) === Number(parent.id));
+
+//                       return (
+//                         <React.Fragment key={parent.id}>
+//                           <li
+//                             onClick={() => handleCategoryToggleById(parent.id)}
+//                             style={{
+//                               cursor: "pointer",
+//                               display: "flex",
+//                               alignItems: "center",
+//                               gap: "0.5rem",
+//                               fontWeight: isParentSelected ? "bold" : "normal",
+//                               marginBottom: "4px",
+//                             }}
+//                           >
+//                             <span>{parent.title}</span>
+//                             <p>({parentProductCount})</p>
+//                           </li>
+
+//                           {children.map((child) => {
+//                             const childProductCount = getProductCountForCategory(child.id);
+//                             const isChildSelected = selectedCategoryIds.some((c) => Number(c) === Number(child.id));
+//                             return (
+//                               <li
+//                                 key={child.id}
+//                                 onClick={() => handleCategoryToggleById(child.id)}
+//                                 style={{
+//                                   cursor: "pointer",
+//                                   display: "flex",
+//                                   alignItems: "center",
+//                                   gap: "0.3rem",
+//                                   fontWeight: isChildSelected ? "bold" : "normal",
+//                                   marginLeft: "15px",
+//                                   fontSize: "1.3rem",
+//                                   marginBottom: "8px",
+//                                   color: "#666",
+//                                 }}
+//                               >
+//                                 <span>{child.title}</span>
+//                                 <p>({childProductCount})</p>
+//                               </li>
+//                             );
+//                           })}
+//                         </React.Fragment>
+//                       );
+//                     })}
+//                   </ul>
+//                 </FilterAccordion>
+
+//                 {/* Brands */}
+//                 <FilterAccordion title={t?.productsPageFilterBrandsTitle || "Brands"}>
+//                   <div className="filteredSearch">
+//                     <img src="/icons/searchIcon.svg" alt="" />
+//                     <input className="filterSrch" type="text" placeholder={t?.searchText || "Search..."} value={brandSearchTerm} onChange={(e) => setBrandSearchTerm(e.target.value)} />
+//                   </div>
+//                   <ul style={{ maxHeight: "250px", overflowY: "auto", paddingRight: "4px" }}>
+//                     {filteredBrands.map((br) => {
+//                       const isSelected = selectedBrandIds.some((b) => Number(b) === Number(br.id));
+//                       return (
+//                         <li
+//                           key={br.id}
+//                           onClick={() => handleBrandToggleById(br.id)}
+//                           style={{
+//                             cursor: "pointer",
+//                             display: "flex",
+//                             alignItems: "center",
+//                             gap: "0.5rem",
+//                             fontWeight: isSelected ? "bold" : "normal",
+//                           }}
+//                         >
+//                           <input type="checkbox" checked={isSelected} readOnly />
+//                           <span>{br.title}</span>
+//                         </li>
+//                       );
+//                     })}
+//                   </ul>
+//                 </FilterAccordion>
+
+//                 <div className="applyBTN flex items-center mt-4 justify-center" onClick={() => setIsMobileFilterOpen(false)}>
+//                   <ApplyBTN t={t} />
+//                 </div>
+//               </div>
+//             </div>
+//           </div>
+
+//           {/* Products Grid */}
+//           <div className="xl-9 lg-9 md-9 sm-12">
+//             <div className="productPageCards">
+//               <div className="productPageSorting">
+//                 <div className="productPageSortingInner">
+//                   <span>{t?.sortBy || "Sort by"}</span>
+//                   <ReactSelect t={t} value={sortOption} onChange={setSortOption} />
+//                 </div>
+//               </div>
+
+//               <div className="row">
+//                 {isLoading ? (
+//                   <div className="loader-container">
+//                     <div className="loader" />
+//                   </div>
+//                 ) : (
+//                   sortedProducts.map((d) => <ProductCard key={d.id} product={d} t={t} />)
+//                 )}
+//               </div>
+//             </div>
+
+//             <div ref={loadMoreRef} style={{ height: "1px" }} />
+//             {isLoadingMore && (
+//               <div className="loader-container" style={{ margin: "1rem 0" }}>
+//                 <div className="loader" />
+//               </div>
+//             )}
+//           </div>
+//         </div>
+
+//         {/* Description */}
+//         <div className="productsPageDescription">
+//           <h1>{categoryPageTitle ? categoryPageTitle : t?.productsPageCeoDescription || "Ceo description - Addenta product category"}</h1>
+
+//           {showDetails && (
+//             <div className="productsPageDetailsCEO" style={{ marginTop: "2rem" }}>
+//               <div className="page-description-content" dangerouslySetInnerHTML={{ __html: categoryPageDescription || "" }} />
+//             </div>
+//           )}
+
+//           <div className="productsPageDescriptionLink" style={{ marginTop: "1rem" }}>
+//             <a
+//               href="#"
+//               onClick={(e) => {
+//                 e.preventDefault();
+//                 setShowDetails((prev) => !prev);
+//               }}
+//               style={{ display: "inline-flex", alignItems: "center", cursor: "pointer", textDecoration: "none" }}
+//             >
+//               {showDetails ? t?.hideDetailsBtn || "Hide" : t?.seeMoreBtn || "See more"}
+//               <img src="/icons/rightDown.svg" alt="" style={{ marginLeft: "0.25rem", transform: showDetails ? "rotate(180deg)" : "none", transition: "transform 0.2s" }} />
+//             </a>
+//           </div>
+//         </div>
+
+//         <style jsx>{`
+//           .loader-container {
+//             width: 100% !important;
+//             min-width: 97rem;
+//             min-height: 10rem;
+//             display: flex;
+//             align-items: center;
+//             justify-content: center;
+//             padding: 5rem auto;
+//           }
+//           .loader {
+//             border: 5px solid #98b4de;
+//             border-top: 5px solid #293881;
+//             border-radius: 50%;
+//             width: 40px;
+//             height: 40px;
+//             animation: spin 0.8s linear infinite;
+//           }
+//           @keyframes spin {
+//             to {
+//               transform: rotate(360deg);
+//             }
+//           }
+//           .accordion-content {
+//             max-height: 250px;
+//             overflow-y: auto;
+//           }
+//           .productsPageDetailsCEO h1 {
+//             margin-bottom: 0.5rem;
+//           }
+//           .page-description-content {
+//             margin-bottom: 0.5rem;
+//           }
+//         `}</style>
+//       </div>
+//     </div>
+//   );
+// }
+
+
+
+
+// ?  // ?  boxtan kral nisterb
+
+// "use client";
+// import Link from "next/link";
+// import React, {
+//   useState,
+//   useEffect,
+//   useMemo,
+//   useCallback,
+//   useRef,
+// } from "react";
+// import { useRouter, useSearchParams } from "next/navigation";
+// import LoadMoreBTN from "./LoadMoreBTN";
+// import ApplyBTN from "./ApplyBTN";
+// import ReactSelect from "./ReactSelect";
+// import Manat from "../../public/icons/manat.svg";
+// import axiosInstance from "@/lib/axios";
+
+// // Accordion başlık komponenti
+// const FilterAccordion = ({ title, children }) => {
+//   const [isOpen, setIsOpen] = useState(true);
+//   return (
+//     <div className="accordion">
+//       <button className="accordion-header" onClick={() => setIsOpen(!isOpen)}>
+//         {title}
+//         <img
+//           src={isOpen ? "/icons/minus.svg" : "/icons/plusIcon.svg"}
+//           alt="Toggle Icon"
+//           className="toggle-icon"
+//         />
+//       </button>
+//       {isOpen && <div className="accordion-content">{children}</div>}
+//     </div>
+//   );
+// };
+
+// // Cache və utility-lər
+// const productCache = new Map();
+// const CACHE_DURATION = 5 * 60 * 1000; // 5 dəq
+
+// async function fetchProducts(
+//   categoryIds = [],
+//   brandIds = [],
+//   searchText = "",
+//   page = 1,
+//   perPage = 24
+// ) {
+//   const cacheKey = JSON.stringify({
+//     categoryIds,
+//     brandIds,
+//     searchText,
+//     page,
+//     perPage,
+//   });
+
+//   const cached = productCache.get(cacheKey);
+//   if (cached && Date.now() - cached.timestamp < CACHE_DURATION) {
+//     return cached.data;
+//   }
+
+//   const filters = [];
+//   if (categoryIds.length) {
+//     filters.push({ key: "categories", operator: "IN", values: categoryIds });
+//   }
+//   if (brandIds.length) {
+//     filters.push({ key: "brands", operator: "IN", values: brandIds });
+//   }
+
+//   let url = `/page-data/product?per_page=${perPage}&page=${page}`;
+//   if (searchText) url += `&search_text=${encodeURIComponent(searchText)}`;
+
+//   if (filters.length) {
+//     const query = filters
+//       .map((f, idx) => {
+//         const base = `filters[${idx}][key]=${encodeURIComponent(
+//           f.key
+//         )}&filters[${idx}][operator]=${encodeURIComponent(f.operator)}`;
+//         const vals = f.values
+//           .map((v) => `filters[${idx}][value][]=${encodeURIComponent(v)}`)
+//           .join("&");
+//         return `${base}&${vals}`;
+//       })
+//       .join("&");
+//     url += `&${query}`;
+//   }
+
+//   try {
+//     const res = await axiosInstance.get(url);
+//     const result = {
+//       products: res.data.data.data,
+//       pagination: res.data.data,
+//     };
+//     productCache.set(cacheKey, {
+//       data: result,
+//       timestamp: Date.now(),
+//     });
+//     return result;
+//   } catch (err) {
+//     console.error("Filter fetch error (client)", err);
+//     return { products: [], pagination: null };
+//   }
+// }
+
+// // slugify
+// function slugify(text) {
+//   if (!text) return "";
+//   return text
+//     .normalize("NFD")
+//     .replace(/[\u0300-\u036f]/g, "")
+//     .toLowerCase()
+//     .replace(/[^a-z0-9]+/g, "-")
+//     .replace(/(^-|-$)/g, "");
+// }
+
+// // normalize id array (numeric, unique)
+// const normalizeIds = (arr = []) =>
+//   Array.from(new Set((arr || []).map((v) => Number(v)).filter((v) => !Number.isNaN(v))));
+
+// // extract category ids from product robustly
+// function extractCategoryIdsFromProduct(product) {
+//   const ids = new Set();
+//   if (!product) return [];
+//   const raw =
+//     product.categories ?? product.category_ids ?? product.category_list ?? product.category ?? null;
+
+//   const pushId = (v) => {
+//     if (v == null) return;
+//     const n = typeof v === "number" ? v : Number(v);
+//     if (!Number.isNaN(n)) ids.add(n);
+//   };
+
+//   if (Array.isArray(raw)) {
+//     for (const item of raw) {
+//       if (item == null) continue;
+//       if (typeof item === "object") {
+//         if (item.id) pushId(item.id);
+//         else if (item.category_id) pushId(item.category_id);
+//         else if (item.value) pushId(item.value);
+//       } else {
+//         pushId(item);
+//       }
+//     }
+//   } else if (typeof raw === "object" && raw !== null) {
+//     if (raw.id) pushId(raw.id);
+//     else if (raw.category_id) pushId(raw.category_id);
+//     else Object.keys(raw).forEach((k) => pushId(k));
+//   } else if (typeof raw === "number" || typeof raw === "string") {
+//     pushId(raw);
+//   }
+
+//   if (product.category_id) pushId(product.category_id);
+//   if (product.category) pushId(product.category);
+
+//   return Array.from(ids);
+// }
+
+// // Product card (memo)
+// const ProductCard = React.memo(({ product, t }) => (
+//   <div className="xl-4 lg-4 md-6 sm-6">
+//     <Link href={`/products/${slugify(product.title)}-${product.id}`} className="block">
+//       <div className="homePageProductCardContent">
+//         <div className="homePageProCardImgs">
+//           <div className="homePageProductCardContentImage">
+//             <img src={`https://admin.adentta.az/storage${product.image}`} alt={product.title} loading="lazy" />
+//           </div>
+//         </div>
+//         <div className="homePageProductCardContentInner">
+//           <div className="homePageProductCardContentText">
+//             <span>{product.title}</span>
+//           </div>
+//           <div className="price">
+//             <div className="priceItem">
+//               <strong id="prices">{product.price}</strong>
+//               <Manat />
+//             </div>
+//           </div>
+//         </div>
+//         <div className="homePageProductCardContentBottom">
+//           <span>{t?.learnMore || "Learn More"}</span>
+//           <img src="/icons/arrowTopRight.svg" alt="" />
+//         </div>
+//       </div>
+//     </Link>
+//   </div>
+// ));
+
+// export default function ProductsPageFilter({
+//   t,
+//   allProducts = [],
+//   initialProducts = [],
+//   categoryData = [],
+//   brandsDataFilter = [],
+//   initialSelectedBrands = [],
+//   initialSelectedCategories = [],
+//   categoryMetaTitle = null,
+//   categoryMetaDescription = null,
+//   categoryPageTitle = null,
+//   categoryPageDescription = null,
+//   categoryId = null,
+//   searchText = null,
+//   perPage = 24,
+//   pagination = null,
+//   productCounts = {},
+// }) {
+//   const router = useRouter();
+//   const searchParams = useSearchParams();
+
+//   // initial selected ids (normalize)
+//   const initialCatIds = normalizeIds(
+//     (initialSelectedCategories || []).map((c) => (c && c.id ? c.id : null))
+//   );
+//   const initialBrandIds = normalizeIds(
+//     (initialSelectedBrands || []).map((b) => (b && b.id ? b.id : null))
+//   );
+
+//   const [filteredProducts, setFilteredProducts] = useState(initialProducts);
+//   const [currentPagination, setPagination] = useState(pagination);
+//   const [selectedCategoryIds, setSelectedCategoryIds] = useState(initialCatIds);
+//   const [selectedBrandIds, setSelectedBrandIds] = useState(initialBrandIds);
+//   const [sortOption, setSortOption] = useState({
+//     value: "az",
+//     label: t?.from || "From A-Z",
+//   });
+//   const [isMobileFilterOpen, setIsMobileFilterOpen] = useState(false);
+//   const [isLoading, setIsLoading] = useState(false);
+//   const [brandSearchTerm, setBrandSearchTerm] = useState("");
+//   const [showDetails, setShowDetails] = useState(false);
+//   const [currentPage, setCurrentPage] = useState(1);
+//   const [isLoadingMore, setIsLoadingMore] = useState(false);
+
+//   const loadMoreRef = useRef(null);
+//   const debounceTimeoutRef = useRef(null);
+
+//   const fetchProductsDebounced = useCallback(
+//     async (categoryIds, brandIds, searchTextParam, page = 1) => {
+//       if (debounceTimeoutRef.current) clearTimeout(debounceTimeoutRef.current);
+//       debounceTimeoutRef.current = setTimeout(async () => {
+//         setIsLoading(true);
+//         try {
+//           const { products, pagination: newPagination } = await fetchProducts(
+//             categoryIds,
+//             brandIds,
+//             searchTextParam,
+//             page,
+//             perPage
+//           );
+//           if (page === 1) setFilteredProducts(products);
+//           else setFilteredProducts((prev) => [...prev, ...products]);
+//           setPagination(newPagination);
+//           setCurrentPage(page);
+//         } catch {
+//           if (page === 1) setFilteredProducts([]);
+//         } finally {
+//           setIsLoading(false);
+//           setIsLoadingMore(false);
+//         }
+//       }, 30000);
+//     },
+//     [perPage]
+//   );
+
+//   // YENİ: Daha dəqiq kateqoriya-məhsul xəritəsi
+//   const categoryToProducts = useMemo(() => {
+//     const map = new Map();
+//     if (!Array.isArray(allProducts)) return map;
+    
+//     for (const product of allProducts) {
+//       const productId = product?.id ?? product?.product_id;
+//       if (!productId) continue;
+      
+//       const categoryIds = extractCategoryIdsFromProduct(product);
+      
+//       for (const categoryId of categoryIds) {
+//         const numericCategoryId = Number(categoryId);
+//         if (Number.isNaN(numericCategoryId)) continue;
+        
+//         if (!map.has(numericCategoryId)) {
+//           map.set(numericCategoryId, new Set());
+//         }
+//         map.get(numericCategoryId).add(Number(productId));
+//       }
+//     }
+    
+//     return map;
+//   }, [allProducts]);
+
+//   // YENİ: Daha səmərəli və dəqiq kateqoriya məhsul sayı hesablama funksiyası
+//   const getProductCountForCategory = useCallback((categoryId) => {
+//     const numericId = Number(categoryId);
+    
+//     // Birinci backend productCounts-dan yoxlayırıq
+//     const backendCounts = productCounts?.categories;
+//     if (backendCounts) {
+//       if (typeof backendCounts === 'object' && !Array.isArray(backendCounts)) {
+//         const count = backendCounts[numericId] ?? backendCounts[numericId.toString()];
+//         if (typeof count === 'number' && count >= 0) {
+//           return count;
+//         }
+//       }
+//       if (Array.isArray(backendCounts)) {
+//         const found = backendCounts.find(c => 
+//           Number(c?.id || c?.category_id) === numericId
+//         );
+//         if (found && typeof (found.count || found.total || found.product_count) === 'number') {
+//           return found.count || found.total || found.product_count;
+//         }
+//       }
+//     }
+    
+//     // Backend-də məlumat yoxdursa, client-side hesablayırıq
+//     // MƏMƏM: Yalnız həmin kateqoriyanın birbaşa məhsullarını sayırıq (alt kateqoriyalar daxil edilmir)
+//     const productsInCategory = categoryToProducts.get(numericId);
+//     return productsInCategory ? productsInCategory.size : 0;
+    
+//   }, [productCounts, categoryToProducts]);
+
+//   // When URL/search change -> derive ids and fetch
+//   useEffect(() => {
+//     const catParam = searchParams.get("category");
+//     const brParam = searchParams.get("brands");
+//     const stParam = searchParams.get("search_text");
+
+//     const slugs = catParam ? catParam.split(",").filter(Boolean) : [];
+//     const slugToId = (slug) => {
+//       const found = categoryData.find((c) => c.url_slug === slug);
+//       return found ? Number(found.id) : null;
+//     };
+//     const newCatIds = normalizeIds(slugs.map(slugToId));
+
+//     const brIds = brParam
+//       ? brParam
+//           .split(",")
+//           .map((s) => Number(s))
+//           .filter((n) => !Number.isNaN(n))
+//       : [];
+//     const newBrandIds = normalizeIds(brIds);
+
+//     setSelectedCategoryIds(newCatIds);
+//     setSelectedBrandIds(newBrandIds);
+//     setShowDetails(false);
+//     fetchProductsDebounced(newCatIds, newBrandIds, stParam, 1);
+//   }, [searchParams.toString(), categoryData, brandsDataFilter, fetchProductsDebounced]);
+
+//   const sortedProducts = useMemo(() => {
+//     return sortOption.value === "az"
+//       ? [...filteredProducts].sort((a, b) => a.title.localeCompare(b.title))
+//       : [...filteredProducts].sort((a, b) => b.title.localeCompare(a.title));
+//   }, [filteredProducts, sortOption.value]);
+
+//   // update URL with unique slugs
+//   const updateUrlWithFilters = useCallback(
+//     (brandIdsArr = [], categoryIdsArr = []) => {
+//       const params = new URLSearchParams();
+
+//       const uniqueCatIds = normalizeIds(categoryIdsArr);
+//       const catSlugs = uniqueCatIds
+//         .map((id) => {
+//           const found = categoryData.find((c) => Number(c.id) === Number(id));
+//           return found ? found.url_slug : null;
+//         })
+//         .filter(Boolean);
+//       const uniqueSlugs = Array.from(new Set(catSlugs));
+//       if (uniqueSlugs.length) params.set("category", uniqueSlugs.join(","));
+
+//       const uniqueBrandIds = normalizeIds(brandIdsArr);
+//       if (uniqueBrandIds.length) params.set("brands", uniqueBrandIds.join(","));
+
+//       const cs = searchParams.get("search_text");
+//       const pp = searchParams.get("per_page");
+//       if (cs) params.set("search_text", cs);
+//       if (pp) params.set("per_page", pp);
+
+//       const qs = params.toString();
+//       router.push(qs ? `/products?${qs}` : `/products`);
+//     },
+//     [router, searchParams, categoryData]
+//   );
+
+//   // toggle by numeric id (ensures uniqueness)
+//   const handleCategoryToggleById = useCallback(
+//     (id) => {
+//       const numeric = Number(id);
+//       setSelectedCategoryIds((prev) => {
+//         const set = new Set(prev.map((v) => Number(v)));
+//         if (set.has(numeric)) set.delete(numeric);
+//         else set.add(numeric);
+//         const arr = normalizeIds(Array.from(set));
+//         updateUrlWithFilters(selectedBrandIds, arr);
+//         return arr;
+//       });
+//     },
+//     [selectedBrandIds, updateUrlWithFilters]
+//   );
+
+//   const handleBrandToggleById = useCallback(
+//     (id) => {
+//       const numeric = Number(id);
+//       setSelectedBrandIds((prev) => {
+//         const set = new Set(prev.map((v) => Number(v)));
+//         if (set.has(numeric)) set.delete(numeric);
+//         else set.add(numeric);
+//         const arr = normalizeIds(Array.from(set));
+//         updateUrlWithFilters(arr, selectedCategoryIds);
+//         return arr;
+//       });
+//     },
+//     [selectedCategoryIds, updateUrlWithFilters]
+//   );
+
+//   // YENİ: Düzgün infinite scroll observer - layout pozulması problemi həll edildi
+//   useEffect(() => {
+//     if (!loadMoreRef.current) return;
+    
+//     const observer = new IntersectionObserver(
+//       ([entry]) => {
+//         if (
+//           entry.isIntersecting && 
+//           !isLoading && 
+//           !isLoadingMore && 
+//           currentPagination?.next_page_url &&
+//           filteredProducts.length > 0 // Bu şərt əlavə edildi
+//         ) {
+//           setIsLoadingMore(true);
+          
+//           // Kiçik gecikmə əlavə edildi ki, layout stabil olsun
+//           setTimeout(() => {
+//             const nextPage = currentPage + 1;
+//             const catIds = normalizeIds(selectedCategoryIds);
+//             const brIds = normalizeIds(selectedBrandIds);
+//             const st = searchParams.get("search_text");
+//             fetchProductsDebounced(catIds, brIds, st, nextPage);
+//           }, 100); // 2000-dən 100-ə endirdik
+//         }
+//       },
+//       { 
+//         root: null, 
+//         rootMargin: "50px", // 200px-dən 50px-ə endirdik
+//         threshold: 0.1 
+//       }
+//     );
+    
+//     observer.observe(loadMoreRef.current);
+    
+//     return () => observer.disconnect();
+//   }, [
+//     isLoading,
+//     isLoadingMore,
+//     currentPagination,
+//     currentPage,
+//     selectedCategoryIds,
+//     selectedBrandIds,
+//     searchParams,
+//     fetchProductsDebounced,
+//     filteredProducts.length // Bu dependency əlavə edildi
+//   ]);
+
+//   // grouped categories for UI (parent -> children)
+//   const groupedCategories = useMemo(() => {
+//     const parentCategories = categoryData.filter((category) => !category.parent_id);
+//     return parentCategories.map((parentCategory) => {
+//       const children = categoryData.filter((sub) => {
+//         const parentRaw = sub.parent_id;
+//         if (!parentRaw) return false;
+//         let parents = [];
+//         if (Array.isArray(parentRaw)) parents = parentRaw.map((p) => (typeof p === "object" ? p.id : p));
+//         else if (typeof parentRaw === "object" && parentRaw.id != null) parents = [parentRaw.id];
+//         else parents = [parentRaw];
+//         const numericParents = parents.map((p) => (typeof p === "number" ? p : parseInt(p, 10))).filter(Boolean);
+//         return numericParents.includes(parentCategory.id);
+//       });
+//       return { parent: parentCategory, children };
+//     });
+//   }, [categoryData]);
+
+//   // helpers to render selected items (pull title from categoryData/brandsData)
+//   const renderSelectedCategories = useMemo(() => {
+//     return selectedCategoryIds.map((id) => {
+//       const cat = categoryData.find((c) => Number(c.id) === Number(id));
+//       return {
+//         id,
+//         title: cat ? cat.title : `Category ${id}`,
+//       };
+//     });
+//   }, [selectedCategoryIds, categoryData]);
+
+//   const renderSelectedBrands = useMemo(() => {
+//     return selectedBrandIds.map((id) => {
+//       const br = brandsDataFilter.find((b) => Number(b.id) === Number(id));
+//       return {
+//         id,
+//         title: br ? br.title : `Brand ${id}`,
+//       };
+//     });
+//   }, [selectedBrandIds, brandsDataFilter]);
+
+//   const filteredBrands = useMemo(() => {
+//     return brandsDataFilter.filter((b) => b.title.toLowerCase().includes(brandSearchTerm.toLowerCase()));
+//   }, [brandsDataFilter, brandSearchTerm]);
+
+//   return (
+//     <div>
+//       <div className="container">
+//         {/* Başlıq */}
+//         <div className="filterTop topper">
+//           <Link href="/">
+//             <h1>Adentta</h1>
+//           </Link>
+//           <img src="/icons/rightDown.svg" alt="Adentta" />
+//           <h4>{t?.products || "Products"}</h4>
+//         </div>
+
+//         <div className="searchResultsProductCount">
+//           {searchText && (
+//             <div className="search-results-info">
+//               <p>
+//                 {t?.searchResults || "results found for"} "{searchText}" ( {currentPagination?.total || filteredProducts.length} )
+//               </p>
+//             </div>
+//           )}
+//         </div>
+
+//         <div className="row">
+//           {/* Sidebar */}
+//           <div className="xl-3 lg-3 md-3 sm-12">
+//             <div className="filter-container">
+//               <button className="filter-title" onClick={() => setIsMobileFilterOpen(!isMobileFilterOpen)}>
+//                 {t?.productsPageFilterTitle || "Filter"}
+//               </button>
+
+//               {/* Selected filters - desktop */}
+//               <div className="selectedFilter desktop-only">
+//                 {renderSelectedCategories.map((cat) => (
+//                   <div className="selectedFilterInner" key={`cat-${cat.id}`}>
+//                     <span onClick={() => handleCategoryToggleById(cat.id)}>×</span>
+//                     <p>{cat.title}</p>
+//                   </div>
+//                 ))}
+//                 {renderSelectedBrands.map((br) => (
+//                   <div className="selectedFilterInner" key={`brand-${br.id}`}>
+//                     <span onClick={() => handleBrandToggleById(br.id)}>×</span>
+//                     <p>{br.title}</p>
+//                   </div>
+//                 ))}
+//               </div>
+
+//               <div className={`filter-panel ${isMobileFilterOpen ? "active" : ""}`}>
+//                 <button className="filter-titless">{t?.productsPageFilterTitle || "Filter"}</button>
+
+//                 {/* Selected - mobile */}
+//                 <div className="selectedFilter mobile-only">
+//                   {renderSelectedCategories.map((cat) => (
+//                     <div className="selectedFilterInner" key={`cat-${cat.id}`}>
+//                       <span onClick={() => handleCategoryToggleById(cat.id)}>×</span>
+//                       <p>{cat.title}</p>
+//                     </div>
+//                   ))}
+//                   {renderSelectedBrands.map((br) => (
+//                     <div className="selectedFilterInner" key={`brand-${br.id}`}>
+//                       <span onClick={() => handleBrandToggleById(br.id)}>×</span>
+//                       <p>{br.title}</p>
+//                     </div>
+//                   ))}
+//                 </div>
+
+//                 <button className="close-btn" onClick={() => setIsMobileFilterOpen(false)}>
+//                   <img src="/icons/popupCloseIcon.svg" alt="close" />
+//                 </button>
+
+//                 <div className="lineFiltered" />
+
+//                 {/* Categories */}
+//                 <FilterAccordion title={t?.productsPageFilterCategoryTitle || "Category"}>
+//                   <ul style={{ maxHeight: "300px", overflowY: "auto", paddingRight: "4px" }}>
+//                     {groupedCategories.map(({ parent, children }) => {
+//                       const parentProductCount = getProductCountForCategory(parent.id);
+//                       const isParentSelected = selectedCategoryIds.some((c) => Number(c) === Number(parent.id));
+
+//                       return (
+//                         <React.Fragment key={parent.id}>
+//                           <li
+//                             onClick={() => handleCategoryToggleById(parent.id)}
+//                             style={{
+//                               cursor: "pointer",
+//                               display: "flex",
+//                               alignItems: "center",
+//                               gap: "0.5rem",
+//                               fontWeight: isParentSelected ? "bold" : "normal",
+//                               marginBottom: "4px",
+//                             }}
+//                           >
+//                             <span>{parent.title}</span>
+//                             <p>({parentProductCount})</p>
+//                           </li>
+
+//                           {children.map((child) => {
+//                             const childProductCount = getProductCountForCategory(child.id);
+//                             const isChildSelected = selectedCategoryIds.some((c) => Number(c) === Number(child.id));
+//                             return (
+//                               <li
+//                                 key={child.id}
+//                                 onClick={() => handleCategoryToggleById(child.id)}
+//                                 style={{
+//                                   cursor: "pointer",
+//                                   display: "flex",
+//                                   alignItems: "center",
+//                                   gap: "0.3rem",
+//                                   fontWeight: isChildSelected ? "bold" : "normal",
+//                                   marginLeft: "15px",
+//                                   fontSize: "1.3rem",
+//                                   marginBottom: "8px",
+//                                   color: "#666",
+//                                 }}
+//                               >
+//                                 <span>{child.title}</span>
+//                                 <p>({childProductCount})</p>
+//                               </li>
+//                             );
+//                           })}
+//                         </React.Fragment>
+//                       );
+//                     })}
+//                   </ul>
+//                 </FilterAccordion>
+
+//                 {/* Brands */}
+//                 <FilterAccordion title={t?.productsPageFilterBrandsTitle || "Brands"}>
+//                   <div className="filteredSearch">
+//                     <img src="/icons/searchIcon.svg" alt="" />
+//                     <input className="filterSrch" type="text" placeholder={t?.searchText || "Search..."} value={brandSearchTerm} onChange={(e) => setBrandSearchTerm(e.target.value)} />
+//                   </div>
+//                   <ul style={{ maxHeight: "250px", overflowY: "auto", paddingRight: "4px" }}>
+//                     {filteredBrands.map((br) => {
+//                       const isSelected = selectedBrandIds.some((b) => Number(b) === Number(br.id));
+//                       return (
+//                         <li
+//                           key={br.id}
+//                           onClick={() => handleBrandToggleById(br.id)}
+//                           style={{
+//                             cursor: "pointer",
+//                             display: "flex",
+//                             alignItems: "center",
+//                             gap: "0.5rem",
+//                             fontWeight: isSelected ? "bold" : "normal",
+//                           }}
+//                         >
+//                           <input type="checkbox" checked={isSelected} readOnly />
+//                           <span>{br.title}</span>
+//                         </li>
+//                       );
+//                     })}
+//                   </ul>
+//                 </FilterAccordion>
+
+//                 <div className="applyBTN flex items-center mt-4 justify-center" onClick={() => setIsMobileFilterOpen(false)}>
+//                   <ApplyBTN t={t} />
+//                 </div>
+//               </div>
+//             </div>
+//           </div>
+
+//           {/* Products Grid */}
+//           <div className="xl-9 lg-9 md-9 sm-12">
+//             <div className="productPageCards">
+//               <div className="productPageSorting">
+//                 <div className="productPageSortingInner">
+//                   <span>{t?.sortBy || "Sort by"}</span>
+//                   <ReactSelect t={t} value={sortOption} onChange={setSortOption} />
+//                 </div>
+//               </div>
+
+//               <div className="row">
+//                 {isLoading ? (
+//                   <div className="loader-container">
+//                     <div className="loader" />
+//                   </div>
+//                 ) : (
+//                   sortedProducts.map((d) => <ProductCard key={d.id} product={d} t={t} />)
+//                 )}
+//               </div>
+//             </div>
+
+//             {/* YENİ: Loading trigger elementi daha aşağıda yerləşdirildi */}
+//             {!isLoading && sortedProducts.length > 0 && (
+//               <div ref={loadMoreRef} style={{ 
+//                 height: "20px", 
+//                 margin: "20px 0",
+//                 visibility: "hidden" 
+//               }} />
+//             )}
+            
+//             {/* YENİ: Loading state daha yaxşı göstərilir */}
+//             {isLoadingMore && (
+//               <div className="loading-more-container">
+//                 <div className="loader" />
+//                 <p style={{ textAlign: "center", marginTop: "10px" }}>
+//                   {t?.loadingMore || "Loading more products..."}
+//                 </p>
+//               </div>
+//             )}
+//           </div>
+//         </div>
+
+//         {/* Description */}
+//         <div className="productsPageDescription">
+//           <h1>{categoryPageTitle ? categoryPageTitle : t?.productsPageCeoDescription || "Ceo description - Addenta product category"}</h1>
+
+//           {showDetails && (
+//             <div className="productsPageDetailsCEO" style={{ marginTop: "2rem" }}>
+//               <div className="page-description-content" dangerouslySetInnerHTML={{ __html: categoryPageDescription || "" }} />
+//             </div>
+//           )}
+
+//           <div className="productsPageDescriptionLink" style={{ marginTop: "1rem" }}>
+//             <a
+//               href="#"
+//               onClick={(e) => {
+//                 e.preventDefault();
+//                 setShowDetails((prev) => !prev);
+//               }}
+//               style={{ display: "inline-flex", alignItems: "center", cursor: "pointer", textDecoration: "none" }}
+//             >
+//               {showDetails ? t?.hideDetailsBtn || "Hide" : t?.seeMoreBtn || "See more"}
+//               <img src="/icons/rightDown.svg" alt="" style={{ marginLeft: "0.25rem", transform: showDetails ? "rotate(180deg)" : "none", transition: "transform 0.2s" }} />
+//             </a>
+//           </div>
+//         </div>
+
+//         <style jsx>{`
+//           .loader-container {
+//             width: 100% !important;
+//             min-width: 97rem;
+//             min-height: 10rem;
+//             display: flex;
+//             align-items: center;
+//             justify-content: center;
+//             padding: 5rem auto;
+//           }
+//           .loading-more-container {
+//             width: 100%;
+//             display: flex;
+//             flex-direction: column;
+//             align-items: center;
+//             justify-content: center;
+//             padding: 2rem 0;
+//             margin: 2rem 0;
+//             background: rgba(152, 180, 222, 0.05);
+//             border-radius: 8px;
+//           }
+//           .loader {
+//             border: 5px solid #98b4de;
+//             border-top: 5px solid #293881;
+//             border-radius: 50%;
+//             width: 40px;
+//             height: 40px;
+//             animation: spin 0.8s linear infinite;
+//           }
+//           @keyframes spin {
+//             to {
+//               transform: rotate(360deg);
+//             }
+//           }
+//           .accordion-content {
+//             max-height: 250px;
+//             overflow-y: auto;
+//           }
+//           .productsPageDetailsCEO h1 {
+//             margin-bottom: 0.5rem;
+//           }
+//           .page-description-content {
+//             margin-bottom: 0.5rem;
+//           }
+//         `}</style>
+//       </div>
+//     </div>
+//   );
+// }
+
+// ?  boxtan kral
 
 
 
@@ -738,8 +2291,37 @@
 
 
 
-//! Bu kod duzeldi ve suretlidi ve qruplasmada var
-// File: components/ProductsPageFilter.jsx
+
+// ! infinite isledi burda
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// ! DWAYNO JONSHON 15IFJR
+// ? EN KRAL PADISAH SENSIN ASLANIM
 "use client";
 import Link from "next/link";
 import React, {
@@ -756,7 +2338,7 @@ import ReactSelect from "./ReactSelect";
 import Manat from "../../public/icons/manat.svg";
 import axiosInstance from "@/lib/axios";
 
-// Accordion başlık komponenti (className'ler orijinal)
+// Accordion başlık komponenti
 const FilterAccordion = ({ title, children }) => {
   const [isOpen, setIsOpen] = useState(true);
   return (
@@ -774,9 +2356,9 @@ const FilterAccordion = ({ title, children }) => {
   );
 };
 
-// Optimized client-side fetch with caching
+// Cache və utility-lər
 const productCache = new Map();
-const CACHE_DURATION = 5 * 60 * 1000; // 5 minutes
+const CACHE_DURATION = 5 * 60 * 1000; // 5 dəq
 
 async function fetchProducts(
   categoryIds = [],
@@ -793,7 +2375,6 @@ async function fetchProducts(
     perPage,
   });
 
-  // Check cache first
   const cached = productCache.get(cacheKey);
   if (cached && Date.now() - cached.timestamp < CACHE_DURATION) {
     return cached.data;
@@ -808,10 +2389,7 @@ async function fetchProducts(
   }
 
   let url = `/page-data/product?per_page=${perPage}&page=${page}`;
-
-  if (searchText) {
-    url += `&search_text=${encodeURIComponent(searchText)}`;
-  }
+  if (searchText) url += `&search_text=${encodeURIComponent(searchText)}`;
 
   if (filters.length) {
     const query = filters
@@ -834,13 +2412,10 @@ async function fetchProducts(
       products: res.data.data.data,
       pagination: res.data.data,
     };
-
-    // Cache the result
     productCache.set(cacheKey, {
       data: result,
       timestamp: Date.now(),
     });
-
     return result;
   } catch (err) {
     console.error("Filter fetch error (client)", err);
@@ -848,7 +2423,7 @@ async function fetchProducts(
   }
 }
 
-// Güvenli slugify utility
+// slugify
 function slugify(text) {
   if (!text) return "";
   return text
@@ -859,21 +2434,56 @@ function slugify(text) {
     .replace(/(^-|-$)/g, "");
 }
 
-// Memoized product card component
-const ProductCard = React.memo(({ product, t, slugify }) => (
+// normalize id array (numeric, unique)
+const normalizeIds = (arr = []) =>
+  Array.from(new Set((arr || []).map((v) => Number(v)).filter((v) => !Number.isNaN(v))));
+
+// extract category ids from product robustly
+function extractCategoryIdsFromProduct(product) {
+  const ids = new Set();
+  if (!product) return [];
+  const raw =
+    product.categories ?? product.category_ids ?? product.category_list ?? product.category ?? null;
+
+  const pushId = (v) => {
+    if (v == null) return;
+    const n = typeof v === "number" ? v : Number(v);
+    if (!Number.isNaN(n)) ids.add(n);
+  };
+
+  if (Array.isArray(raw)) {
+    for (const item of raw) {
+      if (item == null) continue;
+      if (typeof item === "object") {
+        if (item.id) pushId(item.id);
+        else if (item.category_id) pushId(item.category_id);
+        else if (item.value) pushId(item.value);
+      } else {
+        pushId(item);
+      }
+    }
+  } else if (typeof raw === "object" && raw !== null) {
+    if (raw.id) pushId(raw.id);
+    else if (raw.category_id) pushId(raw.category_id);
+    else Object.keys(raw).forEach((k) => pushId(k));
+  } else if (typeof raw === "number" || typeof raw === "string") {
+    pushId(raw);
+  }
+
+  if (product.category_id) pushId(product.category_id);
+  if (product.category) pushId(product.category);
+
+  return Array.from(ids);
+}
+
+// Product card (memo)
+const ProductCard = React.memo(({ product, t }) => (
   <div className="xl-4 lg-4 md-6 sm-6">
-    <Link
-      href={`/products/${slugify(product.title)}-${product.id}`}
-      className="block"
-    >
+    <Link href={`/products/${slugify(product.title)}-${product.id}`} className="block">
       <div className="homePageProductCardContent">
         <div className="homePageProCardImgs">
           <div className="homePageProductCardContentImage">
-            <img
-              src={`https://admin.adentta.az/storage${product.image}`}
-              alt={product.title}
-              loading="lazy"
-            />
+            <img src={`https://admin.adentta.az/storage${product.image}`} alt={product.title} loading="lazy" />
           </div>
         </div>
         <div className="homePageProductCardContentInner">
@@ -917,12 +2527,18 @@ export default function ProductsPageFilter({
   const router = useRouter();
   const searchParams = useSearchParams();
 
+  // initial selected ids (normalize)
+  const initialCatIds = normalizeIds(
+    (initialSelectedCategories || []).map((c) => (c && c.id ? c.id : null))
+  );
+  const initialBrandIds = normalizeIds(
+    (initialSelectedBrands || []).map((b) => (b && b.id ? b.id : null))
+  );
+
   const [filteredProducts, setFilteredProducts] = useState(initialProducts);
   const [currentPagination, setPagination] = useState(pagination);
-  const [selectedCategories, setSelectedCategories] = useState(
-    initialSelectedCategories
-  );
-  const [selectedBrands, setSelectedBrands] = useState(initialSelectedBrands);
+  const [selectedCategoryIds, setSelectedCategoryIds] = useState(initialCatIds);
+  const [selectedBrandIds, setSelectedBrandIds] = useState(initialBrandIds);
   const [sortOption, setSortOption] = useState({
     value: "az",
     label: t?.from || "From A-Z",
@@ -932,8 +2548,8 @@ export default function ProductsPageFilter({
   const [brandSearchTerm, setBrandSearchTerm] = useState("");
   const [showDetails, setShowDetails] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
-
   const [isLoadingMore, setIsLoadingMore] = useState(false);
+
   const loadMoreRef = useRef(null);
   const debounceTimeoutRef = useRef(null);
 
@@ -960,38 +2576,92 @@ export default function ProductsPageFilter({
           setIsLoading(false);
           setIsLoadingMore(false);
         }
-      }, 300);
+      }, 2000);
     },
     [perPage]
   );
 
+  // YENİ: Daha dəqiq kateqoriya-məhsul xəritəsi
+  const categoryToProducts = useMemo(() => {
+    const map = new Map();
+    if (!Array.isArray(allProducts)) return map;
+    
+    for (const product of allProducts) {
+      const productId = product?.id ?? product?.product_id;
+      if (!productId) continue;
+      
+      const categoryIds = extractCategoryIdsFromProduct(product);
+      
+      for (const categoryId of categoryIds) {
+        const numericCategoryId = Number(categoryId);
+        if (Number.isNaN(numericCategoryId)) continue;
+        
+        if (!map.has(numericCategoryId)) {
+          map.set(numericCategoryId, new Set());
+        }
+        map.get(numericCategoryId).add(Number(productId));
+      }
+    }
+    
+    return map;
+  }, [allProducts]);
+
+  // YENİ: Daha səmərəli və dəqiq kateqoriya məhsul sayı hesablama funksiyası
+  const getProductCountForCategory = useCallback((categoryId) => {
+    const numericId = Number(categoryId);
+    
+    // Birinci backend productCounts-dan yoxlayırıq
+    const backendCounts = productCounts?.categories;
+    if (backendCounts) {
+      if (typeof backendCounts === 'object' && !Array.isArray(backendCounts)) {
+        const count = backendCounts[numericId] ?? backendCounts[numericId.toString()];
+        if (typeof count === 'number' && count >= 0) {
+          return count;
+        }
+      }
+      if (Array.isArray(backendCounts)) {
+        const found = backendCounts.find(c => 
+          Number(c?.id || c?.category_id) === numericId
+        );
+        if (found && typeof (found.count || found.total || found.product_count) === 'number') {
+          return found.count || found.total || found.product_count;
+        }
+      }
+    }
+    
+    // Backend-də məlumat yoxdursa, client-side hesablayırıq
+    // MƏMƏM: Yalnız həmin kateqoriyanın birbaşa məhsullarını sayırıq (alt kateqoriyalar daxil edilmir)
+    const productsInCategory = categoryToProducts.get(numericId);
+    return productsInCategory ? productsInCategory.size : 0;
+    
+  }, [productCounts, categoryToProducts]);
+
+  // When URL/search change -> derive ids and fetch
   useEffect(() => {
     const catParam = searchParams.get("category");
     const brParam = searchParams.get("brands");
     const stParam = searchParams.get("search_text");
 
-    const slugs = catParam ? catParam.split(",") : [];
-    const newCats = categoryData.filter((c) => slugs.includes(c.url_slug));
-    const catIds = newCats.map((c) => c.id);
+    const slugs = catParam ? catParam.split(",").filter(Boolean) : [];
+    const slugToId = (slug) => {
+      const found = categoryData.find((c) => c.url_slug === slug);
+      return found ? Number(found.id) : null;
+    };
+    const newCatIds = normalizeIds(slugs.map(slugToId));
 
     const brIds = brParam
       ? brParam
           .split(",")
-          .map((s) => parseInt(s, 10))
-          .filter(Boolean)
+          .map((s) => Number(s))
+          .filter((n) => !Number.isNaN(n))
       : [];
-    const newBrands = brandsDataFilter.filter((b) => brIds.includes(b.id));
+    const newBrandIds = normalizeIds(brIds);
 
-    setSelectedCategories(newCats);
-    setSelectedBrands(newBrands);
+    setSelectedCategoryIds(newCatIds);
+    setSelectedBrandIds(newBrandIds);
     setShowDetails(false);
-    fetchProductsDebounced(catIds, brIds, stParam, 1);
-  }, [
-    searchParams.toString(),
-    categoryData,
-    brandsDataFilter,
-    fetchProductsDebounced,
-  ]);
+    fetchProductsDebounced(newCatIds, newBrandIds, stParam, 1);
+  }, [searchParams.toString(), categoryData, brandsDataFilter, fetchProductsDebounced]);
 
   const sortedProducts = useMemo(() => {
     return sortOption.value === "az"
@@ -999,123 +2669,160 @@ export default function ProductsPageFilter({
       : [...filteredProducts].sort((a, b) => b.title.localeCompare(a.title));
   }, [filteredProducts, sortOption.value]);
 
+  // update URL with unique slugs
   const updateUrlWithFilters = useCallback(
-    (newBrands, newCats) => {
+    (brandIdsArr = [], categoryIdsArr = []) => {
       const params = new URLSearchParams();
-      if (newCats.length)
-        params.set("category", newCats.map((c) => c.url_slug).join(","));
-      if (newBrands.length)
-        params.set("brands", newBrands.map((b) => b.id).join(","));
+
+      const uniqueCatIds = normalizeIds(categoryIdsArr);
+      const catSlugs = uniqueCatIds
+        .map((id) => {
+          const found = categoryData.find((c) => Number(c.id) === Number(id));
+          return found ? found.url_slug : null;
+        })
+        .filter(Boolean);
+      const uniqueSlugs = Array.from(new Set(catSlugs));
+      if (uniqueSlugs.length) params.set("category", uniqueSlugs.join(","));
+
+      const uniqueBrandIds = normalizeIds(brandIdsArr);
+      if (uniqueBrandIds.length) params.set("brands", uniqueBrandIds.join(","));
+
       const cs = searchParams.get("search_text");
       const pp = searchParams.get("per_page");
       if (cs) params.set("search_text", cs);
       if (pp) params.set("per_page", pp);
+
       const qs = params.toString();
       router.push(qs ? `/products?${qs}` : `/products`);
     },
-    [router, searchParams]
+    [router, searchParams, categoryData]
   );
 
-  const handleCategoryToggle = useCallback(
-    (cat) => {
-      const exist = selectedCategories.some((c) => c.id === cat.id);
-      const upd = exist
-        ? selectedCategories.filter((c) => c.id !== cat.id)
-        : [...selectedCategories, cat];
-      updateUrlWithFilters(selectedBrands, upd);
+  // toggle by numeric id (ensures uniqueness)
+  const handleCategoryToggleById = useCallback(
+    (id) => {
+      const numeric = Number(id);
+      setSelectedCategoryIds((prev) => {
+        const set = new Set(prev.map((v) => Number(v)));
+        if (set.has(numeric)) set.delete(numeric);
+        else set.add(numeric);
+        const arr = normalizeIds(Array.from(set));
+        updateUrlWithFilters(selectedBrandIds, arr);
+        return arr;
+      });
     },
-    [selectedCategories, selectedBrands, updateUrlWithFilters]
+    [selectedBrandIds, updateUrlWithFilters]
   );
 
-  const handleBrandToggle = useCallback(
-    (br) => {
-      const exist = selectedBrands.some((b) => b.id === br.id);
-      const upd = exist
-        ? selectedBrands.filter((b) => b.id !== br.id)
-        : [...selectedBrands, br];
-      updateUrlWithFilters(upd, selectedCategories);
+  const handleBrandToggleById = useCallback(
+    (id) => {
+      const numeric = Number(id);
+      setSelectedBrandIds((prev) => {
+        const set = new Set(prev.map((v) => Number(v)));
+        if (set.has(numeric)) set.delete(numeric);
+        else set.add(numeric);
+        const arr = normalizeIds(Array.from(set));
+        updateUrlWithFilters(arr, selectedCategoryIds);
+        return arr;
+      });
     },
-    [selectedBrands, selectedCategories, updateUrlWithFilters]
+    [selectedCategoryIds, updateUrlWithFilters]
   );
 
-  // GÜNCELLENDİ: infinite scroll yüklemeyi 2 saniye gecikmeli yapıyoruz
+  // YENİ: Düzgün infinite scroll observer - layout pozulması problemi həll edildi
   useEffect(() => {
     if (!loadMoreRef.current) return;
-    const obs = new IntersectionObserver(
+    
+    const observer = new IntersectionObserver(
       ([entry]) => {
         if (
-          entry.isIntersecting &&
-          !isLoading &&
-          !isLoadingMore &&
-          currentPagination?.next_page_url
+          entry.isIntersecting && 
+          !isLoading && 
+          !isLoadingMore && 
+          currentPagination?.next_page_url &&
+          filteredProducts.length > 0 // Bu şərt əlavə edildi
         ) {
           setIsLoadingMore(true);
+          
+          // Kiçik gecikmə əlavə edildi ki, layout stabil olsun
           setTimeout(() => {
             const nextPage = currentPage + 1;
-            const catIds = selectedCategories.map((c) => c.id);
-            const brIds = selectedBrands.map((b) => b.id);
+            const catIds = normalizeIds(selectedCategoryIds);
+            const brIds = normalizeIds(selectedBrandIds);
             const st = searchParams.get("search_text");
             fetchProductsDebounced(catIds, brIds, st, nextPage);
-          }, 2000); // 2 saniye bekle
+          }, 100); // 2000-dən 100-ə endirdik
         }
       },
-      { root: null, rootMargin: "200px", threshold: 0.1 }
+      { 
+        root: null, 
+        rootMargin: "50px", // 200px-dən 50px-ə endirdik
+        threshold: 0.1 
+      }
     );
-    obs.observe(loadMoreRef.current);
-    return () => obs.disconnect();
+    
+    observer.observe(loadMoreRef.current);
+    
+    return () => observer.disconnect();
   }, [
     isLoading,
     isLoadingMore,
     currentPagination,
     currentPage,
-    selectedCategories,
-    selectedBrands,
+    selectedCategoryIds,
+    selectedBrandIds,
     searchParams,
     fetchProductsDebounced,
+    filteredProducts.length // Bu dependency əlavə edildi
   ]);
 
-  // Category count için helper'ı kullanıyoruz
-  const getProductCountForCategory = useCallback(
-    (id) => {
-      if (productCounts.categories?.[id]) {
-        return productCounts.categories[id];
-      }
-      return allProducts.filter((p) => p.categories?.some((c) => c.id === id))
-        .length;
-    },
-    [productCounts, allProducts]
-  );
-
-  const filteredBrands = useMemo(() => {
-    return brandsDataFilter.filter((b) =>
-      b.title.toLowerCase().includes(brandSearchTerm.toLowerCase())
-    );
-  }, [brandsDataFilter, brandSearchTerm]);
-
-  // Kateqoriya qruplaşması - HeaderMenu məntiqinə əsasən
+  // grouped categories for UI (parent -> children)
   const groupedCategories = useMemo(() => {
-    // Əsas kateqoriyalar (parent_id olmayan)
-    const parentCategories = categoryData.filter(
-      (category) => !category.parent_id
-    );
-
+    const parentCategories = categoryData.filter((category) => !category.parent_id);
     return parentCategories.map((parentCategory) => {
-      // Bu əsas kateqoriyaya aid alt kateqoriyalar
-      const children = categoryData.filter((sub) =>
-        sub.parent_id?.some((p) => p.id === parentCategory.id)
-      );
-
-      return {
-        parent: parentCategory,
-        children: children,
-      };
+      const children = categoryData.filter((sub) => {
+        const parentRaw = sub.parent_id;
+        if (!parentRaw) return false;
+        let parents = [];
+        if (Array.isArray(parentRaw)) parents = parentRaw.map((p) => (typeof p === "object" ? p.id : p));
+        else if (typeof parentRaw === "object" && parentRaw.id != null) parents = [parentRaw.id];
+        else parents = [parentRaw];
+        const numericParents = parents.map((p) => (typeof p === "number" ? p : parseInt(p, 10))).filter(Boolean);
+        return numericParents.includes(parentCategory.id);
+      });
+      return { parent: parentCategory, children };
     });
   }, [categoryData]);
+
+  // helpers to render selected items (pull title from categoryData/brandsData)
+  const renderSelectedCategories = useMemo(() => {
+    return selectedCategoryIds.map((id) => {
+      const cat = categoryData.find((c) => Number(c.id) === Number(id));
+      return {
+        id,
+        title: cat ? cat.title : `Category ${id}`,
+      };
+    });
+  }, [selectedCategoryIds, categoryData]);
+
+  const renderSelectedBrands = useMemo(() => {
+    return selectedBrandIds.map((id) => {
+      const br = brandsDataFilter.find((b) => Number(b.id) === Number(id));
+      return {
+        id,
+        title: br ? br.title : `Brand ${id}`,
+      };
+    });
+  }, [selectedBrandIds, brandsDataFilter]);
+
+  const filteredBrands = useMemo(() => {
+    return brandsDataFilter.filter((b) => b.title.toLowerCase().includes(brandSearchTerm.toLowerCase()));
+  }, [brandsDataFilter, brandSearchTerm]);
 
   return (
     <div>
       <div className="container">
-        {/* Başlık */}
+        {/* Başlıq */}
         <div className="filterTop topper">
           <Link href="/">
             <h1>Adentta</h1>
@@ -1128,96 +2835,72 @@ export default function ProductsPageFilter({
           {searchText && (
             <div className="search-results-info">
               <p>
-                {t?.searchResults || "results found for"} "{searchText}" ({" "}
-                {currentPagination?.total || filteredProducts.length} )
+                {t?.searchResults || "results found for"} "{searchText}" ( {currentPagination?.total || filteredProducts.length} )
               </p>
             </div>
           )}
         </div>
 
         <div className="row">
-          {/* Sidebar Filter */}
+          {/* Sidebar */}
           <div className="xl-3 lg-3 md-3 sm-12">
             <div className="filter-container">
-              <button
-                className="filter-title"
-                onClick={() => setIsMobileFilterOpen(!isMobileFilterOpen)}
-              >
+              <button className="filter-title" onClick={() => setIsMobileFilterOpen(!isMobileFilterOpen)}>
                 {t?.productsPageFilterTitle || "Filter"}
               </button>
 
-              {/* Seçilmiş kategori ve markalar - Desktop */}
+              {/* Selected filters - desktop */}
               <div className="selectedFilter desktop-only">
-                {selectedCategories.map((cat) => (
+                {renderSelectedCategories.map((cat) => (
                   <div className="selectedFilterInner" key={`cat-${cat.id}`}>
-                    <span onClick={() => handleCategoryToggle(cat)}>×</span>
+                    <span onClick={() => handleCategoryToggleById(cat.id)}>×</span>
                     <p>{cat.title}</p>
                   </div>
                 ))}
-                {selectedBrands.map((br) => (
+                {renderSelectedBrands.map((br) => (
                   <div className="selectedFilterInner" key={`brand-${br.id}`}>
-                    <span onClick={() => handleBrandToggle(br)}>×</span>
+                    <span onClick={() => handleBrandToggleById(br.id)}>×</span>
                     <p>{br.title}</p>
                   </div>
                 ))}
               </div>
 
-              <div
-                className={`filter-panel ${isMobileFilterOpen ? "active" : ""}`}
-              >
-                <button className="filter-titless">
-                  {t?.productsPageFilterTitle || "Filter"}
-                </button>
+              <div className={`filter-panel ${isMobileFilterOpen ? "active" : ""}`}>
+                <button className="filter-titless">{t?.productsPageFilterTitle || "Filter"}</button>
 
-                {/* Seçilmiş kategori ve markalar - Mobile */}
+                {/* Selected - mobile */}
                 <div className="selectedFilter mobile-only">
-                  {selectedCategories.map((cat) => (
+                  {renderSelectedCategories.map((cat) => (
                     <div className="selectedFilterInner" key={`cat-${cat.id}`}>
-                      <span onClick={() => handleCategoryToggle(cat)}>×</span>
+                      <span onClick={() => handleCategoryToggleById(cat.id)}>×</span>
                       <p>{cat.title}</p>
                     </div>
                   ))}
-                  {selectedBrands.map((br) => (
+                  {renderSelectedBrands.map((br) => (
                     <div className="selectedFilterInner" key={`brand-${br.id}`}>
-                      <span onClick={() => handleBrandToggle(br)}>×</span>
+                      <span onClick={() => handleBrandToggleById(br.id)}>×</span>
                       <p>{br.title}</p>
                     </div>
                   ))}
                 </div>
 
-                <button
-                  className="close-btn"
-                  onClick={() => setIsMobileFilterOpen(false)}
-                >
+                <button className="close-btn" onClick={() => setIsMobileFilterOpen(false)}>
                   <img src="/icons/popupCloseIcon.svg" alt="close" />
                 </button>
 
-                <div className="lineFiltered"></div>
+                <div className="lineFiltered" />
 
-                {/* Category Accordion - YENİ QRUPLAŞMA */}
-                <FilterAccordion
-                  title={t?.productsPageFilterCategoryTitle || "Category"}
-                >
-                  <ul
-                    style={{
-                      maxHeight: "300px",
-                      overflowY: "auto",
-                      paddingRight: "4px",
-                    }}
-                  >
+                {/* Categories */}
+                <FilterAccordion title={t?.productsPageFilterCategoryTitle || "Category"}>
+                  <ul style={{ maxHeight: "300px", overflowY: "auto", paddingRight: "4px" }}>
                     {groupedCategories.map(({ parent, children }) => {
-                      const parentProductCount = getProductCountForCategory(
-                        parent.id
-                      );
-                      const isParentSelected = selectedCategories.some(
-                        (c) => c.id === parent.id
-                      );
+                      const parentProductCount = getProductCountForCategory(parent.id);
+                      const isParentSelected = selectedCategoryIds.some((c) => Number(c) === Number(parent.id));
 
                       return (
                         <React.Fragment key={parent.id}>
-                          {/* Əsas Kateqoriya */}
                           <li
-                            onClick={() => handleCategoryToggle(parent)}
+                            onClick={() => handleCategoryToggleById(parent.id)}
                             style={{
                               cursor: "pointer",
                               display: "flex",
@@ -1231,30 +2914,23 @@ export default function ProductsPageFilter({
                             <p>({parentProductCount})</p>
                           </li>
 
-                          {/* Alt Kateqoriyalar */}
                           {children.map((child) => {
-                            const childProductCount =
-                              getProductCountForCategory(child.id);
-                            const isChildSelected = selectedCategories.some(
-                              (c) => c.id === child.id
-                            );
-
+                            const childProductCount = getProductCountForCategory(child.id);
+                            const isChildSelected = selectedCategoryIds.some((c) => Number(c) === Number(child.id));
                             return (
                               <li
                                 key={child.id}
-                                onClick={() => handleCategoryToggle(child)}
+                                onClick={() => handleCategoryToggleById(child.id)}
                                 style={{
                                   cursor: "pointer",
                                   display: "flex",
                                   alignItems: "center",
                                   gap: "0.3rem",
-                                  fontWeight: isChildSelected
-                                    ? "bold"
-                                    : "normal",
-                                  marginLeft: "15px", // Soldan məsafə
-                                  fontSize: "1.3rem", // Kiçik şrift
+                                  fontWeight: isChildSelected ? "bold" : "normal",
+                                  marginLeft: "15px",
+                                  fontSize: "1.3rem",
                                   marginBottom: "8px",
-                                  color: "#666", // Daha açıq rəng
+                                  color: "#666",
                                 }}
                               >
                                 <span>{child.title}</span>
@@ -1268,35 +2944,19 @@ export default function ProductsPageFilter({
                   </ul>
                 </FilterAccordion>
 
-                {/* Brand Accordion */}
-                <FilterAccordion
-                  title={t?.productsPageFilterBrandsTitle || "Brands"}
-                >
+                {/* Brands */}
+                <FilterAccordion title={t?.productsPageFilterBrandsTitle || "Brands"}>
                   <div className="filteredSearch">
                     <img src="/icons/searchIcon.svg" alt="" />
-                    <input
-                      className="filterSrch"
-                      type="text"
-                      placeholder={t?.searchText || "Search..."}
-                      value={brandSearchTerm}
-                      onChange={(e) => setBrandSearchTerm(e.target.value)}
-                    />
+                    <input className="filterSrch" type="text" placeholder={t?.searchText || "Search..."} value={brandSearchTerm} onChange={(e) => setBrandSearchTerm(e.target.value)} />
                   </div>
-                  <ul
-                    style={{
-                      maxHeight: "250px",
-                      overflowY: "auto",
-                      paddingRight: "4px",
-                    }}
-                  >
+                  <ul style={{ maxHeight: "250px", overflowY: "auto", paddingRight: "4px" }}>
                     {filteredBrands.map((br) => {
-                      const isSelected = selectedBrands.some(
-                        (b) => b.id === br.id
-                      );
+                      const isSelected = selectedBrandIds.some((b) => Number(b) === Number(br.id));
                       return (
                         <li
                           key={br.id}
-                          onClick={() => handleBrandToggle(br)}
+                          onClick={() => handleBrandToggleById(br.id)}
                           style={{
                             cursor: "pointer",
                             display: "flex",
@@ -1305,11 +2965,7 @@ export default function ProductsPageFilter({
                             fontWeight: isSelected ? "bold" : "normal",
                           }}
                         >
-                          <input
-                            type="checkbox"
-                            checked={isSelected}
-                            readOnly
-                          />
+                          <input type="checkbox" checked={isSelected} readOnly />
                           <span>{br.title}</span>
                         </li>
                       );
@@ -1317,11 +2973,7 @@ export default function ProductsPageFilter({
                   </ul>
                 </FilterAccordion>
 
-                {/* Mobile Apply Button */}
-                <div
-                  className="applyBTN flex items-center mt-4 justify-center"
-                  onClick={() => setIsMobileFilterOpen(false)}
-                >
+                <div className="applyBTN flex items-center mt-4 justify-center" onClick={() => setIsMobileFilterOpen(false)}>
                   <ApplyBTN t={t} />
                 </div>
               </div>
@@ -1334,11 +2986,7 @@ export default function ProductsPageFilter({
               <div className="productPageSorting">
                 <div className="productPageSortingInner">
                   <span>{t?.sortBy || "Sort by"}</span>
-                  <ReactSelect
-                    t={t}
-                    value={sortOption}
-                    onChange={setSortOption}
-                  />
+                  <ReactSelect t={t} value={sortOption} onChange={setSortOption} />
                 </div>
               </div>
 
@@ -1348,109 +2996,54 @@ export default function ProductsPageFilter({
                     <div className="loader" />
                   </div>
                 ) : (
-                  sortedProducts.map((d) => (
-                    <div key={d.id} className="xl-4 lg-4 md-6 sm-6">
-                      <Link
-                        href={`/products/${slugify(d.title)}-${d.id}`}
-                        className="block"
-                      >
-                        <div className="homePageProductCardContent">
-                          <div className="homePageProCardImgs">
-                            <div className="homePageProductCardContentImage">
-                              <img
-                                src={`https://admin.adentta.az/storage${d.image}`}
-                                alt={d.title}
-                              />
-                            </div>
-                          </div>
-                          <div className="homePageProductCardContentInner">
-                            <div className="homePageProductCardContentText">
-                              <span>{d.title}</span>
-                            </div>
-                            <div className="price">
-                              <div className="priceItem">
-                                <strong id="prices">{d.price}</strong>
-                                <Manat />
-                              </div>
-                            </div>
-                          </div>
-                          <div className="homePageProductCardContentBottom">
-                            <span>{t?.learnMore || "Learn More"}</span>
-                            <img src="/icons/arrowTopRight.svg" alt="" />
-                          </div>
-                        </div>
-                      </Link>
-                    </div>
-                  ))
+                  sortedProducts.map((d) => <ProductCard key={d.id} product={d} t={t} />)
                 )}
               </div>
             </div>
-            <div ref={loadMoreRef} style={{ height: "1px" }} />
+
+            {/* YENİ: Loading trigger elementi daha aşağıda yerləşdirildi */}
+            {!isLoading && sortedProducts.length > 0 && (
+              <div ref={loadMoreRef} style={{ 
+                height: "20px", 
+                margin: "20px 0",
+                visibility: "hidden" 
+              }} />
+            )}
+            
+            {/* YENİ: Loading state daha yaxşı göstərilir */}
             {isLoadingMore && (
-              <div className="loader-container" style={{ margin: "1rem 0" }}>
+              <div className="loading-more-container">
                 <div className="loader" />
               </div>
             )}
           </div>
         </div>
 
-        {/* Dinamik meta və toggle bölmesi */}
+        {/* Description */}
         <div className="productsPageDescription">
-          <h1>
-            {categoryPageTitle
-              ? categoryPageTitle
-              : t?.productsPageCeoDescription ||
-                "Ceo description - Addenta product category"}
-          </h1>
+          <h1>{categoryPageTitle ? categoryPageTitle : t?.productsPageCeoDescription || "Ceo description - Addenta product category"}</h1>
 
           {showDetails && (
-            <div
-              className="productsPageDetailsCEO"
-              style={{ marginTop: "2rem" }}
-            >
-              <div
-                className="page-description-content"
-                dangerouslySetInnerHTML={{
-                  __html: categoryPageDescription || "",
-                }}
-              />
+            <div className="productsPageDetailsCEO" style={{ marginTop: "2rem" }}>
+              <div className="page-description-content" dangerouslySetInnerHTML={{ __html: categoryPageDescription || "" }} />
             </div>
           )}
 
-          <div
-            className="productsPageDescriptionLink"
-            style={{ marginTop: "1rem" }}
-          >
+          <div className="productsPageDescriptionLink" style={{ marginTop: "1rem" }}>
             <a
               href="#"
               onClick={(e) => {
                 e.preventDefault();
                 setShowDetails((prev) => !prev);
               }}
-              style={{
-                display: "inline-flex",
-                alignItems: "center",
-                cursor: "pointer",
-                textDecoration: "none",
-              }}
+              style={{ display: "inline-flex", alignItems: "center", cursor: "pointer", textDecoration: "none" }}
             >
-              {showDetails
-                ? t?.hideDetailsBtn || "Hide"
-                : t?.seeMoreBtn || "See more"}
-              <img
-                src="/icons/rightDown.svg"
-                alt=""
-                style={{
-                  marginLeft: "0.25rem",
-                  transform: showDetails ? "rotate(180deg)" : "none",
-                  transition: "transform 0.2s",
-                }}
-              />
+              {showDetails ? t?.hideDetailsBtn || "Hide" : t?.seeMoreBtn || "See more"}
+              <img src="/icons/rightDown.svg" alt="" style={{ marginLeft: "0.25rem", transform: showDetails ? "rotate(180deg)" : "none", transition: "transform 0.2s" }} />
             </a>
           </div>
         </div>
 
-        {/* style jsx */}
         <style jsx>{`
           .loader-container {
             width: 100% !important;
@@ -1460,6 +3053,17 @@ export default function ProductsPageFilter({
             align-items: center;
             justify-content: center;
             padding: 5rem auto;
+          }
+          .loading-more-container {
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem 0;
+            margin: 2rem 0;
+            // background: rgba(152, 180, 222, 0.05);
+            border-radius: 8px;
           }
           .loader {
             border: 5px solid #98b4de;
@@ -1489,6 +3093,8 @@ export default function ProductsPageFilter({
     </div>
   );
 }
+// ? EN KRAL PADISAH SENSIN ASLANIM
+// ! DWAYNO JONSHON 15IFJR
 
 
 
@@ -1511,7 +3117,48 @@ export default function ProductsPageFilter({
 
 
 
-// ! sen kisisen manaf
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// ! sen kisisen manaf COX KOHNE KODDUR BU
 // // File: components/ProductsPageFilter.jsx
 // "use client";
 // import Link from "next/link";
