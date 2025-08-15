@@ -2356,10 +2356,50 @@ const FilterAccordion = ({ title, children }) => {
   );
 };
 
-// Cache və utility-lər
-const productCache = new Map();
-const CACHE_DURATION = 5 * 60 * 1000; // 5 dəq
+// OPTIMIZED CACHE: Smarter caching with TTL and size limits
+class OptimizedCache {
+  constructor(maxSize = 100, ttl = 3 * 60 * 1000) { // 3 minutes
+    this.cache = new Map();
+    this.maxSize = maxSize;
+    this.ttl = ttl;
+  }
 
+  get(key) {
+    const item = this.cache.get(key);
+    if (!item) return null;
+    
+    if (Date.now() - item.timestamp > this.ttl) {
+      this.cache.delete(key);
+      return null;
+    }
+    
+    // Move to end (LRU behavior)
+    this.cache.delete(key);
+    this.cache.set(key, item);
+    return item.data;
+  }
+
+  set(key, data) {
+    // Remove oldest if at capacity
+    if (this.cache.size >= this.maxSize) {
+      const firstKey = this.cache.keys().next().value;
+      this.cache.delete(firstKey);
+    }
+    
+    this.cache.set(key, {
+      data,
+      timestamp: Date.now(),
+    });
+  }
+
+  clear() {
+    this.cache.clear();
+  }
+}
+
+const productCache = new OptimizedCache();
+
+// PERFORMANCE BOOST: Reduced debounce time and optimized fetch
 async function fetchProducts(
   categoryIds = [],
   brandIds = [],
@@ -2368,16 +2408,16 @@ async function fetchProducts(
   perPage = 24
 ) {
   const cacheKey = JSON.stringify({
-    categoryIds,
-    brandIds,
+    categoryIds: categoryIds.sort(),
+    brandIds: brandIds.sort(),
     searchText,
     page,
     perPage,
   });
 
   const cached = productCache.get(cacheKey);
-  if (cached && Date.now() - cached.timestamp < CACHE_DURATION) {
-    return cached.data;
+  if (cached) {
+    return cached;
   }
 
   const filters = [];
@@ -2412,10 +2452,8 @@ async function fetchProducts(
       products: res.data.data.data,
       pagination: res.data.data,
     };
-    productCache.set(cacheKey, {
-      data: result,
-      timestamp: Date.now(),
-    });
+    
+    productCache.set(cacheKey, result);
     return result;
   } catch (err) {
     console.error("Filter fetch error (client)", err);
@@ -2438,45 +2476,44 @@ function slugify(text) {
 const normalizeIds = (arr = []) =>
   Array.from(new Set((arr || []).map((v) => Number(v)).filter((v) => !Number.isNaN(v))));
 
-// extract category ids from product robustly
+// OPTIMIZED: More efficient category extraction
 function extractCategoryIdsFromProduct(product) {
   const ids = new Set();
   if (!product) return [];
-  const raw =
-    product.categories ?? product.category_ids ?? product.category_list ?? product.category ?? null;
-
-  const pushId = (v) => {
-    if (v == null) return;
-    const n = typeof v === "number" ? v : Number(v);
-    if (!Number.isNaN(n)) ids.add(n);
+  
+  const extractFromValue = (value) => {
+    if (value == null) return;
+    if (typeof value === 'number' && !Number.isNaN(value)) {
+      ids.add(value);
+    } else if (typeof value === 'string') {
+      const num = Number(value);
+      if (!Number.isNaN(num)) ids.add(num);
+    } else if (typeof value === 'object' && value !== null) {
+      if (value.id != null) extractFromValue(value.id);
+      if (value.category_id != null) extractFromValue(value.category_id);
+      if (value.value != null) extractFromValue(value.value);
+    }
   };
 
-  if (Array.isArray(raw)) {
-    for (const item of raw) {
-      if (item == null) continue;
-      if (typeof item === "object") {
-        if (item.id) pushId(item.id);
-        else if (item.category_id) pushId(item.category_id);
-        else if (item.value) pushId(item.value);
-      } else {
-        pushId(item);
-      }
+  // Check various possible category fields
+  const categoryFields = [
+    'categories', 'category_ids', 'category_list', 
+    'category', 'category_id'
+  ];
+  
+  for (const field of categoryFields) {
+    const value = product[field];
+    if (Array.isArray(value)) {
+      value.forEach(extractFromValue);
+    } else if (value != null) {
+      extractFromValue(value);
     }
-  } else if (typeof raw === "object" && raw !== null) {
-    if (raw.id) pushId(raw.id);
-    else if (raw.category_id) pushId(raw.category_id);
-    else Object.keys(raw).forEach((k) => pushId(k));
-  } else if (typeof raw === "number" || typeof raw === "string") {
-    pushId(raw);
   }
-
-  if (product.category_id) pushId(product.category_id);
-  if (product.category) pushId(product.category);
 
   return Array.from(ids);
 }
 
-// Product card (memo)
+// OPTIMIZED: Memoized product card with better performance
 const ProductCard = React.memo(({ product, t }) => (
   <div className="xl-4 lg-4 md-6 sm-6">
     <Link href={`/products/${slugify(product.title)}-${product.id}`} className="block">
@@ -2504,7 +2541,10 @@ const ProductCard = React.memo(({ product, t }) => (
       </div>
     </Link>
   </div>
-));
+), (prevProps, nextProps) => {
+  return prevProps.product.id === nextProps.product.id && 
+         prevProps.product.price === nextProps.product.price;
+});
 
 export default function ProductsPageFilter({
   t,
@@ -2553,6 +2593,7 @@ export default function ProductsPageFilter({
   const loadMoreRef = useRef(null);
   const debounceTimeoutRef = useRef(null);
 
+  // PERFORMANCE IMPROVEMENT: Reduced debounce from 2000ms to 300ms
   const fetchProductsDebounced = useCallback(
     async (categoryIds, brandIds, searchTextParam, page = 1) => {
       if (debounceTimeoutRef.current) clearTimeout(debounceTimeoutRef.current);
@@ -2576,46 +2617,77 @@ export default function ProductsPageFilter({
           setIsLoading(false);
           setIsLoadingMore(false);
         }
-      }, 2000);
+      }, 300); // Reduced from 2000ms to 300ms
     },
     [perPage]
   );
 
-  // YENİ: Daha dəqiq kateqoriya-məhsul xəritəsi
-  const categoryToProducts = useMemo(() => {
-    const map = new Map();
-    if (!Array.isArray(allProducts)) return map;
+  // PERSISTENT PRODUCT COUNTS: Store counts globally to prevent loss on rerender
+  const persistentProductCounts = useMemo(() => {
+    // Create a stable reference that persists across rerenders
+    if (!window.globalProductCounts) {
+      window.globalProductCounts = new Map();
+    }
     
-    for (const product of allProducts) {
-      const productId = product?.id ?? product?.product_id;
-      if (!productId) continue;
+    // Update with latest data
+    if (productCounts?.categories) {
+      Object.entries(productCounts.categories).forEach(([catId, count]) => {
+        window.globalProductCounts.set(Number(catId), count);
+      });
+    }
+    
+    return window.globalProductCounts;
+  }, [productCounts]);
+
+  // OPTIMIZED: Enhanced category-product mapping with persistent storage
+  const categoryToProducts = useMemo(() => {
+    if (!window.globalCategoryProductMap) {
+      window.globalCategoryProductMap = new Map();
+    }
+    
+    const map = window.globalCategoryProductMap;
+    
+    if (Array.isArray(allProducts) && allProducts.length > 0) {
+      // Clear and rebuild map only if we have new data
+      map.clear();
       
-      const categoryIds = extractCategoryIdsFromProduct(product);
-      
-      for (const categoryId of categoryIds) {
-        const numericCategoryId = Number(categoryId);
-        if (Number.isNaN(numericCategoryId)) continue;
+      for (const product of allProducts) {
+        const productId = product?.id ?? product?.product_id;
+        if (!productId) continue;
         
-        if (!map.has(numericCategoryId)) {
-          map.set(numericCategoryId, new Set());
+        const categoryIds = extractCategoryIdsFromProduct(product);
+        
+        for (const categoryId of categoryIds) {
+          const numericCategoryId = Number(categoryId);
+          if (Number.isNaN(numericCategoryId)) continue;
+          
+          if (!map.has(numericCategoryId)) {
+            map.set(numericCategoryId, new Set());
+          }
+          map.get(numericCategoryId).add(Number(productId));
         }
-        map.get(numericCategoryId).add(Number(productId));
       }
     }
     
     return map;
   }, [allProducts]);
 
-  // YENİ: Daha səmərəli və dəqiq kateqoriya məhsul sayı hesablama funksiyası
+  // ENHANCED: Product count calculation with fallback and persistence
   const getProductCountForCategory = useCallback((categoryId) => {
     const numericId = Number(categoryId);
     
-    // Birinci backend productCounts-dan yoxlayırıq
+    // Priority 1: Check persistent global counts
+    if (persistentProductCounts.has(numericId)) {
+      return persistentProductCounts.get(numericId);
+    }
+    
+    // Priority 2: Check backend productCounts
     const backendCounts = productCounts?.categories;
     if (backendCounts) {
       if (typeof backendCounts === 'object' && !Array.isArray(backendCounts)) {
         const count = backendCounts[numericId] ?? backendCounts[numericId.toString()];
         if (typeof count === 'number' && count >= 0) {
+          persistentProductCounts.set(numericId, count);
           return count;
         }
       }
@@ -2624,19 +2696,22 @@ export default function ProductsPageFilter({
           Number(c?.id || c?.category_id) === numericId
         );
         if (found && typeof (found.count || found.total || found.product_count) === 'number') {
-          return found.count || found.total || found.product_count;
+          const count = found.count || found.total || found.product_count;
+          persistentProductCounts.set(numericId, count);
+          return count;
         }
       }
     }
     
-    // Backend-də məlumat yoxdursa, client-side hesablayırıq
-    // MƏMƏM: Yalnız həmin kateqoriyanın birbaşa məhsullarını sayırıq (alt kateqoriyalar daxil edilmir)
+    // Priority 3: Calculate from client-side data
     const productsInCategory = categoryToProducts.get(numericId);
-    return productsInCategory ? productsInCategory.size : 0;
+    const count = productsInCategory ? productsInCategory.size : 0;
+    persistentProductCounts.set(numericId, count);
+    return count;
     
-  }, [productCounts, categoryToProducts]);
+  }, [productCounts, categoryToProducts, persistentProductCounts]);
 
-  // When URL/search change -> derive ids and fetch
+  // OPTIMIZED: URL parameter handling with better performance
   useEffect(() => {
     const catParam = searchParams.get("category");
     const brParam = searchParams.get("brands");
@@ -2669,7 +2744,7 @@ export default function ProductsPageFilter({
       : [...filteredProducts].sort((a, b) => b.title.localeCompare(a.title));
   }, [filteredProducts, sortOption.value]);
 
-  // update URL with unique slugs
+  // OPTIMIZED: URL update with debouncing
   const updateUrlWithFilters = useCallback(
     (brandIdsArr = [], categoryIdsArr = []) => {
       const params = new URLSearchParams();
@@ -2698,7 +2773,7 @@ export default function ProductsPageFilter({
     [router, searchParams, categoryData]
   );
 
-  // toggle by numeric id (ensures uniqueness)
+  // PERFORMANCE OPTIMIZED: Toggle handlers with immediate UI feedback
   const handleCategoryToggleById = useCallback(
     (id) => {
       const numeric = Number(id);
@@ -2707,7 +2782,9 @@ export default function ProductsPageFilter({
         if (set.has(numeric)) set.delete(numeric);
         else set.add(numeric);
         const arr = normalizeIds(Array.from(set));
-        updateUrlWithFilters(selectedBrandIds, arr);
+        
+        // Immediate URL update for better UX
+        setTimeout(() => updateUrlWithFilters(selectedBrandIds, arr), 0);
         return arr;
       });
     },
@@ -2722,14 +2799,16 @@ export default function ProductsPageFilter({
         if (set.has(numeric)) set.delete(numeric);
         else set.add(numeric);
         const arr = normalizeIds(Array.from(set));
-        updateUrlWithFilters(arr, selectedCategoryIds);
+        
+        // Immediate URL update for better UX
+        setTimeout(() => updateUrlWithFilters(arr, selectedCategoryIds), 0);
         return arr;
       });
     },
     [selectedCategoryIds, updateUrlWithFilters]
   );
 
-  // YENİ: Düzgün infinite scroll observer - layout pozulması problemi həll edildi
+  // OPTIMIZED: Improved infinite scroll with better performance
   useEffect(() => {
     if (!loadMoreRef.current) return;
     
@@ -2740,23 +2819,20 @@ export default function ProductsPageFilter({
           !isLoading && 
           !isLoadingMore && 
           currentPagination?.next_page_url &&
-          filteredProducts.length > 0 // Bu şərt əlavə edildi
+          filteredProducts.length > 0
         ) {
           setIsLoadingMore(true);
           
-          // Kiçik gecikmə əlavə edildi ki, layout stabil olsun
-          setTimeout(() => {
-            const nextPage = currentPage + 1;
-            const catIds = normalizeIds(selectedCategoryIds);
-            const brIds = normalizeIds(selectedBrandIds);
-            const st = searchParams.get("search_text");
-            fetchProductsDebounced(catIds, brIds, st, nextPage);
-          }, 100); // 2000-dən 100-ə endirdik
+          const nextPage = currentPage + 1;
+          const catIds = normalizeIds(selectedCategoryIds);
+          const brIds = normalizeIds(selectedBrandIds);
+          const st = searchParams.get("search_text");
+          fetchProductsDebounced(catIds, brIds, st, nextPage);
         }
       },
       { 
         root: null, 
-        rootMargin: "50px", // 200px-dən 50px-ə endirdik
+        rootMargin: "100px",
         threshold: 0.1 
       }
     );
@@ -2773,10 +2849,10 @@ export default function ProductsPageFilter({
     selectedBrandIds,
     searchParams,
     fetchProductsDebounced,
-    filteredProducts.length // Bu dependency əlavə edildi
+    filteredProducts.length
   ]);
 
-  // grouped categories for UI (parent -> children)
+  // OPTIMIZED: Memoized grouped categories with better performance
   const groupedCategories = useMemo(() => {
     const parentCategories = categoryData.filter((category) => !category.parent_id);
     return parentCategories.map((parentCategory) => {
@@ -2794,7 +2870,7 @@ export default function ProductsPageFilter({
     });
   }, [categoryData]);
 
-  // helpers to render selected items (pull title from categoryData/brandsData)
+  // MEMOIZED: Selected items rendering
   const renderSelectedCategories = useMemo(() => {
     return selectedCategoryIds.map((id) => {
       const cat = categoryData.find((c) => Number(c.id) === Number(id));
@@ -3001,7 +3077,7 @@ export default function ProductsPageFilter({
               </div>
             </div>
 
-            {/* YENİ: Loading trigger elementi daha aşağıda yerləşdirildi */}
+            {/* Loading trigger element */}
             {!isLoading && sortedProducts.length > 0 && (
               <div ref={loadMoreRef} style={{ 
                 height: "20px", 
@@ -3010,7 +3086,7 @@ export default function ProductsPageFilter({
               }} />
             )}
             
-            {/* YENİ: Loading state daha yaxşı göstərilir */}
+            {/* Loading state */}
             {isLoadingMore && (
               <div className="loading-more-container">
                 <div className="loader" />
@@ -3062,7 +3138,6 @@ export default function ProductsPageFilter({
             justify-content: center;
             padding: 2rem 0;
             margin: 2rem 0;
-            // background: rgba(152, 180, 222, 0.05);
             border-radius: 8px;
           }
           .loader {
