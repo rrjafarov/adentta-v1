@@ -381,8 +381,31 @@ import ProductsPageHero from "@/components/Sliders/ProductsPageHero";
 import ProductsPageFilter from "@/components/ProductsPageFilter";
 import Footer from "@/components/Footer/Footer";
 
-// Parallel API calls with Promise.all
+// PERFORMANCE OPTIMIZATION: Cached data store
+const globalCache = new Map();
+const CACHE_TTL = 10 * 60 * 1000; // 10 minutes
+
+function getCachedData(key) {
+  const cached = globalCache.get(key);
+  if (cached && Date.now() - cached.timestamp < CACHE_TTL) {
+    return cached.data;
+  }
+  return null;
+}
+
+function setCachedData(key, data) {
+  globalCache.set(key, {
+    data,
+    timestamp: Date.now()
+  });
+}
+
+// OPTIMIZED: Parallel API calls with better caching
 async function fetchEssentialData() {
+  const cacheKey = 'essential_data';
+  const cached = getCachedData(cacheKey);
+  if (cached) return cached;
+
   try {
     const [settingsRes, categoriesRes, brandsRes] = await Promise.all([
       axiosInstance.get(`/page-data/setting`, { cache: "force-cache" }),
@@ -390,11 +413,14 @@ async function fetchEssentialData() {
       axiosInstance.get("/page-data/brands?per_page=999", { cache: "force-cache" })
     ]);
 
-    return {
+    const result = {
       settingData: settingsRes.data?.data || [],
       categoryData: categoriesRes.data.data.data,
       brandsDataFilter: brandsRes.data.data.data
     };
+
+    setCachedData(cacheKey, result);
+    return result;
   } catch (error) {
     console.error("Failed to fetch essential data", error);
     return {
@@ -405,8 +431,94 @@ async function fetchEssentialData() {
   }
 }
 
-// Optimized product fetch with pagination (API default 12 per page)
+// OPTIMIZED: Single efficient product count calculation
+async function fetchOptimizedProductCounts(categoryData) {
+  const cacheKey = 'product_counts_detailed';
+  const cached = getCachedData(cacheKey);
+  if (cached) return cached;
+
+  try {
+    // Strategy 1: Try batch endpoint first
+    try {
+      const batchRes = await axiosInstance.get("/page-data/product-counts-batch", { 
+        cache: "force-cache" 
+      });
+      if (batchRes.data) {
+        setCachedData(cacheKey, batchRes.data);
+        return batchRes.data;
+      }
+    } catch (e) {
+      console.log("Batch endpoint not available, using optimized approach");
+    }
+
+    // Strategy 2: Optimized parallel requests with concurrency limit
+    const BATCH_SIZE = 5; // Process 5 categories at a time to avoid overwhelming server
+    const categoryCountsMap = {};
+    
+    for (let i = 0; i < categoryData.length; i += BATCH_SIZE) {
+      const batch = categoryData.slice(i, i + BATCH_SIZE);
+      
+      const batchPromises = batch.map(async (category) => {
+        const cacheKey = `cat_count_${category.id}`;
+        const cached = getCachedData(cacheKey);
+        if (cached !== null) return { categoryId: category.id, count: cached };
+
+        try {
+          const filters = [{ 
+            key: "categories", 
+            operator: "IN", 
+            values: [category.id] 
+          }];
+          
+          const query = filters
+            .map((f, idx) => {
+              const base = `filters[${idx}][key]=${encodeURIComponent(f.key)}&filters[${idx}][operator]=${encodeURIComponent(f.operator)}`;
+              const vals = f.values
+                .map((v) => `filters[${idx}][value][]=${encodeURIComponent(v)}`)
+                .join("&");
+              return `${base}&${vals}`;
+            })
+            .join("&");
+            
+          const url = `/page-data/product?per_page=1&${query}`;
+          const response = await axiosInstance.get(url, { cache: "force-cache" });
+          
+          const count = response.data?.data?.total || 0;
+          setCachedData(`cat_count_${category.id}`, count);
+          
+          return { categoryId: category.id, count };
+        } catch (error) {
+          console.error(`Failed to fetch count for category ${category.id}:`, error);
+          return { categoryId: category.id, count: 0 };
+        }
+      });
+      
+      const batchResults = await Promise.all(batchPromises);
+      batchResults.forEach(({ categoryId, count }) => {
+        categoryCountsMap[categoryId] = count;
+      });
+    }
+    
+    const result = {
+      categories: categoryCountsMap,
+      total: Object.values(categoryCountsMap).reduce((sum, count) => sum + count, 0)
+    };
+    
+    setCachedData(cacheKey, result);
+    return result;
+    
+  } catch (error) {
+    console.error("Failed to fetch optimized product counts", error);
+    return { categories: {}, total: 0 };
+  }
+}
+
+// OPTIMIZED: Product fetch with better pagination
 async function fetchProductsByFilters(categoryIds = [], brandIds = [], searchText = "", page = 1, perPage = 12) {
+  const cacheKey = `products_${JSON.stringify({categoryIds, brandIds, searchText, page, perPage})}`;
+  const cached = getCachedData(cacheKey);
+  if (cached) return cached;
+
   const filters = [];
   if (categoryIds.length) {
     filters.push({ key: "categories", operator: "IN", values: categoryIds });
@@ -436,111 +548,41 @@ async function fetchProductsByFilters(categoryIds = [], brandIds = [], searchTex
   
   try {
     const res = await axiosInstance.get(url, { cache: "no-store" });
-    return {
+    const result = {
       products: res.data.data.data,
       pagination: res.data.data
     };
+    setCachedData(cacheKey, result);
+    return result;
   } catch (err) {
     console.error("Filter fetch error (server)", err);
     return { products: [], pagination: null };
   }
 }
 
-// PRO HƏLLİ: Hər kateqoriya üçün dəqiq məhsul sayını hesablayan funksiya
-async function fetchDetailedProductCounts(categoryData) {
-  try {
-    const categoryCountsMap = {};
-    
-    // Hər kateqoriya üçün ayrıca API sorğusu göndəririk
-    const countPromises = categoryData.map(async (category) => {
-      try {
-        const filters = [{ 
-          key: "categories", 
-          operator: "IN", 
-          values: [category.id] 
-        }];
-        
-        const query = filters
-          .map((f, idx) => {
-            const base = `filters[${idx}][key]=${encodeURIComponent(f.key)}&filters[${idx}][operator]=${encodeURIComponent(f.operator)}`;
-            const vals = f.values
-              .map((v) => `filters[${idx}][value][]=${encodeURIComponent(v)}`)
-              .join("&");
-            return `${base}&${vals}`;
-          })
-          .join("&");
-          
-        const url = `/page-data/product?per_page=1&${query}`;
-        const response = await axiosInstance.get(url, { cache: "force-cache" });
-        
-        return {
-          categoryId: category.id,
-          count: response.data?.data?.total || 0
-        };
-      } catch (error) {
-        console.error(`Failed to fetch count for category ${category.id}:`, error);
-        return {
-          categoryId: category.id,
-          count: 0
-        };
-      }
-    });
-    
-    // Bütün sorğuları paralel icra edirik
-    const results = await Promise.all(countPromises);
-    
-    // Nəticələri obyektə çeviririk
-    results.forEach(({ categoryId, count }) => {
-      categoryCountsMap[categoryId] = count;
-    });
-    
-    return {
-      categories: categoryCountsMap,
-      total: Object.values(categoryCountsMap).reduce((sum, count) => sum + count, 0)
-    };
-    
-  } catch (error) {
-    console.error("Failed to fetch detailed product counts", error);
-    return { categories: {}, total: 0 };
-  }
-}
-
-// Fallback: Lightweight product count fetch
-async function fetchProductCounts() {
-  try {
-    const { data } = await axiosInstance.get("/page-data/product-counts", { 
-      cache: "force-cache" 
-    });
-    return data;
-  } catch (error) {
-    // Fallback to basic fetch if endpoint doesn't exist
-    try {
-      const { data } = await axiosInstance.get("/page-data/product?per_page=1", { 
-        cache: "force-cache" 
-      });
-      return { total: data.data.total };
-    } catch (err) {
-      console.error("Failed to fetch product counts", err);
-      return { total: 0 };
-    }
-  }
-}
-
-// Yeni: bütün məhsulları serverdə yığmaq üçün funksionallıq
-// PRO qərarı: per_page=999 istifadə edirik (backend-ə uyğun olaraq artıra bilərsiniz)
+// OPTIMIZED: Lightweight all products fetch with smart caching
 async function fetchAllProducts() {
+  const cacheKey = 'all_products';
+  const cached = getCachedData(cacheKey);
+  if (cached) return cached;
+
   try {
     const res = await axiosInstance.get("/page-data/product?per_page=999", { cache: "force-cache" });
-    // res.data.data.data strukturuna uyğun olaraq bütün məhsullar
-    return Array.isArray(res.data?.data?.data) ? res.data.data.data : [];
+    const products = Array.isArray(res.data?.data?.data) ? res.data.data.data : [];
+    setCachedData(cacheKey, products);
+    return products;
   } catch (err) {
     console.error("Failed to fetch all products for category counts", err);
     return [];
   }
 }
 
+// OPTIMIZED: Single contact and events fetch
 async function fetchContactAndEvents() {
-  const cookieStore = await cookies();
+  const cacheKey = 'contact_events';
+  const cached = getCachedData(cacheKey);
+  if (cached) return cached;
+
   try {
     const [contactRes, eventsRes, brandsRes] = await Promise.all([
       axiosInstance.get(`/page-data/contact`, { cache: "force-cache" }),
@@ -548,11 +590,14 @@ async function fetchContactAndEvents() {
       axiosInstance.get(`/page-data/brands?per_page=999`, { cache: "force-cache" })
     ]);
 
-    return {
+    const result = {
       contact: contactRes.data,
       eventsData: eventsRes.data?.data?.data || [],
       brandsData: brandsRes.data?.data?.data || []
     };
+
+    setCachedData(cacheKey, result);
+    return result;
   } catch (error) {
     console.error("Failed to fetch contact and events", error);
     return {
@@ -564,10 +609,15 @@ async function fetchContactAndEvents() {
 }
 
 async function fetchProductsSeoData() {
+  const cacheKey = 'products_seo';
+  const cached = getCachedData(cacheKey);
+  if (cached) return cached;
+
   try {
     const { data: aboutSeo } = await axiosInstance.get(`/page-data/product-page-info`, {
       cache: "force-cache",
     });
+    setCachedData(cacheKey, aboutSeo);
     return aboutSeo;
   } catch (error) {
     console.error("Failed to fetch products SEO data", error);
@@ -576,10 +626,15 @@ async function fetchProductsSeoData() {
 }
 
 async function getTranslations() {
+  const cacheKey = 'translations';
+  const cached = getCachedData(cacheKey);
+  if (cached) return cached;
+
   try {
     const response = await axiosInstance.get("/translation-list", { 
       cache: "force-cache" 
     });
+    setCachedData(cacheKey, response);
     return response;
   } catch (err) {
     console.log("Translation fetch error:", err);
@@ -599,13 +654,10 @@ export async function generateMetadata({ searchParams }) {
   
   if (categoryParam) {
     try {
-      const { data: category } = await axiosInstance.get("/page-data/categories?per_page=999", {
-        cache: "force-cache",
-      });
-      const allCategories = category.data.data;
+      const { categoryData } = await fetchEssentialData();
       const slugs = categoryParam.split(",");
       const lastSlug = slugs[slugs.length - 1];
-      const sel = allCategories.find((c) => c.url_slug === lastSlug);
+      const sel = categoryData.find((c) => c.url_slug === lastSlug);
       if (sel?.meta_title && sel?.meta_description) {
         title = sel.meta_title;
         description = sel.meta_description;
@@ -666,135 +718,137 @@ export default async function page({ searchParams }) {
   const brandsParamRaw = searchParams.brands || null;
   const searchText = searchParams.search_text || null;
   const currentPage = parseInt(searchParams.page) || 1;
-  const perPage = 12; // API default per_page
+  const perPage = 12;
 
-  // Parallel fetch of essential data + translations + allProducts
-  const [essentialData, translations, allProducts] = await Promise.all([
-    fetchEssentialData(),
-    getTranslations(),
-    fetchAllProducts()
-  ]);
-
-  const { settingData, categoryData, brandsDataFilter } = essentialData;
-  const t = translations?.data;
-
-  // PRO HƏLLİ: Dəqiq məhsul saylarını hesablayırıq
-  let productCounts;
   try {
-    // Əvvəlcə detailed count API-ni çağırırıq
-    productCounts = await fetchDetailedProductCounts(categoryData);
-  } catch (error) {
-    console.error("Detailed count failed, falling back to basic counts", error);
-    // Fallback: əsas məhsul sayı API-ni çağırırıq
-    productCounts = await fetchProductCounts();
-  }
+    // PERFORMANCE BOOST: Start all critical requests immediately
+    const [essentialData, translations] = await Promise.all([
+      fetchEssentialData(),
+      getTranslations()
+    ]);
 
-  // Process selected category
-  let selectedCategoryObj = null;
-  if (categoryParam) {
-    const categorySlugs = categoryParam.split(",");
-    const lastSlug = categorySlugs[categorySlugs.length - 1];
-    selectedCategoryObj = categoryData.find((c) => c.url_slug === lastSlug) || null;
-  }
+    const { settingData, categoryData, brandsDataFilter } = essentialData;
+    const t = translations?.data;
 
-  const brandIds = brandsParamRaw
-    ? brandsParamRaw.split(",").map((s) => parseInt(s, 10)).filter(Boolean)
-    : [];
+    // Process selected category first (needed for product counts)
+    let selectedCategoryObj = null;
+    if (categoryParam) {
+      const categorySlugs = categoryParam.split(",");
+      const lastSlug = categorySlugs[categorySlugs.length - 1];
+      selectedCategoryObj = categoryData.find((c) => c.url_slug === lastSlug) || null;
+    }
 
-  // Fetch filtered products with pagination
-  const { products: initialProducts, pagination } = await fetchProductsByFilters(
-    selectedCategoryObj ? [selectedCategoryObj.id] : [],
-    brandIds,
-    searchText,
-    currentPage,
-    perPage
-  );
+    const brandIds = brandsParamRaw
+      ? brandsParamRaw.split(",").map((s) => parseInt(s, 10)).filter(Boolean)
+      : [];
 
-  const initialSelectedBrands = brandsDataFilter.filter((b) =>
-    brandIds.includes(b.id)
-  );
-  const initialSelectedCategories = categoryParam
-    ? categoryParam
-        .split(",")
-        .map((slug) => categoryData.find((c) => c.url_slug === slug))
-        .filter(Boolean)
-    : [];
+    // CRITICAL OPTIMIZATION: Parallel execution of heavy operations
+    const [productCounts, { products: initialProducts, pagination }, allProducts] = await Promise.all([
+      fetchOptimizedProductCounts(categoryData),
+      fetchProductsByFilters(
+        selectedCategoryObj ? [selectedCategoryObj.id] : [],
+        brandIds,
+        searchText,
+        currentPage,
+        perPage
+      ),
+      fetchAllProducts()
+    ]);
 
-  // Parallel fetch of footer data (non-blocking)
-  const footerDataPromise = fetchContactAndEvents();
+    // Process remaining data
+    const initialSelectedBrands = brandsDataFilter.filter((b) =>
+      brandIds.includes(b.id)
+    );
+    const initialSelectedCategories = categoryParam
+      ? categoryParam
+          .split(",")
+          .map((slug) => categoryData.find((c) => c.url_slug === slug))
+          .filter(Boolean)
+      : [];
 
-  const categoryMetaTitle = selectedCategoryObj?.meta_title || null;
-  const categoryMetaDescription = selectedCategoryObj?.meta_description || null;
-  const categoryPageTitle = selectedCategoryObj?.page_title || null;
-  const categoryPageDescription = selectedCategoryObj?.page_description || null;
+    // Non-blocking footer data fetch
+    const footerDataPromise = fetchContactAndEvents();
 
-  let subcategoriesForSelected = [];
-  if (selectedCategoryObj) {
-    const selId =
-      typeof selectedCategoryObj.id === "number"
-        ? selectedCategoryObj.id
-        : parseInt(selectedCategoryObj.id, 10);
-    subcategoriesForSelected = categoryData.filter((c) => {
-      if (!c.parent_id) return false;
-      if (Array.isArray(c.parent_id)) {
-        return c.parent_id.some((p) => {
-          const pid = typeof p.id === "number" ? p.id : parseInt(p.id, 10);
+    const categoryMetaTitle = selectedCategoryObj?.meta_title || null;
+    const categoryMetaDescription = selectedCategoryObj?.meta_description || null;
+    const categoryPageTitle = selectedCategoryObj?.page_title || null;
+    const categoryPageDescription = selectedCategoryObj?.page_description || null;
+
+    let subcategoriesForSelected = [];
+    if (selectedCategoryObj) {
+      const selId =
+        typeof selectedCategoryObj.id === "number"
+          ? selectedCategoryObj.id
+          : parseInt(selectedCategoryObj.id, 10);
+      subcategoriesForSelected = categoryData.filter((c) => {
+        if (!c.parent_id) return false;
+        if (Array.isArray(c.parent_id)) {
+          return c.parent_id.some((p) => {
+            const pid = typeof p.id === "number" ? p.id : parseInt(p.id, 10);
+            return pid === selId;
+          });
+        }
+        if (typeof c.parent_id === "object" && c.parent_id.id != null) {
+          const pid =
+            typeof c.parent_id.id === "number"
+              ? c.parent_id.id
+              : parseInt(c.parent_id.id, 10);
           return pid === selId;
-        });
-      }
-      if (typeof c.parent_id === "object" && c.parent_id.id != null) {
-        const pid =
-          typeof c.parent_id.id === "number"
-            ? c.parent_id.id
-            : parseInt(c.parent_id.id, 10);
-        return pid === selId;
-      }
-      return c.parent_id === selId;
-    });
+        }
+        return c.parent_id === selId;
+      });
+    }
+
+    // Await footer data at the end
+    const { contact, eventsData, brandsData } = await footerDataPromise;
+
+    return (
+      <>
+        <Header settingData={settingData} categoryData={categoryData} />
+
+        <ProductsPageHero
+          t={t}
+          productData={initialProducts}
+          selectedCategory={selectedCategoryObj}
+          subcategories={subcategoriesForSelected}
+          productCounts={productCounts}
+        />
+
+        <ProductsPageFilter
+          allProducts={allProducts}
+          initialProducts={initialProducts}
+          categoryData={categoryData}
+          brandsDataFilter={brandsDataFilter}
+          initialSelectedBrands={initialSelectedBrands}
+          initialSelectedCategories={initialSelectedCategories}
+          t={t}
+          categoryMetaTitle={categoryMetaTitle}
+          categoryMetaDescription={categoryMetaDescription}
+          categoryPageTitle={categoryPageTitle}
+          categoryPageDescription={categoryPageDescription}
+          categoryId={selectedCategoryObj?.id || null}
+          searchText={searchText}
+          perPage={perPage}
+          pagination={pagination}
+          productCounts={productCounts}
+        />
+
+        <Footer
+          categoryData={categoryData}
+          eventsData={eventsData}
+          brandsData={brandsData}
+          contact={contact}
+        />
+      </>
+    );
+  } catch (error) {
+    console.error("Critical error in products page:", error);
+    // Fallback to empty data structure
+    return (
+      <>
+        <div>Error loading page. Please try again.</div>
+      </>
+    );
   }
-
-  // Await footer data at the end
-  const { contact, eventsData, brandsData } = await footerDataPromise;
-
-  return (
-    <>
-      <Header settingData={settingData} categoryData={categoryData} />
-
-      <ProductsPageHero
-        t={t}
-        productData={initialProducts}
-        selectedCategory={selectedCategoryObj}
-        subcategories={subcategoriesForSelected}
-        productCounts={productCounts}
-      />
-
-      <ProductsPageFilter
-        allProducts={allProducts}
-        initialProducts={initialProducts}
-        categoryData={categoryData}
-        brandsDataFilter={brandsDataFilter}
-        initialSelectedBrands={initialSelectedBrands}
-        initialSelectedCategories={initialSelectedCategories}
-        t={t}
-        categoryMetaTitle={categoryMetaTitle}
-        categoryMetaDescription={categoryMetaDescription}
-        categoryPageTitle={categoryPageTitle}
-        categoryPageDescription={categoryPageDescription}
-        categoryId={selectedCategoryObj?.id || null}
-        searchText={searchText}
-        perPage={perPage}
-        pagination={pagination}
-        productCounts={productCounts}
-      />
-
-      <Footer
-        categoryData={categoryData}
-        eventsData={eventsData}
-        brandsData={brandsData}
-        contact={contact}
-      />
-    </>
-  );
 }
-
 // ? EN KRAL PADISAH SENSIN ASLANIM
