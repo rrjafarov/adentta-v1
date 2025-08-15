@@ -618,7 +618,9 @@ const BrandsDetailPage = async ({ t, brandsDetailDataDetail, otherBrands }) => {
         </section>
       </div>
 
-      {filteredProducts.length > 0 && (
+      {brandsDetailDataDetail &&
+ Array.isArray(brandsDetailDataDetail.product) &&
+ brandsDetailDataDetail.product.length  > 0 && (
         <section id="brandDPProducts">
           <div className="container">
             <div className="brandDPProductsCards">
@@ -627,7 +629,7 @@ const BrandsDetailPage = async ({ t, brandsDetailDataDetail, otherBrands }) => {
                 <p>{t?.brandsPageBrandProductsAll || "Brand products"}</p>
               </div>
               <div className="row">
-                {filteredProducts.slice(0, 4).map((product, index) => (
+                {brandsDetailDataDetail.product.slice(0, 4).map((product, index) => (
                   <div key={index} className="xl-3 lg-3 md-6 sm-6">
                     <Link
                       href={`/products/${product?.title

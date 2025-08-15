@@ -201,6 +201,8 @@ const page = async ({ params }) => {
 
   const setting = await fetchSettingsPageData();
   const settingData = setting?.data || [];
+  console.log(brandsDetailDataDetail ,"rfrfrfrfrfrf");
+  
 
   return (
     <div>
