@@ -19,7 +19,7 @@ export default async function RootLayout({ children, params }) {
         />
       </head>
       <body suppressHydrationWarning>
-        {/* <NavigationProgress /> */}
+        <NavigationProgress />
         {children}
       </body>
     </html>

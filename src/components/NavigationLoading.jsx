@@ -99,7 +99,7 @@ import "nprogress/nprogress.css";
 NProgress.configure({
   minimum: 0.3,
   easing: "ease",
-  speed: 500,
+  speed: 300,
   showSpinner: false,
   trickle: true,
   trickleSpeed: 200,
