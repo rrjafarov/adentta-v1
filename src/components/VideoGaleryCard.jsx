@@ -33,7 +33,8 @@ const VideoGaleryCard = ({ video, selectedCategory = "All" }) => {
     <div className="videoGaleryCard">
       <div className="videoGaleryCardItem">
         <Link href={videoUrl} className="galleryImg" data-fancybox="videos">
-          <span>{videoTitle}</span>
+          <span className="videoTitle">{videoTitle}</span>
+
           <div className="videoGaleryImg">
             <LazyLoadImage
               src={`https://admin.adentta.az/storage${thumbnail}`}

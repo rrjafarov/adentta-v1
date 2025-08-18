@@ -8,13 +8,8 @@ $adentta-03: #293881 !important;
 $adentta-04: #f0ece3 !important;
 $adentta-05: #ddd2bf !important;
 $adentta-06: #29282f !important;
-// @import "../components/Header/header.scss";
 @import "../../components/Header/header.scss";
-
-// @import url("https://fonts.cdnfonts.com/css/sf-pro-display");
 @import url("https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,200..1000;1,200..1000&display=swap");
-
-// @import url('https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,200..1000;1,200..1000&display=swap');
 
 .copy-feedback {
   font-size: 1.2rem !important;
@@ -7490,7 +7485,7 @@ ul {
   .videoGaleryCardItem {
     display: flex;
     flex-direction: column;
-    padding: 3.58rem 1.7rem 2.02rem;
+    padding: 3.28rem 1.7rem 1.202rem;
 
     span {
       width: 100%;
@@ -7504,17 +7499,16 @@ ul {
       overflow: hidden;
       text-overflow: ellipsis;
       -webkit-line-clamp: 2;
-      /* Maksimum göstəriləcək sətir sayı */
       -webkit-box-orient: vertical;
+    }
+    .videoTitle{
+      height: 6rem;
     }
 
     .galleryImg {
-      padding-left: 1rem;
-      padding-right: 1rem;
       width: 100%;
       height: 100%;
       position: relative;
-
       .videoGaleryImg {
         padding-top: 1.5rem;
         width: 100%;
@@ -7525,38 +7519,72 @@ ul {
           width: 100%;
           height: 25rem;
           object-fit: cover;
+          border-radius: 1.5rem;
         }
 
+        // .videoGaleryPlay {
+        //   position: absolute;
+        //   bottom: 0;
+        //   right: 0;
+        //   display: flex;
+        //   gap: 1rem;
+        //   align-items: center;
+        //   justify-content: center;
+        //   background-color: #fff;
+        //   padding: 5rem 1rem 2rem 3rem;
+        //   z-index: 1;
+        //   // border-top-left-radius: 400rem;
+        //   span {
+        //     color: #293881;
+        //     font-size: 1.5rem;
+        //     font-style: normal;
+        //     font-weight: 500;
+        //     line-height: normal;
+        //     letter-spacing: 0.015rem;
+        //   }
+
+        //   img {
+        //     width: 30px;
+        //     height: 30px;
+        //     flex-shrink: 0;
+        //   }
+        // }
         .videoGaleryPlay {
-          position: absolute;
-          bottom: 0;
-          right: 0;
-          display: flex;
-          gap: 1rem;
-          align-items: center;
-          justify-content: center;
-          background-color: #fff;
-          padding: 3rem 1rem 2rem 3rem;
-          z-index: 1;
-          border-top-left-radius: 400rem;
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  display: flex;
+  gap: 1rem;
+  align-items: flex-end;
+  justify-content: flex-end;
+  background-color: #fff;
+  width: 14rem;
+  height: 12rem;
+  // padding: 5rem 1rem 0rem 3rem;
+  z-index: 1000;
+  clip-path: polygon(14rem 0, 100% 0, 100% 100%, 0 100%, 0 12.5rem);
+  padding-bottom: 1.3rem;
+  padding-right: 1rem;
+  span {
+    color: #293881;
+    font-size: 1.5rem;
+    font-style: normal;
+    font-weight: 500;
+    line-height: normal;
+    letter-spacing: 0.015rem;
+    text-align: end;
+  }
 
-          span {
-            color: #293881;
-            font-size: 1.5rem;
-            font-style: normal;
-            font-weight: 500;
-            line-height: normal;
-            letter-spacing: 0.015rem;
-          }
+  img {
+    width: 2.8rem;
+    height: 2.8rem;
+    flex-shrink: 0;
+  }
+}
 
-          img {
-            width: 30px;
-            height: 30px;
-            flex-shrink: 0;
-          }
-        }
       }
     }
+    
   }
 }
 
