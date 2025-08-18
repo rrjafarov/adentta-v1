@@ -6,6 +6,10 @@ import React, { useState } from "react";
 import Cookies from "js-cookie";
 import { useRouter } from "next/navigation";
 
+
+
+
+
 const FooterBottom = ({ t }) => {
   const router = useRouter();
   const [currentLang, setCurrentLang] = useState(
