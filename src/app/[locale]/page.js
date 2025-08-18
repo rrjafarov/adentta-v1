@@ -19,7 +19,7 @@ async function fetchProductsPageData() {
 
   try {
     const { data: product } = await axiosInstance.get(
-      `/page-data/product?per_page=999`,
+      `/page-data/product?per_page=99`,
       {
         // headers: { Lang: lang.value },
         cache: "no-store",
