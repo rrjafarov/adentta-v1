@@ -7552,7 +7552,7 @@ ul {
         .videoGaleryPlay {
   position: absolute;
   bottom: 0;
-  right: 0;
+  right: -10px;
   display: flex;
   gap: 1rem;
   align-items: flex-end;
@@ -7562,9 +7562,9 @@ ul {
   height: 12rem;
   // padding: 5rem 1rem 0rem 3rem;
   z-index: 1000;
-  clip-path: polygon(14rem 0, 100% 0, 100% 100%, 0 100%, 0 12.5rem);
-  padding-bottom: 1.3rem;
-  padding-right: 1rem;
+  clip-path: polygon(16rem 0, 100% 0, 100% 100%, 0 100%, 0 12.5rem);
+  padding-bottom: 1.6rem;
+  padding-right: 0.5rem;
   span {
     color: #293881;
     font-size: 1.5rem;
