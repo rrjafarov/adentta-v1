@@ -843,7 +843,6 @@ export default async function page({ searchParams }) {
     );
   } catch (error) {
     console.error("Critical error in products page:", error);
-    // Fallback to empty data structure
     return (
       <>
         <div>Error loading page. Please try again.</div>
