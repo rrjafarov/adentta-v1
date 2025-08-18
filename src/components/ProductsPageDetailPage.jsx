@@ -1062,6 +1062,14 @@
 
 // //! son versiya
 
+
+
+
+
+
+
+
+
 "use client";
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
@@ -1074,7 +1082,7 @@ const WpLink = ({ t }) => {
   useEffect(() => {
     if (typeof window !== "undefined") {
       // setCurrentUrl(window.location.href);
-      setCurrentUrl(window.location.pathname);
+      setCurrentUrl(window.location.href);
     }
   }, []);
   const message = encodeURIComponent(
