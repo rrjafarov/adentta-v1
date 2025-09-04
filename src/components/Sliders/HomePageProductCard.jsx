@@ -206,7 +206,7 @@ const HomePageProductCard = ({ productData , t}) => {
           </SwiperSlide>
         ))}
       </Swiper>
-      <div className="my-custom-pagination"></div>
+      {/* <div className="my-custom-pagination"></div> */}
     </div>
   );
 };
