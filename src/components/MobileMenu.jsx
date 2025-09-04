@@ -189,9 +189,9 @@ const MobileMenu = ({ t, isOpen, setIsOpen }) => {
               </ul>
             </MobileAccordion>
 
-            <Link href="/doctors">
+            {/* <Link href="/doctors">
               <span>{t?.doctors || "Doctors"}</span>
-            </Link>
+            </Link> */}
             <Link href="/events">
               <span>{t?.events || "Events"}</span>
             </Link>

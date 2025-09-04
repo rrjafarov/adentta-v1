@@ -10463,14 +10463,11 @@ ul {
         flex-direction: column;
         gap: 1.55rem;
         padding: 0 3rem;
-
         .pdfCatalogCardImg {
           position: relative;
-
           img {
             width: 100%;
           }
-
           .vatech {
             position: absolute;
             top: 2.26rem;
@@ -10497,9 +10494,12 @@ ul {
         .pdfCatalogCardInfo {
           border-radius: 1.5rem;
           background: rgba(193, 217, 241, 0.2);
-          height: 20rem;
+          height: 19rem;
           .pdfCatalogCardInfoContent {
             padding: 2.75rem 0 2.22rem 3rem;
+            display: flex;
+            flex-direction: column;
+            gap
             span {
               color: #293881;
               font-size: 2rem;
@@ -10937,7 +10937,7 @@ ul {
   img {
     width: 100%;
     height: 100%;
-    // object-fit: cover;
+    object-fit: cover;
   }
 }
 

@@ -850,4 +850,3 @@ export default async function page({ searchParams }) {
     );
   }
 }
-// ? EN KRAL PADISAH SENSIN ASLANIM

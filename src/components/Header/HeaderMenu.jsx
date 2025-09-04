@@ -250,11 +250,11 @@ const HeaderMenu = ({ t, categoryData, isHomePage }) => {
                     </div>
                   </li>
                 </div>
-                <li>
+                {/* <li>
                   <Link className="productsLinkName" href="/doctors">
                     {t?.doctors || "Doctors"}
                   </Link>
-                </li>
+                </li> */}
                 <li>
                   <Link className="productsLinkName" href="/events">
                     {t?.events || "Events"}

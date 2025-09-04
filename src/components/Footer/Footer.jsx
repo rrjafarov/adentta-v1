@@ -173,9 +173,9 @@ const Footer = async ({
               <li>
                 <Link href="/team">{t.team || "Teams"}</Link>
               </li>
-              <li>
+              {/* <li>
                 <Link href="/doctors">{t.doctors || "Doctors"}</Link>
-              </li>
+              </li> */}
               <li>
                 <Link href="/brands">{t.brands || "Brands"}</Link>
               </li>
