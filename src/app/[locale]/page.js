@@ -19,7 +19,9 @@ async function fetchProductsPageData() {
 
   try {
     const { data: product } = await axiosInstance.get(
-      `/page-data/product?per_page=99`,
+      // `/page-data/product?per_page=99`,
+      `/page-data/product`,
+
       {
         // headers: { Lang: lang.value },
         cache: "no-store",
@@ -276,7 +278,6 @@ const Home = async () => {
   const heroSliderData = heroSliderResponse?.data?.data || [];
 
   const bannerResponse = await fetchBannerPageData();
-  // const bannerData = bannerResponse?.data?.data || [];
   const bannerData = bannerResponse?.data || {};
 
   const homepageResponse = await fetchHomePageData();

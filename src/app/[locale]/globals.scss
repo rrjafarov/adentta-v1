@@ -488,6 +488,10 @@ ul {
 .swprSld {
   width: 100% !important;
   height: 100% !important;
+  a{
+    width: 100% !important;
+    height: 100% !important;
+  }
 }
 
 .swiper {
@@ -10478,6 +10482,7 @@ ul {
         padding: 0 3rem;
         .pdfCatalogCardImg {
           position: relative;
+          height: 38.139rem;
           img {
             width: 100%;
           }
@@ -10631,22 +10636,19 @@ ul {
         line-height: normal;
       }
     }
-
+    
     .brandsDPBlogCards {
       padding-bottom: 7.12rem;
-
       .ourBlog {
         .blogCard {
           padding: 2rem;
           flex-shrink: 0;
           border-radius: 3rem;
           border: 1px solid #dee4ec;
-
           &:hover {
             img {
               transform: scale(1.1);
             }
-
             .blogCardBottom {
               img {
                 transform: translate(3px, -5px);
@@ -10698,8 +10700,12 @@ ul {
 
           .blogCardContent {
             padding: 2.35rem 0 2rem 0;
-
+            height: 13rem;
+            margin-bottom: 1.5rem;
+            overflow: hidden !important;
             span {
+              height: 6rem;
+              overflow: hidden !important;
               color: $adentta-01;
               font-size: 2.2rem;
               font-style: normal;
@@ -10711,10 +10717,21 @@ ul {
               overflow: hidden;
               text-overflow: ellipsis;
               -webkit-line-clamp: 2;
-              /* Maksimum göstəriləcək sətir sayı */
+              -webkit-box-orient: vertical;
+              margin-bottom: 0.5rem;
+            }.brandBlogContent{
+              color: #59649b;
+              font-size: 1.5rem;
+              font-style: normal;
+              font-weight: 400;
+              line-height: 129.5%;
+              width: 95% !important;
+              display: -webkit-box;
+              overflow: hidden;
+              text-overflow: ellipsis;
+              -webkit-line-clamp: 2;
               -webkit-box-orient: vertical;
             }
-
             p {
               color: #59649b;
               font-size: 1.5rem;
@@ -10726,7 +10743,6 @@ ul {
               overflow: hidden;
               text-overflow: ellipsis;
               -webkit-line-clamp: 2;
-              /* Maksimum göstəriləcək sətir sayı */
               -webkit-box-orient: vertical;
             }
           }

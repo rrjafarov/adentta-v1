@@ -46,7 +46,7 @@ const BrandsDetailPage = async ({ t, brandsDetailDataDetail, otherBrands }) => {
   const [firstCategory] = brandsDetailDataDetail.category || [];
 
   const categoryTitle = firstCategory?.title;
-  
+
   // Handle country field: check if it's an array or a number
   const firstCountry = Array.isArray(brandsDetailDataDetail.country)
     ? brandsDetailDataDetail.country[0]
@@ -145,60 +145,62 @@ const BrandsDetailPage = async ({ t, brandsDetailDataDetail, otherBrands }) => {
       </div>
 
       {brandsDetailDataDetail &&
- Array.isArray(brandsDetailDataDetail.product) &&
- brandsDetailDataDetail.product.length  > 0 && (
-        <section id="brandDPProducts">
-          <div className="container">
-            <div className="brandDPProductsCards">
-              <div className="brandDPProductsHeadText">
-                <span>{t?.brandsPageBrandProducts || "Brand products"}</span>
-                <p>{t?.brandsPageBrandProductsAll || "Brand products"}</p>
-              </div>
-              <div className="row">
-                {brandsDetailDataDetail.product.slice(0, 4).map((product, index) => (
-                  <div key={index} className="xl-3 lg-3 md-6 sm-6">
-                    <Link
-                      href={`/products/${product?.title
-                        ?.toLowerCase()
-                        .replace(/\s+/g, "-")}-${product.id}`}
-                      className="block"
-                    >
-                      <div className="homePageProductCardContent ">
-                        <div className="homePageProCardImgs">
-                          <div className="homePageProductCardContentImage">
-                            <img
-                              src={`https://admin.adentta.az/storage${product.image}`}
-                              alt={product.title}
-                            />
-                          </div>
-                        </div>
-                        <div className="homePageProductCardContentInner">
-                          <div className="homePageProductCardContentText ">
-                            <span>{product.title}</span>
-                          </div>
-                          <div className="price">
-                            <div className="priceItem">
-                              <strong id="prices">{product.price}</strong>
-                              <Manat />
+        Array.isArray(brandsDetailDataDetail.product) &&
+        brandsDetailDataDetail.product.length > 0 && (
+          <section id="brandDPProducts">
+            <div className="container">
+              <div className="brandDPProductsCards">
+                <div className="brandDPProductsHeadText">
+                  <span>{t?.brandsPageBrandProducts || "Brand products"}</span>
+                  <p>{t?.brandsPageBrandProductsAll || "Brand products"}</p>
+                </div>
+                <div className="row">
+                  {brandsDetailDataDetail.product
+                    .slice(0, 4)
+                    .map((product, index) => (
+                      <div key={index} className="xl-3 lg-3 md-6 sm-6">
+                        <Link
+                          href={`/products/${product?.title
+                            ?.toLowerCase()
+                            .replace(/\s+/g, "-")}-${product.id}`}
+                          className="block"
+                        >
+                          <div className="homePageProductCardContent ">
+                            <div className="homePageProCardImgs">
+                              <div className="homePageProductCardContentImage">
+                                <img
+                                  src={`https://admin.adentta.az/storage${product.image}`}
+                                  alt={product.title}
+                                />
+                              </div>
+                            </div>
+                            <div className="homePageProductCardContentInner">
+                              <div className="homePageProductCardContentText ">
+                                <span>{product.title}</span>
+                              </div>
+                              <div className="price">
+                                <div className="priceItem">
+                                  <strong id="prices">{product.price}</strong>
+                                  <Manat />
+                                </div>
+                              </div>
+                            </div>
+                            <div className="homePageProductCardContentBottom">
+                              <span>{t?.learnMore || "Learn More"}</span>
+                              <img
+                                src="/icons/arrowTopRight.svg"
+                                alt="Learn more"
+                              />
                             </div>
                           </div>
-                        </div>
-                        <div className="homePageProductCardContentBottom">
-                          <span>{t?.learnMore || "Learn More"}</span>
-                          <img
-                            src="/icons/arrowTopRight.svg"
-                            alt="Learn more"
-                          />
-                        </div>
+                        </Link>
                       </div>
-                    </Link>
-                  </div>
-                ))}
+                    ))}
+                </div>
               </div>
             </div>
-          </div>
-        </section>
-      )}
+          </section>
+        )}
 
       {brandsDetailDataDetail.image_gallery?.length > 0 && (
         <section id="brandsDPSlider">
@@ -338,6 +340,7 @@ const BrandsDetailPage = async ({ t, brandsDetailDataDetail, otherBrands }) => {
                           <div className="blogCardContent">
                             <span>{blog.title}</span>
                             <div
+                            className="brandBlogContent"
                               dangerouslySetInnerHTML={{ __html: blog.content }}
                             ></div>
                           </div>
