@@ -253,6 +253,29 @@
 
 // export default ProductsPageFilter;
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 "use client";
 import Link from "next/link";
 import React, { useState, useEffect, useCallback } from "react";
@@ -327,12 +350,14 @@ const ProductsPageFilter = ({
       // Mövcud search params-ları götür
       const params = {};
       searchParams.forEach((value, key) => {
-        if (params[key] === undefined) {
-          params[key] = value;
-        } else if (Array.isArray(params[key])) {
-          params[key].push(value);
-        } else {
-          params[key] = [params[key], value];
+        if (key !== 'page') { // page parametrini manual set edirik
+          if (params[key] === undefined) {
+            params[key] = value;
+          } else if (Array.isArray(params[key])) {
+            params[key].push(value);
+          } else {
+            params[key] = [params[key], value];
+          }
         }
       });
 
@@ -349,10 +374,19 @@ const ProductsPageFilter = ({
 
       const queryString = buildRawQuery(params);
 
+      // ƏVVƏL URL-i yenilə
+      const newUrl = new URL(window.location);
+      newUrl.searchParams.set("page", page);
+      router.push(newUrl.pathname + "?" + newUrl.searchParams.toString(), {
+        scroll: false,
+      });
+      
+      setCurrentPage(page);
+
       const { data } = await axiosInstance.get(
         `/page-data/product?${queryString}`,
         {
-          headers: { Lang: "az" }, // və ya dinamik locale
+          headers: { Lang: "az" },
           cache: "no-store",
         }
       );
@@ -383,15 +417,6 @@ const ProductsPageFilter = ({
           );
           return [...prevData, ...uniqueNewItems];
         });
-
-        // URL-i yenilə
-        const newUrl = new URL(window.location);
-        newUrl.searchParams.set("page", page);
-        router.push(newUrl.pathname + "?" + newUrl.searchParams.toString(), {
-          scroll: false,
-        });
-
-        setCurrentPage(page);
       }
     } catch (error) {
       console.error("fetchMoreProducts error:", error);
@@ -411,9 +436,9 @@ const ProductsPageFilter = ({
     const clientHeight =
       document.documentElement.clientHeight || window.innerHeight;
 
-    // Bottom-dan 200px qaldığında yeni məhsulları yüklə
+    // Bottom-dan 900px qaldığında yeni məhsulları yüklə
     const scrolledToBottom =
-      Math.ceil(scrollTop + clientHeight) >= scrollHeight - 900;
+      Math.ceil(scrollTop + clientHeight) >= scrollHeight - 1100;
 
     if (scrolledToBottom) {
       fetchMoreProducts(currentPage + 1);
@@ -431,16 +456,14 @@ const ProductsPageFilter = ({
     fetchMoreProducts(currentPage + 1);
   };
 
-  // --------- Yeni əlavə: searchParams dəyişdikdə tam re-fetch et (replace productData) ----------
+  // Yeni əlavə: searchParams dəyişdikdə lazım olan bütün səhifələri yüklə
   useEffect(() => {
-    // parser: URLSearchParams -> obyekt (array-ları düzgün toplayır)
     const loadProductsByParams = async () => {
       try {
         setLoading(true);
 
         const params = {};
         searchParams.forEach((value, key) => {
-          // əgər eyni key bir neçə dəfə gəlirsə, array olaraq topla
           if (params[key] === undefined) {
             params[key] = value;
           } else if (Array.isArray(params[key])) {
@@ -450,8 +473,8 @@ const ProductsPageFilter = ({
           }
         });
 
-        if (!params.per_page) params.per_page = 12;
-        if (!params.page) params.page = 1;
+        const targetPage = parseInt(params.page || 1, 10);
+        const perPage = parseInt(params.per_page || 12, 10);
 
         if (!params["filters[0][key]"]) {
           params["filters[0][key]"] = "categories";
@@ -459,30 +482,71 @@ const ProductsPageFilter = ({
           params["filters[0][value][]"] = "99";
         }
 
-        const queryString = buildRawQuery(params);
+        // Əgər page > 1 dirsə, bütün səhifələri yüklə (1-dən targetPage-ə qədər)
+        if (targetPage > 1) {
+          const allProducts = [];
+          
+          for (let page = 1; page <= targetPage; page++) {
+            const pageParams = { ...params, page, per_page: perPage };
+            const queryString = buildRawQuery(pageParams);
 
-        const { data } = await axiosInstance.get(
-          `/page-data/product?${queryString}`,
-          {
-            headers: { Lang: "az" },
-            cache: "no-store",
+            const { data } = await axiosInstance.get(
+              `/page-data/product?${queryString}`,
+              {
+                headers: { Lang: "az" },
+                cache: "no-store",
+              }
+            );
+
+            const pageItems = Array.isArray(data)
+              ? data
+              : Array.isArray(data?.data)
+              ? data.data
+              : Array.isArray(data?.data?.data)
+              ? data.data.data
+              : Array.isArray(data?.items)
+              ? data.items
+              : [];
+
+            allProducts.push(...pageItems);
+            
+            // Əgər bu səhifədə az məhsul varsa, daha məhsul yoxdur
+            if (pageItems.length < perPage) {
+              setHasMore(false);
+              break;
+            }
           }
-        );
+          
+          setProductData(allProducts);
+          setCurrentPage(targetPage);
+          setHasMore(allProducts.length % perPage === 0);
+        } else {
+          // İlk səhifə üçün normal yüklə
+          params.per_page = perPage;
+          const queryString = buildRawQuery(params);
 
-        const items = Array.isArray(data)
-          ? data
-          : Array.isArray(data?.data)
-          ? data.data
-          : Array.isArray(data?.data?.data)
-          ? data.data.data
-          : Array.isArray(data?.items)
-          ? data.items
-          : [];
+          const { data } = await axiosInstance.get(
+            `/page-data/product?${queryString}`,
+            {
+              headers: { Lang: "az" },
+              cache: "no-store",
+            }
+          );
 
-        // Replace mövcud productData ilə — UI dərhal yenilənəcək
-        setProductData(items || []);
-        setCurrentPage(parseInt(params.page || 1, 10) || 1);
-        setHasMore((items?.length ?? 0) >= 12);
+          const items = Array.isArray(data)
+            ? data
+            : Array.isArray(data?.data)
+            ? data.data
+            : Array.isArray(data?.data?.data)
+            ? data.data.data
+            : Array.isArray(data?.items)
+            ? data.items
+            : [];
+
+          setProductData(items || []);
+          setCurrentPage(1);
+          setHasMore((items?.length ?? 0) >= perPage);
+        }
       } catch (err) {
         console.error("loadProductsByParams error:", err);
       } finally {
@@ -490,11 +554,9 @@ const ProductsPageFilter = ({
       }
     };
 
-    // searchParams.toString() dependency istifadə et — beləliklə hər URL dəyişəndə effekt işləyəcək
     loadProductsByParams();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [searchParams.toString()]);
-  // --------------------------------------------------------------------------------------------
 
   return (
     <div>
@@ -694,11 +756,6 @@ const ProductsPageFilter = ({
               }}
             />
           </div>
-
-          {/* <div className="productsPageDescriptionLink">
-            <Link href={"#"}>View More</Link>
-            <img src="/icons/rightDown.svg" alt="" />
-          </div> */}
         </div>
       </div>
 
@@ -717,6 +774,27 @@ const ProductsPageFilter = ({
 };
 
 export default ProductsPageFilter;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 // "use client";
 // import Link from "next/link";
@@ -745,10 +823,14 @@ export default ProductsPageFilter;
 //   );
 // };
 
-// const ProductsPageFilter = ({ productData: initialProductData }) => {
+// const ProductsPageFilter = ({
+//   productData: initialProductData,
+//   t,
+//   brandsData,
+// }) => {
 //   const [selectedOption, setSelectedOption] = useState(null);
 //   const [isMobileFilterOpen, setMobileFilterOpen] = useState(false);
-//   const [productData, setProductData] = useState(initialProductData);
+//   const [productData, setProductData] = useState(initialProductData || []);
 //   const [currentPage, setCurrentPage] = useState(1);
 //   const [loading, setLoading] = useState(false);
 //   const [hasMore, setHasMore] = useState(true);
@@ -761,6 +843,8 @@ export default ProductsPageFilter;
 //     const page = searchParams.get("page");
 //     if (page) {
 //       setCurrentPage(parseInt(page));
+//     } else {
+//       setCurrentPage(1);
 //     }
 //   }, [searchParams]);
 
@@ -786,7 +870,13 @@ export default ProductsPageFilter;
 //       // Mövcud search params-ları götür
 //       const params = {};
 //       searchParams.forEach((value, key) => {
-//         params[key] = value;
+//         if (params[key] === undefined) {
+//           params[key] = value;
+//         } else if (Array.isArray(params[key])) {
+//           params[key].push(value);
+//         } else {
+//           params[key] = [params[key], value];
+//         }
 //       });
 
 //       // Yeni səhifə nömrəsini əlavə et
@@ -847,6 +937,7 @@ export default ProductsPageFilter;
 //         setCurrentPage(page);
 //       }
 //     } catch (error) {
+//       console.error("fetchMoreProducts error:", error);
 //     } finally {
 //       setLoading(false);
 //     }
@@ -865,7 +956,7 @@ export default ProductsPageFilter;
 
 //     // Bottom-dan 200px qaldığında yeni məhsulları yüklə
 //     const scrolledToBottom =
-//       Math.ceil(scrollTop + clientHeight) >= scrollHeight - 400;
+//       Math.ceil(scrollTop + clientHeight) >= scrollHeight - 900;
 
 //     if (scrolledToBottom) {
 //       fetchMoreProducts(currentPage + 1);
@@ -883,13 +974,78 @@ export default ProductsPageFilter;
 //     fetchMoreProducts(currentPage + 1);
 //   };
 
+//   // --------- Yeni əlavə: searchParams dəyişdikdə tam re-fetch et (replace productData) ----------
+//   useEffect(() => {
+//     // parser: URLSearchParams -> obyekt (array-ları düzgün toplayır)
+//     const loadProductsByParams = async () => {
+//       try {
+//         setLoading(true);
+
+//         const params = {};
+//         searchParams.forEach((value, key) => {
+//           // əgər eyni key bir neçə dəfə gəlirsə, array olaraq topla
+//           if (params[key] === undefined) {
+//             params[key] = value;
+//           } else if (Array.isArray(params[key])) {
+//             params[key].push(value);
+//           } else {
+//             params[key] = [params[key], value];
+//           }
+//         });
+
+//         if (!params.per_page) params.per_page = 12;
+//         if (!params.page) params.page = 1;
+
+//         if (!params["filters[0][key]"]) {
+//           params["filters[0][key]"] = "categories";
+//           params["filters[0][operator]"] = "IN";
+//           params["filters[0][value][]"] = "99";
+//         }
+
+//         const queryString = buildRawQuery(params);
+
+//         const { data } = await axiosInstance.get(
+//           `/page-data/product?${queryString}`,
+//           {
+//             headers: { Lang: "az" },
+//             cache: "no-store",
+//           }
+//         );
+
+//         const items = Array.isArray(data)
+//           ? data
+//           : Array.isArray(data?.data)
+//           ? data.data
+//           : Array.isArray(data?.data?.data)
+//           ? data.data.data
+//           : Array.isArray(data?.items)
+//           ? data.items
+//           : [];
+
+//         // Replace mövcud productData ilə — UI dərhal yenilənəcək
+//         setProductData(items || []);
+//         setCurrentPage(parseInt(params.page || 1, 10) || 1);
+//         setHasMore((items?.length ?? 0) >= 12);
+//       } catch (err) {
+//         console.error("loadProductsByParams error:", err);
+//       } finally {
+//         setLoading(false);
+//       }
+//     };
+
+//     // searchParams.toString() dependency istifadə et — beləliklə hər URL dəyişəndə effekt işləyəcək
+//     loadProductsByParams();
+//     // eslint-disable-next-line react-hooks/exhaustive-deps
+//   }, [searchParams.toString()]);
+//   // --------------------------------------------------------------------------------------------
+
 //   return (
 //     <div>
 //       <div className="container">
 //         <div className="filterTop topper">
 //           <h1>Adentta</h1>
 //           <img src="/icons/rightDown.svg" alt="Adentta" />
-//           <h4>Products</h4>
+//           <h4>{t?.products}</h4>
 //         </div>
 
 //         <div className="row">
@@ -900,7 +1056,7 @@ export default ProductsPageFilter;
 //                 className="filter-title"
 //                 onClick={() => setMobileFilterOpen(!isMobileFilterOpen)}
 //               >
-//                 Filter
+//                 {t?.productsPageFilterTitle || "Filter"}
 //               </button>
 
 //               {/* Desktop için seçili filtreler (filter-title altında) */}
@@ -942,7 +1098,9 @@ export default ProductsPageFilter;
 //                 </button>
 //                 <div className="lineFiltered"></div>
 
-//                 <FilterAccordion title="Category">
+//                 <FilterAccordion
+//                   title={t?.productsPageFilterCategoryTitle || "Category"}
+//                 >
 //                   <ul>
 //                     <li>
 //                       X-ray Equipment<p>(22)</p>
@@ -968,31 +1126,24 @@ export default ProductsPageFilter;
 //                   </ul>
 //                 </FilterAccordion>
 
-//                 <FilterAccordion title="Brand">
+//                 <FilterAccordion title={t?.brands || "Brands"}>
 //                   <div className="filteredSearch">
-//                     <img src="icons/searchIcon.svg" alt="" />
+//                     {/* <img src="icons/searchIcon.svg" alt="search" /> */}
 //                     <input
 //                       className="filterSrch"
 //                       type="text"
-//                       placeholder="Search..."
+//                       placeholder={t?.searchText}
 //                     />
 //                   </div>
 //                   <ul>
-//                     <li>
-//                       <input type="checkbox" /> Siemens
-//                     </li>
-//                     <li>
-//                       <input type="checkbox" /> Philips Healthcare
-//                     </li>
-//                     <li>
-//                       <input type="checkbox" /> GE Healthcare
-//                     </li>
-//                     <li>
-//                       <input type="checkbox" /> Mindray
-//                     </li>
-//                     <li>
-//                       <input type="checkbox" /> Boston Scientific
-//                     </li>
+//                     {(Array.isArray(brandsData)
+//                       ? brandsData
+//                       : Object.values(brandsData || {})
+//                     ).map((brand) => (
+//                       <li key={brand?.id ?? brand?.title}>
+//                         <input type="checkbox" /> {brand?.title ?? "No title"}
+//                       </li>
+//                     ))}
 //                   </ul>
 //                 </FilterAccordion>
 
@@ -1006,9 +1157,9 @@ export default ProductsPageFilter;
 //           <div className="xl-9 lg-9 md-9 sm-12">
 //             <div className="productPageCards">
 //               <div className="productPageSorting">
-//                 <span>Sort by</span>
+//                 <span>{t?.sortBy}</span>
 //                 <div>
-//                   <ReactSelect />
+//                   <ReactSelect t={t} />
 //                 </div>
 //               </div>
 //               <div className="row">
@@ -1042,7 +1193,7 @@ export default ProductsPageFilter;
 //                           </div>
 //                         </div>
 //                         <div className="homePageProductCardContentBottom">
-//                           <span>Learn More</span>
+//                           <span>{t?.learnMore}</span>
 //                           <img src="/icons/arrowTopRight.svg" alt="" />
 //                         </div>
 //                       </div>
@@ -1072,13 +1223,17 @@ export default ProductsPageFilter;
 //         </div>
 
 //         <div className="productsPageDescription">
-//           <h1>{productData[0].categories[0]?.page_title || "Page title is not aviable"}</h1>
+//           <h1>
+//             {productData[0]?.categories?.[0]?.page_title ||
+//               "Page title is not aviable"}
+//           </h1>
 //           <div className="productsPageDetailsCEO" style={{ marginTop: "2rem" }}>
 //             <div
 //               className="page-description-content"
 //               dangerouslySetInnerHTML={{
 //                 __html:
-//                   productData[0].categories[0]?.page_description || "Page description is not available.",
+//                   productData[0]?.categories?.[0]?.page_description ||
+//                   "Page description is not available.",
 //               }}
 //             />
 //           </div>
@@ -1105,3 +1260,6 @@ export default ProductsPageFilter;
 // };
 
 // export default ProductsPageFilter;
+
+
+
