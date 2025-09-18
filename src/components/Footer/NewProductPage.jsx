@@ -267,11 +267,6 @@
 
 
 
-
-
-
-
-
 "use client";
 import Link from "next/link";
 import React, { useState, useEffect, useCallback, useRef } from "react";
@@ -824,9 +819,6 @@ const ProductsPageFilter = ({
 };
 
 export default ProductsPageFilter;
-
-
-
 
 
 
