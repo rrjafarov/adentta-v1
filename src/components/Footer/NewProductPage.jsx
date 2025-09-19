@@ -640,7 +640,7 @@ const ProductsPageFilter = ({
                 className={`filter-panel ${isMobileFilterOpen ? "active" : ""}`}
               >
                 {/* Mobilde açılan menüde filter-titless başlığı altında olacak */}
-                <button className="filter-titless">Filter</button>
+                <button className="filter-titless">{t?.productsPageFilterTitle || "Filter"}</button>
 
                 {/* Mobil için seçili filtreler (filter-titless altında) */}
                 <div className="selectedFilter mobile-only">
