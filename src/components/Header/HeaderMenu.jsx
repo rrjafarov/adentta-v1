@@ -1,3 +1,5 @@
+// // ! NEW products page
+
 // "use client";
 // import Link from "next/link";
 // import React, { useState, useEffect } from "react";
@@ -112,10 +114,7 @@
 //                                     <div key={category.id} className="column">
 //                                       {/* Üst kateqoriya adı */}
 //                                       <Link
-//                                         href={{
-//                                           pathname: "/products",
-//                                           query: { category: category.url_slug },
-//                                         }}
+//                                         href={`/product-page?per_page=12&filters[0][key]=categories&filters[0][operator]=IN&filters[0][value][]=${category.id}`}
 //                                       >
 //                                         <h3>
 //                                           <img
@@ -131,15 +130,7 @@
 //                                         {children.slice(0,5).map((child) => (
 //                                           <Link
 //                                             key={child.id}
-//                                             href={{
-//                                               pathname: "/products",
-//                                               query: {
-//                                                 // category: category.id,
-//                                                 // subcategory: child.id,
-//                                                 category: category.url_slug,
-//                                                 subcategory: child.url_slug,
-//                                               },
-//                                             }}
+//                                             href={`/product-page?per_page=12&filters[0][key]=categories&filters[0][operator]=IN&filters[0][value][]=${child.id}`}
 //                                             className="subLink"
 //                                           >
 //                                             {child.title}
@@ -272,6 +263,7 @@
 // };
 
 // export default HeaderMenu;
+// // ! New products page end
 
 
 
@@ -294,20 +286,28 @@
 
 
 
-// ! NEW products page
+
+
+
+
+
+
+
+
+
+
 
 "use client";
 import Link from "next/link";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import SearchPopup from "../SearchPopup";
 import Image from "next/image";
 import MobileMenu from "@/components/MobileMenu";
 import HeaderSearchIcon from "../../../public/icons/searchIcon.svg";
 import Cookies from "js-cookie";
-import { useRouter } from "next/navigation";
 
-const HeaderMenu = ({ t, categoryData, isHomePage }) => {
- const [selectedLang, setSelectedLang] = useState("az");
+const HeaderMenu = ({ t, categoryData = [], isHomePage }) => {
+  const [selectedLang, setSelectedLang] = useState("az");
 
   useEffect(() => {
     const storedLang = Cookies.get("NEXT_LOCALE");
@@ -342,6 +342,45 @@ const HeaderMenu = ({ t, categoryData, isHomePage }) => {
   const toggleMenu = () => setIsOpen(!isOpen);
   const togglePopup = () => setIsPopupOpen(!isPopupOpen);
   const toggleMobileMenu = () => setIsMobileMenuOpen((prev) => !prev);
+
+  // --------- Normalizasiya (API nümunəsinə uyğun) ----------
+  const { roots, allCategories } = useMemo(() => {
+    const map = new Map();
+
+    const add = (cat) => {
+      if (!cat || !cat.id) return;
+      if (!map.has(cat.id)) {
+        map.set(cat.id, cat);
+      }
+    };
+
+    (categoryData || []).forEach((cat) => {
+      add(cat);
+      if (Array.isArray(cat.parent_id)) {
+        cat.parent_id.forEach((p) => add(p));
+      }
+    });
+
+    const all = Array.from(map.values());
+
+    const potentialRoots = all.filter((c) => {
+      if (!c.hasOwnProperty("parent_id")) return true;
+      if (!c.parent_id) return true;
+      if (Array.isArray(c.parent_id) && c.parent_id.length === 0) return true;
+      return false;
+    });
+
+    return { roots: potentialRoots, allCategories: all };
+  }, [categoryData]);
+
+  const getChildrenForRoot = (rootId) => {
+    return allCategories.filter((cat) =>
+      Array.isArray(cat.parent_id) && cat.parent_id.some((p) => p.id === rootId)
+    );
+  };
+
+  const buildIconSrc = (iconPath) =>
+    iconPath ? `https://admin.adentta.az/storage${iconPath}` : null;
 
   return (
     <>
@@ -395,35 +434,35 @@ const HeaderMenu = ({ t, categoryData, isHomePage }) => {
                       </div>
                       <div className="rower">
                         <div className="row">
-
                           <div className="xl-12 lg-12">
                             <div className="rowerd">
-                              {categoryData
-                                .filter((category) => !category.parent_id)
-                                .map((category) => {
-                                  const children = categoryData.filter((sub) =>
-                                    sub.parent_id?.some(
-                                      (p) => p.id === category.id
-                                    )
-                                  );
+                              {roots.length === 0 ? (
+                                <div className="column">
+                                  <h3>{t?.noCategories || "No categories"}</h3>
+                                </div>
+                              ) : (
+                                roots.map((category) => {
+                                  const children = getChildrenForRoot(category.id);
+                                  const iconSrc = buildIconSrc(category.icon);
+
                                   return (
                                     <div key={category.id} className="column">
-                                      {/* Üst kateqoriya adı */}
                                       <Link
                                         href={`/product-page?per_page=12&filters[0][key]=categories&filters[0][operator]=IN&filters[0][value][]=${category.id}`}
                                       >
                                         <h3>
-                                          <img
-                                            src={`https://admin.adentta.az/storage${category.icon}`}
-                                            alt={category.title}
-                                          />
+                                          {iconSrc ? (
+                                            <img
+                                              src={iconSrc}
+                                              alt={category.title || ""}
+                                            />
+                                          ) : null}
                                           <span>{category.title}</span>
                                         </h3>
                                       </Link>
 
-                                      {/* Alt kateqoriyalar */}
                                       <div className="columnLinks">
-                                        {children.slice(0,5).map((child) => (
+                                        {children.slice(0, 5).map((child) => (
                                           <Link
                                             key={child.id}
                                             href={`/product-page?per_page=12&filters[0][key]=categories&filters[0][operator]=IN&filters[0][value][]=${child.id}`}
@@ -435,7 +474,8 @@ const HeaderMenu = ({ t, categoryData, isHomePage }) => {
                                       </div>
                                     </div>
                                   );
-                                })}
+                                })
+                              )}
                             </div>
                           </div>
                         </div>
@@ -559,4 +599,3 @@ const HeaderMenu = ({ t, categoryData, isHomePage }) => {
 };
 
 export default HeaderMenu;
-// ! New products page end

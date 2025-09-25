@@ -29,7 +29,6 @@ async function fetchProductsPageData() {
     );
     return product.data.data;
   } catch (error) {
-    console.error("Failed to fetch product page data", error);
     throw error;
   }
 }
@@ -50,7 +49,6 @@ async function fetchBrandsPageData() {
     );
     return brands;
   } catch (error) {
-    console.error("Failed to fetch brands page data", error);
     throw error;
   }
 }
@@ -71,7 +69,6 @@ async function fetchEventsPageData() {
     );
     return events;
   } catch (error) {
-    console.error("Failed to fetch events page data", error);
     throw error;
   }
 }
@@ -92,7 +89,6 @@ async function fetchBlogsPageData() {
     );
     return blogs;
   } catch (error) {
-    console.error("Failed to fetch blogs page data", error);
     throw error;
   }
 }
@@ -110,7 +106,6 @@ async function fetchHeroSlidePageData() {
     });
     return slider;
   } catch (error) {
-    console.error("Failed to fetch slider page data", error);
     throw error;
   }
 }
@@ -128,7 +123,6 @@ async function fetchBannerPageData() {
     });
     return banner;
   } catch (error) {
-    console.error("Failed to fetch banner page data", error);
     throw error;
   }
 }
@@ -157,7 +151,6 @@ async function fetchCategoryPageData() {
     );
     return category;
   } catch (error) {
-    console.error("Failed to fetch category page data", error);
     throw error;
   }
 }
@@ -174,7 +167,6 @@ async function fetchHomePageData() {
     });
     return homepage;
   } catch (error) {
-    console.error("Failed to fetch homepage page data", error);
     throw error;
   }
 }
@@ -190,9 +182,6 @@ export async function generateMetadata() {
   return {
     title: seo?.data.meta_title,
     description: seo?.data.meta_description,
-    // icons: {
-    //   icon: "https://adentta.az/favicon.ico.svg",
-    // },
     openGraph: {
       title: seo?.data.meta_title || "Adentta",
       description: seo?.data.meta_description,
@@ -235,7 +224,6 @@ async function fetchSettingsPageData() {
     });
     return setting;
   } catch (error) {
-    console.error("Failed to fetch setting page data", error);
     throw error;
   }
 }
@@ -250,7 +238,6 @@ async function fetchContactPageData() {
     });
     return contact;
   } catch (error) {
-    console.error("Failed to fetch contact page data", error);
     throw error;
   }
 }
