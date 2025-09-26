@@ -2996,8 +2996,8 @@ ul {
 
 .filteredSearch {
   // max-width: 30rem;
-  width: 28.3451rem;
-  width: 100%;
+  width: 27.3451rem;
+  width: 95%;
   height: 4.006rem;
   flex-shrink: 0;
   border-radius: 0.8rem;
@@ -11342,4 +11342,42 @@ ul {
 #nprogress .spinner-icon {
   border-top-color: red;
   border-left-color: red;
+}
+
+
+
+
+
+
+
+
+.accordion-content {
+  // max-width: 300px;
+  max-height: 400px;
+  overflow: auto;
+  border-radius: 0.5rem;
+  padding: 0.5rem;
+  box-sizing: border-box;
+  ul{
+    li{
+      font-size: 1.5rem;
+    }
+  }
+}
+
+/* Scroll dizaynı */
+.accordion-content::-webkit-scrollbar {
+  width: 5px;
+}
+
+.accordion-content::-webkit-scrollbar-thumb {
+  background-color: #293881;   /* scrollun göy rəngi */
+  border-radius: 4px;
+}
+
+.accordion-content::-webkit-scrollbar-track {
+  background: transparent;
+  margin-top: 1rem;  /* scroll yuxarıdan məsafə */
+  margin-bottom: 1rem; /* alt tərəfdən də boşluq (istəsən götür) */
+  margin-left: 1rem;
 }

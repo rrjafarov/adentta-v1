@@ -842,10 +842,9 @@ export default async function page({ searchParams }) {
       </>
     );
   } catch (error) {
-    console.error("Critical error in products page:", error);
     return (
       <>
-        <div>Error loading page. Please try again.</div>
+        <div>Error loading page.</div>
       </>
     );
   }
