@@ -441,9 +441,12 @@ const HeaderMenu = ({ t, categoryData = [], isHomePage }) => {
                                   <h3>{t?.noCategories || "No categories"}</h3>
                                 </div>
                               ) : (
+                                
                                 roots.map((category) => {
                                   const children = getChildrenForRoot(category.id);
-                                  const iconSrc = buildIconSrc(category.icon);
+                                  // const iconSrc = buildIconSrc(category.icon);
+                                  const iconSrc = `https://admin.adentta.az/storage${category.icon}`;
+
 
                                   return (
                                     <div key={category.id} className="column">
