@@ -599,7 +599,6 @@ const ProductsPageFilter = ({
     // update prev params ref
     prevParamsRef.current = currentParamsStr;
 
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [searchParams.toString()]);
   // --------------------------------------------------------------------------------------------
 
@@ -767,7 +766,7 @@ const ProductsPageFilter = ({
               </div>
             </div>
 
-            {/* Loading indicator və Manual Load More button */}
+
             <div className="flex items-center justify-center flex-col gap-4 py-8">
               {loading && (
                 <div

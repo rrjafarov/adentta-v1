@@ -326,7 +326,7 @@ const BlogPages = ({ t, blogData = [], blogsCategoryData = [] }) => {
                       <div className="blogCardContent">
                         <span>{blog.title}</span>
                         <div
-                          dangerouslySetInnerHTML={{ __html: blog.content }}
+                          dangerouslySetInnerHTML={{ __html: blog.content }}    
                         />
                       </div>
 
