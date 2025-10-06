@@ -2867,11 +2867,12 @@ ul {
     min-width: 5.8313rem;
     min-height: 2.5945rem;
     border-radius: 4rem;
-    gap: 0.5rem;
+    gap: 0.8rem;
     background: #f4f8ff;
     justify-content: center;
     align-items: center;
     padding: 1rem;
+    display: flex;
 
     span {
       color: #293881;
@@ -2880,8 +2881,8 @@ ul {
       font-weight: 400;
       line-height: normal;
       cursor: pointer;
-
-      letter-spacing: -0.01rem;
+      margin-bottom: 0.3rem;
+      // letter-spacing: -0.01rem;
     }
 
     p {
@@ -11380,4 +11381,19 @@ ul {
   margin-top: 1rem;  /* scroll yuxarıdan məsafə */
   margin-bottom: 1rem; /* alt tərəfdən də boşluq (istəsən götür) */
   margin-left: 1rem;
+}
+
+
+
+
+
+.categoryPortal{
+  display: flex;
+  
+}
+.subCategoryPortal{
+  margin-left: 2rem;
+  li{
+    font-size: 2rem;
+  }
 }

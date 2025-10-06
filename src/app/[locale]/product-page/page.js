@@ -266,11 +266,11 @@ const Page = async ({ searchParams }) => {
     <div>
       <Header settingData={settingData} categoryData={categoryData} />
       <ProductsPageHero />
-      <NewProductPage brandsData={brandsData} t={t} productData={productData} />
+      <NewProductPage brandsData={brandsData} t={t} productData={productData}  />
       <Footer
         contact={contact}
         categoryData={categoryData}
-        eventsData={eventsData}
+        eventsData={eventsData} 
         brandsData={brandsData}
       />
     </div>
