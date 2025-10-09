@@ -253,18 +253,15 @@
 
 // export default ProductsPageFilter;
 
-
-
-
-
-
-
-
-
-
 "use client";
 import Link from "next/link";
-import React, { useState, useEffect, useCallback, useRef, useMemo } from "react";
+import React, {
+  useState,
+  useEffect,
+  useCallback,
+  useRef,
+  useMemo,
+} from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import LoadMoreBTN from "../LoadMoreBTN";
 import ApplyBTN from "../ApplyBTN";
@@ -291,7 +288,9 @@ const FilterAccordion = ({ title, children }) => {
 
 // Normalizasiya funksiyası (IDs-i number edir, unique)
 const normalizeIds = (arr = []) =>
-  Array.from(new Set((arr || []).map((v) => Number(v)).filter((v) => !Number.isNaN(v))));
+  Array.from(
+    new Set((arr || []).map((v) => Number(v)).filter((v) => !Number.isNaN(v)))
+  );
 
 const ProductsPageFilter = ({
   productData: initialProductData,
@@ -342,23 +341,32 @@ const ProductsPageFilter = ({
   };
 
   // Kateqoriya məhsul count funksiyası (dummy; realda backend-dən/productData-dan hesabla)
-  const getProductCountForCategory = useCallback((categoryId) => {
-    // Dummy: realda productData.filter(p => p.categories.includes(categoryId)).length
-    return 0; // Placeholder
-  }, [productData]);
+  const getProductCountForCategory = useCallback(
+    (categoryId) => {
+      // Dummy: realda productData.filter(p => p.categories.includes(categoryId)).length
+      return 0; // Placeholder
+    },
+    [productData]
+  );
 
   // Qruplaşdırılmış kateqoriyalar (useMemo ilə)
   const groupedCategories = useMemo(() => {
-    const parentCategories = categoryData.filter((category) => !category.parent_id);
+    const parentCategories = categoryData.filter(
+      (category) => !category.parent_id
+    );
     return parentCategories.map((parentCategory) => {
       const children = categoryData.filter((sub) => {
         const parentRaw = sub.parent_id;
         if (!parentRaw) return false;
         let parents = [];
-        if (Array.isArray(parentRaw)) parents = parentRaw.map((p) => (typeof p === "object" ? p.id : p));
-        else if (typeof parentRaw === "object" && parentRaw.id != null) parents = [parentRaw.id];
+        if (Array.isArray(parentRaw))
+          parents = parentRaw.map((p) => (typeof p === "object" ? p.id : p));
+        else if (typeof parentRaw === "object" && parentRaw.id != null)
+          parents = [parentRaw.id];
         else parents = [parentRaw];
-        const numericParents = parents.map((p) => (typeof p === "number" ? p : parseInt(p, 10))).filter(Boolean);
+        const numericParents = parents
+          .map((p) => (typeof p === "number" ? p : parseInt(p, 10)))
+          .filter(Boolean);
         return numericParents.includes(parentCategory.id);
       });
       return { parent: parentCategory, children };
@@ -469,7 +477,11 @@ const ProductsPageFilter = ({
         const newSearch = newUrl.searchParams.toString();
 
         // Daha etibarlı: window.history ilə ünvanı dərhal dəyişirik
-        if (typeof window !== "undefined" && window.history && window.history.pushState) {
+        if (
+          typeof window !== "undefined" &&
+          window.history &&
+          window.history.pushState
+        ) {
           window.history.pushState({}, "", newUrl.pathname + "?" + newSearch);
         } else {
           // Fallback: router.push (əgər history mövcud deyilsə)
@@ -655,7 +667,6 @@ const ProductsPageFilter = ({
 
     // update prev params ref
     prevParamsRef.current = currentParamsStr;
-
   }, [searchParams.toString()]);
   // --------------------------------------------------------------------------------------------
 
@@ -683,7 +694,9 @@ const ProductsPageFilter = ({
               <div className="selectedFilter desktop-only">
                 {renderSelectedCategories.map((cat) => (
                   <div className="selectedFilterInner" key={`cat-${cat.id}`}>
-                    <span onClick={() => handleCategoryToggleById(cat.id)}>×</span>
+                    <span onClick={() => handleCategoryToggleById(cat.id)}>
+                      ×
+                    </span>
                     <p>{cat.title}</p>
                   </div>
                 ))}
@@ -694,13 +707,17 @@ const ProductsPageFilter = ({
                 className={`filter-panel ${isMobileFilterOpen ? "active" : ""}`}
               >
                 {/* Mobilde açılan menüde filter-titless başlığı altında olacak */}
-                <button className="filter-titless">{t?.productsPageFilterTitle || "Filter"}</button>
+                <button className="filter-titless">
+                  {t?.productsPageFilterTitle || "Filter"}
+                </button>
 
                 {/* Mobil için seçili filtreler (filter-titless altında) */}
                 <div className="selectedFilter mobile-only">
                   {renderSelectedCategories.map((cat) => (
                     <div className="selectedFilterInner" key={`cat-${cat.id}`}>
-                      <span onClick={() => handleCategoryToggleById(cat.id)}>×</span>
+                      <span onClick={() => handleCategoryToggleById(cat.id)}>
+                        ×
+                      </span>
                       <p>{cat.title}</p>
                     </div>
                   ))}
@@ -717,10 +734,20 @@ const ProductsPageFilter = ({
                 <FilterAccordion
                   title={t?.productsPageFilterCategoryTitle || "Category"}
                 >
-                  <ul style={{ maxHeight: "300px", overflowY: "auto", paddingRight: "4px" }}>
+                  <ul
+                    style={{
+                      maxHeight: "300px",
+                      overflowY: "auto",
+                      paddingRight: "4px",
+                    }}
+                  >
                     {groupedCategories.map(({ parent, children }) => {
-                      const parentProductCount = getProductCountForCategory(parent.id);
-                      const isParentSelected = selectedCategoryIds.some((c) => Number(c) === Number(parent.id));
+                      const parentProductCount = getProductCountForCategory(
+                        parent.id
+                      );
+                      const isParentSelected = selectedCategoryIds.some(
+                        (c) => Number(c) === Number(parent.id)
+                      );
 
                       return (
                         <React.Fragment key={parent.id}>
@@ -740,18 +767,25 @@ const ProductsPageFilter = ({
                           </li>
 
                           {children.map((child) => {
-                            const childProductCount = getProductCountForCategory(child.id);
-                            const isChildSelected = selectedCategoryIds.some((c) => Number(c) === Number(child.id));
+                            const childProductCount =
+                              getProductCountForCategory(child.id);
+                            const isChildSelected = selectedCategoryIds.some(
+                              (c) => Number(c) === Number(child.id)
+                            );
                             return (
                               <li
                                 key={child.id}
-                                onClick={() => handleCategoryToggleById(child.id)}
+                                onClick={() =>
+                                  handleCategoryToggleById(child.id)
+                                }
                                 style={{
                                   cursor: "pointer",
                                   display: "flex",
                                   alignItems: "center",
                                   gap: "0.3rem",
-                                  fontWeight: isChildSelected ? "bold" : "normal",
+                                  fontWeight: isChildSelected
+                                    ? "bold"
+                                    : "normal",
                                   marginLeft: "15px",
                                   fontSize: "1.3rem",
                                   marginBottom: "8px",
@@ -784,7 +818,12 @@ const ProductsPageFilter = ({
                     {(Array.isArray(brandsData)
                       ? brandsData
                       : Object.values(brandsData || {})
-                    ).filter((brand) => brand.title.toLowerCase().includes(brandSearchTerm.toLowerCase()))
+                    )
+                      .filter((brand) =>
+                        brand.title
+                          .toLowerCase()
+                          .includes(brandSearchTerm.toLowerCase())
+                      )
                       .map((brand) => (
                         <li key={brand?.id ?? brand?.title}>
                           <input type="checkbox" /> {brand?.title ?? "No title"}
@@ -822,9 +861,17 @@ const ProductsPageFilter = ({
                         <div className="homePageProCardImgs">
                           <div className="homePageProductCardContentImage">
                             <img
-                              src={`https://admin.adentta.az/storage${data.image}`}
+                              src={
+                                data?.image
+                                  ? `https://admin.adentta.az/storage${data.image}`
+                                  : "/images/adenttaDefaultImg.svg"
+                              }
                               alt=""
                             />
+                            {/* <img
+                              src={`https://admin.adentta.az/storage${data.image}`}
+                              alt=""
+                            /> */}
                           </div>
                         </div>
                         <div className="homePageProductCardContentInner">
@@ -848,7 +895,6 @@ const ProductsPageFilter = ({
                 ))}
               </div>
             </div>
-
 
             <div className="flex items-center justify-center flex-col gap-4 py-8">
               {loading && (
@@ -901,26 +947,6 @@ const ProductsPageFilter = ({
 };
 
 export default ProductsPageFilter;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 // "use client";
 // import Link from "next/link";
@@ -1420,7 +1446,6 @@ export default ProductsPageFilter;
 //                 ))}
 //               </div>
 //             </div>
-
 
 //             <div className="flex items-center justify-center flex-col gap-4 py-8">
 //               {loading && (

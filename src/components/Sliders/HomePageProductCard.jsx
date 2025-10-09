@@ -10,7 +10,7 @@ import Image from "next/image";
 import Manat from "../../../public/icons/manat.svg";
 import "../../app/[locale]/globals.scss";
 
-const HomePageProductCard = ({ productData , t}) => {
+const HomePageProductCard = ({ productData, t }) => {
   return (
     <div className="container swiperjs homePageProductCardAll">
       <Swiper
@@ -42,9 +42,10 @@ const HomePageProductCard = ({ productData , t}) => {
               <div className="homePageProductCardContent">
                 <div className="homePageProCardImgs">
                   <div className="homePageProductCardContentImage">
-                    {product.image ? (
+                    {/* {product.image ? (
                       <Image
-                        src={`https://admin.adentta.az/storage${product.image}`}
+                        // src={`https://admin.adentta.az/storage${product.image}`}
+                        src={product.image ? `https://admin.adentta.az/storage${product.image}` : '/images/adenttaDefaultImg.svg'}
                         alt={product.title}
                         width={800}
                         height={800}
@@ -53,7 +54,20 @@ const HomePageProductCard = ({ productData , t}) => {
                       />
                     ) : (
                       <p>NotFound</p>
-                    )}
+                    )} */}
+
+                    <Image
+                      src={
+                        product?.image
+                          ? `https://admin.adentta.az/storage${product.image}`
+                          : "/images/adenttaDefaultImg.svg"
+                      }
+                      alt={product?.title || "Product image"}
+                      width={800}
+                      height={800}
+                      priority
+                      unoptimized
+                    />
                   </div>
                 </div>
                 <div className="homePageProductCardContentInner">

@@ -169,9 +169,19 @@ const BrandsDetailPage = async ({ t, brandsDetailDataDetail, otherBrands }) => {
                             <div className="homePageProCardImgs">
                               <div className="homePageProductCardContentImage">
                                 <img
-                                  src={`https://admin.adentta.az/storage${product.image}`}
-                                  alt={product.title}
+                                  src={
+                                    product?.image
+                                      ? `https://admin.adentta.az/storage${product.image}`
+                                      : "/images/adenttaDefaultImg.svg"
+                                  }
+                                  alt={product?.title || "Product image"}
                                 />
+
+                                {/* <img
+                                  src={`https://admin.adentta.az/storage${product.image}`}
+                                  
+                                  alt={product.title}
+                                /> */}
                               </div>
                             </div>
                             <div className="homePageProductCardContentInner">
@@ -340,7 +350,7 @@ const BrandsDetailPage = async ({ t, brandsDetailDataDetail, otherBrands }) => {
                           <div className="blogCardContent">
                             <span>{blog.title}</span>
                             <div
-                            className="brandBlogContent"
+                              className="brandBlogContent"
                               dangerouslySetInnerHTML={{ __html: blog.content }}
                             ></div>
                           </div>
