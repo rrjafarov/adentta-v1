@@ -253,6 +253,11 @@
 
 // export default ProductsPageFilter;
 
+
+
+
+
+
 "use client";
 import Link from "next/link";
 import React, {
@@ -583,9 +588,6 @@ const ProductsPageFilter = ({
     }
     return true;
   };
-
-  // --------- Yeni əlavə: searchParams dəyişdikdə tam re-fetch et (replace productData)
-  // Amma əgər dəyişən yalnız 'page' və biz onu infinite-scroll ilə yaratmışıqsa -> fetch etmə (maintain appended data).
   useEffect(() => {
     const currentParamsStr = searchParams.toString();
     const prevParamsStr = prevParamsRef.current;
@@ -805,7 +807,7 @@ const ProductsPageFilter = ({
 
                 <FilterAccordion title={t?.brands || "Brands"}>
                   <div className="filteredSearch">
-                    {/* <img src="icons/searchIcon.svg" alt="search" /> */}
+                    <img src="icons/searchIcon.svg" alt="search" />
                     <input
                       className="filterSrch"
                       type="text"
@@ -947,6 +949,34 @@ const ProductsPageFilter = ({
 };
 
 export default ProductsPageFilter;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 // "use client";
 // import Link from "next/link";

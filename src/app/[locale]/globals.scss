@@ -11306,15 +11306,18 @@ ul {
 }
 
 .accordion-content {
+  margin-top: 2rem;
   // max-width: 300px;
   max-height: 400px;
   overflow: auto;
+  overflow-x: hidden;
   border-radius: 0.5rem;
   padding: 0.5rem;
   box-sizing: border-box;
   ul {
     li {
-      font-size: 1.5rem;
+      font-size: 1.8rem;
+      font-weight: 500;
     }
   }
 }
@@ -11325,7 +11328,7 @@ ul {
 }
 
 .accordion-content::-webkit-scrollbar-thumb {
-  background-color: #293881; /* scrollun göy rəngi */
+  background-color: #888888; /* scrollun göy rəngi */
   border-radius: 4px;
 }
 
