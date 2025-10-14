@@ -2292,36 +2292,11 @@
 
 
 
-// ! infinite isledi burda
 
 
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-// ! DWAYNO JONSHON 15IFJR
-// ? EN KRAL PADISAH SENSIN ASLANIM
 "use client";
 import Link from "next/link";
 import React, {
@@ -2588,9 +2563,11 @@ export default function ProductsPageFilter({
   const [brandSearchTerm, setBrandSearchTerm] = useState("");
   const [showDetails, setShowDetails] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
-  const [isLoadingMore, setIsLoadingMore] = useState(false);
+  const [hasMore, setHasMore] = useState(true);
+  const [loading, setLoading] = useState(false);
 
-  const loadMoreRef = useRef(null);
+  const isLoadingMoreRef = useRef(false);
+  const prevParamsRef = useRef(searchParams.toString());
   const debounceTimeoutRef = useRef(null);
 
   // PERFORMANCE IMPROVEMENT: Reduced debounce from 2000ms to 300ms
@@ -2615,12 +2592,155 @@ export default function ProductsPageFilter({
           if (page === 1) setFilteredProducts([]);
         } finally {
           setIsLoading(false);
-          setIsLoadingMore(false);
         }
       }, 300); // Reduced from 2000ms to 300ms
     },
     [perPage]
   );
+
+  const fetchMoreProducts = async (page) => {
+    if (loading || !hasMore) return;
+
+    try {
+      setLoading(true);
+      isLoadingMoreRef.current = true;
+
+      const paramsObj = {};
+      searchParams.forEach((value, key) => {
+        if (paramsObj[key] === undefined) paramsObj[key] = value;
+        else if (Array.isArray(paramsObj[key])) paramsObj[key].push(value);
+        else paramsObj[key] = [paramsObj[key], value];
+      });
+
+      const perPageVal = paramsObj.per_page || perPage;
+
+      let queryString = "";
+
+      if (selectedCategoryIds.length > 0) {
+        queryString = `per_page=${encodeURIComponent(
+          String(perPageVal)
+        )}&filters[0][key]=categories&filters[0][operator]=IN`;
+        selectedCategoryIds.forEach((id) => {
+          queryString += `&filters[0][value][]=${encodeURIComponent(
+            String(id)
+          )}`;
+        });
+        if (selectedBrandIds.length > 0) {
+          queryString += `&filters[1][key]=brands&filters[1][operator]=IN`;
+          selectedBrandIds.forEach((id) => {
+            queryString += `&filters[1][value][]=${encodeURIComponent(
+              String(id)
+            )}`;
+          });
+        }
+        queryString += `&page=${encodeURIComponent(String(page))}`;
+      } else {
+        paramsObj.page = page;
+        paramsObj.per_page = perPageVal;
+        if (!paramsObj["filters[0][key]"]) {
+          paramsObj["filters[0][key]"] = "categories";
+          paramsObj["filters[0][operator]"] = "IN";
+          paramsObj["filters[0][value][]"] = "99";
+        }
+        // Add brands if selected
+        if (selectedBrandIds.length > 0 && !paramsObj["filters[1][key]"]) {
+          paramsObj["filters[1][key]"] = "brands";
+          paramsObj["filters[1][operator]"] = "IN";
+          selectedBrandIds.forEach(id => paramsObj["filters[1][value][]"] ? paramsObj["filters[1][value][]"].push(String(id)) : (paramsObj["filters[1][value][]"] = [String(id)]));
+        }
+        const buildRawQuery = (params = {}) => {
+          const parts = [];
+          for (const [key, value] of Object.entries(params || {})) {
+            if (Array.isArray(value)) {
+              for (const v of value)
+                parts.push(`${key}=${encodeURIComponent(String(v))}`);
+            } else if (value !== undefined && value !== null && value !== "") {
+              parts.push(`${key}=${encodeURIComponent(String(value))}`);
+            }
+          }
+          return parts.join("&");
+        };
+        queryString = buildRawQuery(paramsObj);
+      }
+
+      const { data } = await axiosInstance.get(
+        `/page-data/product?${queryString}`,
+        {
+          headers: { Lang: "az" },
+          cache: "no-store",
+        }
+      );
+
+      const newItems = Array.isArray(data)
+        ? data
+        : Array.isArray(data?.data)
+        ? data.data
+        : Array.isArray(data?.data?.data)
+        ? data.data.data
+        : Array.isArray(data?.items)
+        ? data.items
+        : [];
+
+      if (newItems.length === 0 || newItems.length < Number(perPageVal)) {
+        setHasMore(false);
+      }
+
+      if (newItems.length > 0) {
+        setFilteredProducts((prevData) => {
+          const existingIds = new Set(prevData.map((item) => item.id));
+          const uniqueNewItems = newItems.filter(
+            (item) => !existingIds.has(item.id)
+          );
+          return [...prevData, ...uniqueNewItems];
+        });
+
+        const newUrl = new URL(window.location);
+        newUrl.searchParams.set("page", String(page));
+        const newSearch = newUrl.searchParams.toString();
+        if (
+          typeof window !== "undefined" &&
+          window.history &&
+          window.history.pushState
+        ) {
+          window.history.pushState(
+            {},
+            "",
+            newUrl.pathname + (newSearch ? "?" + newSearch : "")
+          );
+        } else {
+          router.push(newUrl.pathname + (newSearch ? "?" + newSearch : ""), {
+            scroll: false,
+          });
+        }
+
+        setCurrentPage(page);
+        prevParamsRef.current = newSearch;
+      }
+    } catch (error) {
+      console.error("fetchMoreProducts error:", error);
+      isLoadingMoreRef.current = false;
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleScroll = useCallback(() => {
+    if (loading || !hasMore) return;
+    const scrollTop =
+      document.documentElement.scrollTop || document.body.scrollTop;
+    const scrollHeight =
+      document.documentElement.scrollHeight || document.body.scrollHeight;
+    const clientHeight =
+      document.documentElement.clientHeight || window.innerHeight;
+    const scrolledToBottom =
+      Math.ceil(scrollTop + clientHeight) >= scrollHeight - 900;
+    if (scrolledToBottom) fetchMoreProducts(currentPage + 1);
+  }, [loading, hasMore, currentPage]);
+
+  useEffect(() => {
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, [handleScroll]);
 
   // PERSISTENT PRODUCT COUNTS: Store counts globally to prevent loss on rerender
   const persistentProductCounts = useMemo(() => {
@@ -2711,32 +2831,149 @@ export default function ProductsPageFilter({
     
   }, [productCounts, categoryToProducts, persistentProductCounts]);
 
+  const onlyPageChanged = (prevStr, nextStr) => {
+    const prev = new URLSearchParams(prevStr || "");
+    const next = new URLSearchParams(nextStr || "");
+    const prevObj = {};
+    prev.forEach((v, k) => {
+      if (k === "page") return;
+      if (prevObj[k] === undefined) prevObj[k] = v;
+      else if (Array.isArray(prevObj[k])) prevObj[k].push(v);
+      else prevObj[k] = [prevObj[k], v];
+    });
+    const nextObj = {};
+    next.forEach((v, k) => {
+      if (k === "page") return;
+      if (nextObj[k] === undefined) nextObj[k] = v;
+      else if (Array.isArray(nextObj[k])) nextObj[k].push(v);
+      else nextObj[k] = [nextObj[k], v];
+    });
+    const keysPrev = Object.keys(prevObj).sort();
+    const keysNext = Object.keys(nextObj).sort();
+    if (keysPrev.length !== keysNext.length) return false;
+    for (let i = 0; i < keysPrev.length; i++) {
+      const k = keysPrev[i];
+      if (k !== keysNext[i]) return false;
+      const a = Array.isArray(prevObj[k]) ? prevObj[k] : [prevObj[k]];
+      const b = Array.isArray(nextObj[k]) ? nextObj[k] : [nextObj[k]];
+      if (a.length !== b.length) return false;
+      for (let j = 0; j < a.length; j++) {
+        if (String(a[j]) !== String(b[j])) return false;
+      }
+    }
+    return true;
+  };
+
   // OPTIMIZED: URL parameter handling with better performance
   useEffect(() => {
-    const catParam = searchParams.get("category");
-    const brParam = searchParams.get("brands");
-    const stParam = searchParams.get("search_text");
+    const currentParamsStr = searchParams.toString();
+    const prevParamsStr = prevParamsRef.current;
+    const pageChangedOnly = onlyPageChanged(prevParamsStr, currentParamsStr);
 
-    const slugs = catParam ? catParam.split(",").filter(Boolean) : [];
-    const slugToId = (slug) => {
-      const found = categoryData.find((c) => c.url_slug === slug);
-      return found ? Number(found.id) : null;
+    if (pageChangedOnly && isLoadingMoreRef.current) {
+      const page = parseInt(searchParams.get("page") || "1", 10);
+      setCurrentPage(page);
+      isLoadingMoreRef.current = false;
+      prevParamsRef.current = currentParamsStr;
+      return;
+    }
+
+    const loadProductsByParams = async () => {
+      try {
+        setIsLoading(true);
+
+        const params = {};
+        searchParams.forEach((value, key) => {
+          if (params[key] === undefined) params[key] = value;
+          else if (Array.isArray(params[key])) params[key].push(value);
+          else params[key] = [params[key], value];
+        });
+
+        if (!params.per_page) params.per_page = perPage;
+        if (!params.page) params.page = 1;
+
+        const stParam = searchParams.get("search_text");
+
+        let queryString = "";
+
+        if (selectedCategoryIds.length > 0) {
+          queryString = `per_page=${encodeURIComponent(
+            String(params.per_page)
+          )}&filters[0][key]=categories&filters[0][operator]=IN`;
+          selectedCategoryIds.forEach((id) => {
+            queryString += `&filters[0][value][]=${encodeURIComponent(
+              String(id)
+            )}`;
+          });
+          if (selectedBrandIds.length > 0) {
+            queryString += `&filters[1][key]=brands&filters[1][operator]=IN`;
+            selectedBrandIds.forEach((id) => {
+              queryString += `&filters[1][value][]=${encodeURIComponent(
+                String(id)
+              )}`;
+            });
+          }
+          queryString += `&page=${encodeURIComponent(String(params.page))}`;
+        } else {
+          if (!params["filters[0][key]"]) {
+            params["filters[0][key]"] = "categories";
+            params["filters[0][operator]"] = "IN";
+            params["filters[0][value][]"] = "99";
+          }
+          // Add brands if selected
+          if (selectedBrandIds.length > 0 && !params["filters[1][key]"]) {
+            params["filters[1][key]"] = "brands";
+            params["filters[1][operator]"] = "IN";
+            selectedBrandIds.forEach(id => params["filters[1][value][]"] ? params["filters[1][value][]"].push(String(id)) : (params["filters[1][value][]"] = [String(id)]));
+          }
+          const buildRawQuery = (params = {}) => {
+            const parts = [];
+            for (const [key, value] of Object.entries(params || {})) {
+              if (Array.isArray(value)) {
+                for (const v of value)
+                  parts.push(`${key}=${encodeURIComponent(String(v))}`);
+              } else if (value !== undefined && value !== null && value !== "") {
+                parts.push(`${key}=${encodeURIComponent(String(value))}`);
+              }
+            }
+            return parts.join("&");
+          };
+          queryString = buildRawQuery(params);
+          if (stParam) queryString += `&search_text=${encodeURIComponent(stParam)}`;
+        }
+
+        const { data } = await axiosInstance.get(
+          `/page-data/product?${queryString}`,
+          {
+            headers: { Lang: "az" },
+            cache: "no-store",
+          }
+        );
+
+        const items = Array.isArray(data)
+          ? data
+          : Array.isArray(data?.data)
+          ? data.data
+          : Array.isArray(data?.data?.data)
+          ? data.data.data
+          : Array.isArray(data?.items)
+          ? data.items
+          : [];
+
+        setFilteredProducts(items || []);
+        setCurrentPage(parseInt(params.page || 1, 10) || 1);
+        setHasMore((items?.length ?? 0) >= perPage);
+        isLoadingMoreRef.current = false;
+      } catch (err) {
+        console.error("loadProductsByParams error:", err);
+      } finally {
+        setIsLoading(false);
+      }
     };
-    const newCatIds = normalizeIds(slugs.map(slugToId));
 
-    const brIds = brParam
-      ? brParam
-          .split(",")
-          .map((s) => Number(s))
-          .filter((n) => !Number.isNaN(n))
-      : [];
-    const newBrandIds = normalizeIds(brIds);
-
-    setSelectedCategoryIds(newCatIds);
-    setSelectedBrandIds(newBrandIds);
-    setShowDetails(false);
-    fetchProductsDebounced(newCatIds, newBrandIds, stParam, 1);
-  }, [searchParams.toString(), categoryData, brandsDataFilter, fetchProductsDebounced]);
+    loadProductsByParams();
+    prevParamsRef.current = currentParamsStr;
+  }, [searchParams.toString(), selectedCategoryIds, selectedBrandIds]);
 
   const sortedProducts = useMemo(() => {
     return sortOption.value === "az"
@@ -2807,50 +3044,6 @@ export default function ProductsPageFilter({
     },
     [selectedCategoryIds, updateUrlWithFilters]
   );
-
-  // OPTIMIZED: Improved infinite scroll with better performance
-  useEffect(() => {
-    if (!loadMoreRef.current) return;
-    
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (
-          entry.isIntersecting && 
-          !isLoading && 
-          !isLoadingMore && 
-          currentPagination?.next_page_url &&
-          filteredProducts.length > 0
-        ) {
-          setIsLoadingMore(true);
-          
-          const nextPage = currentPage + 1;
-          const catIds = normalizeIds(selectedCategoryIds);
-          const brIds = normalizeIds(selectedBrandIds);
-          const st = searchParams.get("search_text");
-          fetchProductsDebounced(catIds, brIds, st, nextPage);
-        }
-      },
-      { 
-        root: null, 
-        rootMargin: "100px",
-        threshold: 0.1 
-      }
-    );
-    
-    observer.observe(loadMoreRef.current);
-    
-    return () => observer.disconnect();
-  }, [
-    isLoading,
-    isLoadingMore,
-    currentPagination,
-    currentPage,
-    selectedCategoryIds,
-    selectedBrandIds,
-    searchParams,
-    fetchProductsDebounced,
-    filteredProducts.length
-  ]);
 
   // OPTIMIZED: Memoized grouped categories with better performance
   const groupedCategories = useMemo(() => {
@@ -3077,21 +3270,21 @@ export default function ProductsPageFilter({
               </div>
             </div>
 
-            {/* Loading trigger element */}
-            {!isLoading && sortedProducts.length > 0 && (
-              <div ref={loadMoreRef} style={{ 
-                height: "20px", 
-                margin: "20px 0",
-                visibility: "hidden" 
-              }} />
-            )}
-            
-            {/* Loading state */}
-            {isLoadingMore && (
-              <div className="loading-more-container">
-                <div className="loader" />
-              </div>
-            )}
+            <div className="flex items-center justify-center flex-col gap-4 py-8">
+              {loading && (
+                <div
+                  className="loading-spinner"
+                  style={{
+                    width: "40px",
+                    height: "40px",
+                    border: "4px solid #f3f3f3",
+                    borderTop: "4px solid #293881",
+                    borderRadius: "50%",
+                    animation: "spin 1s linear infinite",
+                  }}
+                ></div>
+              )}
+            </div>
           </div>
         </div>
 
@@ -3121,6 +3314,14 @@ export default function ProductsPageFilter({
         </div>
 
         <style jsx>{`
+          @keyframes spin {
+            0% {
+              transform: rotate(0deg);
+            }
+            100% {
+              transform: rotate(360deg);
+            }
+          }
           .loader-container {
             width: 100% !important;
             min-width: 97rem;
@@ -3129,29 +3330,6 @@ export default function ProductsPageFilter({
             align-items: center;
             justify-content: center;
             padding: 5rem auto;
-          }
-          .loading-more-container {
-            width: 100%;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            padding: 2rem 0;
-            margin: 2rem 0;
-            border-radius: 8px;
-          }
-          .loader {
-            border: 5px solid #98b4de;
-            border-top: 5px solid #293881;
-            border-radius: 50%;
-            width: 40px;
-            height: 40px;
-            animation: spin 0.8s linear infinite;
-          }
-          @keyframes spin {
-            to {
-              transform: rotate(360deg);
-            }
           }
           .accordion-content {
             max-height: 250px;
@@ -3168,6 +3346,903 @@ export default function ProductsPageFilter({
     </div>
   );
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// ! DWAYNO JONSHON 15IFJR
+// ? EN KRAL PADISAH SENSIN ASLANIM
+// "use client";
+// import Link from "next/link";
+// import React, {
+//   useState,
+//   useEffect,
+//   useMemo,
+//   useCallback,
+//   useRef,
+// } from "react";
+// import { useRouter, useSearchParams } from "next/navigation";
+// import LoadMoreBTN from "./LoadMoreBTN";
+// import ApplyBTN from "./ApplyBTN";
+// import ReactSelect from "./ReactSelect";
+// import Manat from "../../public/icons/manat.svg";
+// import axiosInstance from "@/lib/axios";
+
+// // Accordion başlık komponenti
+// const FilterAccordion = ({ title, children }) => {
+//   const [isOpen, setIsOpen] = useState(true);
+//   return (
+//     <div className="accordion">
+//       <button className="accordion-header" onClick={() => setIsOpen(!isOpen)}>
+//         {title}
+//         <img
+//           src={isOpen ? "/icons/minus.svg" : "/icons/plusIcon.svg"}
+//           alt="Toggle Icon"
+//           className="toggle-icon"
+//         />
+//       </button>
+//       {isOpen && <div className="accordion-content">{children}</div>}
+//     </div>
+//   );
+// };
+
+// // OPTIMIZED CACHE: Smarter caching with TTL and size limits
+// class OptimizedCache {
+//   constructor(maxSize = 100, ttl = 3 * 60 * 1000) { // 3 minutes
+//     this.cache = new Map();
+//     this.maxSize = maxSize;
+//     this.ttl = ttl;
+//   }
+
+//   get(key) {
+//     const item = this.cache.get(key);
+//     if (!item) return null;
+    
+//     if (Date.now() - item.timestamp > this.ttl) {
+//       this.cache.delete(key);
+//       return null;
+//     }
+    
+//     // Move to end (LRU behavior)
+//     this.cache.delete(key);
+//     this.cache.set(key, item);
+//     return item.data;
+//   }
+
+//   set(key, data) {
+//     // Remove oldest if at capacity
+//     if (this.cache.size >= this.maxSize) {
+//       const firstKey = this.cache.keys().next().value;
+//       this.cache.delete(firstKey);
+//     }
+    
+//     this.cache.set(key, {
+//       data,
+//       timestamp: Date.now(),
+//     });
+//   }
+
+//   clear() {
+//     this.cache.clear();
+//   }
+// }
+
+// const productCache = new OptimizedCache();
+
+// // PERFORMANCE BOOST: Reduced debounce time and optimized fetch
+// async function fetchProducts(
+//   categoryIds = [],
+//   brandIds = [],
+//   searchText = "",
+//   page = 1,
+//   perPage = 24
+// ) {
+//   const cacheKey = JSON.stringify({
+//     categoryIds: categoryIds.sort(),
+//     brandIds: brandIds.sort(),
+//     searchText,
+//     page,
+//     perPage,
+//   });
+
+//   const cached = productCache.get(cacheKey);
+//   if (cached) {
+//     return cached;
+//   }
+
+//   const filters = [];
+//   if (categoryIds.length) {
+//     filters.push({ key: "categories", operator: "IN", values: categoryIds });
+//   }
+//   if (brandIds.length) {
+//     filters.push({ key: "brands", operator: "IN", values: brandIds });
+//   }
+
+//   let url = `/page-data/product?per_page=${perPage}&page=${page}`;
+//   if (searchText) url += `&search_text=${encodeURIComponent(searchText)}`;
+
+//   if (filters.length) {
+//     const query = filters
+//       .map((f, idx) => {
+//         const base = `filters[${idx}][key]=${encodeURIComponent(
+//           f.key
+//         )}&filters[${idx}][operator]=${encodeURIComponent(f.operator)}`;
+//         const vals = f.values
+//           .map((v) => `filters[${idx}][value][]=${encodeURIComponent(v)}`)
+//           .join("&");
+//         return `${base}&${vals}`;
+//       })
+//       .join("&");
+//     url += `&${query}`;
+//   }
+
+//   try {
+//     const res = await axiosInstance.get(url);
+//     const result = {
+//       products: res.data.data.data,
+//       pagination: res.data.data,
+//     };
+    
+//     productCache.set(cacheKey, result);
+//     return result;
+//   } catch (err) {
+//     console.error("Filter fetch error (client)", err);
+//     return { products: [], pagination: null };
+//   }
+// }
+
+// // slugify
+// function slugify(text) {
+//   if (!text) return "";
+//   return text
+//     .normalize("NFD")
+//     .replace(/[\u0300-\u036f]/g, "")
+//     .toLowerCase()
+//     .replace(/[^a-z0-9]+/g, "-")
+//     .replace(/(^-|-$)/g, "");
+// }
+
+// // normalize id array (numeric, unique)
+// const normalizeIds = (arr = []) =>
+//   Array.from(new Set((arr || []).map((v) => Number(v)).filter((v) => !Number.isNaN(v))));
+
+// // OPTIMIZED: More efficient category extraction
+// function extractCategoryIdsFromProduct(product) {
+//   const ids = new Set();
+//   if (!product) return [];
+  
+//   const extractFromValue = (value) => {
+//     if (value == null) return;
+//     if (typeof value === 'number' && !Number.isNaN(value)) {
+//       ids.add(value);
+//     } else if (typeof value === 'string') {
+//       const num = Number(value);
+//       if (!Number.isNaN(num)) ids.add(num);
+//     } else if (typeof value === 'object' && value !== null) {
+//       if (value.id != null) extractFromValue(value.id);
+//       if (value.category_id != null) extractFromValue(value.category_id);
+//       if (value.value != null) extractFromValue(value.value);
+//     }
+//   };
+
+//   // Check various possible category fields
+//   const categoryFields = [
+//     'categories', 'category_ids', 'category_list', 
+//     'category', 'category_id'
+//   ];
+  
+//   for (const field of categoryFields) {
+//     const value = product[field];
+//     if (Array.isArray(value)) {
+//       value.forEach(extractFromValue);
+//     } else if (value != null) {
+//       extractFromValue(value);
+//     }
+//   }
+
+//   return Array.from(ids);
+// }
+
+// // OPTIMIZED: Memoized product card with better performance
+// const ProductCard = React.memo(({ product, t }) => (
+//   <div className="xl-4 lg-4 md-6 sm-6">
+//     <Link href={`/products/${slugify(product.title)}-${product.id}`} className="block">
+//       <div className="homePageProductCardContent">
+//         <div className="homePageProCardImgs">
+//           <div className="homePageProductCardContentImage">
+//             <img src={`https://admin.adentta.az/storage${product.image}`} alt={product.title} loading="lazy" />
+//           </div>
+//         </div>
+//         <div className="homePageProductCardContentInner">
+//           <div className="homePageProductCardContentText">
+//             <span>{product.title}</span>
+//           </div>
+//           <div className="price">
+//             <div className="priceItem">
+//               <strong id="prices">{product.price}</strong>
+//               <Manat />
+//             </div>
+//           </div>
+//         </div>
+//         <div className="homePageProductCardContentBottom">
+//           <span>{t?.learnMore || "Learn More"}</span>
+//           <img src="/icons/arrowTopRight.svg" alt="" />
+//         </div>
+//       </div>
+//     </Link>
+//   </div>
+// ), (prevProps, nextProps) => {
+//   return prevProps.product.id === nextProps.product.id && 
+//          prevProps.product.price === nextProps.product.price;
+// });
+
+// export default function ProductsPageFilter({
+//   t,
+//   allProducts = [],
+//   initialProducts = [],
+//   categoryData = [],
+//   brandsDataFilter = [],
+//   initialSelectedBrands = [],
+//   initialSelectedCategories = [],
+//   categoryMetaTitle = null,
+//   categoryMetaDescription = null,
+//   categoryPageTitle = null,
+//   categoryPageDescription = null,
+//   categoryId = null,
+//   searchText = null,
+//   perPage = 24,
+//   pagination = null,
+//   productCounts = {},
+// }) {
+//   const router = useRouter();
+//   const searchParams = useSearchParams();
+
+//   // initial selected ids (normalize)
+//   const initialCatIds = normalizeIds(
+//     (initialSelectedCategories || []).map((c) => (c && c.id ? c.id : null))
+//   );
+//   const initialBrandIds = normalizeIds(
+//     (initialSelectedBrands || []).map((b) => (b && b.id ? b.id : null))
+//   );
+
+//   const [filteredProducts, setFilteredProducts] = useState(initialProducts);
+//   const [currentPagination, setPagination] = useState(pagination);
+//   const [selectedCategoryIds, setSelectedCategoryIds] = useState(initialCatIds);
+//   const [selectedBrandIds, setSelectedBrandIds] = useState(initialBrandIds);
+//   const [sortOption, setSortOption] = useState({
+//     value: "az",
+//     label: t?.from || "From A-Z",
+//   });
+//   const [isMobileFilterOpen, setIsMobileFilterOpen] = useState(false);
+//   const [isLoading, setIsLoading] = useState(false);
+//   const [brandSearchTerm, setBrandSearchTerm] = useState("");
+//   const [showDetails, setShowDetails] = useState(false);
+//   const [currentPage, setCurrentPage] = useState(1);
+//   const [isLoadingMore, setIsLoadingMore] = useState(false);
+
+//   const loadMoreRef = useRef(null);
+//   const debounceTimeoutRef = useRef(null);
+
+//   // PERFORMANCE IMPROVEMENT: Reduced debounce from 2000ms to 300ms
+//   const fetchProductsDebounced = useCallback(
+//     async (categoryIds, brandIds, searchTextParam, page = 1) => {
+//       if (debounceTimeoutRef.current) clearTimeout(debounceTimeoutRef.current);
+//       debounceTimeoutRef.current = setTimeout(async () => {
+//         setIsLoading(true);
+//         try {
+//           const { products, pagination: newPagination } = await fetchProducts(
+//             categoryIds,
+//             brandIds,
+//             searchTextParam,
+//             page,
+//             perPage
+//           );
+//           if (page === 1) setFilteredProducts(products);
+//           else setFilteredProducts((prev) => [...prev, ...products]);
+//           setPagination(newPagination);
+//           setCurrentPage(page);
+//         } catch {
+//           if (page === 1) setFilteredProducts([]);
+//         } finally {
+//           setIsLoading(false);
+//           setIsLoadingMore(false);
+//         }
+//       }, 300); // Reduced from 2000ms to 300ms
+//     },
+//     [perPage]
+//   );
+
+//   // PERSISTENT PRODUCT COUNTS: Store counts globally to prevent loss on rerender
+//   const persistentProductCounts = useMemo(() => {
+//     // Create a stable reference that persists across rerenders
+//     if (!window.globalProductCounts) {
+//       window.globalProductCounts = new Map();
+//     }
+    
+//     // Update with latest data
+//     if (productCounts?.categories) {
+//       Object.entries(productCounts.categories).forEach(([catId, count]) => {
+//         window.globalProductCounts.set(Number(catId), count);
+//       });
+//     }
+    
+//     return window.globalProductCounts;
+//   }, [productCounts]);
+
+//   // OPTIMIZED: Enhanced category-product mapping with persistent storage
+//   const categoryToProducts = useMemo(() => {
+//     if (!window.globalCategoryProductMap) {
+//       window.globalCategoryProductMap = new Map();
+//     }
+    
+//     const map = window.globalCategoryProductMap;
+    
+//     if (Array.isArray(allProducts) && allProducts.length > 0) {
+//       // Clear and rebuild map only if we have new data
+//       map.clear();
+      
+//       for (const product of allProducts) {
+//         const productId = product?.id ?? product?.product_id;
+//         if (!productId) continue;
+        
+//         const categoryIds = extractCategoryIdsFromProduct(product);
+        
+//         for (const categoryId of categoryIds) {
+//           const numericCategoryId = Number(categoryId);
+//           if (Number.isNaN(numericCategoryId)) continue;
+          
+//           if (!map.has(numericCategoryId)) {
+//             map.set(numericCategoryId, new Set());
+//           }
+//           map.get(numericCategoryId).add(Number(productId));
+//         }
+//       }
+//     }
+    
+//     return map;
+//   }, [allProducts]);
+
+//   // ENHANCED: Product count calculation with fallback and persistence
+//   const getProductCountForCategory = useCallback((categoryId) => {
+//     const numericId = Number(categoryId);
+    
+//     // Priority 1: Check persistent global counts
+//     if (persistentProductCounts.has(numericId)) {
+//       return persistentProductCounts.get(numericId);
+//     }
+    
+//     // Priority 2: Check backend productCounts
+//     const backendCounts = productCounts?.categories;
+//     if (backendCounts) {
+//       if (typeof backendCounts === 'object' && !Array.isArray(backendCounts)) {
+//         const count = backendCounts[numericId] ?? backendCounts[numericId.toString()];
+//         if (typeof count === 'number' && count >= 0) {
+//           persistentProductCounts.set(numericId, count);
+//           return count;
+//         }
+//       }
+//       if (Array.isArray(backendCounts)) {
+//         const found = backendCounts.find(c => 
+//           Number(c?.id || c?.category_id) === numericId
+//         );
+//         if (found && typeof (found.count || found.total || found.product_count) === 'number') {
+//           const count = found.count || found.total || found.product_count;
+//           persistentProductCounts.set(numericId, count);
+//           return count;
+//         }
+//       }
+//     }
+    
+//     // Priority 3: Calculate from client-side data
+//     const productsInCategory = categoryToProducts.get(numericId);
+//     const count = productsInCategory ? productsInCategory.size : 0;
+//     persistentProductCounts.set(numericId, count);
+//     return count;
+    
+//   }, [productCounts, categoryToProducts, persistentProductCounts]);
+
+//   // OPTIMIZED: URL parameter handling with better performance
+//   useEffect(() => {
+//     const catParam = searchParams.get("category");
+//     const brParam = searchParams.get("brands");
+//     const stParam = searchParams.get("search_text");
+
+//     const slugs = catParam ? catParam.split(",").filter(Boolean) : [];
+//     const slugToId = (slug) => {
+//       const found = categoryData.find((c) => c.url_slug === slug);
+//       return found ? Number(found.id) : null;
+//     };
+//     const newCatIds = normalizeIds(slugs.map(slugToId));
+
+//     const brIds = brParam
+//       ? brParam
+//           .split(",")
+//           .map((s) => Number(s))
+//           .filter((n) => !Number.isNaN(n))
+//       : [];
+//     const newBrandIds = normalizeIds(brIds);
+
+//     setSelectedCategoryIds(newCatIds);
+//     setSelectedBrandIds(newBrandIds);
+//     setShowDetails(false);
+//     fetchProductsDebounced(newCatIds, newBrandIds, stParam, 1);
+//   }, [searchParams.toString(), categoryData, brandsDataFilter, fetchProductsDebounced]);
+
+//   const sortedProducts = useMemo(() => {
+//     return sortOption.value === "az"
+//       ? [...filteredProducts].sort((a, b) => a.title.localeCompare(b.title))
+//       : [...filteredProducts].sort((a, b) => b.title.localeCompare(a.title));
+//   }, [filteredProducts, sortOption.value]);
+
+//   // OPTIMIZED: URL update with debouncing
+//   const updateUrlWithFilters = useCallback(
+//     (brandIdsArr = [], categoryIdsArr = []) => {
+//       const params = new URLSearchParams();
+
+//       const uniqueCatIds = normalizeIds(categoryIdsArr);
+//       const catSlugs = uniqueCatIds
+//         .map((id) => {
+//           const found = categoryData.find((c) => Number(c.id) === Number(id));
+//           return found ? found.url_slug : null;
+//         })
+//         .filter(Boolean);
+//       const uniqueSlugs = Array.from(new Set(catSlugs));
+//       if (uniqueSlugs.length) params.set("category", uniqueSlugs.join(","));
+
+//       const uniqueBrandIds = normalizeIds(brandIdsArr);
+//       if (uniqueBrandIds.length) params.set("brands", uniqueBrandIds.join(","));
+
+//       const cs = searchParams.get("search_text");
+//       const pp = searchParams.get("per_page");
+//       if (cs) params.set("search_text", cs);
+//       if (pp) params.set("per_page", pp);
+
+//       const qs = params.toString();
+//       router.push(qs ? `/products?${qs}` : `/products`);
+//     },
+//     [router, searchParams, categoryData]
+//   );
+
+//   // PERFORMANCE OPTIMIZED: Toggle handlers with immediate UI feedback
+//   const handleCategoryToggleById = useCallback(
+//     (id) => {
+//       const numeric = Number(id);
+//       setSelectedCategoryIds((prev) => {
+//         const set = new Set(prev.map((v) => Number(v)));
+//         if (set.has(numeric)) set.delete(numeric);
+//         else set.add(numeric);
+//         const arr = normalizeIds(Array.from(set));
+        
+//         // Immediate URL update for better UX
+//         setTimeout(() => updateUrlWithFilters(selectedBrandIds, arr), 0);
+//         return arr;
+//       });
+//     },
+//     [selectedBrandIds, updateUrlWithFilters]
+//   );
+
+//   const handleBrandToggleById = useCallback(
+//     (id) => {
+//       const numeric = Number(id);
+//       setSelectedBrandIds((prev) => {
+//         const set = new Set(prev.map((v) => Number(v)));
+//         if (set.has(numeric)) set.delete(numeric);
+//         else set.add(numeric);
+//         const arr = normalizeIds(Array.from(set));
+        
+//         // Immediate URL update for better UX
+//         setTimeout(() => updateUrlWithFilters(arr, selectedCategoryIds), 0);
+//         return arr;
+//       });
+//     },
+//     [selectedCategoryIds, updateUrlWithFilters]
+//   );
+
+//   // OPTIMIZED: Improved infinite scroll with better performance
+//   useEffect(() => {
+//     if (!loadMoreRef.current) return;
+    
+//     const observer = new IntersectionObserver(
+//       ([entry]) => {
+//         if (
+//           entry.isIntersecting && 
+//           !isLoading && 
+//           !isLoadingMore && 
+//           currentPagination?.next_page_url &&
+//           filteredProducts.length > 0
+//         ) {
+//           setIsLoadingMore(true);
+          
+//           const nextPage = currentPage + 1;
+//           const catIds = normalizeIds(selectedCategoryIds);
+//           const brIds = normalizeIds(selectedBrandIds);
+//           const st = searchParams.get("search_text");
+//           fetchProductsDebounced(catIds, brIds, st, nextPage);
+//         }
+//       },
+//       { 
+//         root: null, 
+//         rootMargin: "100px",
+//         threshold: 0.1 
+//       }
+//     );
+    
+//     observer.observe(loadMoreRef.current);
+    
+//     return () => observer.disconnect();
+//   }, [
+//     isLoading,
+//     isLoadingMore,
+//     currentPagination,
+//     currentPage,
+//     selectedCategoryIds,
+//     selectedBrandIds,
+//     searchParams,
+//     fetchProductsDebounced,
+//     filteredProducts.length
+//   ]);
+
+//   // OPTIMIZED: Memoized grouped categories with better performance
+//   const groupedCategories = useMemo(() => {
+//     const parentCategories = categoryData.filter((category) => !category.parent_id);
+//     return parentCategories.map((parentCategory) => {
+//       const children = categoryData.filter((sub) => {
+//         const parentRaw = sub.parent_id;
+//         if (!parentRaw) return false;
+//         let parents = [];
+//         if (Array.isArray(parentRaw)) parents = parentRaw.map((p) => (typeof p === "object" ? p.id : p));
+//         else if (typeof parentRaw === "object" && parentRaw.id != null) parents = [parentRaw.id];
+//         else parents = [parentRaw];
+//         const numericParents = parents.map((p) => (typeof p === "number" ? p : parseInt(p, 10))).filter(Boolean);
+//         return numericParents.includes(parentCategory.id);
+//       });
+//       return { parent: parentCategory, children };
+//     });
+//   }, [categoryData]);
+
+//   // MEMOIZED: Selected items rendering
+//   const renderSelectedCategories = useMemo(() => {
+//     return selectedCategoryIds.map((id) => {
+//       const cat = categoryData.find((c) => Number(c.id) === Number(id));
+//       return {
+//         id,
+//         title: cat ? cat.title : `Category ${id}`,
+//       };
+//     });
+//   }, [selectedCategoryIds, categoryData]);
+
+//   const renderSelectedBrands = useMemo(() => {
+//     return selectedBrandIds.map((id) => {
+//       const br = brandsDataFilter.find((b) => Number(b.id) === Number(id));
+//       return {
+//         id,
+//         title: br ? br.title : `Brand ${id}`,
+//       };
+//     });
+//   }, [selectedBrandIds, brandsDataFilter]);
+
+//   const filteredBrands = useMemo(() => {
+//     return brandsDataFilter.filter((b) => b.title.toLowerCase().includes(brandSearchTerm.toLowerCase()));
+//   }, [brandsDataFilter, brandSearchTerm]);
+
+//   return (
+//     <div>
+//       <div className="container">
+//         {/* Başlıq */}
+//         <div className="filterTop topper">
+//           <Link href="/">
+//             <h1>Adentta</h1>
+//           </Link>
+//           <img src="/icons/rightDown.svg" alt="Adentta" />
+//           <h4>{t?.products || "Products"}</h4>
+//         </div>
+
+//         <div className="searchResultsProductCount">
+//           {searchText && (
+//             <div className="search-results-info">
+//               <p>
+//                 {t?.searchResults || "results found for"} "{searchText}" ( {currentPagination?.total || filteredProducts.length} )
+//               </p>
+//             </div>
+//           )}
+//         </div>
+
+//         <div className="row">
+//           {/* Sidebar */}
+//           <div className="xl-3 lg-3 md-3 sm-12">
+//             <div className="filter-container">
+//               <button className="filter-title" onClick={() => setIsMobileFilterOpen(!isMobileFilterOpen)}>
+//                 {t?.productsPageFilterTitle || "Filter"}
+//               </button>
+
+//               {/* Selected filters - desktop */}
+//               <div className="selectedFilter desktop-only">
+//                 {renderSelectedCategories.map((cat) => (
+//                   <div className="selectedFilterInner" key={`cat-${cat.id}`}>
+//                     <span onClick={() => handleCategoryToggleById(cat.id)}>×</span>
+//                     <p>{cat.title}</p>
+//                   </div>
+//                 ))}
+//                 {renderSelectedBrands.map((br) => (
+//                   <div className="selectedFilterInner" key={`brand-${br.id}`}>
+//                     <span onClick={() => handleBrandToggleById(br.id)}>×</span>
+//                     <p>{br.title}</p>
+//                   </div>
+//                 ))}
+//               </div>
+
+//               <div className={`filter-panel ${isMobileFilterOpen ? "active" : ""}`}>
+//                 <button className="filter-titless">{t?.productsPageFilterTitle || "Filter"}</button>
+
+//                 {/* Selected - mobile */}
+//                 <div className="selectedFilter mobile-only">
+//                   {renderSelectedCategories.map((cat) => (
+//                     <div className="selectedFilterInner" key={`cat-${cat.id}`}>
+//                       <span onClick={() => handleCategoryToggleById(cat.id)}>×</span>
+//                       <p>{cat.title}</p>
+//                     </div>
+//                   ))}
+//                   {renderSelectedBrands.map((br) => (
+//                     <div className="selectedFilterInner" key={`brand-${br.id}`}>
+//                       <span onClick={() => handleBrandToggleById(br.id)}>×</span>
+//                       <p>{br.title}</p>
+//                     </div>
+//                   ))}
+//                 </div>
+
+//                 <button className="close-btn" onClick={() => setIsMobileFilterOpen(false)}>
+//                   <img src="/icons/popupCloseIcon.svg" alt="close" />
+//                 </button>
+
+//                 <div className="lineFiltered" />
+
+//                 {/* Categories */}
+//                 <FilterAccordion title={t?.productsPageFilterCategoryTitle || "Category"}>
+//                   <ul style={{ maxHeight: "300px", overflowY: "auto", paddingRight: "4px" }}>
+//                     {groupedCategories.map(({ parent, children }) => {
+//                       const parentProductCount = getProductCountForCategory(parent.id);
+//                       const isParentSelected = selectedCategoryIds.some((c) => Number(c) === Number(parent.id));
+
+//                       return (
+//                         <React.Fragment key={parent.id}>
+//                           <li
+//                             onClick={() => handleCategoryToggleById(parent.id)}
+//                             style={{
+//                               cursor: "pointer",
+//                               display: "flex",
+//                               alignItems: "center",
+//                               gap: "0.5rem",
+//                               fontWeight: isParentSelected ? "bold" : "normal",
+//                               marginBottom: "4px",
+//                             }}
+//                           >
+//                             <span>{parent.title}</span>
+//                             <p>({parentProductCount})</p>
+//                           </li>
+
+//                           {children.map((child) => {
+//                             const childProductCount = getProductCountForCategory(child.id);
+//                             const isChildSelected = selectedCategoryIds.some((c) => Number(c) === Number(child.id));
+//                             return (
+//                               <li
+//                                 key={child.id}
+//                                 onClick={() => handleCategoryToggleById(child.id)}
+//                                 style={{
+//                                   cursor: "pointer",
+//                                   display: "flex",
+//                                   alignItems: "center",
+//                                   gap: "0.3rem",
+//                                   fontWeight: isChildSelected ? "bold" : "normal",
+//                                   marginLeft: "15px",
+//                                   fontSize: "1.3rem",
+//                                   marginBottom: "8px",
+//                                   color: "#666",
+//                                 }}
+//                               >
+//                                 <span>{child.title}</span>
+//                                 <p>({childProductCount})</p>
+//                               </li>
+//                             );
+//                           })}
+//                         </React.Fragment>
+//                       );
+//                     })}
+//                   </ul>
+//                 </FilterAccordion>
+
+//                 {/* Brands */}
+//                 <FilterAccordion title={t?.productsPageFilterBrandsTitle || "Brands"}>
+//                   <div className="filteredSearch">
+//                     <img src="/icons/searchIcon.svg" alt="" />
+//                     <input className="filterSrch" type="text" placeholder={t?.searchText || "Search..."} value={brandSearchTerm} onChange={(e) => setBrandSearchTerm(e.target.value)} />
+//                   </div>
+//                   <ul style={{ maxHeight: "250px", overflowY: "auto", paddingRight: "4px" }}>
+//                     {filteredBrands.map((br) => {
+//                       const isSelected = selectedBrandIds.some((b) => Number(b) === Number(br.id));
+//                       return (
+//                         <li
+//                           key={br.id}
+//                           onClick={() => handleBrandToggleById(br.id)}
+//                           style={{
+//                             cursor: "pointer",
+//                             display: "flex",
+//                             alignItems: "center",
+//                             gap: "0.5rem",
+//                             fontWeight: isSelected ? "bold" : "normal",
+//                           }}
+//                         >
+//                           <input type="checkbox" checked={isSelected} readOnly />
+//                           <span>{br.title}</span>
+//                         </li>
+//                       );
+//                     })}
+//                   </ul>
+//                 </FilterAccordion>
+
+//                 <div className="applyBTN flex items-center mt-4 justify-center" onClick={() => setIsMobileFilterOpen(false)}>
+//                   <ApplyBTN t={t} />
+//                 </div>
+//               </div>
+//             </div>
+//           </div>
+
+//           {/* Products Grid */}
+//           <div className="xl-9 lg-9 md-9 sm-12">
+//             <div className="productPageCards">
+//               <div className="productPageSorting">
+//                 <div className="productPageSortingInner">
+//                   <span>{t?.sortBy || "Sort by"}</span>
+//                   <ReactSelect t={t} value={sortOption} onChange={setSortOption} />
+//                 </div>
+//               </div>
+
+//               <div className="row">
+//                 {isLoading ? (
+//                   <div className="loader-container">
+//                     <div className="loader" />
+//                   </div>
+//                 ) : (
+//                   sortedProducts.map((d) => <ProductCard key={d.id} product={d} t={t} />)
+//                 )}
+//               </div>
+//             </div>
+
+//             {/* Loading trigger element */}
+//             {!isLoading && sortedProducts.length > 0 && (
+//               <div ref={loadMoreRef} style={{ 
+//                 height: "20px", 
+//                 margin: "20px 0",
+//                 visibility: "hidden" 
+//               }} />
+//             )}
+            
+//             {/* Loading state */}
+//             {isLoadingMore && (
+//               <div className="loading-more-container">
+//                 <div className="loader" />
+//               </div>
+//             )}
+//           </div>
+//         </div>
+
+//         {/* Description */}
+//         <div className="productsPageDescription">
+//           <h1>{categoryPageTitle ? categoryPageTitle : t?.productsPageCeoDescription || "Ceo description - Addenta product category"}</h1>
+
+//           {showDetails && (
+//             <div className="productsPageDetailsCEO" style={{ marginTop: "2rem" }}>
+//               <div className="page-description-content" dangerouslySetInnerHTML={{ __html: categoryPageDescription || "" }} />
+//             </div>
+//           )}
+
+//           <div className="productsPageDescriptionLink" style={{ marginTop: "1rem" }}>
+//             <a
+//               href="#"
+//               onClick={(e) => {
+//                 e.preventDefault();
+//                 setShowDetails((prev) => !prev);
+//               }}
+//               style={{ display: "inline-flex", alignItems: "center", cursor: "pointer", textDecoration: "none" }}
+//             >
+//               {showDetails ? t?.hideDetailsBtn || "Hide" : t?.seeMoreBtn || "See more"}
+//               <img src="/icons/rightDown.svg" alt="" style={{ marginLeft: "0.25rem", transform: showDetails ? "rotate(180deg)" : "none", transition: "transform 0.2s" }} />
+//             </a>
+//           </div>
+//         </div>
+
+//         <style jsx>{`
+//           .loader-container {
+//             width: 100% !important;
+//             min-width: 97rem;
+//             min-height: 10rem;
+//             display: flex;
+//             align-items: center;
+//             justify-content: center;
+//             padding: 5rem auto;
+//           }
+//           .loading-more-container {
+//             width: 100%;
+//             display: flex;
+//             flex-direction: column;
+//             align-items: center;
+//             justify-content: center;
+//             padding: 2rem 0;
+//             margin: 2rem 0;
+//             border-radius: 8px;
+//           }
+//           .loader {
+//             border: 5px solid #98b4de;
+//             border-top: 5px solid #293881;
+//             border-radius: 50%;
+//             width: 40px;
+//             height: 40px;
+//             animation: spin 0.8s linear infinite;
+//           }
+//           @keyframes spin {
+//             to {
+//               transform: rotate(360deg);
+//             }
+//           }
+//           .accordion-content {
+//             max-height: 250px;
+//             overflow-y: auto;
+//           }
+//           .productsPageDetailsCEO h1 {
+//             margin-bottom: 0.5rem;
+//           }
+//           .page-description-content {
+//             margin-bottom: 0.5rem;
+//           }
+//         `}</style>
+//       </div>
+//     </div>
+//   );
+// }
 // ? EN KRAL PADISAH SENSIN ASLANIM
 // ! DWAYNO JONSHON 15IFJR
 
