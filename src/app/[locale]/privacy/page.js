@@ -166,7 +166,6 @@ const page = async () => {
 
   const setting = await fetchSettingsPageData();
   const settingData = setting?.data || [];
-   
   
   return (
     <div>
