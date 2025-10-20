@@ -73,13 +73,12 @@ const EventsDetailPage = ({ t, eventsDetail, otherEvents }) => {
                 // src="/images/eventDetailBanner.png"
                 src={`https://admin.adentta.az/storage${eventsDetail.image}`}
                 alt="eventDetail"
-                width={2000}
-                height={1000}
+                width={940}
+                height={500}
               />
             </div>
 
             <div className="eventDetailText">
-              {/* <span>Atque his de rebus et splendida est eorum et</span> */}
               <div
                 className="porto"
                 dangerouslySetInnerHTML={{ __html: eventsDetail.content }}
@@ -103,9 +102,6 @@ const EventsDetailPage = ({ t, eventsDetail, otherEvents }) => {
               <div key={event.id} className="xl-4 lg-4 md-6 sm-12">
                 <div className="ourEvent">
                   <Link
-                    // href={`/events/${event?.title
-                    //   ?.toLowerCase()
-                    //   .replace(/\s+/g, "-")}-${event.id}`}
                     href={`/events/${(event?.slug || event?.title)
                       ?.toLowerCase()
                       .replace(/\s+/g, "-")}-${event.id}`}
@@ -116,8 +112,8 @@ const EventsDetailPage = ({ t, eventsDetail, otherEvents }) => {
                           <Image
                             src={`https://admin.adentta.az/storage${event.image}`}
                             alt={event.title}
-                            width={400}
-                            height={400}
+                            width={300}
+                            height={300}
                           />
                         )}
                         <div className="eventCardImageDate">

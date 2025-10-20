@@ -5,9 +5,9 @@ import "swiper/css";
 import "swiper/css/pagination";
 import "swiper/css/autoplay";
 import "../../app/[locale]/globals.scss";
-
 import { Pagination, Autoplay } from "swiper/modules";
 import Link from "next/link";
+import Image from "next/image";
 
 const OurBlogsHomePage = ({ blogData, t }) => {
   return (
@@ -58,8 +58,6 @@ const OurBlogsHomePage = ({ blogData, t }) => {
           {blogData.map((blog) => (
             <SwiperSlide key={blog.id}>
               <Link
-                // href={`/blogs/${blog?.title?.toLowerCase()
-                //   .replace(/\s+/g, "-")}-${blog.id}`}
                 href={`/blogs/${(blog?.slug || blog?.title)
                   ?.toLowerCase()
                   .replace(/\s+/g, "-")}-${blog.id}`}
@@ -68,9 +66,16 @@ const OurBlogsHomePage = ({ blogData, t }) => {
                 <div className="ourEvents ourBlogs">
                   <div className="ourEvent ourBlogshh">
                     <div className="ourEventImage ourEventImageBlog">
-                      <img
+                      {/* <img
                         src={`https://admin.adentta.az/storage${blog.image}`}
                         alt=""
+                      /> */}
+
+                      <Image
+                        src={`https://admin.adentta.az/storage${blog.image}`}
+                        alt={blog.title}
+                        width={300}
+                        height={300}
                       />
                     </div>
 

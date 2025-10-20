@@ -19,7 +19,6 @@ async function fetchBrandsPageData() {
     );
     return brands;
   } catch (error) {
-    console.error("Failed to fetch brands page data", error);
     throw error;
   }
 }
@@ -59,7 +58,7 @@ async function fetchEventsPageData() {
 
   try {
     const { data: events } = await axiosInstance.get(
-      `/page-data/event?per_page=999`,
+      `/page-data/event`,
       {
         // headers: { Lang: lang.value },
         cache: "no-store",

@@ -19,10 +19,6 @@ const TeamPage = ({ t, teamMembers = [] }) => {
           <span> {t?.teamMeet || "Meet our team"}</span>
           <p>
             {t?.teamContent || "Adentta Professional Team"}
-            {/* At <strong>Adentta</strong>, our experienced team is committed to
-            delivering reliable medical solutions and outstanding support. Meet
-            the professionals who ensure quality, innovation, and excellence in
-            everything we do. */}
           </p>
         </div>
 

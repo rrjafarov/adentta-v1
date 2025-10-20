@@ -12,7 +12,6 @@ const EventsPage = ({ eventsData, t }) => {
   const [currentPage, setCurrentPage] = useState(0);
   const [filteredEvents, setFilteredEvents] = useState(eventsData);
 
-  // eventsData strukturunu yoxlamaq üçün
   useEffect(() => {
     console.log("eventsData:", eventsData);
     console.log(
@@ -145,8 +144,6 @@ const EventsPage = ({ eventsData, t }) => {
                   <div key={event.id} className="xl-4 lg-4 md-6 sm-12">
                     <div className="ourEvent">
                       <Link
-                        // href={`/events/${event?.title?.toLowerCase()
-                        //   .replace(/\s+/g, "-")}-${event.id}`}
                         href={`/events/${(event?.slug || event?.title)
                           ?.toLowerCase()
                           .replace(/\s+/g, "-")}-${event.id}`}
@@ -157,8 +154,8 @@ const EventsPage = ({ eventsData, t }) => {
                               <Image
                                 src={`https://admin.adentta.az/storage${event.image}`}
                                 alt={event.title}
-                                width={300}
-                                height={300}
+                                width={400}
+                                height={400}
                               />
                             )}
                             <div className="eventCardImageDate">

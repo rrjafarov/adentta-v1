@@ -17,7 +17,6 @@ async function fetchContactPageData() {
     });
     return contact;
   } catch (error) {
-    console.error("Failed to fetch contact page data", error);
     throw error;
   }
 }
@@ -32,7 +31,6 @@ async function fetchSettingsPageData() {
     });
     return setting;
   } catch (error) {
-    console.error("Failed to fetch setting page data", error);
     throw error;
   }
 }
@@ -47,7 +45,6 @@ async function fetchAboutPageData() {
     });
     return videoCategory;
   } catch (error) {
-    console.error("Failed to fetch videoCategory page data", error);
     throw error;
   }
 }
@@ -74,7 +71,6 @@ async function fetchVideoPageData() {
     });
     return videos;
   } catch (error) {
-    console.error("Failed to fetch video page data", error);
     throw error;
   }
 }
@@ -90,7 +86,6 @@ async function fetchCategoryPageData() {
     });
     return category;
   } catch (error) {
-    console.error("Failed to fetch category page data", error);
     throw error;
   }
 }
@@ -108,7 +103,6 @@ async function fetchBrandsPageData() {
     });
     return brands;
   } catch (error) {
-    console.error("Failed to fetch brands page data", error);
     throw error;
   }
 }
@@ -126,7 +120,6 @@ async function fetchEventsPageData() {
     });
     return events;
   } catch (error) {
-    console.error("Failed to fetch events page data", error);
     throw error;
   }
 }
@@ -145,7 +138,6 @@ async function fetchVideoSeoData() {
     });
     return aboutSeo;
   } catch (error) {
-    console.error("Failed to fetch aboutSeo page data", error);
     throw error;
   }
 }

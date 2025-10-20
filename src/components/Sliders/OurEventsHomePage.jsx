@@ -4,7 +4,6 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
 import "swiper/css/pagination";
 import "swiper/css/autoplay";
-
 import "../../app/[locale]/globals.scss";
 import { Pagination, Autoplay } from "swiper/modules";
 import Link from "next/link";
@@ -103,8 +102,6 @@ const OurEventsHomePage = ({ eventsData, t }) => {
           {eventsData.map((event) => (
             <SwiperSlide key={event.id}>
               <Link
-                // href={`/events/${event?.title?.toLowerCase()
-                //   .replace(/\s+/g, "-")}-${event.id}`}
 
                 href={`/events/${(event?.slug || event?.title )
                   ?.toLowerCase()
@@ -116,15 +113,11 @@ const OurEventsHomePage = ({ eventsData, t }) => {
                 <div className="ourEvents">
                   <div className="ourEvent">
                     <div className="ourEventImage">
-                      {/* <img
-                        src={`https://admin.adentta.az/storage${event.image}`}
-                        alt={event.title}
-                      /> */}
                       <Image
                         src={`https://admin.adentta.az/storage${event.image}`}
                         alt={event.title}
-                        width={400}
-                        height={400}
+                        width={300}
+                        height={300}
                       />
                       <div className="ourEventImageDate">
                         <span className="ourEventDate">
@@ -137,10 +130,6 @@ const OurEventsHomePage = ({ eventsData, t }) => {
                     <div className="ourEventContent ourEventContentEvent">
                       <span>{event.title}</span>
                       <p>{event.sub_title}</p>
-                      {/* <div
-                      className="eventStopTitle"
-                        dangerouslySetInnerHTML={{ __html: event.sub_title }}
-                      ></div> */}
                     </div>
 
                     <div className="ourEventBottom">
@@ -162,4 +151,3 @@ const OurEventsHomePage = ({ eventsData, t }) => {
 
 export default OurEventsHomePage;
 
-// ! son versiya

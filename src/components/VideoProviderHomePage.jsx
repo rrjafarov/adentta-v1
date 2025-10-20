@@ -72,11 +72,17 @@ const VideoProviderHomePage = ({ homepageData, t }) => {
         <div className="vidProviderVideo">
           <Link href={homepageData.video_url} data-fancybox="videos">
             <div className="vidProviderVideoContent">
-              {/* <img src="/images/videoImage.png" alt="" /> */}
-              <img
+              <Image
+                src={`https://admin.adentta.az/storage${homepageData.video_cover}`}
+                alt={homepageData.title}
+                width={500}
+                height={500}
+              />
+              
+              {/* <img
                 src={`https://admin.adentta.az/storage${homepageData.video_cover}`}
                 alt="video"
-              />
+              /> */}
               <div className="happyCustomer">
                 <div className="smallHappyCustomer">
                   <span>
@@ -87,7 +93,6 @@ const VideoProviderHomePage = ({ homepageData, t }) => {
                       className="stats-number"
                     />
                   </span>
-                  {/* <p>{t?.happyCustomerHomePage || "Happy customer"}</p> */}
                   <p>{homepageData.customer_text}</p>
                 </div>
               </div>
@@ -110,38 +115,6 @@ const VideoProviderHomePage = ({ homepageData, t }) => {
 };
 
 export default VideoProviderHomePage;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 // "use client";
 // import React from "react";

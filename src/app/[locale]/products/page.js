@@ -448,7 +448,6 @@ async function fetchOptimizedProductCounts(categoryData) {
         return batchRes.data;
       }
     } catch (e) {
-      console.log("Batch endpoint not available, using optimized approach");
     }
 
     // Strategy 2: Optimized parallel requests with concurrency limit
@@ -488,7 +487,6 @@ async function fetchOptimizedProductCounts(categoryData) {
           
           return { categoryId: category.id, count };
         } catch (error) {
-          console.error(`Failed to fetch count for category ${category.id}:`, error);
           return { categoryId: category.id, count: 0 };
         }
       });
@@ -508,7 +506,6 @@ async function fetchOptimizedProductCounts(categoryData) {
     return result;
     
   } catch (error) {
-    console.error("Failed to fetch optimized product counts", error);
     return { categories: {}, total: 0 };
   }
 }
@@ -555,7 +552,6 @@ async function fetchProductsByFilters(categoryIds = [], brandIds = [], searchTex
     setCachedData(cacheKey, result);
     return result;
   } catch (err) {
-    console.error("Filter fetch error (server)", err);
     return { products: [], pagination: null };
   }
 }
@@ -572,7 +568,6 @@ async function fetchAllProducts() {
     setCachedData(cacheKey, products);
     return products;
   } catch (err) {
-    console.error("Failed to fetch all products for category counts", err);
     return [];
   }
 }
@@ -599,7 +594,6 @@ async function fetchContactAndEvents() {
     setCachedData(cacheKey, result);
     return result;
   } catch (error) {
-    console.error("Failed to fetch contact and events", error);
     return {
       contact: {},
       eventsData: [],
@@ -620,7 +614,6 @@ async function fetchProductsSeoData() {
     setCachedData(cacheKey, aboutSeo);
     return aboutSeo;
   } catch (error) {
-    console.error("Failed to fetch products SEO data", error);
     return { data: { meta_title: "", meta_description: "", og_image: "" } };
   }
 }
@@ -637,7 +630,6 @@ async function getTranslations() {
     setCachedData(cacheKey, response);
     return response;
   } catch (err) {
-    console.log("Translation fetch error:", err);
     return null;
   }
 }

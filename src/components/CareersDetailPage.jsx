@@ -60,7 +60,6 @@ const CareersDetailPage = ({ careerData, t }) => {
               <div className="detailPageVacancyNeedsText">
                 <span>{t?.careersPageVacancyNeeds || "Vacancy Needs"}</span>
                 <div className="vacancyNeeds">
-                  {/* <Image src="/icons/dotIMG.svg" alt="1" width={8} height={8} /> */}
                   <div
                     className="vacancyNeedText"
                     dangerouslySetInnerHTML={{

@@ -15,7 +15,6 @@ async function fetchContactPageData() {
     });
     return contact;
   } catch (error) {
-    console.error("Failed to fetch contact page data", error);
     throw error;
   }
 }
@@ -31,7 +30,6 @@ async function fetchSettingsPageData() {
     });
     return setting;
   } catch (error) {
-    console.error("Failed to fetch setting page data", error);
     throw error;
   }
 }
@@ -47,7 +45,6 @@ async function fetchAboutPageData() {
     });
     return about;
   } catch (error) {
-    console.error("Failed to fetch about page data", error);
     throw error;
   }
 }
@@ -66,7 +63,6 @@ async function fetchCategoryPageData() {
     );
     return category;
   } catch (error) {
-    console.error("Failed to fetch category page data", error);
     throw error;
   }
 }
@@ -84,7 +80,6 @@ async function fetchBrandsPageData() {
     });
     return brands;
   } catch (error) {
-    console.error("Failed to fetch brands page data", error);
     throw error;
   }
 }
@@ -102,7 +97,6 @@ async function fetchEventsPageData() {
     });
     return events;
   } catch (error) {
-    console.error("Failed to fetch events page data", error);
     throw error;
   }
 }

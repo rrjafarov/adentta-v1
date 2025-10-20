@@ -41,7 +41,7 @@ async function fetchBrandsPageData() {
 
   try {
     const { data: brands } = await axiosInstance.get(
-      `/page-data/brands?per_page=999`,
+      `/page-data/brands`,
       {
         // headers: { Lang: lang.value },
         cache: "no-store",
@@ -61,7 +61,7 @@ async function fetchEventsPageData() {
 
   try {
     const { data: events } = await axiosInstance.get(
-      `/page-data/event?per_page=999`,
+      `/page-data/event`,
       {
         // headers: { Lang: lang.value },
         cache: "no-store",
@@ -81,7 +81,8 @@ async function fetchBlogsPageData() {
 
   try {
     const { data: blogs } = await axiosInstance.get(
-      `/page-data/blog?per_page=999`,
+      // `/page-data/blog?per_page=999`,
+      `/page-data/blog`,
       {
         // headers: { Lang: lang.value },
         cache: "no-store",

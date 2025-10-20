@@ -30,7 +30,7 @@ const AboutPageBanner = ({
           <Image
             src={`https://admin.adentta.az/storage/${image}`}
             alt="banner"
-            width={800}
+            width={1200}
             height={500}
           />
           <div className="aboutTop topper">

@@ -28,7 +28,6 @@ async function fetchCategoryPageData() {
     });
     return category;
   } catch (error) {
-    console.error("Failed to fetch category page data", error);
     throw error;
   }
 }
@@ -56,7 +55,6 @@ async function fetchBrandsPageDataFoot() {
     });
     return brands;
   } catch (error) {
-    console.error("Failed to fetch brands page data", error);
     throw error;
   }
 }
@@ -72,7 +70,6 @@ async function fetchContactPageData() {
     });
     return contact;
   } catch (error) {
-    console.error("Failed to fetch contact page data", error);
     throw error;
   }
 }
@@ -83,13 +80,12 @@ async function fetchEventsPageData() {
   const lang = cookieStore.get("NEXT_LOCALE");
 
   try {
-    const { data: events } = await axiosInstance.get(`/page-data/event?per_page=999`, {
+    const { data: events } = await axiosInstance.get(`/page-data/event`, {
       // headers: { Lang: lang.value },
       cache: "no-store",
     });
     return events;
   } catch (error) {
-    console.error("Failed to fetch events page data", error);
     throw error;
   }
 }
@@ -107,7 +103,6 @@ export async function generateMetadata({ params }) {
   // Cari brendi tapırıq
   const brand = allBrands.find(b => b.id.toString() === slug);
 
-  // Brand yoxdursa fallback
   if (!brand) {
     return {
       title: "Adentta",
@@ -169,7 +164,6 @@ async function fetchSettingsPageData() {
     });
     return setting;
   } catch (error) {
-    console.error("Failed to fetch setting page data", error);
     throw error;
   }
 }
@@ -201,7 +195,6 @@ const page = async ({ params }) => {
 
   const setting = await fetchSettingsPageData();
   const settingData = setting?.data || [];
-  console.log(brandsDetailDataDetail ,"rfrfrfrfrfrf");
   
 
   return (

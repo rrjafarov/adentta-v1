@@ -35,7 +35,6 @@ async function fetchCategoryPageData() {
     );
     return category;
   } catch (error) {
-    console.error("Failed to fetch category page data", error);
     throw error;
   }
 }
@@ -57,7 +56,9 @@ async function fetchBrandsPageData() {
 
   try {
     const { data: brands } = await axiosInstance.get(
-      `/page-data/brands?per_page=999`,
+      // `/page-data/brands?per_page=999`,
+      `/page-data/brands`,
+
       {
         // headers: { Lang: lang.value },
         cache: "no-store",
@@ -65,7 +66,6 @@ async function fetchBrandsPageData() {
     );
     return brands;
   } catch (error) {
-    console.error("Failed to fetch brands page data", error);
     throw error;
   }
 }
@@ -82,7 +82,6 @@ async function fetchSettingsPageData() {
     });
     return setting;
   } catch (error) {
-    console.error("Failed to fetch setting page data", error);
     throw error;
   }
 }
@@ -94,7 +93,9 @@ async function fetchEventsPageData() {
 
   try {
     const { data: events } = await axiosInstance.get(
-      `/page-data/event?per_page=999`,
+      // `/page-data/event?per_page=999`,
+      `/page-data/event`,
+
       {
         // headers: { Lang: lang.value },
         cache: "no-store",
@@ -102,7 +103,6 @@ async function fetchEventsPageData() {
     );
     return events;
   } catch (error) {
-    console.error("Failed to fetch events page data", error);
     throw error;
   }
 }
@@ -192,7 +192,6 @@ async function fetchContactPageData() {
     });
     return contact;
   } catch (error) {
-    console.error("Failed to fetch contact page data", error);
     throw error;
   }
 }

@@ -15,7 +15,6 @@ async function fetchContactPageData() {
     });
     return contact;
   } catch (error) {
-    console.error("Failed to fetch contact page data", error);
     throw error;
   }
 }
@@ -30,7 +29,6 @@ async function fetchPdfPageData() {
     });
     return pdf;
   } catch (error) {
-    console.error("Failed to fetch pdf page data", error);
     throw error;
   }
 }
@@ -45,7 +43,6 @@ async function fetchSettingsPageData() {
     });
     return setting;
   } catch (error) {
-    console.error("Failed to fetch setting page data", error);
     throw error;
   }
 }
@@ -72,7 +69,6 @@ async function fetchCategoryPageData() {
     );
     return category;
   } catch (error) {
-    console.error("Failed to fetch category page data", error);
     throw error;
   }
 }
@@ -84,13 +80,12 @@ async function fetchBrandsPageData() {
   const lang = cookieStore.get("NEXT_LOCALE");
 
   try {
-    const { data: brands } = await axiosInstance.get(`/page-data/brands?per_page=999`, {
+    const { data: brands } = await axiosInstance.get(`/page-data/brands`, {
       // headers: { Lang: lang.value },
       cache: "no-store",
     });
     return brands;
   } catch (error) {
-    console.error("Failed to fetch brands page data", error);
     throw error;
   }
 }
@@ -102,32 +97,31 @@ async function fetchEventsPageData() {
   const lang = cookieStore.get("NEXT_LOCALE");
 
   try {
-    const { data: events } = await axiosInstance.get(`/page-data/event?per_page=999`, {
+    const { data: events } = await axiosInstance.get(`/page-data/event`, {
       // headers: { Lang: lang.value },
       cache: "no-store",
     });
     return events;
   } catch (error) {
-    console.error("Failed to fetch events page data", error);
     throw error;
   }
 }
 //! eventsApi
-
-
 
 async function fetchPdfSeoData() {
   const cookieStore = await cookies();
   const lang = cookieStore.get("NEXT_LOCALE");
 
   try {
-    const { data: pdfSeo } = await axiosInstance.get(`/page-data/pdf-page-info`, {
-      // headers: { Lang: lang.value },
-      cache: "no-store",
-    });
+    const { data: pdfSeo } = await axiosInstance.get(
+      `/page-data/pdf-page-info`,
+      {
+        // headers: { Lang: lang.value },
+        cache: "no-store",
+      }
+    );
     return pdfSeo;
   } catch (error) {
-    console.error("Failed to fetch pdfSeo page data", error);
     throw error;
   }
 }
@@ -178,8 +172,6 @@ export async function generateMetadata() {
 
 // !generateMetaData
 
-
-
 const page = async () => {
   const brandsResponse = await fetchBrandsPageData();
   const brandsData = brandsResponse?.data?.data || [];
@@ -193,7 +185,7 @@ const page = async () => {
   const categoryResponse = await fetchCategoryPageData();
   const categoryData = categoryResponse?.data?.data || [];
 
-    const contact = await fetchContactPageData();
+  const contact = await fetchContactPageData();
 
   const setting = await fetchSettingsPageData();
   const settingData = setting?.data || [];
@@ -202,7 +194,7 @@ const page = async () => {
       <Header settingData={settingData} categoryData={categoryData} />
       <PdfCatalog t={t} pdfMembers={pdfMembers} />
       <Footer
-      contact={contact}
+        contact={contact}
         categoryData={categoryData}
         eventsData={eventsData}
         brandsData={brandsData}

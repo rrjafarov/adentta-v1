@@ -89,8 +89,8 @@ const BlogsDetailPage = ({ t, blogDetail, otherBlogs }) => {
                             <Image
                               src={`https://admin.adentta.az/storage${blog.image}`}
                               alt={blog.title}
-                              width={400}
-                              height={400}
+                              width={300}
+                              height={300}
                             />
                           )}
                           {/* <div className="blogCardImageDate">

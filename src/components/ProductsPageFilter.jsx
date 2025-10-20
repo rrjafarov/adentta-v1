@@ -2717,7 +2717,6 @@ export default function ProductsPageFilter({
         prevParamsRef.current = newSearch;
       }
     } catch (error) {
-      console.error("fetchMoreProducts error:", error);
       isLoadingMoreRef.current = false;
     } finally {
       setLoading(false);
