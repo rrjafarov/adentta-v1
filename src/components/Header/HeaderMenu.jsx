@@ -541,7 +541,7 @@ const HeaderMenu = ({ t, categoryData = [], isHomePage }) => {
                 </li>
                 <div className="dropdownMedia">
                   <li>
-                    <Link className="productsLinkName" href="/">
+                    <Link className="productsLinkName" href="#">
                       {t?.media || "Media"}
                     </Link>
                     <img

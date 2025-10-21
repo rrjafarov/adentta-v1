@@ -49,17 +49,17 @@ const BlogsDetailPage = ({ t, blogDetail, otherBlogs }) => {
               {/* <p>
               </p> */}
               <div
-                className="porto"
+                className="paragraphBlog"
                 dangerouslySetInnerHTML={{ __html: blogDetail.content }}
               />
-              <br />
+              {/* <br />
               <div className="blogDetailBottom">
-                {/* <span>Quos nisi redarguimus, omnis virtus</span> */}
+                <span>Quos nisi redarguimus, omnis virtus</span>
                 <div className="blogDetailBottomText">
-                  {/* <p>
-                  </p> */}
+                  <p>
+                  </p>
                 </div>
-              </div>
+              </div> */}
             </div>
           </div>
         </div>
@@ -104,7 +104,7 @@ const BlogsDetailPage = ({ t, blogDetail, otherBlogs }) => {
                           
                           <span>{blog.title}</span>
                           <div
-                            className="porto"
+                            className="paragraphBlog"
                             dangerouslySetInnerHTML={{
                               __html: blog.content,
                             }}

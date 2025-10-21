@@ -1,4 +1,3 @@
-
 "use client";
 import Link from "next/link";
 import React, { useEffect, useState } from "react";
@@ -22,10 +21,10 @@ export default function SearchPopup({ t, closePopup }) {
       .toString()
       .toLowerCase()
       .trim()
-      .replace(/\s+/g, "-")         // boşluqları -
+      .replace(/\s+/g, "-") // boşluqları -
       .replace(/[^a-z0-9-]/g, "-") // hər şeyi a-z,0-9 və - xaricində -
-      .replace(/-+/g, "-")         // çoxlu - => bir -
-      .replace(/^-|-$/g, "");      // baş və sondakı - sil
+      .replace(/-+/g, "-") // çoxlu - => bir -
+      .replace(/^-|-$/g, ""); // baş və sondakı - sil
   };
 
   // Fetch ve filtreleme
@@ -33,7 +32,9 @@ export default function SearchPopup({ t, closePopup }) {
     const fetchData = async () => {
       try {
         const res = await axiosInstance.get(
-          `/page-data/product?per_page=12&search_text=${encodeURIComponent(searchTerm)}`
+          `/page-data/product?per_page=12&search_text=${encodeURIComponent(
+            searchTerm
+          )}`
         );
         const products = res.data.data?.data || [];
         setProductData(products);
@@ -89,7 +90,9 @@ export default function SearchPopup({ t, closePopup }) {
   // Enter tuşu ile yönlendirme
   const handleKeyDown = (e) => {
     if (e.key === "Enter" && searchTerm.trim() !== "") {
-      router.push(`/products?per_page=12&search_text=${encodeURIComponent(searchTerm)}`);
+      router.push(
+        `/products?per_page=12&search_text=${encodeURIComponent(searchTerm)}`
+      );
       closePopup();
     }
   };
@@ -99,7 +102,11 @@ export default function SearchPopup({ t, closePopup }) {
       <div onClick={handleOverlayClick} className="overlay">
         <div className="searchPopup">
           <div className="searchPopupHeader">
-            <img onClick={closePopup} src="/icons/popupCloseIcon.svg" alt="close" />
+            <img
+              onClick={closePopup}
+              src="/icons/popupCloseIcon.svg"
+              alt="close"
+            />
           </div>
           <div className="searchPopupInner">
             <div className="searchingInput">
@@ -138,24 +145,36 @@ export default function SearchPopup({ t, closePopup }) {
                           <h3>{product.title}</h3>
                           <div className="searchPopupContentInner">
                             <img
-                              src={`https://admin.adentta.az/storage${product.image}`}
+                              // src={`https://admin.adentta.az/storage${product.image}`}
+                              src={
+                                product?.image
+                                  ? `https://admin.adentta.az/storage${product.image}`
+                                  : "/images/adenttaDefaultImg.svg"
+                              }
                               alt={product.title}
                             />
-                            <p dangerouslySetInnerHTML={{ __html: product.content }} />
+                            <p
+                              dangerouslySetInnerHTML={{
+                                __html: product.content,
+                              }}
+                            />
                           </div>
                         </div>
                       </div>
                     </Link>
                   );
                 })
-                
               ) : (
-                <p className="infoMessageSearch">{t?.searchNoResults || "No results found"}</p>
+                <p className="infoMessageSearch">
+                  {t?.searchNoResults || "No results found"}
+                </p>
               )}
 
               <div className="popupSeeMore">
                 <Link
-                  href={`/products?per_page=12&search_text=${encodeURIComponent(searchTerm)}`}
+                  href={`/products?per_page=12&search_text=${encodeURIComponent(
+                    searchTerm
+                  )}`}
                 >
                   {t?.searchShowMore || "Show more"}
                 </Link>

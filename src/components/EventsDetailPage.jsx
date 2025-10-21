@@ -80,7 +80,7 @@ const EventsDetailPage = ({ t, eventsDetail, otherEvents }) => {
 
             <div className="eventDetailText">
               <div
-                className="porto"
+                className="paragraphBlog"
                 dangerouslySetInnerHTML={{ __html: eventsDetail.content }}
               />
 

@@ -9,6 +9,7 @@ import { Pagination, Autoplay } from "swiper/modules";
 import Link from "next/link";
 import Cookies from "js-cookie";
 import Image from "next/image";
+import SeeMore from "../SeeMore";
 
 const OurEventsHomePage = ({ eventsData, t }) => {
   const lang = Cookies.get("NEXT_LOCALE") || "az";
@@ -102,12 +103,9 @@ const OurEventsHomePage = ({ eventsData, t }) => {
           {eventsData.map((event) => (
             <SwiperSlide key={event.id}>
               <Link
-
-                href={`/events/${(event?.slug || event?.title )
+                href={`/events/${(event?.slug || event?.title)
                   ?.toLowerCase()
                   .replace(/\s+/g, "-")}-${event.id}`}
-
-
                 className="block"
               >
                 <div className="ourEvents">
@@ -144,10 +142,15 @@ const OurEventsHomePage = ({ eventsData, t }) => {
         </Swiper>
 
         <div className="events-custom-pagination"></div>
+
+        <div className="container flex justify-center seeMoreGlobal ">
+          <Link href={"/events"}>
+            <SeeMore t={t} />
+          </Link>
+        </div>
       </div>
     </section>
   );
 };
 
 export default OurEventsHomePage;
-

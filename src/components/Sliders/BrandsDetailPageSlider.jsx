@@ -39,6 +39,10 @@ const CareersPageSlider = ({ brandsDetailDataDetail }) => {
           nextEl: ".careersCustom-next",
           prevEl: ".careersCustom-prev",
         }}
+        autoplay={{
+          delay: 3000, // 3 saniyədən bir slayd dəyişsin
+          disableOnInteraction: false, // istifadəçi klikləsə belə davam etsin
+        }}
         breakpoints={{
           320: { slidesPerView: 2 },
           480: { slidesPerView: 2 },
@@ -56,7 +60,7 @@ const CareersPageSlider = ({ brandsDetailDataDetail }) => {
               className="careersSliderGalleryImg brandsSliderGalleryImgDetail"
               data-fancybox="videos"
             >
-              <div className="videoGaleryImg brandsGalleryImgDetail" >
+              <div className="videoGaleryImg brandsGalleryImgDetail">
                 <Image
                   src={`https://admin.adentta.az/storage${image}`}
                   alt={`Gallery image ${index + 1}`}

@@ -8,6 +8,7 @@ import "../../app/[locale]/globals.scss";
 import { Pagination, Autoplay } from "swiper/modules";
 import Link from "next/link";
 import Image from "next/image";
+import SeeMore from "../SeeMore";
 
 const OurBlogsHomePage = ({ blogData, t }) => {
   return (
@@ -66,11 +67,6 @@ const OurBlogsHomePage = ({ blogData, t }) => {
                 <div className="ourEvents ourBlogs">
                   <div className="ourEvent ourBlogshh">
                     <div className="ourEventImage ourEventImageBlog">
-                      {/* <img
-                        src={`https://admin.adentta.az/storage${blog.image}`}
-                        alt=""
-                      /> */}
-
                       <Image
                         src={`https://admin.adentta.az/storage${blog.image}`}
                         alt={blog.title}
@@ -97,6 +93,12 @@ const OurBlogsHomePage = ({ blogData, t }) => {
           ))}
         </Swiper>
         <div className="blogs-custom-pagination"></div>
+
+        <div className="container flex justify-center seeMoreGlobal ">
+          <Link href={"/blogs"}>
+            <SeeMore t={t} />
+          </Link>
+        </div>
       </div>
     </section>
   );
