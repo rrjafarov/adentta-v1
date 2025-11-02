@@ -108,7 +108,7 @@ const Footer = async ({
                   <Link
                     href={{
                       pathname: "/products",
-                      query: { category: category.id },
+                      query: { category: category.url_slug },
                     }}
                   >
                     {category.title}

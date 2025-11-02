@@ -100,7 +100,7 @@ const OurEventsHomePage = ({ eventsData, t }) => {
           modules={[Pagination, Autoplay]}
           className="mySwiper"
         >
-          {eventsData.map((event) => (
+          {eventsData.slice(0, 5).map((event) => (
             <SwiperSlide key={event.id}>
               <Link
                 href={`/events/${(event?.slug || event?.title)

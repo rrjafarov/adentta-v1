@@ -172,7 +172,8 @@ export default function SearchPopup({ t, closePopup }) {
 
               <div className="popupSeeMore">
                 <Link
-                  href={`/products?per_page=12&search_text=${encodeURIComponent(
+                  // href={`/products?per_page=12&search_text=${encodeURIComponent(
+                  href={`/products?search_text=${encodeURIComponent(
                     searchTerm
                   )}`}
                 >

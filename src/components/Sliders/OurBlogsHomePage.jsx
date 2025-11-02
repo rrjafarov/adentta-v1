@@ -19,7 +19,7 @@ const OurBlogsHomePage = ({ blogData, t }) => {
         <Swiper
           slidesPerView={"4"}
           spaceBetween={20}
-          // loop={"true"}
+          loop={"true"}
           pagination={{
             clickable: true,
             el: ".blogs-custom-pagination",
@@ -56,7 +56,7 @@ const OurBlogsHomePage = ({ blogData, t }) => {
           modules={[Pagination, Autoplay]}
           className="mySwiper"
         >
-          {blogData.map((blog) => (
+          {blogData.slice(0, 5).map((blog) => (
             <SwiperSlide key={blog.id}>
               <Link
                 href={`/blogs/${(blog?.slug || blog?.title)

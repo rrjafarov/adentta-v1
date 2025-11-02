@@ -52,6 +52,7 @@ const FooterBottom = ({ t }) => {
               <option value="az">az</option>
             </select>
           </div>
+          
           <Link href="/faq">
             <span>{t?.faqPageTitle || "FAQs"}</span>
           </Link>
