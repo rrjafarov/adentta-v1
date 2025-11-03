@@ -2219,21 +2219,7 @@
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-// ! BURDA SELECTED QARMASIQDI BIRAZ
-
-
-
+// *
 "use client";
 import Link from "next/link";
 import React, {
@@ -2301,6 +2287,23 @@ const normalizeIds = (arr = []) =>
     new Set((arr || []).map((v) => Number(v)).filter((v) => !Number.isNaN(v)))
   );
 
+// ---- HELPERS: parent/child əlaqəsi ----
+function normalizeParentIds(parentRaw) {
+  if (!parentRaw) return [];
+  if (Array.isArray(parentRaw)) {
+    return parentRaw
+      .map((p) => (typeof p === "object" && p !== null ? p.id : p))
+      .map((v) => parseInt(v, 10))
+      .filter((v) => Number.isFinite(v));
+  }
+  if (typeof parentRaw === "object" && parentRaw !== null && parentRaw.id != null) {
+    const n = parseInt(parentRaw.id, 10);
+    return Number.isFinite(n) ? [n] : [];
+  }
+  const n = parseInt(parentRaw, 10);
+  return Number.isFinite(n) ? [n] : [];
+}
+
 const ProductsPageFilter = ({
   productData: initialProductData,
   t,
@@ -2323,6 +2326,37 @@ const ProductsPageFilter = ({
 
   const isLoadingMoreRef = useRef(false);
   const prevParamsRef = useRef(searchParams.toString());
+
+  // Törəmələri toplamaq (rekursiv)
+  const collectDescendantCategoryIds = useCallback(
+    (parentId) => {
+      const pid = Number(parentId);
+      if (!Number.isFinite(pid)) return [];
+      const result = new Set();
+      const stack = [pid];
+      const seen = new Set();
+
+      while (stack.length) {
+        const current = stack.pop();
+        if (seen.has(current)) continue;
+        seen.add(current);
+
+        for (const c of categoryData || []) {
+          const parents = normalizeParentIds(c.parent_id);
+          if (parents.includes(current)) {
+            const cid = parseInt(c.id, 10);
+            if (Number.isFinite(cid) && !result.has(cid)) {
+              result.add(cid);
+              stack.push(cid);
+            }
+          }
+        }
+      }
+
+      return Array.from(result);
+    },
+    [categoryData]
+  );
 
   useEffect(() => {
     if (selectedCategory?.id) {
@@ -2418,10 +2452,19 @@ const ProductsPageFilter = ({
           params.set("per_page", params.get("per_page") || "12");
           params.set("filters[0][key]", "categories");
           params.set("filters[0][operator]", "IN");
+
+          const expanded = new Set();
+          arr.forEach((val) => {
+            expanded.add(Number(val));
+            collectDescendantCategoryIds(Number(val)).forEach((d) =>
+              expanded.add(Number(d))
+            );
+          });
+
           Array.from(params.keys()).forEach((k) => {
             if (k === "filters[0][value][]") params.delete(k);
           });
-          arr.forEach((val) =>
+          Array.from(expanded).forEach((val) =>
             params.append("filters[0][value][]", String(val))
           );
         }
@@ -2450,7 +2493,7 @@ const ProductsPageFilter = ({
         return arr;
       });
     },
-    [router, searchParams, categoryData]
+    [router, searchParams, categoryData, collectDescendantCategoryIds]
   );
 
   const handleRemoveCategory = useCallback(
@@ -2469,6 +2512,24 @@ const ProductsPageFilter = ({
       };
     });
   }, [selectedCategoryIds, categoryData]);
+
+  // ----- YENİ: yalnız ÜST kateqoriya seçiləndə title və iç məzmunu dəyiş -----
+  const singleSelectedParent = useMemo(() => {
+    if (selectedCategoryIds.length !== 1) return null;
+    const onlyId = Number(selectedCategoryIds[0]);
+    const onlyCat = categoryData.find((c) => Number(c.id) === onlyId);
+    if (!onlyCat) return null;
+    const parents = normalizeParentIds(onlyCat.parent_id);
+    return parents.length === 0 ? onlyCat : null; // parentdırsa qaytar
+  }, [selectedCategoryIds, categoryData]);
+
+  const childrenOfSelectedParent = useMemo(() => {
+    if (!singleSelectedParent) return [];
+    const pid = Number(singleSelectedParent.id);
+    return (categoryData || []).filter((c) =>
+      normalizeParentIds(c.parent_id).includes(pid)
+    );
+  }, [singleSelectedParent, categoryData]);
 
   const fetchMoreProducts = async (page) => {
     if (loading || !hasMore) return;
@@ -2492,20 +2553,36 @@ const ProductsPageFilter = ({
       let queryString = "";
 
       if (urlCategoryId) {
-        queryString = `per_page=${encodeURIComponent(
-          String(perPage)
-        )}&filters[0][key]=categories&filters[0][operator]=IN&filters[0][value][]=${encodeURIComponent(
-          String(urlCategoryId)
-        )}&page=${encodeURIComponent(String(page))}`;
-      } else if (selectedCategoryIds.length > 0) {
+        const baseId = Number(urlCategoryId);
+        const expanded = new Set([baseId, ...collectDescendantCategoryIds(baseId)]);
+
         queryString = `per_page=${encodeURIComponent(
           String(perPage)
         )}&filters[0][key]=categories&filters[0][operator]=IN`;
-        selectedCategoryIds.forEach((id) => {
-          queryString += `&filters[0][value][]=${encodeURIComponent(
-            String(id)
-          )}`;
+
+        Array.from(expanded).forEach((val) => {
+          queryString += `&filters[0][value][]=${encodeURIComponent(String(val))}`;
         });
+
+        queryString += `&page=${encodeURIComponent(String(page))}`;
+      } else if (selectedCategoryIds.length > 0) {
+        const expanded = new Set();
+        selectedCategoryIds.forEach((id) => {
+          const n = Number(id);
+          if (Number.isFinite(n)) {
+            expanded.add(n);
+            collectDescendantCategoryIds(n).forEach((d) => expanded.add(d));
+          }
+        });
+
+        queryString = `per_page=${encodeURIComponent(
+          String(perPage)
+        )}&filters[0][key]=categories&filters[0][operator]=IN`;
+
+        Array.from(expanded).forEach((val) => {
+          queryString += `&filters[0][value][]=${encodeURIComponent(String(val))}`;
+        });
+
         queryString += `&page=${encodeURIComponent(String(page))}`;
       } else {
         paramsObj.page = page;
@@ -2664,20 +2741,36 @@ const ProductsPageFilter = ({
         let queryString = "";
 
         if (urlCategoryId) {
-          queryString = `per_page=${encodeURIComponent(
-            String(params.per_page)
-          )}&filters[0][key]=categories&filters[0][operator]=IN&filters[0][value][]=${encodeURIComponent(
-            String(urlCategoryId)
-          )}&page=${encodeURIComponent(String(params.page))}`;
-        } else if (selectedCategoryIds.length > 0) {
+          const baseId = Number(urlCategoryId);
+          const expanded = new Set([baseId, ...collectDescendantCategoryIds(baseId)]);
+
           queryString = `per_page=${encodeURIComponent(
             String(params.per_page)
           )}&filters[0][key]=categories&filters[0][operator]=IN`;
-          selectedCategoryIds.forEach((id) => {
-            queryString += `&filters[0][value][]=${encodeURIComponent(
-              String(id)
-            )}`;
+
+          Array.from(expanded).forEach((val) => {
+            queryString += `&filters[0][value][]=${encodeURIComponent(String(val))}`;
           });
+
+          queryString += `&page=${encodeURIComponent(String(params.page))}`;
+        } else if (selectedCategoryIds.length > 0) {
+          const expanded = new Set();
+          selectedCategoryIds.forEach((id) => {
+            const n = Number(id);
+            if (Number.isFinite(n)) {
+              expanded.add(n);
+              collectDescendantCategoryIds(n).forEach((d) => expanded.add(d));
+            }
+          });
+
+          queryString = `per_page=${encodeURIComponent(
+            String(params.per_page)
+          )}&filters[0][key]=categories&filters[0][operator]=IN`;
+
+          Array.from(expanded).forEach((val) => {
+            queryString += `&filters[0][value][]=${encodeURIComponent(String(val))}`;
+          });
+
           queryString += `&page=${encodeURIComponent(String(params.page))}`;
         } else {
           if (!params["filters[0][key]"]) {
@@ -2719,7 +2812,15 @@ const ProductsPageFilter = ({
 
     loadProductsByParams();
     prevParamsRef.current = currentParamsStr;
-  }, [searchParams.toString(), selectedCategoryIds]);
+  }, [searchParams.toString(), selectedCategoryIds, collectDescendantCategoryIds]);
+
+  // ---------- SEO mətni üçün mənbə ----------
+  const sourceCategory = useMemo(() => {
+    if (selectedCategory && (selectedCategory.page_title || selectedCategory.page_description || selectedCategory.meta_title || selectedCategory.meta_description)) {
+      return selectedCategory;
+    }
+    return productData?.[0]?.categories?.[0] || null;
+  }, [selectedCategory, productData]);
 
   return (
     <div>
@@ -2777,8 +2878,13 @@ const ProductsPageFilter = ({
                 </button>
                 <div className="lineFiltered"></div>
 
+                {/* ====== BURADA DƏYİŞİKLİK: yalnız üst kateqoriya seçilibsə başlıq və iç siyahı dəyişir ====== */}
                 <FilterAccordion
-                  title={t?.productsPageFilterCategoryTitle || "Category"}
+                  title={
+                    singleSelectedParent
+                      ? singleSelectedParent.title
+                      : (t?.productsPageFilterCategoryTitle || "Category")
+                  }
                 >
                   <ul
                     style={{
@@ -2787,64 +2893,97 @@ const ProductsPageFilter = ({
                       paddingRight: "4px",
                     }}
                   >
-                    {groupedCategories.map(({ parent, children }) => {
-                      const parentProductCount = getProductCountForCategory(
-                        parent.id
-                      );
-                      const isParentSelected = selectedCategoryIds.some(
-                        (c) => Number(c) === Number(parent.id)
-                      );
-                      return (
-                        <React.Fragment key={parent.id}>
+                    {singleSelectedParent ? (
+                      // Yalnız SEÇİLMİŞ ÜST KATEQORİYANIN ALT KATEQORİYALARI
+                      childrenOfSelectedParent.map((child) => {
+                        const childProductCount =
+                          getProductCountForCategory(child.id);
+                        const isChildSelected = selectedCategoryIds.some(
+                          (c) => Number(c) === Number(child.id)
+                        );
+                        return (
                           <li
-                            onClick={() => handleCategoryToggleById(parent.id)}
+                            key={child.id}
+                            onClick={() => handleCategoryToggleById(child.id)}
                             style={{
                               cursor: "pointer",
                               display: "flex",
                               alignItems: "center",
-                              gap: "0.5rem",
-                              fontWeight: isParentSelected ? "bold" : "normal",
-                              marginBottom: "4px",
+                              gap: "0.3rem",
+                              fontWeight: isChildSelected ? "bold" : "normal",
+                              marginLeft: "0px",
+                              fontSize: "1.3rem",
+                              marginBottom: "8px",
+                              color: "#666",
                             }}
                           >
-                            <span>{parent.title}</span>
-                            <p>({parentProductCount})</p>
+                            <span>{child.title}</span>
+                            <p>({childProductCount})</p>
                           </li>
+                        );
+                      })
+                    ) : (
+                      // Default: bütün parentlər və onların child-ları
+                      groupedCategories.map(({ parent, children }) => {
+                        const parentProductCount =
+                          getProductCountForCategory(parent.id);
+                        const isParentSelected = selectedCategoryIds.some(
+                          (c) => Number(c) === Number(parent.id)
+                        );
+                        return (
+                          <React.Fragment key={parent.id}>
+                            <li
+                              onClick={() =>
+                                handleCategoryToggleById(parent.id)
+                              }
+                              style={{
+                                cursor: "pointer",
+                                display: "flex",
+                                alignItems: "center",
+                                gap: "0.5rem",
+                                fontWeight: isParentSelected ? "bold" : "normal",
+                                marginBottom: "4px",
+                              }}
+                            >
+                              <span>{parent.title}</span>
+                              <p>({parentProductCount})</p>
+                            </li>
 
-                          {children.map((child) => {
-                            const childProductCount =
-                              getProductCountForCategory(child.id);
-                            const isChildSelected = selectedCategoryIds.some(
-                              (c) => Number(c) === Number(child.id)
-                            );
-                            return (
-                              <li
-                                key={child.id}
-                                onClick={() =>
-                                  handleCategoryToggleById(child.id)
-                                }
-                                style={{
-                                  cursor: "pointer",
-                                  display: "flex",
-                                  alignItems: "center",
-                                  gap: "0.3rem",
-                                  fontWeight: isChildSelected
-                                    ? "bold"
-                                    : "normal",
-                                  marginLeft: "15px",
-                                  fontSize: "1.3rem",
-                                  marginBottom: "8px",
-                                  color: "#666",
-                                }}
-                              >
-                                <span>{child.title}</span>
-                                <p>({childProductCount})</p>
-                              </li>
-                            );
-                          })}
-                        </React.Fragment>
-                      );
-                    })}
+                            {children.map((child) => {
+                              const childProductCount =
+                                getProductCountForCategory(child.id);
+                              const isChildSelected = selectedCategoryIds.some(
+                                (c) => Number(c) === Number(child.id)
+                              );
+                              return (
+                                <li
+                                  key={child.id}
+                                  onClick={() =>
+                                    handleCategoryToggleById(child.id)
+                                  }
+                                  style={{
+                                    cursor: "pointer",
+                                    display: "flex",
+                                    alignItems: "center",
+                                    gap: "0.3rem",
+                                    fontWeight: isChildSelected
+                                      ? "bold"
+                                      : "normal",
+                                    marginLeft: "15px",
+                                    fontSize: "1.3rem",
+                                    marginBottom: "8px",
+                                    color: "#666",
+                                  }}
+                                >
+                                  <span>{child.title}</span>
+                                  <p>({childProductCount})</p>
+                                </li>
+                              );
+                            })}
+                          </React.Fragment>
+                        );
+                      })
+                    )}
                   </ul>
                 </FilterAccordion>
 
@@ -2958,12 +3097,10 @@ const ProductsPageFilter = ({
         </div>
 
         <div className="productsPageDescription">
-          {(productData[0]?.categories?.[0]?.page_title ||
-            productData[0]?.categories?.[0]?.page_description) && (
+          {(sourceCategory?.page_title || sourceCategory?.page_description) && (
             <>
               <h1>
-                {productData[0]?.categories?.[0]?.page_title ||
-                  "Page title is not available"}
+                {sourceCategory?.page_title || "Page title is not available"}
               </h1>
 
               {showDetails && (
@@ -2975,7 +3112,7 @@ const ProductsPageFilter = ({
                     className="page-description-content"
                     dangerouslySetInnerHTML={{
                       __html:
-                        productData[0]?.categories?.[0]?.page_description ||
+                        sourceCategory?.page_description ||
                         "Page description is not available.",
                     }}
                   />
@@ -3062,7 +3199,10 @@ export default ProductsPageFilter;
 
 
 
-// ! Babayimmmmmmm<>><><<><><<><><><><><><><><>DIQQETLI OL SELECT KATEGORY YOXDUR
+
+// ! BURDA ust kategoriyada mehsul gelmir 03.11.25
+
+
 
 // "use client";
 // import Link from "next/link";
@@ -3080,7 +3220,6 @@ export default ProductsPageFilter;
 // import Manat from "../../../public/icons/manat.svg";
 // import axiosInstance from "@/lib/axios";
 
-// // --- Helpers: slugify / getCategorySlug / parseCategoryId ---
 // const slugify = (text) => {
 //   if (!text) return "";
 //   return String(text)
@@ -3110,7 +3249,6 @@ export default ProductsPageFilter;
 //   return /^\d+$/.test(last) ? last : null;
 // }
 
-// // ---------- rest of component ----------
 // const FilterAccordion = ({ title, children }) => {
 //   const [isOpen, setIsOpen] = useState(false);
 //   return (
@@ -3138,6 +3276,7 @@ export default ProductsPageFilter;
 //   t,
 //   brandsData,
 //   categoryData,
+//   selectedCategory,
 // }) => {
 //   const [selectedOption, setSelectedOption] = useState(null);
 //   const [isMobileFilterOpen, setMobileFilterOpen] = useState(false);
@@ -3156,12 +3295,22 @@ export default ProductsPageFilter;
 //   const prevParamsRef = useRef(searchParams.toString());
 
 //   useEffect(() => {
+//     if (selectedCategory?.id) {
+//       const catId = Number(selectedCategory.id);
+//       setSelectedCategoryIds((prev) => {
+//         const set = new Set(prev.map((v) => Number(v)));
+//         set.add(catId);
+//         return Array.from(set);
+//       });
+//     }
+//   }, [selectedCategory]);
+
+//   useEffect(() => {
 //     const page = searchParams.get("page");
 //     if (page) setCurrentPage(parseInt(page));
 //     else setCurrentPage(1);
 //     prevParamsRef.current = searchParams.toString();
-//     // eslint-disable-next-line react-hooks/exhaustive-deps
-//   }, []);
+//   }, [searchParams]);
 
 //   const buildRawQuery = (params = {}) => {
 //     const parts = [];
@@ -3206,8 +3355,6 @@ export default ProductsPageFilter;
 //     });
 //   }, [categoryData]);
 
-//   // --- handle category toggle:
-//   // Now we update URL param "category" in slug-id format (matching header links).
 //   const handleCategoryToggleById = useCallback(
 //     (id) => {
 //       const numeric = Number(id);
@@ -3217,42 +3364,30 @@ export default ProductsPageFilter;
 //         else set.add(numeric);
 //         const arr = normalizeIds(Array.from(set));
 
-//         // Build URL params: we will set `category` param to slug-id when there's exactly 1 selected;
-//         // if multiple selected -> we will use filters[...] format in query (backend can accept multiple values)
 //         const params = new URLSearchParams(searchParams);
 
-//         // If arr is empty -> remove category param and filters
 //         if (arr.length === 0) {
 //           params.delete("category");
-//           // remove filters[...] keys if present
 //           Array.from(params.keys()).forEach((k) => {
 //             if (/^filters?\[.*\]/.test(k)) params.delete(k);
 //           });
 //         } else if (arr.length === 1) {
-//           // single selection -> set category=slug-id (matches header)
 //           const catObj = categoryData.find(
 //             (c) => Number(c.id) === Number(arr[0])
 //           );
 //           const slug = getCategorySlug(catObj || { title: catObj?.title });
 //           params.set("category", `${slug}-${arr[0]}`);
-//           // remove filters[...] to avoid conflicts
 //           Array.from(params.keys()).forEach((k) => {
 //             if (/^filters?\[.*\]/.test(k)) params.delete(k);
 //           });
 //         } else {
-//           // multiple selection -> remove category param and set filters[...] with multiple values
 //           params.delete("category");
-//           // Clean existing filters...
 //           Array.from(params.keys()).forEach((k) => {
 //             if (/^filters?\[.*\]/.test(k)) params.delete(k);
 //           });
-//           // Add backend filter keys (values will be multiple entries)
 //           params.set("per_page", params.get("per_page") || "12");
 //           params.set("filters[0][key]", "categories");
 //           params.set("filters[0][operator]", "IN");
-//           // remove any existing filters[0][value][] entries and then append manually:
-//           // URLSearchParams doesn't have easy multiple-set by same key with set(), so delete and append
-//           // First remove keys like filters[0][value][]
 //           Array.from(params.keys()).forEach((k) => {
 //             if (k === "filters[0][value][]") params.delete(k);
 //           });
@@ -3261,13 +3396,11 @@ export default ProductsPageFilter;
 //           );
 //         }
 
-//         // Push new URL (use current pathname to avoid wrong path)
 //         const pathname =
 //           typeof window !== "undefined"
 //             ? window.location.pathname
 //             : "/products";
 //         const newSearch = params.toString();
-//         // Use history API for instant change without reloading
 //         if (
 //           typeof window !== "undefined" &&
 //           window.history &&
@@ -3286,10 +3419,15 @@ export default ProductsPageFilter;
 
 //         return arr;
 //       });
-
-//       // eslint-disable-next-line react-hooks/exhaustive-deps
 //     },
 //     [router, searchParams, categoryData]
+//   );
+
+//   const handleRemoveCategory = useCallback(
+//     (id) => {
+//       handleCategoryToggleById(id);
+//     },
+//     [handleCategoryToggleById]
 //   );
 
 //   const renderSelectedCategories = useMemo(() => {
@@ -3302,7 +3440,6 @@ export default ProductsPageFilter;
 //     });
 //   }, [selectedCategoryIds, categoryData]);
 
-//   // --- fetchMoreProducts: use category param or selectedCategoryIds to build exact backend query
 //   const fetchMoreProducts = async (page) => {
 //     if (loading || !hasMore) return;
 
@@ -3310,7 +3447,6 @@ export default ProductsPageFilter;
 //       setLoading(true);
 //       isLoadingMoreRef.current = true;
 
-//       // Read current searchParams into plain object
 //       const paramsObj = {};
 //       searchParams.forEach((value, key) => {
 //         if (paramsObj[key] === undefined) paramsObj[key] = value;
@@ -3320,21 +3456,18 @@ export default ProductsPageFilter;
 
 //       const perPage = paramsObj.per_page || 12;
 
-//       // If URL has category param -> prefer it (slug-id)
 //       const urlCategoryParam = searchParams.get("category");
 //       const urlCategoryId = parseCategoryIdFromParam(urlCategoryParam);
 
 //       let queryString = "";
 
 //       if (urlCategoryId) {
-//         // use EXACT format requested
 //         queryString = `per_page=${encodeURIComponent(
 //           String(perPage)
 //         )}&filters[0][key]=categories&filters[0][operator]=IN&filters[0][value][]=${encodeURIComponent(
 //           String(urlCategoryId)
 //         )}&page=${encodeURIComponent(String(page))}`;
 //       } else if (selectedCategoryIds.length > 0) {
-//         // multiple selected via UI -> send multiple filters[0][value][] entries
 //         queryString = `per_page=${encodeURIComponent(
 //           String(perPage)
 //         )}&filters[0][key]=categories&filters[0][operator]=IN`;
@@ -3345,11 +3478,8 @@ export default ProductsPageFilter;
 //         });
 //         queryString += `&page=${encodeURIComponent(String(page))}`;
 //       } else {
-//         // fallback: if no category info, keep existing behavior but ensure page & per_page included
 //         paramsObj.page = page;
 //         paramsObj.per_page = perPage;
-//         // if no filters provided, you may keep default (previous code used 99). Remove default to avoid unexpected results:
-//         // But if you must keep default:
 //         if (!paramsObj["filters[0][key]"]) {
 //           paramsObj["filters[0][key]"] = "categories";
 //           paramsObj["filters[0][operator]"] = "IN";
@@ -3361,7 +3491,7 @@ export default ProductsPageFilter;
 //       const { data } = await axiosInstance.get(
 //         `/page-data/product?${queryString}`,
 //         {
-//           headers: { Lang: "az" }, // keep as before or make dynamic
+//           headers: { Lang: "az" },
 //           cache: "no-store",
 //         }
 //       );
@@ -3389,7 +3519,6 @@ export default ProductsPageFilter;
 //           return [...prevData, ...uniqueNewItems];
 //         });
 
-//         // update URL page param using History API
 //         const newUrl = new URL(window.location);
 //         newUrl.searchParams.set("page", String(page));
 //         const newSearch = newUrl.searchParams.toString();
@@ -3437,20 +3566,6 @@ export default ProductsPageFilter;
 //     window.addEventListener("scroll", handleScroll);
 //     return () => window.removeEventListener("scroll", handleScroll);
 //   }, [handleScroll]);
-
-//   const handleLoadMore = () => {
-//     fetchMoreProducts(currentPage + 1);
-//   };
-
-//   const parseSearchParamsToObj = (sp) => {
-//     const obj = {};
-//     sp.forEach((value, key) => {
-//       if (obj[key] === undefined) obj[key] = value;
-//       else if (Array.isArray(obj[key])) obj[key].push(value);
-//       else obj[key] = [obj[key], value];
-//     });
-//     return obj;
-//   };
 
 //   const onlyPageChanged = (prevStr, nextStr) => {
 //     const prev = new URLSearchParams(prevStr || "");
@@ -3512,7 +3627,6 @@ export default ProductsPageFilter;
 //         if (!params.per_page) params.per_page = 12;
 //         if (!params.page) params.page = 1;
 
-//         // PRIORITY: if URL has category=slug-id -> build exact backend filter string
 //         const urlCategoryId = parseCategoryIdFromParam(
 //           searchParams.get("category")
 //         );
@@ -3526,7 +3640,6 @@ export default ProductsPageFilter;
 //             String(urlCategoryId)
 //           )}&page=${encodeURIComponent(String(params.page))}`;
 //         } else if (selectedCategoryIds.length > 0) {
-//           // if user selected categories in UI but URL doesn't have category param (multi-select)
 //           queryString = `per_page=${encodeURIComponent(
 //             String(params.per_page)
 //           )}&filters[0][key]=categories&filters[0][operator]=IN`;
@@ -3537,9 +3650,7 @@ export default ProductsPageFilter;
 //           });
 //           queryString += `&page=${encodeURIComponent(String(params.page))}`;
 //         } else {
-//           // fallback: if no category info -> keep other params and default behavior
 //           if (!params["filters[0][key]"]) {
-//             // do not add a hardcoded default unless necessary; but preserving old logic used 99
 //             params["filters[0][key]"] = "categories";
 //             params["filters[0][operator]"] = "IN";
 //             params["filters[0][value][]"] = "99";
@@ -3580,7 +3691,6 @@ export default ProductsPageFilter;
 //     prevParamsRef.current = currentParamsStr;
 //   }, [searchParams.toString(), selectedCategoryIds]);
 
-//   // ---------- JSX (unchanged except we use new handlers) ----------
 //   return (
 //     <div>
 //       <div className="container">
@@ -3603,7 +3713,7 @@ export default ProductsPageFilter;
 //               <div className="selectedFilter desktop-only">
 //                 {renderSelectedCategories.map((cat) => (
 //                   <div className="selectedFilterInner" key={`cat-${cat.id}`}>
-//                     <span onClick={() => handleCategoryToggleById(cat.id)}>
+//                     <span onClick={() => handleRemoveCategory(cat.id)}>
 //                       ×
 //                     </span>
 //                     <p>{cat.title}</p>
@@ -3621,7 +3731,7 @@ export default ProductsPageFilter;
 //                 <div className="selectedFilter mobile-only">
 //                   {renderSelectedCategories.map((cat) => (
 //                     <div className="selectedFilterInner" key={`cat-${cat.id}`}>
-//                       <span onClick={() => handleCategoryToggleById(cat.id)}>
+//                       <span onClick={() => handleRemoveCategory(cat.id)}>
 //                         ×
 //                       </span>
 //                       <p>{cat.title}</p>
@@ -3762,7 +3872,6 @@ export default ProductsPageFilter;
 //                       href={`/products/${data.title
 //                         .toLowerCase()
 //                         .replace(/\s+/g, "-")}-${data.id}`}
-//                       // {`/products/${data.title}-${data.id}`}
 //                       className="block"
 //                     >
 //                       <div className="homePageProductCardContent">
@@ -3817,61 +3926,6 @@ export default ProductsPageFilter;
 //             </div>
 //           </div>
 //         </div>
-
-//         {/* <div className="productsPageDescription">
-//           <h1>
-//             {productData[0]?.categories?.[0]?.page_title ||
-//               "Page title is not aviable"}
-//           </h1>
-
-//           {showDetails && (
-//             <div
-//               className="productsPageDetailsCEO"
-//               style={{ marginTop: "2rem" }}
-//             >
-//               <div
-//                 className="page-description-content"
-//                 dangerouslySetInnerHTML={{
-//                   __html:
-//                     productData[0]?.categories?.[0]?.page_description ||
-//                     "Page description is not available.",
-//                 }}
-//               />
-//             </div>
-//           )}
-
-//           <div
-//             className="productsPageDescriptionLink"
-//             style={{ marginTop: "1rem" }}
-//           >
-//             <a
-//               href="#"
-//               onClick={(e) => {
-//                 e.preventDefault();
-//                 setShowDetails((prev) => !prev);
-//               }}
-//               style={{
-//                 display: "inline-flex",
-//                 alignItems: "center",
-//                 cursor: "pointer",
-//                 textDecoration: "none",
-//               }}
-//             >
-//               {showDetails
-//                 ? t?.hideDetailsBtn || "Hide"
-//                 : t?.seeMoreBtn || "See more"}
-//               <img
-//                 src="/icons/rightDown.svg"
-//                 alt=""
-//                 style={{
-//                   marginLeft: "0.25rem",
-//                   transform: showDetails ? "rotate(180deg)" : "none",
-//                   transition: "transform 0.2s",
-//                 }}
-//               />
-//             </a>
-//           </div>
-//         </div> */}
 
 //         <div className="productsPageDescription">
 //           {(productData[0]?.categories?.[0]?.page_title ||
@@ -3949,3 +4003,4 @@ export default ProductsPageFilter;
 // };
 
 // export default ProductsPageFilter;
+

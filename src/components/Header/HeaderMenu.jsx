@@ -312,11 +312,11 @@ const getCategorySlug = (cat) =>
 const buildCategoryHref = (cat) => {
   const slug = getCategorySlug(cat) || String(cat?.id ?? "");
   // nəticə: /product-page?category=slug-id
-  return `/products?category=${encodeURIComponent(slug)}`;
+  // return `/products?category=${encodeURIComponent(slug)}`;
   // ! köhnə versiya:   DIQQETLI OLMALISAN BURADA
-  //  `/product-page?category=${encodeURIComponent(slug)}-${encodeURIComponent(
-  //   String(cat?.id ?? "")
-  // )}`;
+   return `/product-page?category=${encodeURIComponent(slug)}-${encodeURIComponent(
+    String(cat?.id ?? "")
+  )}`;
 };
 
 const HeaderMenu = ({ t, categoryData = [], isHomePage }) => {
