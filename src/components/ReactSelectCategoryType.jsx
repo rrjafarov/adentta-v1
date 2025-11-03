@@ -9,19 +9,19 @@ const Select = dynamic(() => import("react-select"), { ssr: false });
 // API'den kategori verilerini çekiyoruz
 async function fetchBrandCategories(t) {
   try {
-    const { data } = await axiosInstance.get(`/page-data/brand-categories?per_page=999`, {
-      cache: "no-store",
-    });
+    const { data } = await axiosInstance.get(
+      `/page-data/brand-categories?per_page=999`,
+      {
+        cache: "no-store",
+      }
+    );
     const formatted = data.data.data.map((cat) => ({
       value: cat.id,
       label: cat.title, // Əgər title_az və s. varsa, dəyişdir
     }));
 
     // "All" seçeneğini ekliyoruz
-    return [
-      { value: null, label: `${t?.allSelect || "All"}` },
-      ...formatted,
-    ];
+    return [{ value: null, label: `${t?.allSelect || "All"}` }, ...formatted];
   } catch (error) {
     console.error("Brend kateqoriyalar alınmadı:", error);
     throw error;
@@ -64,7 +64,9 @@ export default function BrandCategorySelect({ onChange, t }) {
       boxShadow: "none",
       cursor: "pointer",
       fontSize: "1.5rem",
-      width: "100%",
+      // width: "100%",
+      width: "18rem",
+
       height: "4.2921rem",
       color: "#293881",
       fontWeight: "500",
@@ -75,6 +77,8 @@ export default function BrandCategorySelect({ onChange, t }) {
       border: "1px solid #E6E9EF",
       color: "#293881",
       fontSize: "1.5rem",
+      width: "18rem",
+
       fontWeight: "500",
     }),
     option: (base, state) => ({
@@ -84,6 +88,8 @@ export default function BrandCategorySelect({ onChange, t }) {
       cursor: "pointer",
       fontSize: "1.5rem",
       borderRadius: "15px",
+      width: "100%",
+
       "@media (max-width: 768px)": {
         fontSize: "1.8rem",
       },
@@ -129,10 +135,4 @@ export default function BrandCategorySelect({ onChange, t }) {
   );
 }
 
-
 // !
-
-
-
-
-

@@ -137,7 +137,7 @@ const EventsPage = ({ eventsData, t }) => {
 
           <div className="eventsCards">
             {filteredEvents.length === 0 ? (
-              <p>No events were found.</p>
+              <p className="eventNotFound">{t?.eventNotFound}</p>
             ) : (
               <div className="row">
                 {displayedEvents.map((event) => (

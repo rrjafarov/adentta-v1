@@ -6460,11 +6460,11 @@ ul {
 
   .eventPageHead {
     display: flex;
-    flex-wrap: wrap;
+    // flex-wrap: wrap;
   }
 
   .eventPageHeaderText {
-    width: 80rem;
+    width: 70rem;
     padding-top: 4.24rem;
     display: flex;
     flex-direction: column;
@@ -7362,7 +7362,11 @@ ul {
         }
       }
 }
-
+.eventNotFound{
+  font-size: 2rem;
+  padding: 3rem 0 0 1rem;
+  font-weight: 500;
+}
 @media screen and (max-width: 768px) {
   .eventDetailText {
     padding-left: 2rem !important;

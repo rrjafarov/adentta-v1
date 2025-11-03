@@ -147,60 +147,98 @@
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
 import createMiddleware from "next-intl/middleware";
 import { NextResponse } from "next/server";
 
 const intlMiddleware = createMiddleware({
-  locales: ["az", "en", "ru"], // Supported locales
-  defaultLocale: "az", // Default locale
-  localePrefix: "as-needed", // Add prefix only when necessary
-  localeDetection: false, // Disable browser locale detection
-  urlMappingStrategy: "rewriteDefault", // Rewrite default locale without prefix
+  locales: ["az", "en", "ru"],
+  defaultLocale: "az",
+  localePrefix: "as-needed",
+  localeDetection: false,
+  urlMappingStrategy: "rewriteDefault",
 });
 
 export default function middleware(req) {
   const { cookies } = req;
-  const nextLocale = cookies.get("NEXT_LOCALE")?.value; // Get locale from the cookie
+  const nextLocale = cookies.get("NEXT_LOCALE")?.value;
   const { pathname } = req.nextUrl;
 
-  // Exclude static files from localization
+  // Statik assetlər (mövcud məntiqin qalsın)
   const isStaticAsset =
     /\.(jpg|jpeg|png|gif|svg|ttf|woff|woff2|eot|otf|mp4|webm|json|css|js)$/.test(
       pathname
     );
-  if (isStaticAsset) {
-    return NextResponse.next(); // Skip processing for static files
-  }
+  if (isStaticAsset) return NextResponse.next();
 
-  // Check if the pathname includes a locale
+  // Cookie-dən dil yönləndirməsi
   const hasLocale = /^\/(az|ru|en)(\/|$)/.test(pathname);
-
-  if (nextLocale && !hasLocale) {
+  if (nextLocale && !hasLocale && nextLocale !== "az") {
     const url = req.nextUrl.clone();
-    // Only redirect if the NEXT_LOCALE is not az (since it's the default)
-    if (nextLocale !== "az") {
-      url.pathname = `/${nextLocale}${pathname === "/" ? "" : pathname}`;
-      return NextResponse.redirect(url);
-    }
+    url.pathname = `/${nextLocale}${pathname === "/" ? "" : pathname}`;
+    return NextResponse.redirect(url);
   }
 
-  // Handle regular localization using intlMiddleware
   return intlMiddleware(req);
 }
 
 export const config = {
-  matcher: ["/", "/((?!api|_next|.\\..).*)"], // Match all routes except static files
+  // Burada əsas fərq: .*\\..* → nöqtəli faylları middleware-dən çıxarır
+  matcher: ["/((?!api|_next|.*\\..*).*)"],
 };
+
+
+
+
+
+
+
+
+
+
+
+
+
+// import createMiddleware from "next-intl/middleware";
+// import { NextResponse } from "next/server";
+
+// const intlMiddleware = createMiddleware({
+//   locales: ["az", "en", "ru"], // Supported locales
+//   defaultLocale: "az", // Default locale
+//   localePrefix: "as-needed", // Add prefix only when necessary
+//   localeDetection: false, // Disable browser locale detection
+//   urlMappingStrategy: "rewriteDefault", // Rewrite default locale without prefix
+// });
+
+// export default function middleware(req) {
+//   const { cookies } = req;
+//   const nextLocale = cookies.get("NEXT_LOCALE")?.value; // Get locale from the cookie
+//   const { pathname } = req.nextUrl;
+
+//   // Exclude static files from localization
+//   const isStaticAsset =
+//     /\.(jpg|jpeg|png|gif|svg|ttf|woff|woff2|eot|otf|mp4|webm|json|css|js)$/.test(
+//       pathname
+//     );
+//   if (isStaticAsset) {
+//     return NextResponse.next(); // Skip processing for static files
+//   }
+
+//   // Check if the pathname includes a locale
+//   const hasLocale = /^\/(az|ru|en)(\/|$)/.test(pathname);
+
+//   if (nextLocale && !hasLocale) {
+//     const url = req.nextUrl.clone();
+//     // Only redirect if the NEXT_LOCALE is not az (since it's the default)
+//     if (nextLocale !== "az") {
+//       url.pathname = `/${nextLocale}${pathname === "/" ? "" : pathname}`;
+//       return NextResponse.redirect(url);
+//     }
+//   }
+
+//   // Handle regular localization using intlMiddleware
+//   return intlMiddleware(req);
+// }
+
+// export const config = {
+//   matcher: ["/", "/((?!api|_next|.\\..).*)"], // Match all routes except static files
+// };

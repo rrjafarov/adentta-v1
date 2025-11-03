@@ -1,4 +1,3 @@
-
 // !
 import dynamic from "next/dynamic";
 import { useEffect, useState } from "react";
@@ -55,7 +54,8 @@ export default function CustomSelect({ onChange, t }) {
       boxShadow: "none",
       cursor: "pointer",
       fontSize: "1.5rem",
-      width: "100%",
+      width: "18rem",
+
       height: "4.2921rem",
       color: "#293881",
       fontWeight: "500",
@@ -67,6 +67,8 @@ export default function CustomSelect({ onChange, t }) {
       color: "#293881",
       fontSize: "1.5rem",
       fontWeight: "500",
+      width: "18rem",
+
     }),
     option: (base, state) => ({
       ...base,
@@ -75,6 +77,7 @@ export default function CustomSelect({ onChange, t }) {
       cursor: "pointer",
       fontSize: "1.5rem",
       borderRadius: "15px",
+      width: "100%",
       "@media (max-width: 768px)": {
         fontSize: "1.8rem", // Mobilde daha küçük font
       },

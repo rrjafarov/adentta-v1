@@ -1,6 +1,6 @@
 // !
 
-"use client"
+"use client";
 import dynamic from "next/dynamic";
 import { useEffect, useState } from "react";
 import axiosInstance from "@/lib/axios";
@@ -15,7 +15,6 @@ async function fetchProductCategories() {
     });
     return data.data.data;
   } catch (error) {
-    console.error("Məlumatlar alınmadı:", error);
     throw error;
   }
 }
@@ -42,7 +41,6 @@ export default function CustomProductSelect({ onChange, t }) {
           ...formatted,
         ]);
       } catch (error) {
-        console.error("Kateqoriyalar yüklənmədi:", error);
       } finally {
         setLoading(false); // Yükləməyi bitir
       }
@@ -60,7 +58,8 @@ export default function CustomProductSelect({ onChange, t }) {
       boxShadow: "none",
       cursor: "pointer",
       fontSize: "1.5rem",
-      width: "100%",
+      width: "18rem",
+
       height: "4.2921rem",
       color: "#293881",
       fontWeight: "500",
@@ -70,6 +69,8 @@ export default function CustomProductSelect({ onChange, t }) {
       borderRadius: "12px",
       border: "1px solid #E6E9EF",
       color: "#293881",
+      width: "18rem",
+
       fontSize: "1.5rem",
       fontWeight: "500",
     }),
@@ -79,6 +80,7 @@ export default function CustomProductSelect({ onChange, t }) {
       color: "#293881",
       cursor: "pointer",
       fontSize: "1.5rem",
+      width: "100%",
       borderRadius: "15px",
       "@media (max-width: 768px)": {
         fontSize: "1.8rem",
@@ -124,17 +126,15 @@ export default function CustomProductSelect({ onChange, t }) {
 
   return (
     <div className="selectProductSort">
-      
-        <Select
-          value={selectedOption}
-          onChange={handleSelectChange}
-          options={productCategories}
-          styles={customStyles}
-          components={customComponents}
-          placeholder={t?.selectProduct || "Məhsul seçin"}
-          isSearchable={false}
-        />
-      
+      <Select
+        value={selectedOption}
+        onChange={handleSelectChange}
+        options={productCategories}
+        styles={customStyles}
+        components={customComponents}
+        placeholder={t?.selectProduct || "Məhsul seçin"}
+        isSearchable={false}
+      />
     </div>
   );
 }
