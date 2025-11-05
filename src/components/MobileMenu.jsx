@@ -169,7 +169,7 @@ const MobileMenu = ({ t, isOpen, setIsOpen }) => {
       {isOpen && (
         <div className="mobileMenu">
           <div className="mobileMenuItem">
-            <Link href="/products">
+            <Link href="/product">
               <span>{t?.products || "products"}</span>
             </Link>
 
