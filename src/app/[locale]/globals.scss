@@ -1067,18 +1067,18 @@ ul {
       background-color: #fff;
       // min-height: 42rem;
       height: 45rem;
-      transition: all 0.4s ease;
-
+      transition: all 0.4s ease-in-out;
       &:hover {
-        img {
+        .homePageProductCardContentImage{
+          img {
           transform: scale(1.1);
-          transition: all 0.4s ease;
-        }
+          transition: all 0.4s ease-in-out;
+        }}
 
         .homePageProductCardContentBottom {
           img {
             transform: translate(3px, -5px);
-            transition: all 0.4s ease;
+            transition: all 0.4s ease-in-out;
           }
         }
       }
@@ -2220,7 +2220,7 @@ ul {
         h3,
         li {
           position: relative;
-          cursor: pointer;
+          // cursor: pointer;
           display: inline-block;
           width: max-content;
 
@@ -2572,7 +2572,7 @@ ul {
         gap: 3.44rem;
 
         h4 {
-          width: 30.8217rem;
+          width: 35.8217rem;
           color: $adentta-01;
           font-size: 4rem;
           font-style: normal;
@@ -2582,7 +2582,7 @@ ul {
 
         p {
           color: $adentta-01;
-          width: 40.9908rem;
+          width: 45.9908rem;
           text-align: justify;
           opacity: 0.7;
           font-size: 1.6rem;
@@ -2808,9 +2808,9 @@ ul {
     display: none;
   }
 
-  .lineFiltered {
-    display: none;
-  }
+  // .lineFiltered {
+  //   display: none;
+  // }
 
   .filter-titless {
     display: none;
@@ -2819,6 +2819,15 @@ ul {
   .applyBTN {
     display: none;
   }
+}
+
+.lineFiltered {
+  opacity: 0.4;
+  background: #cbd9ef;
+  width: 100%;
+  height: 0.08rem;
+  padding: 0 2rem;
+  margin: 1rem 0 1rem;
 }
 
 @media screen and (max-width: 768px) {
@@ -2982,6 +2991,11 @@ ul {
   flex-shrink: 0;
   border-radius: 0.4rem;
   border: 1px solid #cbd9ef;
+}
+
+
+.notLink{
+  cursor: none !important;
 }
 
 #seeeMore {
@@ -10341,18 +10355,18 @@ ul {
         border: 1px solid #dee4ec;
         width: 100%;
         height: 44rem;
-        transition: all 0.4s ease;
+        transition: all 0.4s ease-in-out;
 
         &:hover {
           img {
             transform: scale(1.1);
-            transition: all 0.4s ease;
+            transition: all 0.4s ease-in-out;
           }
 
           .homePageProductCardContentBottom {
             img {
               transform: translate(3px, -5px);
-              transition: all 0.4s ease;
+              transition: all 0.4s ease-in-out;
             }
           }
         }
@@ -11391,8 +11405,7 @@ ul {
 
 .accordion-content {
   margin-top: 2rem;
-  // max-width: 300px;
-  max-height: 400px;
+  max-height: 550px;
   overflow: auto;
   overflow-x: hidden;
   border-radius: 0.5rem;
@@ -11400,15 +11413,15 @@ ul {
   box-sizing: border-box;
   ul {
     li {
-      font-size: 1.8rem;
-      font-weight: 500;
+      font-size: 1.6rem;
+      font-weight: 400;
     }
   }
 }
 
 /* Scroll dizaynı */
 .accordion-content::-webkit-scrollbar {
-  width: 5px;
+  width: 3px;
 }
 
 .accordion-content::-webkit-scrollbar-thumb {

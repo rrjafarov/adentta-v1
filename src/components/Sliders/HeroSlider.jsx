@@ -39,7 +39,7 @@ const SwiperJS = ({ heroSliderData, bannerData }) => {
                         <div className="swiperSlideContent">
                           <Image
                             src={`https://admin.adentta.az/storage${slider.image}`}
-                            alt=""
+                            alt="slider"
                             width={840}
                             height={500}
                           />

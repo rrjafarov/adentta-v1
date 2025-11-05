@@ -99,7 +99,7 @@ const Footer = async ({
 
           {/* Products (kategori filtreli) */}
           <div className="footerLinks">
-            <Link href="/products">
+            <Link href="/product">
               <h3>{t.products || "Products"}</h3>
             </Link>
             <ul>
@@ -107,7 +107,7 @@ const Footer = async ({
                 <li key={category.id}>
                   <Link
                     href={{
-                      pathname: "/products",
+                      pathname: "/product",
                       query: { category: category.url_slug },
                     }}
                   >
@@ -160,9 +160,9 @@ const Footer = async ({
 
           {/* Company */}
           <div className="footerLinks">
-            <Link href="/about">
+            {/* <Link href="/about" className="notLink">
+            </Link> */}
               <h3>{t.company || "Company"}</h3>
-            </Link>
             <ul>
               <li>
                 <Link href="/about">{t.aboutCompany || "About"}</Link>
@@ -190,9 +190,12 @@ const Footer = async ({
 
           {/* Media */}
           <div className="footerLinks">
-            <Link href="#">
+            {/* <Link href="#" className="notLink">
               <h3>{t.media || "Media"}</h3>
-            </Link>
+            </Link> */}
+
+            <h3>{t.media || "Media"}</h3>
+
             <ul>
               <li>
                 <Link href="/blogs">{t.blogs || "Blogs"}</Link>

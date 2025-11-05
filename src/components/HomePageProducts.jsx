@@ -384,7 +384,7 @@ const HomePageProducts = ({ categoryData, t }) => {
                     >
                       <img
                         src={`https://admin.adentta.az/storage${category.icon}`}
-                        alt={category.title || ""}
+                        alt={category.title || "category name"}
                       />
                       <p>{category.title}</p>
                     </button>
@@ -396,10 +396,10 @@ const HomePageProducts = ({ categoryData, t }) => {
 
           <div className="swiper-navigation">
             <button className="swiper-button-prev-custom">
-              <img src="/icons/bomLeft.svg" alt="" />
+              <img src="/icons/bomLeft.svg" alt="left" />
             </button>
             <button className="swiper-button-next-custom">
-              <img src="/icons/bomRight.svg" alt="" />
+              <img src="/icons/bomRight.svg" alt="right" />
             </button>
           </div>
         </div>

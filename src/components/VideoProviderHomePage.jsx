@@ -39,25 +39,25 @@ const VideoProviderHomePage = ({ homepageData, t }) => {
           <div className="vidProviderContentChecked">
             <div className="checked">
               <div className="checkIcon">
-                <img src="/icons/check.svg" alt="" />
+                <img src="/icons/check.svg" alt="check" />
               </div>
               <span>{t?.aboutCheck1 || "/"}</span>
             </div>
             <div className="checked">
               <div className="checkIcon">
-                <img src="/icons/check.svg" alt="" />
+                <img src="/icons/check.svg" alt="check" />
               </div>
               <span>{t?.aboutCheck2 || "/"}</span>
             </div>
             <div className="checked">
               <div className="checkIcon">
-                <img src="/icons/check.svg" alt="" />
+                <img src="/icons/check.svg" alt="check" />
               </div>
               <span>{t?.aboutCheck3 || "/"}</span>
             </div>
             <div className="checked">
               <div className="checkIcon">
-                <img src="/icons/check.svg" alt="" />
+                <img src="/icons/check.svg" alt="check" />
               </div>
               <span>{t?.aboutCheck4 || "/"}</span>
             </div>
@@ -74,7 +74,7 @@ const VideoProviderHomePage = ({ homepageData, t }) => {
             <div className="vidProviderVideoContent">
               <Image
                 src={`https://admin.adentta.az/storage${homepageData.video_cover}`}
-                alt={homepageData.title}
+                alt={homepageData.title || "video"}
                 width={500}
                 height={500}
               />
