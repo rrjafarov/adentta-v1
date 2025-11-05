@@ -74,7 +74,7 @@ const VideoProviderHomePage = ({ homepageData, t }) => {
             <div className="vidProviderVideoContent">
               <Image
                 src={`https://admin.adentta.az/storage${homepageData.video_cover}`}
-                alt={homepageData.title || "video"}
+                alt={homepageData.meta_title || "video"}
                 width={500}
                 height={500}
               />
