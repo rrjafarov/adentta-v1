@@ -5,7 +5,6 @@ import ProductsPageDetailPage from "@/components/ProductsPageDetailPage";
 import axiosInstance from "@/lib/axios";
 import { cookies } from "next/headers";
 
-
 async function fetchSettingsPageData() {
   const cookieStore = await cookies();
   const lang = cookieStore.get("NEXT_LOCALE");
@@ -24,9 +23,12 @@ async function fetchSettingsPageData() {
 async function fetchAllProducts() {
   const cookieStore = await cookies();
   const lang = cookieStore.get("NEXT_LOCALE");
-  const { data: productRes } = await axiosInstance.get(`/page-data/product?per_page=99999`, {
-    cache: "no-store",
-  });
+  const { data: productRes } = await axiosInstance.get(
+    `/page-data/product?per_page=99999`,
+    {
+      cache: "no-store",
+    }
+  );
   return productRes.data.data; // bütün məhsullar array-i
 }
 
@@ -64,9 +66,12 @@ async function fetchBrandsPageData() {
   const lang = cookieStore.get("NEXT_LOCALE");
 
   try {
-    const { data: brands } = await axiosInstance.get(`/page-data/brands`, {
-      cache: "no-store",
-    });
+    const { data: brands } = await axiosInstance.get(
+      `/page-data/brands?per_page=999`,
+      {
+        cache: "no-store",
+      }
+    );
     return brands;
   } catch (error) {
     throw error;
@@ -99,7 +104,7 @@ export async function generateMetadata({ params }) {
   const allProducts = await fetchAllProducts();
 
   // Cari məhsulu tapırıq
-  const product = allProducts.find(p => p.id.toString() === slug);
+  const product = allProducts.find((p) => p.id.toString() === slug);
 
   // Məhsul yoxdursa fallback
   if (!product) {
@@ -151,7 +156,6 @@ export async function generateMetadata({ params }) {
 }
 // !generateMetadata
 
-
 async function fetchContactPageData() {
   const cookieStore = await cookies();
   const lang = cookieStore.get("NEXT_LOCALE");
@@ -183,8 +187,14 @@ export default async function Page({ params }) {
 
   const setting = await fetchSettingsPageData();
   const settingData = setting?.data || [];
-    const contact = await fetchContactPageData();
-
+  const contact = await fetchContactPageData();
+  // 🔽 WhatsApp üçün telefonu hazırla (contact.data.phone)
+  const rawPhone = contact?.data?.phone || "";
+  const whatsappNumber = rawPhone
+    .replace(/\D+/g, "") // rəqəm olmayanları sil
+    .replace(/^00/, "") // 00 prefiksini at
+    .replace(/^0/, "994") // 0** → 994**
+    .replace(/^(?!994)/, "994"); // 994 yoxdursa əlavə et
 
   if (!productDetail) return <div>Product not found.</div>;
 
@@ -203,10 +213,14 @@ export default async function Page({ params }) {
         t={t}
         productData={productDetail}
         similarProducts={similarProducts}
+        whatsappNumber={whatsappNumber}
       />
-      <Footer contact={contact} categoryData={categoryData}  eventsData={eventsData} brandsData={brandsData} />
+      <Footer
+        contact={contact}
+        categoryData={categoryData}
+        eventsData={eventsData}
+        brandsData={brandsData}
+      />
     </>
   );
 }
-
-// !

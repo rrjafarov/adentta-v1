@@ -72,7 +72,7 @@ const Footer = async ({
               </ul>
             </div>
             <div className="contactButtons">
-              <Link href={`tel:${contactData.phone || "+994554099878fr"}`}>
+              <Link href={`tel:${contactData.phone || "+994554099878"}`}>
                 <div className="contactButtonCall">
                   <Image
                     src="/icons/phoneicon.svg"
