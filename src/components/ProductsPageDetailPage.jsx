@@ -5,67 +5,24 @@ import Image from "next/image";
 import Thumbnail from "./Sliders/Thumbnail";
 import Manat from "../../public/icons/manat.svg";
 
-// const WpLink = ({ t,whatsappNumber }) => {
-//   const [currentUrl, setCurrentUrl] = useState("");
-//   useEffect(() => {
-//     if (typeof window !== "undefined") {
-//       // setCurrentUrl(window.location.href);
-//       setCurrentUrl(window.location.href);
-//     }
-//   }, []);
-//   const message = encodeURIComponent(
-//     // `Salam, bu məhsul haqqında məlumat ala bilərəm?: ${currentUrl}`
-//     `${
-//       t?.wpMessage || "Salam, bu məhsul haqqında məlumat ala bilərəm?"
-//     }: ${currentUrl}`
-//   );
-//   return (
-//     <Link
-//       // href={`https://wa.me/994554099878?text=${message}`}
-//       href={`https://wa.me/${whatsappNumber}?text=${message}`}
-//       prefetch={false}
-//       target="_blank"
-//       rel="noopener noreferrer"
-//       className="wpButton"
-//     >
-//       <div className="detailPageClickToWhatsapp">
-//         <span>{t?.clickToOrder || "ClickToOrder"}</span>
-//         <div className="dpWP">
-//           <img src="/icons/whiteWP.svg" alt="WhatsApp Icon" />
-//           <span>Whatsapp</span>
-//         </div>
-//       </div>
-//     </Link>
-//   );
-// };
-
-const WpLink = ({ t, whatsappNumber, productData }) => {
+const WpLink = ({ t,whatsappNumber }) => {
   const [currentUrl, setCurrentUrl] = useState("");
   useEffect(() => {
     if (typeof window !== "undefined") {
+      // setCurrentUrl(window.location.href);
       setCurrentUrl(window.location.href);
     }
   }, []);
-
-  // Şəkil URL-ini tam formada hazırla
-  const fullImageUrl = productData?.image
-    ? `https://admin.adentta.az/storage${productData.image}`
-    : "";
-
   const message = encodeURIComponent(
+    // `Salam, bu məhsul haqqında məlumat ala bilərəm?: ${currentUrl}`
     `${
       t?.wpMessage || "Salam, bu məhsul haqqında məlumat ala bilərəm?"
     }: ${currentUrl}`
   );
-
-  // WhatsApp API image parametri ilə
-  const whatsappUrl = `https://wa.me/${whatsappNumber}?text=${message}${
-    fullImageUrl ? `&image=${encodeURIComponent(fullImageUrl)}` : ""
-  }`;
-
   return (
     <Link
-      href={whatsappUrl}
+      // href={`https://wa.me/994554099878?text=${message}`}
+      href={`https://wa.me/${whatsappNumber}?text=${message}`}
       prefetch={false}
       target="_blank"
       rel="noopener noreferrer"
@@ -81,6 +38,7 @@ const WpLink = ({ t, whatsappNumber, productData }) => {
     </Link>
   );
 };
+
 
 const DetailPageAccordion = ({ title, children }) => {
   const [isOpen, setIsOpen] = useState(false);
@@ -102,12 +60,7 @@ const DetailPageAccordion = ({ title, children }) => {
   );
 };
 
-const ProductsPageDetailPage = ({
-  t,
-  whatsappNumber,
-  productData,
-  similarProducts = [],
-}) => {
+const ProductsPageDetailPage = ({ t,whatsappNumber, productData, similarProducts = [] }) => {
   const [thumbsSwiper, setThumbsSwiper] = useState(null);
   const [currentUrl, setCurrentUrl] = useState("");
   const [copied, setCopied] = useState(false);
@@ -242,11 +195,7 @@ const ProductsPageDetailPage = ({
                     </div>
                   )}
                 </div>
-                <WpLink
-                  t={t}
-                  whatsappNumber={whatsappNumber}
-                  productData={productData}
-                />
+                <WpLink t={t} whatsappNumber={whatsappNumber} productData={productData} />
 
                 <div className="detailPageAccordion">
                   {productData?.content && (
