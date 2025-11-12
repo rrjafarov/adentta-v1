@@ -53,14 +53,19 @@ const WpLink = ({ t, whatsappNumber, productData }) => {
     : "";
 
   const message = encodeURIComponent(
-    `${t?.wpMessage || "Salam, bu məhsul haqqında məlumat ala bilərəm?"}: ${
-      productData?.title || ""
-    } - ${currentUrl}${fullImageUrl ? `\n\nŞəkil: ${fullImageUrl}` : ""}`
+    `${
+      t?.wpMessage || "Salam, bu məhsul haqqında məlumat ala bilərəm?"
+    }: ${currentUrl}`
   );
+
+  // WhatsApp API image parametri ilə
+  const whatsappUrl = `https://wa.me/${whatsappNumber}?text=${message}${
+    fullImageUrl ? `&image=${encodeURIComponent(fullImageUrl)}` : ""
+  }`;
 
   return (
     <Link
-      href={`https://wa.me/${whatsappNumber}?text=${message}`}
+      href={whatsappUrl}
       prefetch={false}
       target="_blank"
       rel="noopener noreferrer"
