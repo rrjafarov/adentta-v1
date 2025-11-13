@@ -213,13 +213,16 @@ export default function ReactSelectProductType({ onChange, t, pdfMembers = [] })
       width: "100%",
       borderRadius: "15px",
       "@media (max-width: 768px)": {
-        fontSize: "1.8rem",
+        fontSize: "1.6rem",
       },
     }),
     placeholder: (base) => ({
       ...base,
       color: "#293881",
       fontSize: "1.8rem",
+      "@media (max-width: 768px)": {
+        fontSize: "1.5rem",
+      },
     }),
     singleValue: (base) => ({
       ...base,

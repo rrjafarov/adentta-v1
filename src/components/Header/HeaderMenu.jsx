@@ -395,6 +395,7 @@ const HeaderMenu = ({ t, categoryData = [], isHomePage }) => {
               t={t}
               isOpen={isMobileMenuOpen}
               setIsOpen={setIsMobileMenuOpen}
+              categoryData={categoryData} 
             />
           )}
 

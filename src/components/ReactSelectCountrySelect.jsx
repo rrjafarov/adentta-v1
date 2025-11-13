@@ -229,6 +229,9 @@ export default function CustomSelect({ onChange, t }) {
       ...base,
       color: "#293881",
       fontSize: "1.8rem",
+      "@media (max-width: 768px)": {
+        fontSize: "1.5rem",
+      },
     }),
     singleValue: (base) => ({
       ...base,

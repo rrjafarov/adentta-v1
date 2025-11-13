@@ -5,7 +5,7 @@ import Image from "next/image";
 import Thumbnail from "./Sliders/Thumbnail";
 import Manat from "../../public/icons/manat.svg";
 
-const WpLink = ({ t,whatsappNumber }) => {
+const WpLink = ({ t, whatsappNumber }) => {
   const [currentUrl, setCurrentUrl] = useState("");
   useEffect(() => {
     if (typeof window !== "undefined") {
@@ -39,7 +39,6 @@ const WpLink = ({ t,whatsappNumber }) => {
   );
 };
 
-
 const DetailPageAccordion = ({ title, children }) => {
   const [isOpen, setIsOpen] = useState(false);
   return (
@@ -60,7 +59,12 @@ const DetailPageAccordion = ({ title, children }) => {
   );
 };
 
-const ProductsPageDetailPage = ({ t,whatsappNumber, productData, similarProducts = [] }) => {
+const ProductsPageDetailPage = ({
+  t,
+  whatsappNumber,
+  productData,
+  similarProducts = [],
+}) => {
   const [thumbsSwiper, setThumbsSwiper] = useState(null);
   const [currentUrl, setCurrentUrl] = useState("");
   const [copied, setCopied] = useState(false);
@@ -195,7 +199,11 @@ const ProductsPageDetailPage = ({ t,whatsappNumber, productData, similarProducts
                     </div>
                   )}
                 </div>
-                <WpLink t={t} whatsappNumber={whatsappNumber} productData={productData} />
+                <WpLink
+                  t={t}
+                  whatsappNumber={whatsappNumber}
+                  productData={productData}
+                />
 
                 <div className="detailPageAccordion">
                   {productData?.content && (
@@ -214,7 +222,7 @@ const ProductsPageDetailPage = ({ t,whatsappNumber, productData, similarProducts
                   <DetailPageAccordion
                     title={t?.productsPageDetailsProducts || "Details Products"}
                   >
-                    <div className="row">
+                    {/* <div className="row">
                       <div className="xl-6 lg-6 md-6 sm-12">
                         <span className="paramTitle">
                           {t?.productsPageDetailsParameters || "parametrs"}
@@ -245,6 +253,41 @@ const ProductsPageDetailPage = ({ t,whatsappNumber, productData, similarProducts
                           </span>
                         </div>
                       </div>
+                    </div> */}
+
+                    <div className="row">
+                      {productData.parametrs?.[0]?.title && (
+                        <div className="xl-6 lg-6 md-6 sm-12">
+                          <span className="paramTitle">
+                            {t?.productsPageDetailsParameters || "parametrs"}
+                          </span>
+                          <div className="productParametrs">
+                            <span>{productData.parametrs?.[0]?.title}</span>
+                          </div>
+                        </div>
+                      )}
+
+                      {productData.sizes?.[0]?.title && (
+                        <div className="xl-6 lg-6 md-6 sm-12">
+                          <span className="paramTitle">
+                            {t?.productsPageDetailsSize || "Size"}
+                          </span>
+                          <div className="productParametrs">
+                            <span>{productData.sizes?.[0]?.title}</span>
+                          </div>
+                        </div>
+                      )}
+
+                      {productData.categories?.[0]?.title && (
+                        <div className="xl-6 lg-6 md-6 sm-12">
+                          <span className="paramTitle">
+                            {t?.productsPageDetailsCategory || "Size"}
+                          </span>
+                          <div className="productParametrs">
+                            <span>{productData.categories?.[0]?.title}</span>
+                          </div>
+                        </div>
+                      )}
                     </div>
                   </DetailPageAccordion>
                   <div className="lines" />

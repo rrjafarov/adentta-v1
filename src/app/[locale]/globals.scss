@@ -2739,7 +2739,7 @@ ul {
     border: 1.2px solid #ced2e2 !important;
     border-radius: 10px;
     font-size: 2.2rem !important;
-    padding: 3rem 4.5rem;
+    padding: 3rem 5rem;
     height: 4rem;
     display: flex;
     justify-content: center;
@@ -3780,20 +3780,40 @@ ul {
   align-items: center;
 }
 
+// .productParametrs {
+//   // width: auto;
+//   // height: 3.5515rem;
+//   flex-shrink: 0;
+//   border-radius: 4rem;
+//   border: 1px solid #d7e0ed;
+//   display: flex;
+//   justify-content: center;
+//   align-items: center;
+//   background: #f4f8ff;
+
+//   span {
+//     color: #293881 !important;
+//     font-size: 1.5rem;
+//     padding: 1rem 2rem;
+//   }
+// }
+
 .productParametrs {
-  width: 15.6036rem;
-  height: 3.5515rem;
+  // width: auto;  // buna ehtiyac yoxdur
+  // height: 3.5515rem;
   flex-shrink: 0;
   border-radius: 4rem;
   border: 1px solid #d7e0ed;
-  display: flex;
+  display: inline-flex; // <-- BUNU ƏLAVƏ ET
   justify-content: center;
   align-items: center;
   background: #f4f8ff;
+  width: fit-content; // <-- istəsən bunu da əlavə et
 
   span {
     color: #293881 !important;
     font-size: 1.5rem;
+    padding: 1rem 2rem;
   }
 }
 
@@ -11459,3 +11479,19 @@ ul {
     border-width: 2px !important;
   }
 }
+
+
+
+
+
+
+
+
+
+
+
+// @media (max-width: 768px) {
+//   #filterColumnNotMobile{
+//     display: none !important;
+// }
+// }

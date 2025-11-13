@@ -249,13 +249,16 @@ export default function BrandCategorySelect({ onChange, t }) {
       borderRadius: "15px",
       width: "100%",
       "@media (max-width: 768px)": {
-        fontSize: "1.8rem",
+        fontSize: "1.5rem",
       },
     }),
     placeholder: (base) => ({
       ...base,
       color: "#293881",
       fontSize: "1.8rem",
+      "@media (max-width: 768px)": {
+        fontSize: "1.5rem",
+      },
     }),
     singleValue: (base) => ({
       ...base,

@@ -2184,7 +2184,7 @@ const ProductsPageFilter = ({
         </div>
 
         <div className="row">
-          <div className="xl-3 lg-3 md-3 sm-12">
+          <div className="xl-3 lg-3 md-3 sm-12" id="filterColumnNotMobile">
             <div className="filter-container">
               <button
                 className="filter-title"
