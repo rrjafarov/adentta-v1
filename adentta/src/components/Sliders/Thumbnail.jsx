@@ -1,0 +1,594 @@
+// "use client";
+// import React, { useState, useEffect } from "react";
+// import { Swiper, SwiperSlide } from "swiper/react";
+// import "swiper/css";
+// import "swiper/css/free-mode";
+// import "swiper/css/navigation";
+// import "swiper/css/thumbs";
+// import "swiper/css/pagination";
+// import { FreeMode, Navigation, Thumbs, Pagination } from "swiper/modules";
+// import Link from "next/link";
+// import Image from "next/image";
+// import { Fancybox } from "@fancyapps/ui";
+// import "@fancyapps/ui/dist/fancybox/fancybox.css";
+// import ArrowLeft from "../../../public/icons/careersLeftArrow.svg";
+// import ArrowRight from "../../../public/icons/careersRightArrow.svg";
+// import "../../app/[locale]/globals.scss";
+
+// // Fancybox ayarları
+// Fancybox.bind("[data-fancybox]", {
+//   dragToClose: false,
+//   Image: { zoom: false },
+// });
+
+// const Thumbnail = ({ productData, t }) => {
+//   const [thumbsSwiper, setThumbsSwiper] = useState(null);
+//   const [isMobile, setIsMobile] = useState(false);
+//   const [currentUrl, setCurrentUrl] = useState("");
+//   const [copied, setCopied] = useState(false);
+
+//   // Ekran genişliğini takip et
+//   useEffect(() => {
+//     const handleResize = () => setIsMobile(window.innerWidth < 768);
+//     handleResize();
+//     window.addEventListener("resize", handleResize);
+//     return () => window.removeEventListener("resize", handleResize);
+//   }, []);
+
+//   // Mevcut sayfa URL'sini al
+//   useEffect(() => {
+//     if (typeof window !== "undefined") {
+//       setCurrentUrl(window.location.href);
+//     }
+//   }, []);
+
+//   // Paylaşım URL'leri
+//   const shareUrls = {
+//     telegram: `https://t.me/share/url?url=${encodeURIComponent(currentUrl)}`,
+//     facebook: `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(
+//       currentUrl
+//     )}`,
+//     linkedin: `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(
+//       currentUrl
+//     )}`,
+//     whatsapp: `https://api.whatsapp.com/send?text=${encodeURIComponent(
+//       currentUrl
+//     )}`,
+//   };
+
+//   // Slide listesi: eğer images varsa onları, yoksa tek resmi al
+//   const slides =
+//     productData.images && productData.images.length > 0
+//       ? productData.images
+//       : [productData.image];
+
+//   const handleCopy = () => {
+//     navigator.clipboard.writeText(currentUrl);
+//     setCopied(true);
+//     setTimeout(() => setCopied(false), 2000);
+//   };
+
+//   return (
+//     <div className="detailPageContainer">
+//       {/* --- Sol Thumbnails (masaüstünde) --- */}
+//       {!isMobile && slides.length > 0 && (
+//         <div className="thumbnailWrapper">
+//           <Swiper
+//             onSwiper={setThumbsSwiper}
+//             direction="vertical"
+//             spaceBetween={10}
+//             slidesPerView={4}
+//             freeMode
+//             watchSlidesProgress
+//             modules={[FreeMode, Thumbs]}
+//             className="thumbnailSwiper"
+//           >
+//             {slides.map((src, idx) => (
+//               <SwiperSlide key={idx}>
+//                 <div className="productDetailPageImgSlider">
+//                   <Image
+//                     src={`https://admin.adentta.az/storage${src}`}
+//                     alt={`Thumbnail ${idx + 1}`}
+//                     width={800}
+//                     height={800}
+//                     style={{ objectFit: "cover" }}
+//                   />
+//                 </div>
+//               </SwiperSlide>
+//             ))}
+//           </Swiper>
+//         </div>
+//       )}
+
+//       {/* --- Ana Slider --- */}
+//       <div className="mainSwiperPP">
+//         <Swiper
+//           thumbs={{ swiper: thumbsSwiper }}
+//           navigation={{
+//             nextEl: ".DPcustom-swiper-button-next",
+//             prevEl: ".DPcustom-swiper-button-prev",
+//           }}
+//           pagination={isMobile ? { clickable: true } : false}
+//           slidesPerView={1}
+//           spaceBetween={30}
+//           loop={true}
+//           modules={[FreeMode, Thumbs, Navigation, Pagination]}
+//           className="mainSwiper"
+//         >
+//           {slides.map((src, idx) => (
+//             <SwiperSlide key={idx}>
+//               <div className="mainSwiperImages">
+//                 <Link
+//                   href={`https://admin.adentta.az/storage${src}`}
+//                   className="DPgalleryImg block"
+//                   data-fancybox="videos"
+//                 >
+//                   <Image
+//                     src={`https://admin.adentta.az/storage${src}`}
+//                     alt={`Main image ${idx + 1}`}
+//                     width={800}
+//                     height={800}
+//                   />
+//                 </Link>
+//               </div>
+//             </SwiperSlide>
+//           ))}
+//         </Swiper>
+
+//         {/* Paylaşım linkleri */}
+//         <div className="detailPageShareLinks desktopProductLink topper flex items-center">
+//           <span>{t?.productsPageShare || "Share with"}:</span>
+//           <Link
+//             href={shareUrls.telegram}
+//             target="_blank"
+//             rel="noopener noreferrer"
+//             className="detailPageShareLink ml-2"
+//           >
+//             <img src="/icons/telegramBold.svg" alt="Telegram" />
+//           </Link>
+//           <Link
+//             href={shareUrls.facebook}
+//             target="_blank"
+//             rel="noopener noreferrer"
+//             className="detailPageShareLink ml-2"
+//           >
+//             <img src="/icons/facebookBold.svg" alt="Facebook" />
+//           </Link>
+//           <Link
+//             href={shareUrls.linkedin}
+//             target="_blank"
+//             rel="noopener noreferrer"
+//             className="detailPageShareLink ml-2"
+//           >
+//             <img src="/icons/linkedinBold.svg" alt="LinkedIn" />
+//           </Link>
+//           <Link
+//             href={shareUrls.whatsapp}
+//             target="_blank"
+//             rel="noopener noreferrer"
+//             className="detailPageShareLink ml-2"
+//           >
+//             <img src="/icons/whatsappBold.svg" alt="WhatsApp" />
+//           </Link>
+//           <button onClick={handleCopy} className="detailPageShareLinkCOPY ml-2">
+//             <img src="/icons/copyBold.svg" alt="Copy link" />
+//             <span>{t?.copyLink || "copy link"}</span>
+//           </button>
+//           {copied && <span className="copy-feedback ml-2">Copied</span>}
+//         </div>
+//       </div>
+//     </div>
+//   );
+// };
+
+// export default Thumbnail;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// * 19.06
+// "use client";
+// import React, { useState, useEffect } from "react";
+// import { Swiper, SwiperSlide } from "swiper/react";
+// import "swiper/css";
+// import "swiper/css/free-mode";
+// import "swiper/css/navigation";
+// import "swiper/css/thumbs";
+// import "swiper/css/pagination";
+// import { FreeMode, Navigation, Thumbs, Pagination } from "swiper/modules";
+// import Link from "next/link";
+// import Image from "next/image";
+// import { Fancybox } from "@fancyapps/ui";
+// import "@fancyapps/ui/dist/fancybox/fancybox.css";
+// import "../../app/[locale]/globals.scss";
+
+// // Fancybox ayarları
+// Fancybox.bind("[data-fancybox]", {
+//   dragToClose: false,
+//   Image: { zoom: false },
+// });
+
+// const Thumbnail = ({ productData, t }) => {
+//   const [thumbsSwiper, setThumbsSwiper] = useState(null);
+//   const [isMobile, setIsMobile] = useState(false);
+//   const [currentUrl, setCurrentUrl] = useState("");
+//   const [copied, setCopied] = useState(false);
+
+//   useEffect(() => {
+//     const handleResize = () => setIsMobile(window.innerWidth < 768);
+//     handleResize();
+//     window.addEventListener("resize", handleResize);
+//     return () => window.removeEventListener("resize", handleResize);
+//   }, []);
+
+//   useEffect(() => {
+//     if (typeof window !== "undefined") {
+//       setCurrentUrl(window.location.href);
+//     }
+//   }, []);
+
+
+//   const shareUrls = {
+//     telegram: `https://t.me/share/url?url=${encodeURIComponent(
+//       currentUrl
+//     )}&text=${encodeURIComponent(productData.title)}`,
+//     facebook: `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(
+//       currentUrl
+//     )}"e=${encodeURIComponent(productData.title)}`,
+//     linkedin: `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(
+//       currentUrl
+//     )}&title=${encodeURIComponent(
+//       productData.title
+//     )}&summary=${encodeURIComponent(currentUrl)}`,
+//     whatsapp: `https://api.whatsapp.com/send?text=${encodeURIComponent(
+//       `${productData.title} - ${currentUrl}`
+//     )}`,
+//   };
+
+//   const slides = [productData.image]
+//     .concat(Array.isArray(productData.images) ? productData.images : [])
+//     .filter(Boolean);
+
+//   const handleCopy = () => {
+//     navigator.clipboard.writeText(currentUrl);
+//     setCopied(true);
+//     setTimeout(() => setCopied(false), 2000);
+//   };
+
+//   return (
+//     <div className="detailPageContainer">
+//       {/* Masaüstü thumbnail'ları */}
+//       {!isMobile && slides.length > 1 && (
+//         <div className="thumbnailWrapper">
+//           <Swiper
+//             onSwiper={setThumbsSwiper}
+//             direction="vertical"
+//             spaceBetween={10}
+//             slidesPerView={4}
+//             freeMode
+//             watchSlidesProgress
+//             modules={[FreeMode, Thumbs]}
+//             className="thumbnailSwiper"
+//           >
+//             {slides.map((src, idx) => (
+//               <SwiperSlide key={idx}>
+//                 <div className="productDetailPageImgSlider">
+//                   <Image
+//                     src={`https://admin.adentta.az/storage${src}`}
+//                     alt={`Thumbnail ${idx + 1}`}
+//                     width={800}
+//                     height={800}
+//                     style={{ objectFit: "cover" }}
+//                   />
+//                 </div>
+//               </SwiperSlide>
+//             ))}
+//           </Swiper>
+//         </div>
+//       )}
+
+//       {/* Ana slider */}
+//       <div className="mainSwiperPP">
+//         <Swiper
+//           thumbs={{ swiper: thumbsSwiper }}
+//           navigation={{
+//             nextEl: ".DPcustom-swiper-button-next",
+//             prevEl: ".DPcustom-swiper-button-prev",
+//           }}
+//           pagination={isMobile ? { clickable: true } : false}
+//           slidesPerView={1}
+//           spaceBetween={30}
+//           loop={true}
+//           modules={[FreeMode, Thumbs, Navigation, Pagination]}
+//           className="mainSwiper"
+//         >
+//           {slides.map((src, idx) => (
+//             <SwiperSlide key={idx}>
+//               <div className="mainSwiperImages">
+//                 <Link
+//                   href={`https://admin.adentta.az/storage${src}`}
+//                   className="DPgalleryImg block"
+//                   data-fancybox="videos"
+//                 >
+//                   <Image
+//                     src={`https://admin.adentta.az/storage${src}`}
+//                     alt={`Ana resim ${idx + 1}`}
+//                     width={800}
+//                     height={800}
+//                   />
+//                 </Link>
+//               </div>
+//             </SwiperSlide>
+//           ))}
+//         </Swiper>
+
+//         {/* Paylaşım linkleri */}
+//         <div className="detailPageShareLinks desktopProductLink topper flex items-center">
+//           <span>{t?.productsPageShare || "Paylaş"}:</span>
+//           <Link
+//             href={shareUrls.telegram}
+//             target="_blank"
+//             rel="noopener noreferrer"
+//             className="detailPageShareLink ml-2"
+//           >
+//             <img src="/icons/telegramBold.svg" alt="Telegram" />
+//           </Link>
+//           <Link
+//             href={shareUrls.facebook}
+//             target="_blank"
+//             rel="noopener noreferrer"
+//             className="detailPageShareLink ml-2"
+//           >
+//             <img src="/icons/facebookBold.svg" alt="Facebook" />
+//           </Link>
+//           <Link
+//             href={shareUrls.linkedin}
+//             target="_blank"
+//             rel="noopener noreferrer"
+//             className="detailPageShareLink ml-2"
+//           >
+//             <img src="/icons/linkedinBold.svg" alt="LinkedIn" />
+//           </Link>
+//           <Link
+//             href={shareUrls.whatsapp}
+//             target="_blank"
+//             rel="noopener noreferrer"
+//             className="detailPageShareLink ml-2"
+//           >
+//             <img src="/icons/whatsappBold.svg" alt="WhatsApp" />
+//           </Link>
+//           <button onClick={handleCopy} className="detailPageShareLinkCOPY ml-2">
+//             <img src="/icons/copyBold.svg" alt="Linki kopyala" />
+//             <span>{t?.copyLink || "Linki kopyala"}</span>
+//           </button>
+//           {copied && <span className="copy-feedback ml-2">Copied</span>}
+//         </div>
+//       </div>
+//     </div>
+//   );
+// };
+
+// export default Thumbnail;
+
+// *19.06
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// ! BU KOD ISLEYIR --------------------==------------------------
+  "use client";
+  import React, { useState, useEffect } from "react";
+  import { Swiper, SwiperSlide } from "swiper/react";
+  import "swiper/css";
+  import "swiper/css/free-mode";
+  import "swiper/css/navigation";
+  import "swiper/css/thumbs";
+  import "swiper/css/pagination";
+  import { FreeMode, Navigation, Thumbs, Pagination } from "swiper/modules";
+  import Link from "next/link";
+  import Image from "next/image";
+  import { Fancybox } from "@fancyapps/ui";
+  import "@fancyapps/ui/dist/fancybox/fancybox.css";
+  import "../../app/[locale]/globals.scss";
+
+  // Fancybox ayarları
+  Fancybox.bind("[data-fancybox]", {
+    dragToClose: false,
+    Image: { zoom: false },
+  });
+
+  const Thumbnail = ({ productData, t }) => {
+    const [thumbsSwiper, setThumbsSwiper] = useState(null);
+    const [isMobile, setIsMobile] = useState(false);
+    const [currentUrl, setCurrentUrl] = useState("");
+    const [copied, setCopied] = useState(false);
+
+    useEffect(() => {
+      const handleResize = () => setIsMobile(window.innerWidth < 768);
+      handleResize();
+      window.addEventListener("resize", handleResize);
+      return () => window.removeEventListener("resize", handleResize);
+    }, []);
+
+    useEffect(() => {
+      if (typeof window !== "undefined") {
+        setCurrentUrl(window.location.href);
+      }
+    }, []);
+
+    const shareUrls = {
+      telegram: `https://t.me/share/url?url=${encodeURIComponent(
+        currentUrl
+      )}&text=${encodeURIComponent(productData.title)}`,
+      facebook: `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(
+        currentUrl
+      )}"e=${encodeURIComponent(productData.title)}`,
+      linkedin: `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(
+        currentUrl
+      )}&title=${encodeURIComponent(
+        productData.title
+      )}&summary=${encodeURIComponent(currentUrl)}`,
+      whatsapp: `https://api.whatsapp.com/send?text=${encodeURIComponent(
+        `${productData.title} - ${currentUrl}`
+      )}`,
+    };
+
+    // Mevcut image ve images alanlarını birleştirip falsy değerleri filtreliyoruz:
+    const slides = [productData.image]
+      .concat(Array.isArray(productData.images) ? productData.images : [])
+      .filter(Boolean);
+
+    const handleCopy = () => {
+      navigator.clipboard.writeText(currentUrl);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    };
+
+    return (
+      <div className="detailPageContainer">
+        {/* Thumbnail wrapper her zaman DOM'da; içi koşullu doluyor */}
+        <div className="thumbnailWrapper">
+          {/* Desktop: yalnızca birden fazla resim olduğunda Swiper render et */}
+          {!isMobile && slides.length > 0 && (
+            <Swiper
+              onSwiper={setThumbsSwiper}
+              direction="vertical"
+              spaceBetween={10}
+              slidesPerView={4}
+              freeMode
+              watchSlidesProgress
+              modules={[FreeMode, Thumbs]}
+              className="thumbnailSwiper"
+            >
+              {slides.map((src, idx) => (
+                <SwiperSlide key={idx}>
+                  <div className="productDetailPageImgSlider">
+                    <Image
+                      src={`https://admin.adentta.az/storage${src}`}
+                      alt={`Thumbnail ${idx + 1}`}
+                      width={800}
+                      height={800}
+                      style={{ objectFit: "cover" }}
+                    />
+                  </div>
+                </SwiperSlide>
+              ))}
+            </Swiper>
+          )}
+          {/* Eğer isMobile veya slides.length <= 1 ise burada içi boş kalacak,
+              ama thumbnailWrapper kapsayıcısı DOM’da duracak. */}
+        </div>
+
+        {/* Main alan: Swiper varsa render et, yoksa atla; paylaşım linkleri her zaman aşağıda */}
+        <div className="mainSwiperPP">
+          {slides.length > 0 ? (
+            <Swiper
+              thumbs={{ swiper: thumbsSwiper }}
+              navigation={{
+                nextEl: ".DPcustom-swiper-button-next",
+                prevEl: ".DPcustom-swiper-button-prev",
+              }}
+              pagination={isMobile ? { clickable: true } : false}
+              slidesPerView={1}
+              spaceBetween={30}
+              loop={true}
+              modules={[FreeMode, Thumbs, Navigation, Pagination]}
+              className="mainSwiper"
+            >
+              {slides.map((src, idx) => (
+                <SwiperSlide key={idx}>
+                  <div className="mainSwiperImages">
+                    <Link
+                      href={`https://admin.adentta.az/storage${src}`}
+                      className="DPgalleryImg block"
+                      data-fancybox="videos"
+                    >
+                      <Image
+                        src={`https://admin.adentta.az/storage${src}`}
+                        alt={`Ana resim ${idx + 1}`}
+                        width={800}
+                        height={800}
+                      />
+                    </Link>
+                  </div>
+                </SwiperSlide>
+              ))}
+            </Swiper>
+          ) : (
+            null
+          )}
+
+
+
+          <div className="detailPageShareLinks desktopProductLink topper flex items-center">
+            <span>{t?.productsPageShare || "Paylaş"}:</span>
+            <Link
+              href={shareUrls.telegram}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="detailPageShareLink ml-2"
+            >
+              <img src="/icons/telegramBold.svg" alt="Telegram" />
+            </Link>
+            <Link
+              href={shareUrls.facebook}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="detailPageShareLink ml-2"
+            >
+              <img src="/icons/facebookBold.svg" alt="Facebook" />
+            </Link>
+            <Link
+              href={shareUrls.linkedin}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="detailPageShareLink ml-2"
+            >
+              <img src="/icons/linkedinBold.svg" alt="LinkedIn" />
+            </Link>
+            <Link
+              href={shareUrls.whatsapp}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="detailPageShareLink ml-2"
+            >
+              <img src="/icons/whatsappBold.svg" alt="WhatsApp" />
+            </Link>
+            <button onClick={handleCopy} className="detailPageShareLinkCOPY ml-2">
+              <img src="/icons/copyBold.svg" alt="Linki kopyala" />
+              <span>{t?.copyLink || "Linki kopyala"}</span>
+            </button>
+            {copied && <span className="copy-feedback ml-2">Copied</span>}
+          </div>
+        </div>
+      </div>
+    );
+  };
+
+  export default Thumbnail;
