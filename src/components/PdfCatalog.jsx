@@ -9,7 +9,6 @@
 //   const [selectedBrand, setSelectedBrand] = useState(null);
 //   const [selectedProductType, setSelectedProductType] = useState(null);
 
-
 //   const filteredDoctors = pdfMembers.filter((doctor) => {
 //     const matchesBrand = selectedBrand
 //       ? doctor.brand_id?.some((brand) => brand.title === selectedBrand.label)
@@ -21,7 +20,7 @@
 //         )
 //       : true;
 
-//     return matchesBrand && matchesProductType; 
+//     return matchesBrand && matchesProductType;
 //   });
 
 //   const handleBrandChange = (value) => {
@@ -114,31 +113,6 @@
 
 // export default PdfCatalog;
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 "use client";
 import React, { useMemo, useState } from "react";
 import ReactSelectDrop from "./ReactSelectDrop";
@@ -149,6 +123,15 @@ import Link from "next/link";
 const PdfCatalog = ({ t, pdfMembers = [] }) => {
   const [selectedBrand, setSelectedBrand] = useState(null);
   const [selectedProductType, setSelectedProductType] = useState(null);
+
+
+  const hasProductOptions = useMemo(() => {
+  return (pdfMembers || []).some(
+    (member) =>
+      Array.isArray(member?.product_id) && member.product_id.length > 0
+  );
+}, [pdfMembers]);
+
 
   // Filtrləmə — datadakı strukturuna uyğun
   const filteredDoctors = useMemo(() => {
@@ -192,14 +175,26 @@ const PdfCatalog = ({ t, pdfMembers = [] }) => {
           <span>{t?.pdfCatalog || "PDF Catalog"}</span>
 
           <div className="pdfCatalogSelects">
+
+
+            {/* {hasProductOptions && (
+              <div className="catalogSelect">
+                <ReactSelectProductType
+                  t={t}
+                  pdfMembers={pdfMembers}
+                  onChange={handleProductTypeChange}
+                />
+              </div>
+            )} */}
+
             <div className="catalogSelect">
-              {/* Məhsul seçimi pdfMembers-dən gəlir */}
-              <ReactSelectProductType
+              <ReactSelectProductType 
                 t={t}
                 pdfMembers={pdfMembers}
                 onChange={handleProductTypeChange}
               />
             </div>
+
             <div className="catalogSelect">
               <ReactSelectDrop t={t} onChange={handleBrandChange} />
             </div>
@@ -218,21 +213,40 @@ const PdfCatalog = ({ t, pdfMembers = [] }) => {
                 : "#";
 
               const brandTitle =
-                member?.brand_id?.[0]?.title || (t?.noBrand || "Marka yoxdur");
+                member?.brand_id?.[0]?.title || t?.noBrand || "Marka yoxdur";
 
               return (
                 <div key={member.id} className="xl-4 lg-4 md-6 sm-12">
                   <div className="pdfCatalogCard">
                     <div className="pdfCatalogCardImg">
-                      <Image
+                      {/* <Image
                         src={imgSrc}
                         alt="catalog"
                         width={300}
                         height={300}
-                      />
-                      <div className="vatech">
+                      /> */}
+
+                      <Link
+                        href={pdfHref}
+                        target="_blank"
+                        className="pdfCatalogCardImgLink"
+                      >
+                        <Image
+                          src={imgSrc}
+                          alt="catalog"
+                          width={300}
+                          height={300}
+                        />
+                      </Link>
+
+                      {member?.brand_id?.[0]?.title && (
+                        <div className="vatech">
+                          <span>{brandTitle}</span>
+                        </div>
+                      )}
+                      {/* <div className="vatech">
                         <span>{brandTitle}</span>
-                      </div>
+                      </div> */}
                     </div>
 
                     <div className="pdfCatalogCardInfo">
@@ -240,6 +254,7 @@ const PdfCatalog = ({ t, pdfMembers = [] }) => {
                         <span>{member?.title}</span>
 
                         <div
+                          className="pdfCatalogCardInfoParagraph"
                           dangerouslySetInnerHTML={{
                             __html: member?.short_text || "",
                           }}
