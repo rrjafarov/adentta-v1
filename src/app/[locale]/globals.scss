@@ -7867,7 +7867,7 @@ ul {
     position: relative;
     border-radius: 1.5rem;
     height: 39.139rem;
-    .pdfCatalogCardImgLink{
+    .pdfCatalogCardImgLink {
       width: 100%;
       height: 100%;
     }
@@ -7974,14 +7974,41 @@ ul {
     }
   }
 }
-
+.pdfCatalogCardInfoParagraphDetailPage {
+  width: 31.6163rem;
+  color: #8a8fab;
+  font-size: 1.5rem;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 129.5%;
+  /* 1.9425rem */
+  display: -webkit-box;
+  -webkit-line-clamp: 2; /* YALNIZ 2 sətir göstər */
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  p {
+    font-size: 1.5rem;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 129.5%;
+    /* 1.9425rem */
+    display: -webkit-box;
+    -webkit-line-clamp: 2; /* YALNIZ 2 sətir göstər */
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+}
 @media screen and (max-width: 768px) {
-  .pdfCatalogCardInfoContent{
-    p{
+  .pdfCatalogCardInfoContent {
+    p {
       width: 100% !important;
     }
   }
   .pdfCatalogCardInfoParagraph {
+    width: 100% !important;
+    font-size: 1.5rem;
+  }
+  .pdfCatalogCardInfoParagraphDetailPage {
     width: 100% !important;
     font-size: 1.5rem;
   }
@@ -10714,7 +10741,7 @@ ul {
         .pdfCatalogCardInfo {
           border-radius: 1.5rem;
           background: rgba(193, 217, 241, 0.2);
-          height: 19rem;
+          height: 20rem;
           .pdfCatalogCardInfoContent {
             padding: 2.75rem 0 2.22rem 3rem;
             display: flex;
@@ -10736,7 +10763,7 @@ ul {
               font-weight: 400;
               line-height: 129.5%;
               display: -webkit-box;
-              -webkit-line-clamp: 3;
+              -webkit-line-clamp: 2;
               -webkit-box-orient: vertical;
               overflow: hidden;
               text-overflow: ellipsis;

@@ -242,12 +242,27 @@ const BrandsDetailPage = async ({ t, brandsDetailDataDetail, otherBrands }) => {
                   <div key={index} className="xl-4 lg-4 md-6 sm-12">
                     <div className="pdfCatalogCard">
                       <div className="pdfCatalogCardImg">
-                        <Image
+                        {/* <Image
                           src={`https://admin.adentta.az/storage${pdf.image}`}
                           alt={pdf.title}
                           width={400}
                           height={400}
-                        />
+                        /> */}
+
+                        <Link
+                          // href={`https://admin.adentta.az/storage/uploads/pdf/${pdf.id}.pdf`}
+                          href={`https://admin.adentta.az/storage${pdf.pdf}`}
+                          target="_blank"
+                          className="pdfCatalogCardImgLink"
+                        >
+                          <Image
+                            src={`https://admin.adentta.az/storage${pdf.image}`}
+                            alt={pdf.title}
+                            width={400}
+                            height={400}
+                          />
+                        </Link>
+
                         <div className="vatech">
                           <span>{brandsDetailDataDetail.title}</span>
                         </div>
@@ -257,6 +272,7 @@ const BrandsDetailPage = async ({ t, brandsDetailDataDetail, otherBrands }) => {
                           <span>{pdf.title}</span>
                           {pdf.short_text && (
                             <div
+                              className="pdfCatalogCardInfoParagraphDetailPage"
                               dangerouslySetInnerHTML={{
                                 __html: pdf.short_text,
                               }}
@@ -264,7 +280,9 @@ const BrandsDetailPage = async ({ t, brandsDetailDataDetail, otherBrands }) => {
                           )}
 
                           <a
-                            href={`https://admin.adentta.az/storage/uploads/pdf/${pdf.id}.pdf`}
+                            // href={`https://admin.adentta.az/storage/uploads/pdf/${pdf.id}.pdf`}
+                            href={`https://admin.adentta.az/storage${pdf.pdf}`}
+                            target="_blank"
                             download
                           >
                             <button>
