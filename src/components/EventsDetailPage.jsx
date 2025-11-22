@@ -41,7 +41,7 @@ const EventsDetailPage = ({ t, eventsDetail, otherEvents }) => {
   return (
     <div id="eventDetailPage">
       <div className="container">
-        <div className="eventDetailTop topper">
+        <div className="eventDetailTop topperEvents">
           <Link href="/">
             <h1>Adentta</h1>
           </Link>
@@ -62,7 +62,12 @@ const EventsDetailPage = ({ t, eventsDetail, otherEvents }) => {
                 <div className="detailCalendarItem">
                   <img src="/icons/date.svg" alt="Calendar" />
                   <div className="detailCalendarContent">
-                    <span>{formatDate(eventsDetail.event_start_date)}</span>
+                    {/* <span>{formatDate(eventsDetail.event_start_date)}</span> */}
+                    <span>
+                      {formatDate(eventsDetail.event_start_date)}
+                      {eventsDetail.event_end_date &&
+                        ` - ${formatDate(eventsDetail.event_end_date)}`}
+                    </span>
                     {/* <p>19:00</p> */}
                   </div>
                 </div>

@@ -3273,13 +3273,12 @@ ul {
 
 .productsPageDescription {
   padding-top: 6rem;
-
   h1 {
     color: #293881;
     font-size: 2rem;
     font-style: normal;
     font-weight: 500;
-    line-height: 0%;
+    // line-height: 0%;
     letter-spacing: -0.0016rem;
     // padding-bottom: 2.65rem;
   }
@@ -3407,7 +3406,6 @@ ul {
     margin-bottom: 5rem;
     margin-top: 3rem !important;
   }
-
   h1 {
     color: #293881;
     font-size: 2rem;
@@ -7005,6 +7003,7 @@ ul {
       flex-direction: column;
 
       .eventDetailHeaderText {
+        width: 100%;
         h3 {
           color: #2273ec;
           font-size: 1.4rem;
@@ -7023,35 +7022,85 @@ ul {
           font-style: normal;
           font-weight: 600;
           line-height: 4.4rem;
-          width: 70.7451rem;
+          // width: 70.7451rem;
         }
-
         display: flex;
         flex-direction: column;
 
+        // .detailCalendar {
+        //   margin-top: 2.63rem;
+        //   // width: 18.3rem;
+        //   // width: 100%;
+        //   height: 7.4rem;
+        //   flex-shrink: 0;
+        //   border-radius: 1.45rem;
+        //   background: #e1ecfc;
+        //   display: flex;
+        //   align-items: center;
+        //   justify-content: center;
+
+        //   .detailCalendarItem {
+        //     display: flex;
+        //     align-items: center;
+        //     justify-content: center;
+        //     // width: 23.5rem;
+        //     // width: 17.3rem;
+        //     height: 6.6rem;
+        //     flex-shrink: 0;
+        //     border-radius: 1rem;
+        //     border: 1px solid #fff;
+        //     padding: 0.4rem;
+        //     gap: 1.5rem;
+
+        //     .detailCalendarContent {
+        //       span {
+        //         color: #293881;
+        //         font-size: 1.4rem;
+        //         font-style: normal;
+        //         font-weight: 600;
+        //         line-height: normal;
+        //         letter-spacing: -0.014rem;
+        //       }
+
+        //       p {
+        //         color: #293881;
+        //         font-size: 1.2rem;
+        //         font-style: normal;
+        //         font-weight: 500;
+        //         line-height: normal;
+        //         letter-spacing: -0.012rem;
+        //         opacity: 0.7;
+        //       }
+        //     }
+        //   }
+        // }
+
         .detailCalendar {
           margin-top: 2.63rem;
-          width: 18.3rem;
-          height: 7.4rem;
+          // width: 18.3rem;
+          // width: 100%;
+          height: 7.4rem; // ❗ toxunulmadı
           flex-shrink: 0;
           border-radius: 1.45rem;
           background: #e1ecfc;
-          display: flex;
+          display: inline-flex; // ✅ blok yox, content qədər
           align-items: center;
           justify-content: center;
+          padding: 0.4rem; // ✅ içindəki item ilə kənar arasında boşluq
+          width: auto; // ✅ eni kontent qədər olsun
+          max-width: max-content; // ✅ kontent nə boydadırsa o qədər
 
           .detailCalendarItem {
             display: flex;
             align-items: center;
             justify-content: center;
             // width: 23.5rem;
-            width: 17.3rem;
-
-            height: 6.6rem;
+            // width: 17.3rem;
+            height: 6.6rem; // ❗ toxunulmadı
             flex-shrink: 0;
             border-radius: 1rem;
             border: 1px solid #fff;
-            padding: 0.4rem;
+            padding: 0 1.5rem; // ✅ content ilə border arası ~0.5rem
             gap: 1.5rem;
 
             .detailCalendarContent {
@@ -7512,7 +7561,11 @@ ul {
     }
   }
 }
-
+@media (max-width: 768px) {
+    .topperEvents {
+        display: none !important;
+    }
+}
 // ? EventsDetailPage,jsx
 // !    Event Page
 
@@ -8011,6 +8064,18 @@ ul {
   .pdfCatalogCardInfoParagraphDetailPage {
     width: 100% !important;
     font-size: 1.5rem;
+  }
+
+  .pdfCatalogCardImg {
+    position: relative;
+    border-radius: 1.5rem;
+    height: 48.139rem !important;
+    img {
+      width: 100%;
+      height: 100%;
+      border-radius: 1.5rem;
+      object-fit: cover;
+    }
   }
 }
 
@@ -10329,7 +10394,6 @@ ul {
 
     .brandsDetaiLPageHeroImg {
       position: relative;
-
       img {
         width: 100%;
         height: 40rem;

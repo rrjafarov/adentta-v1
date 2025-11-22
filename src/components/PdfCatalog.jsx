@@ -177,7 +177,7 @@ const PdfCatalog = ({ t, pdfMembers = [] }) => {
           <div className="pdfCatalogSelects">
 
 
-            {/* {hasProductOptions && (
+            {hasProductOptions && (
               <div className="catalogSelect">
                 <ReactSelectProductType
                   t={t}
@@ -185,15 +185,15 @@ const PdfCatalog = ({ t, pdfMembers = [] }) => {
                   onChange={handleProductTypeChange}
                 />
               </div>
-            )} */}
+            )}
 
-            <div className="catalogSelect">
+            {/* <div className="catalogSelect">
               <ReactSelectProductType 
                 t={t}
                 pdfMembers={pdfMembers}
                 onChange={handleProductTypeChange}
               />
-            </div>
+            </div> */}
 
             <div className="catalogSelect">
               <ReactSelectDrop t={t} onChange={handleBrandChange} />
@@ -213,19 +213,12 @@ const PdfCatalog = ({ t, pdfMembers = [] }) => {
                 : "#";
 
               const brandTitle =
-                member?.brand_id?.[0]?.title || t?.noBrand || "Marka yoxdur";
+                member?.brand_id?.[0]?.title || t?.noBrand || "";
 
               return (
                 <div key={member.id} className="xl-4 lg-4 md-6 sm-12">
                   <div className="pdfCatalogCard">
                     <div className="pdfCatalogCardImg">
-                      {/* <Image
-                        src={imgSrc}
-                        alt="catalog"
-                        width={300}
-                        height={300}
-                      /> */}
-
                       <Link
                         href={pdfHref}
                         target="_blank"
@@ -234,8 +227,8 @@ const PdfCatalog = ({ t, pdfMembers = [] }) => {
                         <Image
                           src={imgSrc}
                           alt="catalog"
-                          width={300}
-                          height={300}
+                          width={500}
+                          height={500}
                         />
                       </Link>
 
@@ -244,9 +237,6 @@ const PdfCatalog = ({ t, pdfMembers = [] }) => {
                           <span>{brandTitle}</span>
                         </div>
                       )}
-                      {/* <div className="vatech">
-                        <span>{brandTitle}</span>
-                      </div> */}
                     </div>
 
                     <div className="pdfCatalogCardInfo">
