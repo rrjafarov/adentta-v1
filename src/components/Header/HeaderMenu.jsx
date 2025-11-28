@@ -325,7 +325,6 @@ const HeaderMenu = ({ t, categoryData = [], isHomePage }) => {
       const newPath = `/${newLocale}${currentPath}${queryString}`;
       window.location.href = newPath;
     } catch (error) {
-      console.error("Language change error:", error);
     }
   };
 
@@ -404,7 +403,7 @@ const HeaderMenu = ({ t, categoryData = [], isHomePage }) => {
               <ul>
                 <div className="dropdown">
                   <li>
-                    <Link className="productsLinkName" href="#">
+                    <Link className="productsLinkName" href="/product">
                       {t?.products || "products"}
                     </Link>
                     <img className="bottomDown" src="/icons/bottomDown.svg" alt="" />
@@ -459,7 +458,7 @@ const HeaderMenu = ({ t, categoryData = [], isHomePage }) => {
 
                 <div className="dropdownCompany">
                   <li>
-                    <Link className="productsLinkName" href="#">
+                    <Link className="productsLinkName" href="/about">
                       {t?.company || "company"}
                     </Link>
                     <img className="bottomDown" src="/icons/bottomDown.svg" alt="" />
