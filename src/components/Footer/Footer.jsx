@@ -46,7 +46,7 @@ const Footer = async ({
                 className="footerLogo"
               />
             </Link>
-            <h1>{t?.footerSeoText || "No results found"}</h1>
+            <p>{t?.footerSeoText || "No results found"}</p>
             <div className="socialIcons">
               <ul>
                 <li>
@@ -100,7 +100,7 @@ const Footer = async ({
           {/* Products (kategori filtreli) */}
           <div className="footerLinks">
             <Link href="/product">
-              <h3>{t.products || "Products"}</h3>
+              <span>{t.products || "Products"}</span>
             </Link>
             <ul>
               {categoryData?.slice(0, 6).map((category) => (
@@ -121,7 +121,7 @@ const Footer = async ({
           {/* Brands */}
           <div className="footerLinks">
             <Link href="/brands">
-              <h3>{t.brands || "Brands"}</h3>
+              <span>{t.brands || "Brands"}</span>
             </Link>
             <ul>
               {brandsData?.slice(0, 6).map((brand) => (
@@ -141,7 +141,7 @@ const Footer = async ({
           {/* Events */}
           <div className="footerLinks">
             <Link href="/events">
-              <h3>{t.events || "Events"}</h3>
+              <span>{t.events || "Events"}</span>
             </Link>
             <ul>
               {eventsData?.slice(0, 6).map((event) => (
@@ -162,7 +162,7 @@ const Footer = async ({
           <div className="footerLinks">
             {/* <Link href="/about" className="notLink">
             </Link> */}
-              <h3>{t.company || "Company"}</h3>
+              <span>{t.company || "Company"}</span>
             <ul>
               <li>
                 <Link href="/about">{t.aboutCompany || "About"}</Link>
@@ -176,9 +176,9 @@ const Footer = async ({
               {/* <li>
                 <Link href="/doctors">{t.doctors || "Doctors"}</Link>
               </li> */}
-              <li>
+              {/* <li>
                 <Link href="/brands">{t.brands || "Brands"}</Link>
-              </li>
+              </li> */}
               <li>
                 <Link href="/careers">{t.careers || "Careers"}</Link>
               </li>
@@ -194,7 +194,7 @@ const Footer = async ({
               <h3>{t.media || "Media"}</h3>
             </Link> */}
 
-            <h3>{t.media || "Media"}</h3>
+            <span>{t.media || "Media"}</span>
 
             <ul>
               <li>

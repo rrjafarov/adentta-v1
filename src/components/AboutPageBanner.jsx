@@ -35,25 +35,25 @@ const AboutPageBanner = ({
           />
           <div className="aboutTop topper">
             <Link href="/">
-              <h1 className="topper">Adentta</h1>
+              <strong className="topper">Adentta</strong>
             </Link>
             <img
               className="topper"
               src="/icons/whiteRightDown.svg"
               alt="Adentta"
             />
-            <h4 className="topper">{t?.aboutBannerTitle || "About"}</h4>
+            <span className="topper">{t?.aboutBannerTitle || "About"}</span>
           </div>
           <div className="aboutBottom">
-            <h4>{t?.aboutBannerTitle || "About us"}</h4>
+            <h1>{t?.aboutBannerTitle || "About us"}</h1>
             <p>{t?.aboutBannerContent || "Adentta"}</p>
           </div>
         </div>
 
         <div className="aboutContent">
-          <h4>{t?.aboutBannerTitle || "About us"}</h4>
+          <span>{t?.aboutBannerTitle || "About us"}</span>
           {/* <span>Who we are?</span> */}
-          <span>{title}</span>
+          <h2>{title}</h2>
           <div dangerouslySetInnerHTML={{ __html: content }}></div>
 
           <Link href={"/mission"} className="seeOurMissionBTN">
@@ -83,10 +83,10 @@ const AboutPageBanner = ({
               <div className="xl-6 lg-6 md-6 sm-12">
                 <div className="aboutVidProviderContentText">
                   <span>{t?.whatWeProvide || "What We Provide"}</span>
-                  <p>
+                  <h3>
                     {t?.whatWeProvideContent ||
                       "Empowering Smiles, Elevating Care – Your Trusted Dental Supply Partner."}
-                  </p>
+                  </h3>
                   <p>
                     {t?.whatWeProvideContent2 ||
                       "Our practice is designed not only to provide cutting-edge treatments but also to create an environment where patients feel relaxed and confident in their care."}

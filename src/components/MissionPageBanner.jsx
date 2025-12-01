@@ -1,4 +1,5 @@
 import Image from "next/image";
+import Link from "next/link";
 import React from "react";
 
 const TeamPageBanner = ({
@@ -18,9 +19,11 @@ const TeamPageBanner = ({
       <div className="teamPageBanner">
         <div className="container">
           <div className="teamTop topper">
-            <h1 className="topper">Adentta</h1>
+            <Link href="/">
+              <strong className="topper">Adentta</strong>
+            </Link>
             <img className="topper" src="/icons/rightDown.svg" alt="Adentta" />
-            <h4 className="topper">{t?.mission || "Mission"}</h4>
+            <span className="topper">{t?.mission || "Mission"}</span>
           </div>
         </div>
         <Image
@@ -36,8 +39,7 @@ const TeamPageBanner = ({
           <div className="xl-7 lg-7 md-7 sm-12">
             <div className="teamPageMission">
               <div className="missionInner">
-                {/* <h6>Mission</h6> */}
-                <h6>{misionTitle}</h6>
+                <h1>{misionTitle}</h1>
                 <span>{misionSubTitle}</span>
                 <div dangerouslySetInnerHTML={{ __html: misionContent }}></div>
               </div>
@@ -46,7 +48,7 @@ const TeamPageBanner = ({
           <div className="xl-5 lg-5 md-5 sm-12">
             <div className="teamPageVision">
               <div className="visionInner">
-                <h6>{visionTitle}</h6>
+                <h2>{visionTitle}</h2>
                 <span>{visionSubTitle}</span>
                 <div dangerouslySetInnerHTML={{ __html: vision }}></div>
               </div>
@@ -57,7 +59,6 @@ const TeamPageBanner = ({
               <div className="row">
                 <div className="xl-4 lg-4 md-4 sm-12">
                   <div className="futureGoalsLeft">
-                    {/* <span>Future goals</span>  */}
                     <span>{futureGoalTitle}</span>
                   </div>
                 </div>

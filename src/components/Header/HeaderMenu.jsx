@@ -426,12 +426,12 @@ const HeaderMenu = ({ t, categoryData = [], isHomePage }) => {
                                   return (
                                     <div key={category.id} className="column">
                                       <Link href={buildCategoryHref(category)}>
-                                        <h3>
+                                        <div className="columnHeader">
                                           {iconSrc ? (
                                             <img src={iconSrc} alt={category.title || ""} />
                                           ) : null}
                                           <span>{category.title}</span>
-                                        </h3>
+                                        </div>
                                       </Link>
                                       <div className="columnLinks">
                                         {children.slice(0, 5).map((child) => (

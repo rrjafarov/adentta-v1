@@ -8,15 +8,15 @@ const TeamPage = ({ t, teamMembers = [] }) => {
       <div className="container">
         <div className="teamsTop">
           <Link href="/">
-            <h1 className="topper">Adentta</h1>
+            <strong className="topper">Adentta</strong>
           </Link>
           <img className="topper" src="/icons/rightDown.svg" alt="Adentta" />
-          <h4 className="topper">{t?.teamTitle || "Team"}</h4>
+          <span className="topper">{t?.teamTitle || "Team"}</span>
         </div>
 
         <div className="teamsPageHeaderText">
-          <h2>{t?.teamTitle || "Team"}</h2>
-          <span> {t?.teamMeet || "Meet our team"}</span>
+          <span>{t?.teamTitle || "Team"}</span>
+          <h1> {t?.teamMeet || "Meet our team"}</h1>
           <p>
             {t?.teamContent || "Adentta Professional Team"}
           </p>

@@ -164,7 +164,7 @@ const ProductsPageHero = ({
       <div className="container productsPageHero">
         <div className="productsPageHeroHeader">
           <div className="productsPageHeaderText">
-            <h4>{title}</h4>
+            <h1>{title}</h1>
             <p>{description}</p>
           </div>
           <div className="custom-navigation">

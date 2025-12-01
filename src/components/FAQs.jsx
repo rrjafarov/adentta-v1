@@ -7,14 +7,14 @@ const FilterAccordion = ({ title, children }) => {
 
   return (
     <div className="accordion">
-      <button className="accordion-header" onClick={() => setIsOpen(!isOpen)}>
+      <h3 className="accordion-header" onClick={() => setIsOpen(!isOpen)}>
         {title}
         <img
           src={isOpen ? "/icons/minus.svg" : "/icons/plusIcon.svg"}
           alt="Toggle Icon"
           className="toggle-icon"
         />
-      </button>
+      </h3>
       {isOpen && <div className="accordion-content">{children}</div>}
     </div>
   );
@@ -26,14 +26,14 @@ const FAQs = ({ faqData, t }) => {
       <div className="container">
         <div className="faqTop topper">
           <Link href="/">
-            <h1 className="topper">Adentta</h1>
+            <strong className="topper">Adentta</strong>
           </Link>
           <img className="topper" src="/icons/rightDown.svg" alt="Adentta" />
-          <h4 className="topper">{t?.faqPageTitle || "FAQs"}</h4>
+          <span className="topper">{t?.faqPageTitle || "FAQs"}</span>
         </div>
         <div className="faqPageHeaderText">
-          <h2>{t?.faqPageTitle || "FAQs"}</h2>
-          <span>{t?.faqPageAsked || "Frequently Asked Questions"}</span>
+          <span>{t?.faqPageTitle || "FAQs"}</span>
+          <h1>{t?.faqPageAsked || "Frequently Asked Questions"}</h1>
         </div>
         <div className="faqsAccordions">
           <div className="faqsAccordion">

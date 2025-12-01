@@ -93,7 +93,7 @@ const BrandsDetailPage = async ({ t, brandsDetailDataDetail, otherBrands }) => {
         {/* Top breadcrumb */}
         <div className="brandsDPTop ">
           <Link href="/">
-            <h1 className="topper">Adentta</h1>
+            <strong className="topper">Adentta</strong>
           </Link>
           <Image
             className="topper"
@@ -103,7 +103,7 @@ const BrandsDetailPage = async ({ t, brandsDetailDataDetail, otherBrands }) => {
             height={8}
           />
           <Link href="/brands">
-            <h4 className="topper">{t?.brands || "Brands"}</h4>
+            <span className="topper">{t?.brands || "Brands"}</span>
           </Link>
           <Image
             className="topper"
@@ -112,7 +112,7 @@ const BrandsDetailPage = async ({ t, brandsDetailDataDetail, otherBrands }) => {
             width={8}
             height={8}
           />
-          <h4 className="topper">{brandsDetailDataDetail.title}</h4>
+          <span className="topper lastLink">{brandsDetailDataDetail.title}</span>
         </div>
 
         {/* About brand */}
@@ -132,7 +132,7 @@ const BrandsDetailPage = async ({ t, brandsDetailDataDetail, otherBrands }) => {
             </div>
             <div className="xl-7 lg-7 md-8 sm-12">
               <div className="brandsDPAboutText">
-                <span>{t?.brandsPageAboutBrands || "About brand"}</span>
+                <h1>{brandsDetailDataDetail.title || "About brand"}</h1>
                 <div
                   dangerouslySetInnerHTML={{
                     __html: brandsDetailDataDetail.about_brand,

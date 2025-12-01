@@ -43,21 +43,21 @@ const EventsDetailPage = ({ t, eventsDetail, otherEvents }) => {
       <div className="container">
         <div className="eventDetailTop topperEvents">
           <Link href="/">
-            <h1>Adentta</h1>
+            <strong>Adentta</strong>
           </Link>
           <img className="topper" src="/icons/rightDown.svg" alt="Adentta" />
           <Link href="/events">
-            <h4>{t?.events || "Events"}</h4>
+            <span>{t?.events || "Events"}</span>
           </Link>
           <img className="topper" src="/icons/rightDown.svg" alt="Adentta" />
-          <h4>{eventsDetail.title}</h4>
+          <span>{eventsDetail.title}</span>
         </div>
 
         <div className="eventDetailPage">
           <div className="eventDetailInner">
             <div className="eventDetailHeaderText">
-              <h3>{t?.eventsPageEventDetails || "Events details"}</h3>
-              <h5>{eventsDetail.title}</h5>
+              <p>{t?.eventsPageEventDetails || "Events details"}</p>
+              <h1>{eventsDetail.title}</h1>
               <div className="detailCalendar">
                 <div className="detailCalendarItem">
                   <img src="/icons/date.svg" alt="Calendar" />

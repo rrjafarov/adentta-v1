@@ -13,14 +13,14 @@ const ContactPageMap = ({
       {/* <div className="container"> */}
       <div className="adressMap">
         <div className="adressMapHead">
-          <span>{t?.contactPageMapTitle || "Map"}</span>
+          <h2>{t?.contactPageMapTitle || "Map"}</h2>
         </div>
         <div className="row">
           <div className="xl-6 lg-6 md-6 sm-12">
             <div className="mapSectionAll">
               <div className="mapSectionContent">
                 <div className="mapStoreItem">
-                  <span>{t?.contactPageStore || "store"}</span>
+                  <h3>{t?.contactPageStore || "store"}</h3>
                   <div className="mapStoreInner">
                     <Image
                       src="/icons/boldEmail.svg"
@@ -28,7 +28,7 @@ const ContactPageMap = ({
                       width={100}
                       height={100}
                     />
-                    <span>{email}</span>
+                    <p>{email}</p>
                   </div>
                   <div className="mapStoreInner">
                     <Image
@@ -37,13 +37,13 @@ const ContactPageMap = ({
                       width={100}
                       height={100}
                     />
-                    <span>{locationStore}</span>
+                    <p>{locationStore}</p>
                   </div>
                 </div>
                 <div className="mapContentLine"></div>
 
                 <div className="mapStoreItem">
-                  <span>{t?.contacntPageHeadOffice || "store"}</span>
+                  <h3>{t?.contacntPageHeadOffice || "store"}</h3>
                   <div className="mapStoreInner">
                     <Image
                       src="/icons/boldEmail.svg"
@@ -51,7 +51,7 @@ const ContactPageMap = ({
                       width={100}
                       height={100}
                     />
-                    <span>{email}</span>
+                    <p>{email}</p>
                   </div>
                   <div className="mapStoreInner">
                     <Image
@@ -60,7 +60,7 @@ const ContactPageMap = ({
                       width={100}
                       height={100}
                     />
-                    <span>{locationHeadOffice}</span>
+                    <p>{locationHeadOffice}</p>
                   </div>
                 </div>
               </div>

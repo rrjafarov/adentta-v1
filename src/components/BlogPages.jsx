@@ -312,15 +312,15 @@ const BlogPages = ({ t, blogData = [], blogsCategoryData = [] }) => {
       <div className="container">
         <div className="blogTop topper">
           <Link href="/">
-            <h1 className="topper">Adentta</h1>
+            <strong className="topper">Adentta</strong>
           </Link>
           <img className="topper" src="/icons/rightDown.svg" alt="Adentta" />
-          <h4 className="topper">{t?.blogs || "Blogs"}</h4>
+          <span className="topper">{t?.blogs || "Blogs"}</span>
         </div>
 
         <div className="blogPageHeaderText">
-          <h2>{t?.blogsPageNews || "Blog news"}</h2>
-          <span>{t?.blogsPageExploreOurBlogs || "Explore Our Blogs"}</span>
+          <span>{t?.blogsPageNews || "Blog news"}</span>
+          <h1>{t?.blogsPageExploreOurBlogs || "Explore Our Blogs"}</h1>
           <div className="blogFilter">
             {categoryList.map((title) => {
               const isActive = selectedCategory === title;

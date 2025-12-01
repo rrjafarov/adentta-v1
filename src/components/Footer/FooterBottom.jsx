@@ -83,7 +83,7 @@ const FooterBottom = ({ t }) => {
         <div className="oneStudio">
           <span>{t?.developerBy || "Developed and Designed by "}</span>
           <Link href="https://one.az/" target="_blank">
-          <h4>ONE STUDIO</h4>
+            ONE STUDIO
             <Image
               src="/icons/oneStudio.svg"
               alt="one.az"

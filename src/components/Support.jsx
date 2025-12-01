@@ -8,14 +8,14 @@ const Support = ({ t, title, content }) => {
       <div className="container">
         <div className="supportTop topper">
           <Link href="/">
-            <h1 className="topper">Adentta</h1>
+            <strong className="topper">Adentta</strong>
           </Link>
           <img className="topper" src="/icons/rightDown.svg" alt="Adentta" />
-          <h4 className="topper">{t?.userTermsPage || "User Terms"}</h4>
+          <span className="topper">{t?.userTermsPage || "User Terms"}</span>
         </div>
         <div className="supportPageHeaderText">
-          <h2>{t?.supportPageTitle || "Support"}</h2>
-          <span>{t?.userTermsPage || "User Terms"}</span>
+          <span>{t?.supportPageTitle || "Support"}</span>
+          <h1>{t?.userTermsPage || "User Terms"}</h1>
         </div>
         <div className="supportPageContent">
           <div className="supportPageContentText">

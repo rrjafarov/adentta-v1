@@ -7,7 +7,7 @@ const VacancyOpen = ({ vacancy ,t }) => {
     <div className="openVacanacies">
       <div className="container">
         <div className="openVacancyCardHeader">
-          <strong>{t?.careersPageVacancyTitle || "Open Vacancies"}</strong>
+          <h2>{t?.careersPageVacancyTitle || "Open Vacancies"}</h2>
         </div>
         <div className="vacancyCards">
           <div className="row">

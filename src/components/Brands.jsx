@@ -34,15 +34,15 @@ const Brands = ({ brandsData, t }) => {
       <div className="container">
         <div className="doctorsTop topper">
           <Link href="/">
-            <h1 className="topper">Adentta</h1>
+            <strong className="topper">Adentta</strong>
           </Link>
           <img src="/icons/rightDown.svg" alt="Adentta" />
-          <h4 className="topper">{t?.brands || "Brands"}</h4>
+          <span className="topper">{t?.brands || "Brands"}</span>
         </div>
 
         <div className="doctorsPageHeaderText">
           <span>{t?.brands || "Brands"}</span>
-          <h2>{t?.brands || "Brands"}</h2>
+          <h1>{t?.brands || "Brands"}</h1>
 
           <div className="doctorsPageSelectButtons">
             <div className="doctorsSelects">

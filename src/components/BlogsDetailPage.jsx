@@ -9,20 +9,20 @@ const BlogsDetailPage = ({ t, blogDetail, otherBlogs }) => {
       <div className="container">
         <div className="blogDetailTop topper">
           <Link href="/">
-            <h1 className="topper">Adentta</h1>
+            <strong className="topper">Adentta</strong>
           </Link>
           <img className="topper" src="/icons/rightDown.svg" alt="Adentta" />
           <Link href="/blogs">
-            <h4 className="topper">{t?.blogs || "Blogs"}</h4>
+            <span className="topper">{t?.blogs || "Blogs"}</span>
           </Link>
           <img className="topper" src="/icons/rightDown.svg" alt="Adentta" />
-          <h4 className="topper">{blogDetail.title}</h4>
+          <span className="topper">{blogDetail.title}</span>
         </div>
 
         <div className="blogDetailPage">
           <div className="blogDetailInner">
             <div className="blogDetailHeaderText">
-              <h5>{blogDetail.title}</h5>
+              <h1>{blogDetail.title}</h1>
               <div className="seeView">
                 {/* <span>{blogDetail.published_date}</span> */}
 
@@ -45,7 +45,7 @@ const BlogsDetailPage = ({ t, blogDetail, otherBlogs }) => {
               />
             </div>
             <div className="blogDetailText">
-              <span>{blogDetail.title}</span>
+              {/* <span>{blogDetail.title}</span> */}
               {/* <p>
               </p> */}
               <div

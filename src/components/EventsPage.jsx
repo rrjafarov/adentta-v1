@@ -113,10 +113,10 @@ const EventsPage = ({ eventsData, t }) => {
       <div className="container">
         <div className="eventTop topper">
           <Link href="/">
-            <h1>Adentta</h1>
+            <strong>Adentta</strong>
           </Link>
           <img src="/icons/rightDown.svg" alt="Adentta" />
-          <h4>{t?.events || "Events"}</h4>
+          <span>{t?.events || "Events"}</span>
         </div>
       </div>
 
@@ -124,8 +124,8 @@ const EventsPage = ({ eventsData, t }) => {
         <div className="container">
           <div className="eventPageHead flex justify-between items-center">
             <div className="eventPageHeaderText">
-              <h2>{t?.events || "Events"}</h2>
-              <span>{t?.eventsPageExploreOurEvents || "Events"}</span>
+              <span>{t?.events || "Events"}</span>
+              <h2>{t?.eventsPageExploreOurEvents || "Events"}</h2>
               <p>{t?.eventsPageSubText || "Events"}</p>
             </div>
             <DataPicker

@@ -36,12 +36,12 @@ const AboutPageDirector = ({
 
         <div className="xl-6 md-6 lg-6 sm-12">
           <div className="directorMessageRight">
-            <h6>
+            <h3>
               {directorTitle}
               <div className="nail-top">
                 <Image src="/images/nail.png" alt="" width={100} height={100} />
               </div>
-            </h6>
+            </h3>
             <div className="directorSecondParagraph">
               <div dangerouslySetInnerHTML={{ __html: directorMessage }}></div>
 

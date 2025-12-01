@@ -2079,7 +2079,7 @@ ul {
           cursor: pointer;
         }
 
-        h1 {
+        p {
           color: #a8aec8;
           font-size: 1.2rem;
           font-style: normal;
@@ -2189,7 +2189,7 @@ ul {
       }
 
       .footerLinks {
-        h3 {
+        span {
           color: #fff;
           font-size: 2rem;
           font-style: normal;
@@ -2367,7 +2367,7 @@ ul {
             align-items: center;
           }
 
-          h4 {
+          a {
             color: #cbd1d8;
             font-size: 1.4rem;
             font-style: normal;
@@ -2572,7 +2572,7 @@ ul {
         flex-wrap: wrap;
         gap: 3.44rem;
 
-        h4 {
+        h1 {
           width: 35.8217rem;
           color: $adentta-01;
           font-size: 4rem;
@@ -2672,8 +2672,7 @@ ul {
   padding-left: 0.55rem;
   display: flex;
   gap: 1.15rem;
-
-  h1 {
+  strong {
     color: #293881;
     font-size: 1.3rem;
     font-style: normal;
@@ -2682,21 +2681,19 @@ ul {
     border-bottom: 1px solid #293881;
     cursor: pointer;
   }
-
   img {
     width: 1.4rem;
     height: 1.4rem;
     flex-shrink: 0;
   }
-
-  h4 {
+  span {
     color: #293881;
     font-size: 1.3rem;
     font-style: normal;
     font-weight: 500;
     line-height: normal;
     opacity: 0.3;
-    cursor: pointer;
+    // cursor: pointer;
   }
 }
 
@@ -3596,6 +3593,14 @@ ul {
   }
 
   .productDetailRightTitle {
+    h1 {
+      color: #293881;
+      font-size: 3.2rem;
+      font-style: normal;
+      font-weight: 600;
+      line-height: normal;
+      letter-spacing: -0.064rem;
+    }
     color: #293881;
     font-size: 3.2rem;
     font-style: normal;
@@ -3608,7 +3613,7 @@ ul {
     justify-content: flex-start;
     align-items: flex-start;
     flex-direction: column;
-    cursor: pointer;
+    // cursor: pointer;
 
     .detailPagePrice {
       margin: 2.5rem 0rem 1rem;
@@ -3742,12 +3747,11 @@ ul {
       font-weight: 500;
       line-height: normal;
       letter-spacing: 0.018rem;
-      cursor: pointer;
-
-      &:hover {
-        transform: scale(1.1);
-        transition: all 0.4s ease;
-      }
+      // cursor: pointer;
+      // &:hover {
+      //   transform: scale(1.1);
+      //   transition: all 0.4s ease;
+      // }
     }
 
     .dpWP {
@@ -3763,12 +3767,12 @@ ul {
       align-items: center;
       cursor: pointer;
       gap: 0.5rem;
+      transition: all 0.4s ease;
 
       &:hover {
         transform: scale(1.1);
         transition: all 0.4s ease;
       }
-
       img {
         width: 3.2142rem;
         height: 3.2142rem;
@@ -3844,27 +3848,9 @@ ul {
   align-items: center;
 }
 
-// .productParametrs {
-//   // width: auto;
-//   // height: 3.5515rem;
-//   flex-shrink: 0;
-//   border-radius: 4rem;
-//   border: 1px solid #d7e0ed;
-//   display: flex;
-//   justify-content: center;
-//   align-items: center;
-//   background: #f4f8ff;
 
-//   span {
-//     color: #293881 !important;
-//     font-size: 1.5rem;
-//     padding: 1rem 2rem;
-//   }
-// }
 
 .productParametrs {
-  // width: auto;  // buna ehtiyac yoxdur
-  // height: 3.5515rem;
   flex-shrink: 0;
   border-radius: 4rem;
   border: 1px solid #d7e0ed;
@@ -3873,17 +3859,19 @@ ul {
   align-items: center;
   background: #f4f8ff;
   width: fit-content; // <-- istəsən bunu da əlavə et
-
-  span {
-    color: #293881 !important;
-    font-size: 1.5rem;
-    padding: 1rem 2rem;
+  a {
+    span {
+      color: #293881 !important;
+      font-size: 1.5rem;
+      // padding: 1.2rem 2rem !important;
+    }
+      padding: 0.8rem 2rem !important;
   }
 }
 
 .accordion-header-dp {
   display: flex;
-  justify-content: center;
+  justify-content: flex-start;
   align-items: center;
   gap: 3rem;
   padding-top: 1.5rem;
@@ -4020,7 +4008,6 @@ ul {
 
 #detailPagesSimilarsBottom {
   background-color: #fff;
-
   h4 {
     padding-top: 3.35rem;
     padding-bottom: 3.2rem;
@@ -4188,7 +4175,6 @@ ul {
       }
     }
   }
-
   margin-bottom: 5rem;
 }
 
@@ -4336,7 +4322,7 @@ ul {
     display: flex;
     gap: 1.15rem;
 
-    h1 {
+    strong {
       color: #ffffff;
       font-size: 1.3rem;
       font-style: normal;
@@ -4352,14 +4338,14 @@ ul {
       flex-shrink: 0;
     }
 
-    h4 {
+    span {
       color: #ffffff;
       font-size: 1.3rem;
       font-style: normal;
       font-weight: 500;
       line-height: normal;
       opacity: 0.3;
-      cursor: pointer;
+      // cursor: pointer;
     }
   }
 
@@ -4372,7 +4358,7 @@ ul {
     opacity: 0.9;
     z-index: 3;
 
-    h4 {
+    h1 {
       width: 24.1838rem;
       color: #fff;
       font-size: 5rem;
@@ -4419,7 +4405,7 @@ ul {
   padding-right: 2rem;
   padding-left: 2rem;
 
-  h4 {
+  span {
     color: #2273ec;
     font-size: 1.4rem;
     font-style: normal;
@@ -4430,7 +4416,7 @@ ul {
     opacity: 0.5;
   }
 
-  span {
+  h2 {
     color: $adentta-01;
     font-size: 4rem;
     font-style: normal;
@@ -4726,7 +4712,7 @@ ul {
     text-transform: uppercase;
   }
 
-  p:nth-child(2) {
+  p:nth-child(2) ,h3 {
     font-size: 4rem;
     font-style: normal;
     font-weight: 600;
@@ -4793,7 +4779,7 @@ ul {
 }
 
 .verticalSliderHeaderText {
-  h4 {
+  p {
     color: #fff;
     // font-family: "SF Pro Rounded";
     font-size: 1.4rem;
@@ -4807,7 +4793,7 @@ ul {
     padding-bottom: 0.88rem;
   }
 
-  p {
+  h3 {
     max-width: 47.9674rem;
     width: 100%;
     color: #fff;
@@ -5189,7 +5175,7 @@ ul {
       left: -3rem;
     }
 
-    h6 {
+    h3 {
       color: #293881;
       font-size: 5.5rem;
       font-style: normal;
@@ -5352,7 +5338,7 @@ ul {
       display: flex;
       gap: 1.15rem;
 
-      h1 {
+      strong {
         color: #293881;
         font-size: 1.3rem;
         font-style: normal;
@@ -5368,14 +5354,14 @@ ul {
         flex-shrink: 0;
       }
 
-      h4 {
+      span {
         color: #293881;
         font-size: 1.3rem;
         font-style: normal;
         font-weight: 500;
         line-height: normal;
         opacity: 0.3;
-        cursor: pointer;
+        // cursor: pointer;
       }
     }
   }
@@ -5392,7 +5378,7 @@ ul {
       padding-left: 10.7rem;
       padding-bottom: 4.34rem;
 
-      h6 {
+      h1 {
         color: $adentta-01;
         font-size: 4rem;
         font-style: normal;
@@ -5442,7 +5428,7 @@ ul {
       padding-left: 6.39rem;
       padding-bottom: 4.34rem;
 
-      h6 {
+      h2 {
         color: $adentta-01;
         font-size: 4rem;
         font-style: normal;
@@ -5592,7 +5578,7 @@ ul {
     display: flex;
     gap: 1.15rem;
 
-    h1 {
+    strong {
       color: #293881;
       font-size: 1.3rem;
       font-style: normal;
@@ -5608,14 +5594,14 @@ ul {
       flex-shrink: 0;
     }
 
-    h4 {
+    span {
       color: #293881;
       font-size: 1.3rem;
       font-style: normal;
       font-weight: 500;
       line-height: normal;
       opacity: 0.3;
-      cursor: pointer;
+      // cursor: pointer;
     }
   }
 
@@ -5626,7 +5612,7 @@ ul {
     justify-content: center;
     align-items: center;
 
-    h2 {
+    span {
       color: #2273ec;
       font-size: 1.4rem;
       font-style: normal;
@@ -5636,7 +5622,7 @@ ul {
       text-transform: uppercase;
     }
 
-    span {
+    h1 {
       color: $adentta-01;
       font-size: 4rem;
       font-style: normal;
@@ -5770,7 +5756,7 @@ ul {
     display: flex;
     gap: 1.15rem;
 
-    h1 {
+    strong {
       color: #293881;
       font-size: 1.3rem;
       font-style: normal;
@@ -5786,14 +5772,14 @@ ul {
       flex-shrink: 0;
     }
 
-    h4 {
+    span {
       color: #293881;
       font-size: 1.3rem;
       font-style: normal;
       font-weight: 500;
       line-height: normal;
       opacity: 0.3;
-      cursor: pointer;
+      // cursor: pointer;
     }
   }
 
@@ -5804,7 +5790,7 @@ ul {
     justify-content: center;
     align-items: center;
 
-    h2 {
+    span {
       color: #2273ec;
       font-size: 1.4rem;
       font-style: normal;
@@ -5814,7 +5800,7 @@ ul {
       text-transform: uppercase;
     }
 
-    span {
+    h1 {
       color: $adentta-01;
       font-size: 4rem;
       font-style: normal;
@@ -6048,7 +6034,7 @@ ul {
     display: flex;
     gap: 1.15rem;
 
-    h1 {
+    strong {
       color: #293881;
       font-size: 1.3rem;
       font-style: normal;
@@ -6064,14 +6050,14 @@ ul {
       flex-shrink: 0;
     }
 
-    h4 {
+    span {
       color: #293881;
       font-size: 1.3rem;
       font-style: normal;
       font-weight: 500;
       line-height: normal;
       opacity: 0.3;
-      cursor: pointer;
+      // cursor: pointer;
     }
   }
 
@@ -6092,14 +6078,13 @@ ul {
       flex-direction: column;
 
       .blogDetailHeaderText {
-        h5 {
+        h1 {
           color: $adentta-01;
           font-size: 4rem;
           font-style: normal;
           font-weight: 600;
           line-height: 4.4rem;
         }
-
         display: flex;
         flex-direction: column;
 
@@ -6505,7 +6490,7 @@ ul {
   display: flex;
   gap: 1.15rem;
 
-  h1 {
+  strong {
     color: #293881;
     font-size: 1.3rem;
     font-style: normal;
@@ -6521,14 +6506,14 @@ ul {
     flex-shrink: 0;
   }
 
-  h4 {
+  span {
     color: #293881;
     font-size: 1.3rem;
     font-style: normal;
     font-weight: 500;
     line-height: normal;
     opacity: 0.3;
-    cursor: pointer;
+    // cursor: pointer;
   }
 }
 
@@ -6569,7 +6554,7 @@ ul {
     justify-content: flex-start;
     align-items: flex-start;
 
-    h2 {
+    span {
       color: #2273ec;
       font-size: 1.4rem;
       font-style: normal;
@@ -6580,7 +6565,7 @@ ul {
       opacity: 0.5;
     }
 
-    span {
+    h2 {
       color: $adentta-01;
       font-size: 4rem;
       font-style: normal;
@@ -6961,7 +6946,7 @@ ul {
     display: flex;
     gap: 1.15rem;
 
-    h1 {
+    strong {
       color: #293881;
       font-size: 1.3rem;
       font-style: normal;
@@ -6977,14 +6962,14 @@ ul {
       flex-shrink: 0;
     }
 
-    h4 {
+     span {
       color: #293881;
       font-size: 1.3rem;
       font-style: normal;
       font-weight: 500;
       line-height: normal;
       opacity: 0.3;
-      cursor: pointer;
+      // cursor: pointer;
     }
   }
 
@@ -7004,7 +6989,7 @@ ul {
 
       .eventDetailHeaderText {
         width: 100%;
-        h3 {
+        p {
           color: #2273ec;
           font-size: 1.4rem;
           font-style: normal;
@@ -7016,7 +7001,7 @@ ul {
           opacity: 0.5;
         }
 
-        h5 {
+        h1 {
           color: $adentta-01;
           font-size: 4rem;
           font-style: normal;
@@ -7562,9 +7547,9 @@ ul {
   }
 }
 @media (max-width: 768px) {
-    .topperEvents {
-        display: none !important;
-    }
+  .topperEvents {
+    display: none !important;
+  }
 }
 // ? EventsDetailPage,jsx
 // !    Event Page
@@ -7578,7 +7563,7 @@ ul {
     display: flex;
     gap: 1.15rem;
 
-    h1 {
+    strong {
       color: #293881;
       font-size: 1.3rem;
       font-style: normal;
@@ -7594,14 +7579,14 @@ ul {
       flex-shrink: 0;
     }
 
-    h4 {
+    span {
       color: #293881;
       font-size: 1.3rem;
       font-style: normal;
       font-weight: 500;
       line-height: normal;
       opacity: 0.3;
-      cursor: pointer;
+      // cursor: pointer;
     }
   }
 
@@ -7612,7 +7597,7 @@ ul {
     justify-content: center;
     align-items: center;
 
-    h2 {
+    span {
       color: #2273ec;
       font-size: 1.4rem;
       font-style: normal;
@@ -7622,7 +7607,7 @@ ul {
       text-transform: uppercase;
     }
 
-    span {
+    h1 {
       color: $adentta-01;
       font-size: 4rem;
       font-style: normal;
@@ -7653,13 +7638,13 @@ ul {
       flex-wrap: wrap;
       gap: 1.2rem;
 
-      button {
+      h3 {
         color: $adentta-01;
         font-size: 2rem;
         font-style: normal;
         display: flex;
         align-items: center;
-
+        cursor: pointer;
         font-weight: 400;
         line-height: normal;
         height: 4.1rem;
@@ -7803,7 +7788,7 @@ ul {
     display: flex;
     gap: 1.15rem;
 
-    h1 {
+    strong {
       color: #293881;
       font-size: 1.3rem;
       font-style: normal;
@@ -7819,14 +7804,14 @@ ul {
       flex-shrink: 0;
     }
 
-    h4 {
+    span {
       color: #293881;
       font-size: 1.3rem;
       font-style: normal;
       font-weight: 500;
       line-height: normal;
       opacity: 0.3;
-      cursor: pointer;
+      // cursor: pointer;
     }
   }
 
@@ -7837,7 +7822,7 @@ ul {
     justify-content: center;
     align-items: center;
 
-    h2 {
+    span {
       color: #2273ec;
       font-size: 1.4rem;
       font-style: normal;
@@ -7847,7 +7832,7 @@ ul {
       text-transform: uppercase;
     }
 
-    span {
+    h1 {
       color: $adentta-01;
       font-size: 4rem;
       font-style: normal;
@@ -7962,7 +7947,7 @@ ul {
     .pdfCatalogCardInfoContent {
       padding: 2.4rem 3rem 2.22rem 3rem;
 
-      span {
+      h3 {
         color: #293881;
         font-size: 2rem;
         font-style: normal;
@@ -8095,7 +8080,7 @@ ul {
     display: flex;
     gap: 1.15rem;
 
-    h1 {
+    strong {
       color: #293881;
       font-size: 1.3rem;
       font-style: normal;
@@ -8111,14 +8096,14 @@ ul {
       flex-shrink: 0;
     }
 
-    h4 {
+    span {
       color: #293881;
       font-size: 1.3rem;
       font-style: normal;
       font-weight: 500;
       line-height: normal;
       opacity: 0.3;
-      cursor: pointer;
+      // cursor: pointer;
     }
   }
 
@@ -8129,7 +8114,7 @@ ul {
     justify-content: center;
     align-items: center;
 
-    h2 {
+    span {
       color: #2273ec;
       font-size: 1.4rem;
       font-style: normal;
@@ -8139,7 +8124,7 @@ ul {
       text-transform: uppercase;
     }
 
-    span {
+    h1 {
       color: $adentta-01;
       font-size: 4rem;
       font-style: normal;
@@ -8257,7 +8242,7 @@ ul {
       padding-top: 9.75rem;
       padding-left: 7.8rem;
 
-      span {
+      h2 {
         color: #293881;
         font-feature-settings: "liga" off;
         font-size: 3.2rem;
@@ -8398,7 +8383,7 @@ ul {
         padding-bottom: 3rem;
         text-align: center;
 
-        span {
+        h2 {
           color: #293881;
           font-feature-settings: "liga" off;
           font-size: 4rem;
@@ -8430,7 +8415,7 @@ ul {
             flex-direction: column;
             gap: 2rem;
 
-            span {
+            h3 {
               color: #293881;
               font-feature-settings: "liga" off;
               font-size: 2.7rem;
@@ -8449,7 +8434,7 @@ ul {
                 flex-shrink: 0;
               }
 
-              span {
+              h3 ,p{
                 color: #293881;
                 font-feature-settings: "liga" off;
                 font-size: 1.6rem;
@@ -8767,7 +8752,7 @@ ul {
     display: flex;
     gap: 1.15rem;
 
-    h1 {
+    strong {
       color: #293881;
       font-size: 1.3rem;
       font-style: normal;
@@ -8783,14 +8768,14 @@ ul {
       flex-shrink: 0;
     }
 
-    h4 {
+     span {
       color: #293881;
       font-size: 1.3rem;
       font-style: normal;
       font-weight: 500;
       line-height: normal;
       opacity: 0.3;
-      cursor: pointer;
+      // cursor: pointer;
     }
   }
 
@@ -8806,7 +8791,7 @@ ul {
       justify-content: center;
       align-items: center;
 
-      h2 {
+      span {
         color: #2273ec;
         font-size: 1.4rem;
         font-style: normal;
@@ -8816,7 +8801,7 @@ ul {
         text-transform: uppercase;
       }
 
-      span {
+      h1 {
         color: $adentta-01;
         font-size: 4rem;
         font-style: normal;
@@ -8842,7 +8827,7 @@ ul {
     padding-top: 4.86rem;
     padding-left: 7.66rem;
 
-    strong {
+    h2 {
       color: #2273ec;
       font-feature-settings: "liga" off;
       font-size: 2.8rem;
@@ -9196,7 +9181,7 @@ ul {
     display: flex;
     gap: 1.15rem;
 
-    h1 {
+    strong {
       color: #293881;
       font-size: 1.3rem;
       font-style: normal;
@@ -9212,14 +9197,14 @@ ul {
       flex-shrink: 0;
     }
 
-    h4 {
+    span {
       color: #293881;
       font-size: 1.3rem;
       font-style: normal;
       font-weight: 500;
       line-height: normal;
       opacity: 0.3;
-      cursor: pointer;
+      // cursor: pointer;
     }
   }
 
@@ -9242,7 +9227,8 @@ ul {
       font-style: normal;
       font-weight: 600;
       line-height: normal;
-      span {
+      display: flex;
+      h1 {
         padding-left: 1rem;
       }
     }
@@ -9634,7 +9620,7 @@ ul {
   display: flex;
   gap: 1.15rem;
 
-  h1 {
+  strong {
     color: #293881;
     font-size: 1.3rem;
     font-style: normal;
@@ -9650,14 +9636,14 @@ ul {
     flex-shrink: 0;
   }
 
-  h4 {
+  span {
     color: #293881;
     font-size: 1.3rem;
     font-style: normal;
     font-weight: 500;
     line-height: normal;
     opacity: 0.3;
-    cursor: pointer;
+    // cursor: pointer;
   }
 }
 
@@ -9667,7 +9653,7 @@ ul {
   justify-content: center;
   align-items: center;
 
-  h2 {
+  h1 {
     color: $adentta-01;
     font-size: 4rem;
     font-style: normal;
@@ -10432,7 +10418,7 @@ ul {
     display: flex;
     gap: 1.15rem;
 
-    h1 {
+    strong {
       color: #293881;
       font-size: 1.3rem;
       font-style: normal;
@@ -10448,14 +10434,14 @@ ul {
       flex-shrink: 0;
     }
 
-    h4 {
+    span {
       color: #293881;
       font-size: 1.3rem;
       font-style: normal;
       font-weight: 500;
       line-height: normal;
       opacity: 0.3;
-      cursor: pointer;
+      // cursor: pointer;
     }
   }
 
@@ -10497,7 +10483,7 @@ ul {
       gap: 1.59rem;
       flex-direction: column;
 
-      span {
+      h1 {
         color: #293881;
         font-size: 3.2rem;
         font-style: normal;
@@ -10810,7 +10796,7 @@ ul {
             padding: 2.75rem 0 2.22rem 3rem;
             display: flex;
             flex-direction: column;
-            gap span {
+            h3 {
               color: #293881;
               font-size: 2rem;
               font-style: normal;
@@ -11295,7 +11281,7 @@ ul {
     display: flex;
     gap: 1.15rem;
 
-    h1 {
+    strong {
       color: #293881;
       font-size: 1.3rem;
       font-style: normal;
@@ -11311,14 +11297,14 @@ ul {
       flex-shrink: 0;
     }
 
-    h4 {
+    span {
       color: #293881;
       font-size: 1.3rem;
       font-style: normal;
       font-weight: 500;
       line-height: normal;
       opacity: 0.3;
-      cursor: pointer;
+      // cursor: pointer;
     }
   }
 
@@ -11328,7 +11314,7 @@ ul {
     align-items: center;
     flex-direction: column;
 
-    h2 {
+    span {
       color: #2273ec;
       font-size: 1.4rem;
       font-style: normal;
@@ -11338,7 +11324,7 @@ ul {
       text-transform: uppercase;
     }
 
-    span {
+    h1 {
       color: $adentta-01;
       font-size: 4rem;
       font-style: normal;
@@ -11359,7 +11345,7 @@ ul {
       margin-bottom: 7.93rem;
       flex-shrink: 0;
 
-      button {
+      h3 {
         background-color: #fff;
         text-transform: capitalize;
       }
@@ -11403,7 +11389,7 @@ ul {
     display: flex;
     gap: 1.15rem;
 
-    h1 {
+    strong {
       color: #293881;
       font-size: 1.3rem;
       font-style: normal;
@@ -11419,14 +11405,14 @@ ul {
       flex-shrink: 0;
     }
 
-    h4 {
+    span {
       color: #293881;
       font-size: 1.3rem;
       font-style: normal;
       font-weight: 500;
       line-height: normal;
       opacity: 0.3;
-      cursor: pointer;
+      // cursor: pointer;
     }
   }
 
@@ -11436,7 +11422,7 @@ ul {
     align-items: center;
     flex-direction: column;
 
-    h2 {
+    span {
       color: #2273ec;
       font-size: 1.4rem;
       font-style: normal;
@@ -11446,7 +11432,7 @@ ul {
       text-transform: uppercase;
     }
 
-    span {
+    h1 {
       color: $adentta-01;
       font-size: 4rem;
       font-style: normal;
@@ -11668,9 +11654,3 @@ ul {
     border-width: 2px !important;
   }
 }
-
-// @media (max-width: 768px) {
-//   #filterColumnNotMobile{
-//     display: none !important;
-// }
-// }

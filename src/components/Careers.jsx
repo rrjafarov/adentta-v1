@@ -11,17 +11,17 @@ const Careers = ({ t, vacancy, lifeOnHereData }) => {
       <div className="container">
         <div className="careersTop topper">
           <Link href="/">
-            <h1 className="topper">Adentta</h1>
+            <strong className="topper">Adentta</strong>
           </Link>
           <img className="topper" src="/icons/rightDown.svg" alt="Adentta" />
-          <h4 className="topper">{t?.careers || "Careers"}</h4>
+          <span className="topper">{t?.careers || "Careers"}</span>
         </div>
       </div>
       <div className="careersPage">
         <div className="container">
           <div className="careersPageHeaderText">
-            <h2>{t?.careersVacancy || "Vacancy Page"}</h2>
-            <span>{t?.careers || "Careers"}</span>
+            <span>{t?.careersVacancy || "Vacancy Page"}</span>
+            <h1>{t?.careers || "Careers"}</h1>
           </div>
           <VacancyOpen t={t} vacancy={vacancy} />
         </div>

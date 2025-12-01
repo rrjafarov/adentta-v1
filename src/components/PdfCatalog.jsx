@@ -179,15 +179,15 @@ const PdfCatalog = ({ t, pdfMembers = [] }) => {
       <div className="container">
         <div className="pdfCatalogTop topper">
           <Link href="/">
-            <h1 className="topper">Adentta</h1>
+            <strong className="topper">Adentta</strong>
           </Link>
           <img className="topper" src="/icons/rightDown.svg" alt="Adentta" />
-          <h4 className="topper">{t?.pdfCatalog || "PDF Catalog"}</h4>
+          <span className="topper">{t?.pdfCatalog || "PDF Catalog"}</span>
         </div>
 
         <div className="pdfCatalogPageHeaderText">
-          <h2>{t?.pdfTitle || "PDF"}</h2>
-          <span>{t?.pdfCatalog || "PDF Catalog"}</span>
+          <span>{t?.pdfTitle || "PDF"}</span>
+          <h1>{t?.pdfCatalog || "PDF Catalog"}</h1>
 
           <div className="pdfCatalogSelects">
 
@@ -256,7 +256,7 @@ const PdfCatalog = ({ t, pdfMembers = [] }) => {
 
                     <div className="pdfCatalogCardInfo">
                       <div className="pdfCatalogCardInfoContent">
-                        <span>{member?.title}</span>
+                        <h3>{member?.title}</h3>
 
                         <div
                           className="pdfCatalogCardInfoParagraph"

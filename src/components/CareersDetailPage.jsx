@@ -9,14 +9,14 @@ const CareersDetailPage = ({ careerData, t }) => {
       <div className="container">
         <div className="careersTop topper">
           <Link href="/">
-            <h1 className="topper">Adentta</h1>
+            <strong className="topper">Adentta</strong>
           </Link>
           <img className="topper" src="/icons/rightDown.svg" alt="Adentta" />
           <Link href="/careers">
-            <h4 className="topper">{t?.careers || "Careers"}</h4>
+            <span className="topper">{t?.careers || "Careers"}</span>
           </Link>
           <img className="topper" src="/icons/rightDown.svg" alt="Adentta" />
-          <h4 className="topper">{careerData.title}</h4>
+          <span className="topper">{careerData.title}</span>
         </div>
 
         <div className="careersDetailPageHeaderContent">
@@ -26,7 +26,7 @@ const CareersDetailPage = ({ careerData, t }) => {
           
           <p className="vacancyName">
             {t?.careersPageVacancyName || "Vacancy name"}:
-            <span>{careerData.title}</span>
+            <h1>{careerData.title}</h1>
           </p>
           <div className="careersDetailPageHeaderContentValues">
             <div className="vacancyCardItem">

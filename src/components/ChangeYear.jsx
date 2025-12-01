@@ -298,8 +298,8 @@ export default function VerticalCenteredSlider({ historyYears, t }) {
     <section id="changeYearFolder">
       <div className="container">
         <div className="verticalSliderHeaderText">
-          <h4 className="topper">{t?.aboutBannerTitle || "About"}</h4>
-          <p>{t?.changeYearContent || "Overview of the company's history"}</p>
+          <p className="topper">{t?.aboutBannerTitle || "About"}</p>
+          <h3>{t?.changeYearContent || "Overview of the company's history"}</h3>
         </div>
         <div className="vertical-slider-container">
           {/* Slider Sol Kısım */}

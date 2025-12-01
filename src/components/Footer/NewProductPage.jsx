@@ -1506,11 +1506,6 @@
 
 
 
-
-
-
-
-
 "use client";
 import Link from "next/link";
 import React, {
@@ -1548,7 +1543,9 @@ const getCategorySlug = (cat) =>
 // --- SLUG helper ---
 function readCategorySlug(categoryParam) {
   if (!categoryParam) return null;
-  const raw = Array.isArray(categoryParam) ? categoryParam[0] : String(categoryParam);
+  const raw = Array.isArray(categoryParam)
+    ? categoryParam[0]
+    : String(categoryParam);
   const cleaned = raw.split("?")[0].replace(/\/+$/, "");
   return cleaned || null;
 }
@@ -1557,12 +1554,12 @@ function readCategorySlug(categoryParam) {
 function readAllCategorySlugsFromParams(params) {
   if (!params) return [];
   const list = params.getAll("category");
-  return list.map((v) => String(v).split("?")[0].replace(/\/+$/, "")).filter(Boolean);
+  return list
+    .map((v) => String(v).split("?")[0].replace(/\/+$/, ""))
+    .filter(Boolean);
 }
 
 // Accordion həmişə açıq (toggle yoxdur)
-
-
 
 const FilterAccordion = ({ title, children }) => {
   const [isOpen, setIsOpen] = useState(true); // ilkdə açıq
@@ -1586,8 +1583,6 @@ const FilterAccordion = ({ title, children }) => {
   );
 };
 
-
-
 // const FilterAccordion = ({ title, children }) => {
 //   return (
 //     <div className="accordion">
@@ -1601,7 +1596,9 @@ const FilterAccordion = ({ title, children }) => {
 // };
 
 const normalizeIds = (arr = []) =>
-  Array.from(new Set((arr || []).map((v) => Number(v)).filter((v) => !Number.isNaN(v))));
+  Array.from(
+    new Set((arr || []).map((v) => Number(v)).filter((v) => !Number.isNaN(v)))
+  );
 
 function normalizeParentIds(parentRaw) {
   if (!parentRaw) return [];
@@ -1611,7 +1608,11 @@ function normalizeParentIds(parentRaw) {
       .map((v) => parseInt(v, 10))
       .filter((v) => Number.isFinite(v));
   }
-  if (typeof parentRaw === "object" && parentRaw !== null && parentRaw.id != null) {
+  if (
+    typeof parentRaw === "object" &&
+    parentRaw !== null &&
+    parentRaw.id != null
+  ) {
     const n = parseInt(parentRaw.id, 10);
     return Number.isFinite(n) ? [n] : [];
   }
@@ -1688,7 +1689,10 @@ const ProductsPageFilter = ({
   }, [selectedCategory?.id]);
 
   useEffect(() => {
-    const brands = searchParams.getAll("brand").map((b) => parseInt(b, 10)).filter(Number.isFinite);
+    const brands = searchParams
+      .getAll("brand")
+      .map((b) => parseInt(b, 10))
+      .filter(Number.isFinite);
     setSelectedBrandIds(brands);
   }, [searchParams]);
 
@@ -1703,7 +1707,8 @@ const ProductsPageFilter = ({
     const parts = [];
     for (const [key, value] of Object.entries(params || {})) {
       if (Array.isArray(value)) {
-        for (const v of value) parts.push(`${key}=${encodeURIComponent(String(v))}`);
+        for (const v of value)
+          parts.push(`${key}=${encodeURIComponent(String(v))}`);
       } else if (value !== undefined && value !== null && value !== "") {
         parts.push(`${key}=${encodeURIComponent(String(value))}`);
       }
@@ -1717,7 +1722,9 @@ const ProductsPageFilter = ({
 
   const groupedCategories = useMemo(() => {
     const parentCategories = categoryData.filter(
-      (category) => !category.parent_id || (Array.isArray(category.parent_id) && category.parent_id.length === 0)
+      (category) =>
+        !category.parent_id ||
+        (Array.isArray(category.parent_id) && category.parent_id.length === 0)
     );
     return parentCategories.map((parentCategory) => {
       const children = categoryData.filter((sub) => {
@@ -1738,6 +1745,15 @@ const ProductsPageFilter = ({
     });
   }, [categoryData]);
 
+  const breadcrumbCategoryTitle = useMemo(() => {
+    if (!selectedCategoryIds || selectedCategoryIds.length === 0) return null;
+
+    const firstId = Number(selectedCategoryIds[0]);
+    const cat = (categoryData || []).find((c) => Number(c.id) === firstId);
+
+    return cat?.title || null;
+  }, [selectedCategoryIds, categoryData]);
+
   // KATEQORİYA DƏYİŞİMİ: URL-ə yalnız SLUG yaz
   const handleCategoryToggleById = useCallback(
     (id) => {
@@ -1753,7 +1769,9 @@ const ProductsPageFilter = ({
 
         if (arr.length > 0) {
           arr.forEach((cid) => {
-            const catObj = categoryData.find((c) => Number(c.id) === Number(cid));
+            const catObj = categoryData.find(
+              (c) => Number(c.id) === Number(cid)
+            );
             const slug = getCategorySlug(catObj || { title: catObj?.title });
             if (slug) params.append("category", slug);
           });
@@ -1763,13 +1781,22 @@ const ProductsPageFilter = ({
           if (/^filters?\[.*\]/.test(k)) params.delete(k);
         });
 
-        const pathname = typeof window !== "undefined" ? window.location.pathname : "/product-page";
+        const pathname =
+          typeof window !== "undefined"
+            ? window.location.pathname
+            : "/product-page";
         const newSearch = params.toString();
 
         if (typeof window !== "undefined" && window.history?.pushState) {
-          window.history.pushState({}, "", pathname + (newSearch ? `?${newSearch}` : ""));
+          window.history.pushState(
+            {},
+            "",
+            pathname + (newSearch ? `?${newSearch}` : "")
+          );
         } else {
-          router.push(pathname + (newSearch ? `?${newSearch}` : ""), { scroll: false });
+          router.push(pathname + (newSearch ? `?${newSearch}` : ""), {
+            scroll: false,
+          });
         }
 
         return arr;
@@ -1790,7 +1817,12 @@ const ProductsPageFilter = ({
     (brandId) => {
       const bid = Number(brandId);
       const params = new URLSearchParams(searchParams);
-      const current = new Set(params.getAll("brand").map((v) => parseInt(v, 10)).filter(Number.isFinite));
+      const current = new Set(
+        params
+          .getAll("brand")
+          .map((v) => parseInt(v, 10))
+          .filter(Number.isFinite)
+      );
 
       if (current.has(bid)) current.delete(bid);
       else current.add(bid);
@@ -1802,13 +1834,22 @@ const ProductsPageFilter = ({
         if (/^filters?\[.*\]/.test(k)) params.delete(k);
       });
 
-      const pathname = typeof window !== "undefined" ? window.location.pathname : "/product-page";
+      const pathname =
+        typeof window !== "undefined"
+          ? window.location.pathname
+          : "/product-page";
       const newSearch = params.toString();
 
       if (typeof window !== "undefined" && window.history?.pushState) {
-        window.history.pushState({}, "", pathname + (newSearch ? `?${newSearch}` : ""));
+        window.history.pushState(
+          {},
+          "",
+          pathname + (newSearch ? `?${newSearch}` : "")
+        );
       } else {
-        router.push(pathname + (newSearch ? `?${newSearch}` : ""), { scroll: false });
+        router.push(pathname + (newSearch ? `?${newSearch}` : ""), {
+          scroll: false,
+        });
       }
     },
     [router, searchParams]
@@ -1825,7 +1866,9 @@ const ProductsPageFilter = ({
   }, [selectedCategoryIds, categoryData]);
 
   const renderSelectedBrands = useMemo(() => {
-    const list = Array.isArray(brandsData) ? brandsData : Object.values(brandsData || {});
+    const list = Array.isArray(brandsData)
+      ? brandsData
+      : Object.values(brandsData || {});
     return selectedBrandIds.map((bid) => {
       const b = list.find((x) => Number(x?.id) === Number(bid));
       return { id: bid, title: b?.title ?? `Brand ${bid}` };
@@ -1853,7 +1896,10 @@ const ProductsPageFilter = ({
     const urlSlugs = readAllCategorySlugsFromParams(searchParams);
     if (urlSlugs.length > 0) {
       const ids = urlSlugs
-        .map((slug) => (categoryData || []).find((c) => getCategorySlug(c) === slug)?.id)
+        .map(
+          (slug) =>
+            (categoryData || []).find((c) => getCategorySlug(c) === slug)?.id
+        )
         .map((id) => Number(id))
         .filter(Number.isFinite);
       if (ids.length > 0) return ids;
@@ -1892,7 +1938,10 @@ const ProductsPageFilter = ({
       const perPage = Number(paramsObj.per_page || 12);
 
       const baseIds = getBaseCategoryIdsFromUrlOrState();
-      const brandIds = searchParams.getAll("brand").map((v) => parseInt(v, 10)).filter(Number.isFinite);
+      const brandIds = searchParams
+        .getAll("brand")
+        .map((v) => parseInt(v, 10))
+        .filter(Number.isFinite);
 
       let queryString = "";
 
@@ -1902,7 +1951,9 @@ const ProductsPageFilter = ({
           const nid = Number(id);
           if (Number.isFinite(nid)) {
             expandedSet.add(nid);
-            collectDescendantCategoryIds(nid).forEach((d) => expandedSet.add(Number(d)));
+            collectDescendantCategoryIds(nid).forEach((d) =>
+              expandedSet.add(Number(d))
+            );
           }
         });
 
@@ -1910,7 +1961,9 @@ const ProductsPageFilter = ({
           `per_page=${encodeURIComponent(String(perPage))}` +
           `&filters[0][key]=categories&filters[0][operator]=IN`;
         Array.from(expandedSet).forEach((val) => {
-          queryString += `&filters[0][value][]=${encodeURIComponent(String(val))}`;
+          queryString += `&filters[0][value][]=${encodeURIComponent(
+            String(val)
+          )}`;
         });
         queryString += `&page=${encodeURIComponent(String(page))}`;
       } else {
@@ -1923,7 +1976,9 @@ const ProductsPageFilter = ({
         const nextIdx = queryString.includes("filters[0]") ? 1 : 0;
         queryString += `&filters[${nextIdx}][key]=brands&filters[${nextIdx}][operator]=IN`;
         brandIds.forEach((bid) => {
-          queryString += `&filters[${nextIdx}][value][]=${encodeURIComponent(String(bid))}`;
+          queryString += `&filters[${nextIdx}][value][]=${encodeURIComponent(
+            String(bid)
+          )}`;
         });
       }
 
@@ -1971,7 +2026,11 @@ const ProductsPageFilter = ({
         newUrl.searchParams.set("page", String(page));
         const newSearch = newUrl.searchParams.toString();
         if (typeof window !== "undefined" && window.history?.pushState) {
-          window.history.pushState({}, "", newUrl.pathname + (newSearch ? "?" + newSearch : ""));
+          window.history.pushState(
+            {},
+            "",
+            newUrl.pathname + (newSearch ? "?" + newSearch : "")
+          );
         }
         setCurrentPage(page);
         prevParamsRef.current = newSearch;
@@ -2063,7 +2122,10 @@ const ProductsPageFilter = ({
         const page = Number(params.page || 1);
 
         const baseIds = getBaseCategoryIdsFromUrlOrState();
-        const brandIds = searchParams.getAll("brand").map((v) => parseInt(v, 10)).filter(Number.isFinite);
+        const brandIds = searchParams
+          .getAll("brand")
+          .map((v) => parseInt(v, 10))
+          .filter(Number.isFinite);
 
         let queryString = "";
 
@@ -2073,14 +2135,18 @@ const ProductsPageFilter = ({
             const nid = Number(id);
             if (Number.isFinite(nid)) {
               expandedSet.add(nid);
-              collectDescendantCategoryIds(nid).forEach((d) => expandedSet.add(Number(d)));
+              collectDescendantCategoryIds(nid).forEach((d) =>
+                expandedSet.add(Number(d))
+              );
             }
           });
           queryString =
             `per_page=${encodeURIComponent(String(perPage))}` +
             `&filters[0][key]=categories&filters[0][operator]=IN`;
           Array.from(expandedSet).forEach((val) => {
-            queryString += `&filters[0][value][]=${encodeURIComponent(String(val))}`;
+            queryString += `&filters[0][value][]=${encodeURIComponent(
+              String(val)
+            )}`;
           });
           queryString += `&page=${encodeURIComponent(String(page))}`;
         } else {
@@ -2093,7 +2159,9 @@ const ProductsPageFilter = ({
           const nextIdx = queryString.includes("filters[0]") ? 1 : 0;
           queryString += `&filters[${nextIdx}][key]=brands&filters[${nextIdx}][operator]=IN`;
           brandIds.forEach((bid) => {
-            queryString += `&filters[${nextIdx}][value][]=${encodeURIComponent(String(bid))}`;
+            queryString += `&filters[${nextIdx}][value][]=${encodeURIComponent(
+              String(bid)
+            )}`;
           });
         }
 
@@ -2145,39 +2213,30 @@ const ProductsPageFilter = ({
 
   // SEO mənbə
   const sourceCategory = useMemo(() => {
-    if (selectedCategory && (selectedCategory.page_title || selectedCategory.page_description || selectedCategory.meta_title || selectedCategory.meta_description)) {
+    if (
+      selectedCategory &&
+      (selectedCategory.page_title ||
+        selectedCategory.page_description ||
+        selectedCategory.meta_title ||
+        selectedCategory.meta_description)
+    ) {
       return selectedCategory;
     }
     return productData?.[0]?.categories?.[0] || null;
   }, [selectedCategory, productData]);
 
-
-
-
-
-
-
-  
-
-
-
-
-
-
-
-
-
-
-
-
   // 🔹 SORT: A-Z və ya Z-A; default: dəyişmədən (placeholder görünsün deyə selectedOption null qala bilər)
   const sortedProductData = useMemo(() => {
     const list = [...(productData || [])];
     if (selectedOption?.value === "az") {
-      return list.sort((a, b) => (a?.title || "").localeCompare(b?.title || ""));
+      return list.sort((a, b) =>
+        (a?.title || "").localeCompare(b?.title || "")
+      );
     }
     if (selectedOption?.value === "za") {
-      return list.sort((a, b) => (b?.title || "").localeCompare(a?.title || ""));
+      return list.sort((a, b) =>
+        (b?.title || "").localeCompare(a?.title || "")
+      );
     }
     return list; // seçilməyibsə dəyişmə
   }, [productData, selectedOption]);
@@ -2186,17 +2245,31 @@ const ProductsPageFilter = ({
     <div>
       <div className="container">
         <div className="filterTop topper">
-          <h1>Adentta</h1>
+          <strong>Adentta</strong>
           <img src="/icons/rightDown.svg" alt="Adentta" />
-          <h4>{t?.products}</h4>
+          <span>{t?.products}</span>
+
+          {breadcrumbCategoryTitle && (
+            <>
+              <img src="/icons/rightDown.svg" alt={breadcrumbCategoryTitle} />
+              <span>{breadcrumbCategoryTitle}</span>
+            </>
+          )}
         </div>
+
+        {/* <div className="filterTop topper">
+          <strong>Adentta</strong>
+          <img src="/icons/rightDown.svg" alt="Adentta" />
+          <span>{t?.products}</span>
+        </div> */}
 
         {/* Axtarış nəticələri (ümumi TOTAL göstərilir) */}
         <div className="searchResultsProductCount">
           {searchText && (
             <div className="search-results-info">
               <p>
-                {t?.searchResults || "results found for"} "{searchText}" ( {totalCount} )
+                {t?.searchResults || "results found for"} "{searchText}" ({" "}
+                {totalCount} )
               </p>
             </div>
           )}
@@ -2228,7 +2301,9 @@ const ProductsPageFilter = ({
                 ))}
               </div>
 
-              <div className={`filter-panel ${isMobileFilterOpen ? "active" : ""}`}>
+              <div
+                className={`filter-panel ${isMobileFilterOpen ? "active" : ""}`}
+              >
                 <button className="filter-titless">
                   {t?.productsPageFilterTitle || "Filter"}
                 </button>
@@ -2236,19 +2311,26 @@ const ProductsPageFilter = ({
                 <div className="selectedFilter mobile-only">
                   {renderSelectedCategories.map((cat) => (
                     <div className="selectedFilterInner" key={`cat-${cat.id}`}>
-                      <span onClick={() => handleRemoveCategory(cat.id)}>×</span>
+                      <span onClick={() => handleRemoveCategory(cat.id)}>
+                        ×
+                      </span>
                       <p>{cat.title}</p>
                     </div>
                   ))}
                   {renderSelectedBrands.map((br) => (
                     <div className="selectedFilterInner" key={`brand-${br.id}`}>
-                      <span onClick={() => handleBrandToggleById(br.id)}>×</span>
+                      <span onClick={() => handleBrandToggleById(br.id)}>
+                        ×
+                      </span>
                       <p>{br.title}</p>
                     </div>
                   ))}
                 </div>
 
-                <button className="close-btn" onClick={() => setMobileFilterOpen(false)}>
+                <button
+                  className="close-btn"
+                  onClick={() => setMobileFilterOpen(false)}
+                >
                   <img src="/icons/popupCloseIcon.svg" alt="close" />
                 </button>
 
@@ -2259,100 +2341,111 @@ const ProductsPageFilter = ({
                   title={
                     singleSelectedParent
                       ? singleSelectedParent.title
-                      : (t?.productsPageFilterCategoryTitle || "Category")
+                      : t?.productsPageFilterCategoryTitle || "Category"
                   }
                 >
                   <ul
-                    // style={{
-                    //   maxHeight: "300px",
-                    //   overflowY: "auto",
-                    //   paddingRight: "4px",
-                    // }}
+                  // style={{
+                  //   maxHeight: "300px",
+                  //   overflowY: "auto",
+                  //   paddingRight: "4px",
+                  // }}
                   >
-                    {singleSelectedParent ? (
-                      childrenOfSelectedParent.map((child) => {
-                        const childProductCount = getProductCountForCategory(child.id);
-                        const isChildSelected = selectedCategoryIds.some(
-                          (c) => Number(c) === Number(child.id)
-                        );
-                        return (
-                          <li
-                            key={child.id}
-                            onClick={() => handleCategoryToggleById(child.id)}
-                            style={{
-                              cursor: "pointer",
-                              display: "flex",
-                              alignItems: "center",
-                              gap: "0.3rem",
-                              fontWeight: isChildSelected ? "bold" : "normal",
-                              marginLeft: "0px",
-                              fontSize: "1.4rem",
-                              color: "#666",
-                            }}
-                          >
-                            <span>{child.title}</span>
-                            <p>({childProductCount})</p>
-                          </li>
-                        );
-                      })
-                    ) : (
-                      groupedCategories.map(({ parent, children }) => {
-                        const parentProductCount = getProductCountForCategory(parent.id);
-                        const isParentSelected = selectedCategoryIds.some(
-                          (c) => Number(c) === Number(parent.id)
-                        );
-                        return (
-                          <React.Fragment key={parent.id}>
+                    {singleSelectedParent
+                      ? childrenOfSelectedParent.map((child) => {
+                          const childProductCount = getProductCountForCategory(
+                            child.id
+                          );
+                          const isChildSelected = selectedCategoryIds.some(
+                            (c) => Number(c) === Number(child.id)
+                          );
+                          return (
                             <li
-                              onClick={() => handleCategoryToggleById(parent.id)}
+                              key={child.id}
+                              onClick={() => handleCategoryToggleById(child.id)}
                               style={{
                                 cursor: "pointer",
                                 display: "flex",
                                 alignItems: "center",
-                                gap: "0.5rem",
-                                fontWeight: isParentSelected ? "bold" : "normal",
-                                marginBottom: "4px",
+                                gap: "0.3rem",
+                                fontWeight: isChildSelected ? "bold" : "normal",
+                                marginLeft: "0px",
+                                fontSize: "1.4rem",
+                                color: "#666",
                               }}
                             >
-                              <span>{parent.title}</span>
-                              <p>({parentProductCount})</p>
+                              <span>{child.title}</span>
+                              <p>({childProductCount})</p>
                             </li>
+                          );
+                        })
+                      : groupedCategories.map(({ parent, children }) => {
+                          const parentProductCount = getProductCountForCategory(
+                            parent.id
+                          );
+                          const isParentSelected = selectedCategoryIds.some(
+                            (c) => Number(c) === Number(parent.id)
+                          );
+                          return (
+                            <React.Fragment key={parent.id}>
+                              <li
+                                onClick={() =>
+                                  handleCategoryToggleById(parent.id)
+                                }
+                                style={{
+                                  cursor: "pointer",
+                                  display: "flex",
+                                  alignItems: "center",
+                                  gap: "0.5rem",
+                                  fontWeight: isParentSelected
+                                    ? "bold"
+                                    : "normal",
+                                  marginBottom: "4px",
+                                }}
+                              >
+                                <span>{parent.title}</span>
+                                <p>({parentProductCount})</p>
+                              </li>
 
-                            {children.map((child) => {
-                              const childProductCount = getProductCountForCategory(child.id);
-                              const isChildSelected = selectedCategoryIds.some(
-                                (c) => Number(c) === Number(child.id)
-                              );
-                              return (
-                                <li
-                                  key={child.id}
-                                  onClick={() => handleCategoryToggleById(child.id)}
-                                  style={{
-                                    cursor: "pointer",
-                                    display: "flex",
-                                    alignItems: "center",
-                                    gap: "0.3rem",
-                                    fontWeight: isChildSelected ? "bold" : "normal",
-                                    marginLeft: "1.5rem",
-                                    fontSize: "1.5rem",
-                                    marginBottom: "8px",
-                                    color: "#666",
-                                  }}
-                                >
-                                  <span>{child.title}</span>
-                                  <p>({childProductCount})</p>
-                                </li>
-                              );
-                            })}
-                          </React.Fragment>
-                        );
-                      })
-                    )}
+                              {children.map((child) => {
+                                const childProductCount =
+                                  getProductCountForCategory(child.id);
+                                const isChildSelected =
+                                  selectedCategoryIds.some(
+                                    (c) => Number(c) === Number(child.id)
+                                  );
+                                return (
+                                  <li
+                                    key={child.id}
+                                    onClick={() =>
+                                      handleCategoryToggleById(child.id)
+                                    }
+                                    style={{
+                                      cursor: "pointer",
+                                      display: "flex",
+                                      alignItems: "center",
+                                      gap: "0.3rem",
+                                      fontWeight: isChildSelected
+                                        ? "bold"
+                                        : "normal",
+                                      marginLeft: "1.5rem",
+                                      fontSize: "1.5rem",
+                                      marginBottom: "8px",
+                                      color: "#666",
+                                    }}
+                                  >
+                                    <span>{child.title}</span>
+                                    <p>({childProductCount})</p>
+                                  </li>
+                                );
+                              })}
+                            </React.Fragment>
+                          );
+                        })}
                   </ul>
                 </FilterAccordion>
 
                 <div className="lineFiltered"></div>
-
 
                 {/* Brands (həmişə açıq) */}
                 <FilterAccordion title={t?.brands || "Brands"}>
@@ -2377,14 +2470,25 @@ const ProductsPageFilter = ({
                           .includes(brandSearchTerm.toLowerCase())
                       )
                       .map((brand) => {
-                        const checked = selectedBrandIds.includes(Number(brand?.id));
+                        const checked = selectedBrandIds.includes(
+                          Number(brand?.id)
+                        );
                         return (
                           <li key={brand?.id ?? brand?.title}>
-                            <label style={{ display: "flex", alignItems: "center", gap: "6px", cursor: "pointer" }}>
+                            <label
+                              style={{
+                                display: "flex",
+                                alignItems: "center",
+                                gap: "6px",
+                                cursor: "pointer",
+                              }}
+                            >
                               <input
                                 type="checkbox"
                                 checked={checked}
-                                onChange={() => handleBrandToggleById(brand?.id)}
+                                onChange={() =>
+                                  handleBrandToggleById(brand?.id)
+                                }
                               />
                               {brand?.title ?? "No title"}
                             </label>
@@ -2409,7 +2513,11 @@ const ProductsPageFilter = ({
                 <span>{t?.sortBy}</span>
                 <div>
                   {/* 🔹 Sort: ReactSelect-a value/onChange verdik */}
-                  <ReactSelect t={t} value={selectedOption} onChange={setSelectedOption} />
+                  <ReactSelect
+                    t={t}
+                    value={selectedOption}
+                    onChange={setSelectedOption}
+                  />
                 </div>
               </div>
               <div className="row">
@@ -2539,8 +2647,12 @@ const ProductsPageFilter = ({
 
       <style jsx>{`
         @keyframes spin {
-          0% { transform: rotate(0deg); }
-          100% { transform: rotate(360deg); }
+          0% {
+            transform: rotate(0deg);
+          }
+          100% {
+            transform: rotate(360deg);
+          }
         }
       `}</style>
     </div>
@@ -2572,7 +2684,101 @@ export default ProductsPageFilter;
 
 
 
-// *   her sey isleyir SORT islemir ve mehsul sayi 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// *   her sey isleyir SORT islemir ve mehsul sayi
 // "use client";
 // import Link from "next/link";
 // import React, {
@@ -3548,23 +3754,7 @@ export default ProductsPageFilter;
 
 // export default ProductsPageFilter;
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-// !    bu kod 04.11.25 ucun yekun kodumdur     UST KATEGORİYA DUZ GELİR 
+// !    bu kod 04.11.25 ucun yekun kodumdur     UST KATEGORİYA DUZ GELİR
 // "use client";
 // import Link from "next/link";
 // import React, {
@@ -4474,36 +4664,6 @@ export default ProductsPageFilter;
 // };
 
 // export default ProductsPageFilter;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 // ! burda her sey qaydasindaidi    04.11.25   polopopo  id ile gelir data
 // "use client";

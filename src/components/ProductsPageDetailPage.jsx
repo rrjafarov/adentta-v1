@@ -20,22 +20,38 @@ const WpLink = ({ t, whatsappNumber }) => {
     }: ${currentUrl}`
   );
   return (
-    <Link
-      // href={`https://wa.me/994554099878?text=${message}`}
-      href={`https://wa.me/${whatsappNumber}?text=${message}`}
-      prefetch={false}
-      target="_blank"
-      rel="noopener noreferrer"
-      className="wpButton"
-    >
-      <div className="detailPageClickToWhatsapp">
-        <span>{t?.clickToOrder || "ClickToOrder"}</span>
+    // <Link
+    //   href={`https://wa.me/${whatsappNumber}?text=${message}`}
+    //   prefetch={false}
+    //   target="_blank"
+    //   rel="noopener noreferrer"
+    //   className="wpButton"
+    // >
+    //   <div className="detailPageClickToWhatsapp">
+    //     <span>{t?.clickToOrder || "ClickToOrder"}</span>
+    //     <div className="dpWP">
+    //       <img src="/icons/whiteWP.svg" alt="WhatsApp Icon" />
+    //       <span>Whatsapp</span>
+    //     </div>
+    //   </div>
+    // </Link>
+
+    <div className="detailPageClickToWhatsapp">
+      <span>{t?.clickToOrder || "ClickToOrder"}</span>
+
+      <Link
+        href={`https://wa.me/${whatsappNumber}?text=${message}`}
+        prefetch={false}
+        target="_blank"
+        rel="noopener noreferrer"
+        className="wpButton"
+      >
         <div className="dpWP">
           <img src="/icons/whiteWP.svg" alt="WhatsApp Icon" />
           <span>Whatsapp</span>
         </div>
-      </div>
-    </Link>
+      </Link>
+    </div>
   );
 };
 
@@ -43,17 +59,14 @@ const DetailPageAccordion = ({ title, children }) => {
   const [isOpen, setIsOpen] = useState(false);
   return (
     <div className="accordion">
-      <button
-        className="accordion-header-dp"
-        onClick={() => setIsOpen(!isOpen)}
-      >
+      <h3 className="accordion-header-dp" onClick={() => setIsOpen(!isOpen)}>
         <img
           src={isOpen ? "/icons/minus.svg" : "/icons/plusIcon.svg"}
           alt="Toggle Icon"
           className="toggle-icon"
         />
         {title}
-      </button>
+      </h3>
       {isOpen && <div className="accordion-content-dp">{children}</div>}
     </div>
   );
@@ -69,8 +82,6 @@ const ProductsPageDetailPage = ({
   const [currentUrl, setCurrentUrl] = useState("");
   const [copied, setCopied] = useState(false);
   const [lastViewed, setLastViewed] = useState([]);
-
-  console.log("productData in ProductsPageDetailPage:", productData);
 
   // capture current URL
   useEffect(() => {
@@ -110,6 +121,16 @@ const ProductsPageDetailPage = ({
       `${productData.title} - ${currentUrl}`
     )}`,
   };
+  const slugify = (text) => {
+    if (!text) return "";
+    return String(text)
+      .toLowerCase()
+      .normalize("NFKD")
+      .replace(/[\u0300-\u036f]/g, "")
+      .replace(/[^a-z0-9-]+/g, "-")
+      .replace(/--+/g, "-")
+      .replace(/^-+|-+$/g, "");
+  };
 
   const handleCopy = () => {
     if (!currentUrl) return;
@@ -126,14 +147,22 @@ const ProductsPageDetailPage = ({
         <div className="container">
           <div className="filterTop dptopper topper">
             <Link href="/">
-              <h1>Adentta</h1>
+              <strong>Adentta</strong>
             </Link>
             <img src="/icons/rightDown.svg" alt="Adentta" />
             <Link href="/products">
-              <h4>{t?.products || "Products"}</h4>
+              <span>{t?.products || "Products"}</span>
             </Link>
             <img src="/icons/rightDown.svg" alt="Adentta" />
-            <h4>{productData.title}</h4>
+            <Link
+              href={`/product?category=${encodeURIComponent(
+                productData.categories?.[0]?.url_slug || ""
+              )}`}
+            >
+              <span>{productData.categories?.[0]?.title}</span>
+            </Link>
+            <img src="/icons/rightDown.svg" alt="Adentta" />
+            <span>{productData.title}</span>
           </div>
 
           <div className="row">
@@ -157,7 +186,7 @@ const ProductsPageDetailPage = ({
                   <span>{productData.code}</span>
                 </span>
                 <div className="productDetailRightTitle">
-                  <h3>{productData.title}</h3>
+                  <h1>{productData.title}</h1>
                   <div className="detailPagePrice">
                     <div className="dpPriceItem">
                       <span>{productData.price}</span>
@@ -178,12 +207,19 @@ const ProductsPageDetailPage = ({
                     <div className="detailBrand">
                       <span>{t?.productsPageBrandName || "Brand Name"}:</span>
                       <div className="detailBrandInner">
-                        <Image
-                          src={`https://admin.adentta.az/storage${productData.brands[0].logo}`}
-                          alt={productData.brands[0].name || "Brand"}
-                          width={400}
-                          height={400}
-                        />
+                        <Link
+                          href={`/brands/${slugify(
+                            productData.brands[0].title
+                          )}-${productData.brands[0].id}`}
+                          prefetch={false}
+                        >
+                          <Image
+                            src={`https://admin.adentta.az/storage${productData.brands[0].logo}`}
+                            alt={productData.brands[0].name || "Brand"}
+                            width={400}
+                            height={400}
+                          />
+                        </Link>
                       </div>
                     </div>
                   )}
@@ -283,8 +319,19 @@ const ProductsPageDetailPage = ({
                           <span className="paramTitle">
                             {t?.productsPageDetailsCategory || "Size"}
                           </span>
-                          <div className="productParametrs">
+
+                          {/* <div className="productParametrs">
                             <span>{productData.categories?.[0]?.title}</span>
+                          </div> */}
+                          
+                          <div className="productParametrs">
+                            <Link
+                              href={`/product?category=${encodeURIComponent(
+                                productData.categories?.[0]?.url_slug || ""
+                              )}`}
+                            >
+                              <span>{productData.categories?.[0]?.title}</span>
+                            </Link>
                           </div>
                         </div>
                       )}
