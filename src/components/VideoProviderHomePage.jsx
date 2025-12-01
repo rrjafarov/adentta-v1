@@ -26,10 +26,10 @@ const VideoProviderHomePage = ({ homepageData, t }) => {
         <div className="vidProviderContent">
           <div className="vidProviderContentText">
             <span>{t?.whatWeProvide || "What We Provide"}</span>
-            <p>
+            <h2>
               {t?.whatWeProvideContent ||
                 "Empowering Smiles, Elevating Care – Your Trusted Dental Supply Partner."}
-            </p>
+            </h2>
             <p>
               {t?.whatWeProvideContent2 ||
                 "Our practice is designed not only to provide cutting-edge treatments but also to create an environment where patients feel relaxed and confident in their care."}

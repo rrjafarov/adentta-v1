@@ -344,7 +344,7 @@ const HomePageProducts = ({ categoryData, t }) => {
   return (
     <section id="homePageProducts">
       <div className="homePageProducts container">
-        <span>{t?.homeProductsTitle || "Explore Our Products"}</span>
+        <h2>{t?.homeProductsTitle || "Explore Our Products"}</h2>
 
         <div className="buttons">
           <div

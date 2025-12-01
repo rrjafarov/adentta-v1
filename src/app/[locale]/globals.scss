@@ -872,7 +872,7 @@ ul {
   .homePageProducts {
     padding-top: 5rem;
 
-    span {
+    h2 {
       text-align: start;
       font-size: 4.5rem;
       font-weight: 600;
@@ -1266,6 +1266,13 @@ ul {
           line-height: normal;
           max-width: 55.4rem;
         }
+        h2 {
+          font-size: 4rem;
+          font-style: normal;
+          font-weight: 600;
+          line-height: normal;
+          max-width: 55.4rem;
+        }
 
         p:nth-child(3) {
           font-size: 1.8rem;
@@ -1499,7 +1506,7 @@ ul {
       gap: 5rem;
       align-items: center;
 
-      span {
+      h2 {
         font-size: 4rem;
         font-style: normal;
         font-weight: 600;
@@ -1626,7 +1633,7 @@ ul {
     padding-top: 4rem;
     padding-bottom: 4.6rem;
 
-    span {
+    h2 {
       color: $adentta-01;
       text-align: center;
       display: flex;
@@ -1940,7 +1947,7 @@ ul {
   padding-bottom: 3.4rem;
   gap: 3.4rem;
 
-  span {
+  h2 {
     font-size: 4rem;
     font-style: normal;
     font-weight: 600;
@@ -3270,7 +3277,7 @@ ul {
 
 .productsPageDescription {
   padding-top: 6rem;
-  h1 {
+  h2 {
     color: #293881;
     font-size: 2rem;
     font-style: normal;
@@ -3674,6 +3681,7 @@ ul {
         align-items: center;
         justify-content: center;
         margin-top: 0.85rem;
+        overflow: hidden;
 
         img {
           width: 12rem;
@@ -3848,8 +3856,6 @@ ul {
   align-items: center;
 }
 
-
-
 .productParametrs {
   flex-shrink: 0;
   border-radius: 4rem;
@@ -3859,13 +3865,20 @@ ul {
   align-items: center;
   background: #f4f8ff;
   width: fit-content; // <-- istəsən bunu da əlavə et
-  a {
+  .productParametrsItem {
+    padding: 0.8rem 2rem !important;
     span {
       color: #293881 !important;
       font-size: 1.5rem;
       // padding: 1.2rem 2rem !important;
     }
-      padding: 0.8rem 2rem !important;
+    a {
+      span {
+        color: #293881 !important;
+        font-size: 1.5rem;
+        // padding: 1.2rem 2rem !important;
+      }
+    }
   }
 }
 
@@ -4712,7 +4725,8 @@ ul {
     text-transform: uppercase;
   }
 
-  p:nth-child(2) ,h3 {
+  p:nth-child(2),
+  h3 {
     font-size: 4rem;
     font-style: normal;
     font-weight: 600;
@@ -6962,7 +6976,7 @@ ul {
       flex-shrink: 0;
     }
 
-     span {
+    span {
       color: #293881;
       font-size: 1.3rem;
       font-style: normal;
@@ -8434,7 +8448,8 @@ ul {
                 flex-shrink: 0;
               }
 
-              h3 ,p{
+              h3,
+              p {
                 color: #293881;
                 font-feature-settings: "liga" off;
                 font-size: 1.6rem;
@@ -8768,7 +8783,7 @@ ul {
       flex-shrink: 0;
     }
 
-     span {
+    span {
       color: #293881;
       font-size: 1.3rem;
       font-style: normal;

@@ -2528,9 +2528,10 @@ const ProductsPageFilter = ({
                     className="xl-4 lg-4 md-6 sm-6"
                   >
                     <Link
-                      href={`/products/${(data.title || "")
-                        .toLowerCase()
-                        .replace(/\s+/g, "-")}-${data.id}`}
+                    href={`/products/${slugify(data.title || "")}-${data.id}`}
+                      // href={`/products/${(data.title || "")
+                      //   .toLowerCase()
+                      //   .replace(/\s+/g, "-")}-${data.id}`}
                       className="block"
                     >
                       <div className="homePageProductCardContent">
@@ -2589,9 +2590,9 @@ const ProductsPageFilter = ({
         <div className="productsPageDescription">
           {(sourceCategory?.page_title || sourceCategory?.page_description) && (
             <>
-              <h1>
+              <h2>
                 {sourceCategory?.page_title || "Page title is not available"}
-              </h1>
+              </h2>
 
               {showDetails && (
                 <div

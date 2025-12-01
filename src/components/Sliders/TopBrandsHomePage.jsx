@@ -255,7 +255,7 @@ const TopBrandsHomePage = ({ brandsData, t }) => {
       <div className="container topBrandsHomePage">
         <div className="topBrandsHeader">
           {/* <span>Top Brandlər</span> */}
-          <span>{t?.homeBrandsTitle || "Top Brands"}</span>
+          <h2>{t?.homeBrandsTitle || "Top Brands"}</h2>
         </div>
 
         <div className="container swiperjs topBrandsSwiper">

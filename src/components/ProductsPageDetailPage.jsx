@@ -234,6 +234,8 @@ const ProductsPageDetailPage = ({
                       </div>
                     </div>
                   )}
+
+                  
                 </div>
                 <WpLink
                   t={t}
@@ -298,7 +300,9 @@ const ProductsPageDetailPage = ({
                             {t?.productsPageDetailsParameters || "parametrs"}
                           </span>
                           <div className="productParametrs">
-                            <span>{productData.parametrs?.[0]?.title}</span>
+                            <div className="productParametrsItem">
+                              <span>{productData.parametrs?.[0]?.title}</span>
+                            </div>
                           </div>
                         </div>
                       )}
@@ -309,7 +313,36 @@ const ProductsPageDetailPage = ({
                             {t?.productsPageDetailsSize || "Size"}
                           </span>
                           <div className="productParametrs">
-                            <span>{productData.sizes?.[0]?.title}</span>
+                            <div className="productParametrsItem">
+                              <span>{productData.sizes?.[0]?.title}</span>
+                            </div>
+                          </div>
+                        </div>
+                      )}
+
+                      {productData.categories?.[0]?.parent_id?.[0]?.title && (
+                        <div className="xl-6 lg-6 md-6 sm-12">
+                          <span className="paramTitle">
+                            {t?.parentCategory ||
+                              "Main category"}
+                          </span>
+
+                          <div className="productParametrs">
+                            <div className="productParametrsItem">
+                              <Link
+                                href={`/product?category=${encodeURIComponent(
+                                  productData.categories?.[0]?.parent_id?.[0]
+                                    ?.url_slug || ""
+                                )}`}
+                              >
+                                <span>
+                                  {
+                                    productData.categories?.[0]?.parent_id?.[0]
+                                      ?.title
+                                  }
+                                </span>
+                              </Link>
+                            </div>
                           </div>
                         </div>
                       )}
@@ -320,18 +353,46 @@ const ProductsPageDetailPage = ({
                             {t?.productsPageDetailsCategory || "Size"}
                           </span>
 
-                          {/* <div className="productParametrs">
-                            <span>{productData.categories?.[0]?.title}</span>
-                          </div> */}
-                          
                           <div className="productParametrs">
-                            <Link
-                              href={`/product?category=${encodeURIComponent(
-                                productData.categories?.[0]?.url_slug || ""
-                              )}`}
-                            >
-                              <span>{productData.categories?.[0]?.title}</span>
-                            </Link>
+                            <div className="productParametrsItem">
+                              <Link
+                                href={`/product?category=${encodeURIComponent(
+                                  productData.categories?.[0]?.url_slug || ""
+                                )}`}
+                              >
+                                <span>
+                                  {productData.categories?.[0]?.title}
+                                </span>
+                              </Link>
+                            </div>
+                          </div>
+                        </div>
+                      )}
+
+                      {/* {productData.brands?.[0]?.title && (
+                        <div className="xl-6 lg-6 md-6 sm-12">
+                          <span className="paramTitle">
+                            {t?.brandCountry || "Size"}
+                          </span>
+                          <div className="productParametrs">
+                            <div className="productParametrsItem">
+                              <span>{productData.brands.country?.[0]?.title}</span>   
+                            </div>
+                          </div>
+                        </div>
+                      )} */}
+
+                      {productData.brands?.[0]?.country?.[0]?.title && (
+                        <div className="xl-6 lg-6 md-6 sm-12">
+                          <span className="paramTitle">
+                            {t?.brandCountry || "Size"}
+                          </span>
+                          <div className="productParametrs">
+                            <div className="productParametrsItem">
+                              <span>
+                                {productData.brands?.[0]?.country?.[0]?.title}
+                              </span>
+                            </div>
                           </div>
                         </div>
                       )}

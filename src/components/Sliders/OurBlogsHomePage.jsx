@@ -14,7 +14,7 @@ const OurBlogsHomePage = ({ blogData, t }) => {
   return (
     <section id="ourEvents" className="ourBlogs">
       <div className="container swiperjs ourEventsHomePage">
-        <span>{t?.homeBlogsTitle || "Explore our blogs"}</span>
+        <h2>{t?.homeBlogsTitle || "Explore our blogs"}</h2>
 
         <Swiper
           slidesPerView={"4"}

@@ -13,9 +13,9 @@ const GlobalExcellence = ({ brandsData, t }) => {
   return (
     <section id="globalExcellence">
       <div className="container swiperjs globalExcellence">
-        <span>
+        <h2>
           {t?.homeBrandsTitle2 || "Global Excellence, Trusted Brands."}
-        </span>
+        </h2>
         <p>
           {t?.homeBrandsContent ||
             "Our trusted brands hail from countries known for innovation and  quality, including Sweden, Poland, Italy, Germany, China, Korea, Japan, and Taiwan. Discover the difference global expertise makes."}
