@@ -2253,24 +2253,32 @@ ul {
     .footerBottom {
       display: flex;
       justify-content: space-between;
-      align-items: flex-end;
+      align-items: flex-start;
       padding-top: 10rem;
       padding-bottom: 7.55rem;
       padding-left: 0;
       padding-right: 0;
+      height: 100% !important;
 
       .copyright {
         padding-bottom: 0;
         display: flex;
         justify-content: flex-start;
+        align-items: flex-start;
+        // width: 100%;
+        height: 100% !important;
 
         span {
           color: #d3d3d3;
-          font-size: 1.8rem;
+          font-size: 1.5rem;
           font-style: normal;
           font-weight: 500;
           line-height: 114%;
           letter-spacing: 0.054rem;
+          display: flex;
+          justify-content: flex-start;
+          align-items: flex-start;
+          height: 100%;
         }
       }
 
@@ -2387,8 +2395,15 @@ ul {
         }
       }
     }
+
+
+
+
+
+
   }
 }
+
 
 @media (max-width: 1440px) {
   .contactButtons {
@@ -2437,7 +2452,7 @@ ul {
         align-items: center !important;
 
         span {
-          width: 12rem !important;
+          width: 15rem !important;
           font-size: 1.5rem !important;
           margin-right: 1rem !important;
         }
@@ -3858,6 +3873,7 @@ ul {
 
 .productParametrs {
   flex-shrink: 0;
+  margin-right: 1rem;
   border-radius: 4rem;
   border: 1px solid #d7e0ed;
   display: inline-flex; // <-- BUNU ƏLAVƏ ET
@@ -3890,6 +3906,7 @@ ul {
   padding-top: 1.5rem;
   padding-bottom: 1.5rem;
   font-size: 2rem;
+  cursor: pointer;
 }
 
 .accordion-content-dp {
@@ -6900,7 +6917,7 @@ ul {
 .text {
   color: #293881;
   text-align: center;
-  font-size: 1.7rem;
+  font-size: 1.6rem;
   font-style: normal;
   font-weight: 400;
   line-height: normal;

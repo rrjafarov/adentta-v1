@@ -26,7 +26,7 @@ export default function ReactSelectStatus({ t, eventsData, onStatusChange }) {
       backgroundColor: "e9f2ff",
       border: "0px solid #d7e0ed",
       // minWidth: "15rem"
-      width: "16rem",
+      width: "18rem",
       "@media (max-width: 768px)": {
         fontSize: "1.6rem",
         width: "18rem",
@@ -40,7 +40,7 @@ export default function ReactSelectStatus({ t, eventsData, onStatusChange }) {
       fontSize: "1.5rem",
       fontWeight: "400",
       // minWidth: "15rem",
-      width: "16rem",
+      width: "18rem",
       "@media (max-width: 768px)": {
         fontSize: "1.6rem",
         width: "18rem",
@@ -62,7 +62,7 @@ export default function ReactSelectStatus({ t, eventsData, onStatusChange }) {
     placeholder: (base) => ({
       ...base,
       color: "#293881",
-      fontSize: "1.7rem",
+      fontSize: "1.6rem",
       fontWeight: "400",
       "@media (max-width: 768px)": {
         fontSize: "1.8rem",
