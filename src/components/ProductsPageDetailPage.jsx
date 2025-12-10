@@ -150,7 +150,7 @@ const ProductsPageDetailPage = ({
               <strong>Adentta</strong>
             </Link>
             <img src="/icons/rightDown.svg" alt="Adentta" />
-            <Link href="/products">
+            <Link href="/product">
               <span>{t?.products || "Products"}</span>
             </Link>
             <img src="/icons/rightDown.svg" alt="Adentta" />
