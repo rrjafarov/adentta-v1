@@ -19,7 +19,7 @@
     "html-react-parser": "^5.2.5",
     "i18next": "^25.0.1",
     "js-cookie": "^3.0.5",
-    "next": "15.1.6",
+    "next": "^15.1.9",
     "next-intl": "^4.0.2",
     "nprogress": "^0.2.0",
     "rc-select": "^14.16.6",
