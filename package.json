@@ -15,6 +15,7 @@
     "@splidejs/splide": "^4.1.4",
     "@svgr/webpack": "^8.1.0",
     "axios": "^1.7.9",
+    "fix-react2shell-next": "^1.0.18",
     "framer-motion": "^12.1.0",
     "html-react-parser": "^5.2.5",
     "i18next": "^25.0.1",
