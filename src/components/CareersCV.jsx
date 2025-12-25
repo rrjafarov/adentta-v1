@@ -13,6 +13,7 @@
 //   const [message, setMessage] = useState("");
 //   const [selectedFile, setSelectedFile] = useState(null);
 //   const [submitStatus, setSubmitStatus] = useState(null);
+//   const [isLoading, setIsLoading] = useState(false);
 
 //   // Validation üçün state
 //   const [errors, setErrors] = useState({});
@@ -72,7 +73,7 @@
 //     }
 
 //     if (!selectedFile) {
-//       newErrors.cv = t?.validationCVRequired || "CV faylı seçilməlidir (PDF).";
+//       newErrors.cv = t?.validationCVRequired || "CV faylı seçilməlidir.";
 //     }
 
 //     return newErrors;
@@ -83,23 +84,33 @@
 //     fileInputRef.current?.click();
 //   };
 
-//   // File seçildiğinde state'e yaz
+//   // File seçildiğində state'e yaz
 //   const handleFileChange = (e) => {
 //     const file = e.target.files && e.target.files[0];
-//     if (file) setSelectedFile(file);
+//     if (file) {
+//       setSelectedFile(file);
+//       // Xəta varsa, təmizlə
+//       if (errors.cv) {
+//         setErrors((prev) => {
+//           const newErrors = { ...prev };
+//           delete newErrors.cv;
+//           return newErrors;
+//         });
+//       }
+//     }
 //   };
 
 //   // Form göndərimi
 //   const handleSubmit = async (e) => {
 //     e.preventDefault();
+//     setSubmitStatus(null);
 
 //     // Öncə validasiya
 //     const foundErrors = validateForm();
 //     setErrors(foundErrors);
+    
 //     if (Object.keys(foundErrors).length > 0) {
-//       setSubmitStatus(null);
-
-//       // İlk səhv sahəyə yalnız focus (animasiya/scroll YOXDUR)
+//       // İlk səhv sahəyə focus
 //       const order = ["name", "phone", "email", "message", "cv"];
 //       for (const key of order) {
 //         if (foundErrors[key]) {
@@ -111,29 +122,40 @@
 //           break;
 //         }
 //       }
-//       return; // səhvlər varsa göndərmə
+//       return;
 //     }
 
-//     const payload = {
-//       title: "Career CV Submission",
-//       key: "careers-form",
-//       form_data: {
-//         name: name,
-//         phone: phoneInput,
-//         email: emailInput,
-//         message: message,
-//         ...(selectedFile && { file_name: selectedFile.name }),
-//       },
+//     setIsLoading(true);
+
+//     // FormData düzgün hazırlayırıq
+//     const formData = new FormData();
+//     formData.append("key", "hr");
+//     formData.append("title", name);
+    
+//     // form_data JSON string olaraq
+//     const formDataJson = {
+//       name: name,
+//       phone: phoneInput,
+//       email: emailInput,
+//       message: message,
 //     };
+//     formData.append("form_data", JSON.stringify(formDataJson));
+    
+//     // CV faylını əlavə edirik
+//     if (selectedFile) {
+//       formData.append("file", selectedFile);
+//     }
 
 //     try {
-//       const response = await axiosInstance.post("/form-data/send", payload, {
-//         headers: { "Content-Type": "application/json" },
+//       const response = await axiosInstance.post("/form-data/send", formData, {
+//         headers: {
+//           "Content-Type": "multipart/form-data",
+//         },
 //       });
 
-//       if (response.status === 200) {
+//       if (response.status === 200 || response.status === 201) {
 //         setSubmitStatus("success");
-//         // Təmizlə
+//         // Formu təmizlə
 //         setName("");
 //         setPhoneInput("");
 //         setEmailInput("");
@@ -144,164 +166,292 @@
 //         setSubmitStatus("error");
 //       }
 //     } catch (error) {
-//       console.error("Xəta gönderim sırasında:", error);
+//       console.error("Form göndərilmədi:", error);
 //       setSubmitStatus("error");
+//     } finally {
+//       setIsLoading(false);
 //     }
 //   };
 
 //   return (
-//     <div>
-//       <form onSubmit={handleSubmit}>
-//         <div className="careersCVvacancy">
-//           <div className="careersCVText">
-//             <span>{t?.careersPageCVMessage || "CV Message for Vacancy"}</span>
-//             <p>
-//               {t?.careersPageCVFrame ||
-//                 "Frame is a long established fact that a reader will be distracted by the readable"}
-//             </p>
-//           </div>
+//     <>
+//       {/* 🔹 Spinner animasiyası üçün */}
+//       <style jsx>{`
+//         @keyframes spin {
+//           0% {
+//             transform: rotate(0deg);
+//           }
+//           100% {
+//             transform: rotate(360deg);
+//           }
+//         }
+//       `}</style>
 
-//           <div className="careersCVInputSection">
-//             <div className="careersCVInput">
-//               <div className="sendMessageInputs">
-//                 {/* NAME */}
-//                 <div className="sendMessageInput" style={{ position: "relative" }}>
-//                   <span style={errors.name ? errorLabelStyle : undefined}>
-//                     {errors.name
-//                       ? errors.name
-//                       : (t?.careersPageFormNameSurname || "Name/Surname")}
-//                   </span>
-//                   <input
-//                     ref={nameRef}
-//                     type="text"
-//                     placeholder={t?.careersPageFormNameSurname || "Name/Surname"}
-//                     value={name}
-//                     onChange={(e) => setName(e.target.value)}
-//                     aria-invalid={Boolean(errors.name)}
-//                   />
-//                 </div>
+//       <div>
+//         <form onSubmit={handleSubmit}>
+//           <div className="careersCVvacancy">
+//             <div className="careersCVText">
+//               <span>{t?.careersPageCVMessage || "CV Message for Vacancy"}</span>
+//               <p>
+//                 {t?.careersPageCVFrame ||
+//                   "Frame is a long established fact that a reader will be distracted by the readable"}
+//               </p>
+//             </div>
 
-//                 {/* PHONE */}
-//                 <div className="sendMessageInput" style={{ position: "relative" }}>
-//                   <span style={errors.phone ? errorLabelStyle : undefined}>
-//                     {errors.phone
-//                       ? errors.phone
-//                       : (t?.careersPageFormPhone || "Phone")}
-//                   </span>
-//                   <input
-//                     ref={phoneRef}
-//                     type="text"
-//                     placeholder="+994 00 000 00 00"
-//                     value={phoneInput}
-//                     onChange={(e) => setPhoneInput(e.target.value)}
-//                     aria-invalid={Boolean(errors.phone)}
-//                   />
-//                 </div>
-
-//                 {/* EMAIL */}
-//                 <div className="sendMessageInput" style={{ position: "relative" }}>
-//                   <span style={errors.email ? errorLabelStyle : undefined}>
-//                     {errors.email
-//                       ? errors.email
-//                       : (t?.careersPageFormEmail || "Email")}
-//                   </span>
-//                   <input
-//                     ref={emailRef}
-//                     type="email"
-//                     placeholder={t?.careersPageFormEmail || "Email"}
-//                     value={emailInput}
-//                     onChange={(e) => setEmailInput(e.target.value)}
-//                     aria-invalid={Boolean(errors.email)}
-//                   />
-//                 </div>
-
-//                 {/* CV BUTTON (xəta mətni yerində, butonun altında qalır) */}
-//                 <div className="downCV" style={{ position: "relative" }}>
-//                   <button
-//                     ref={cvButtonRef}
-//                     type="button"
-//                     className="downloadCV"
-//                     onClick={handleButtonClick}
-//                   >
-//                     <span>
-//                       {selectedFile
-//                         ? selectedFile.name
-//                         : t?.careersPageDownloadCV || "Download CV"}
+//             <div className="careersCVInputSection">
+//               <div className="careersCVInput">
+//                 <div className="sendMessageInputs">
+//                   {/* NAME */}
+//                   <div className="sendMessageInput" style={{ position: "relative" }}>
+//                     <span style={errors.name ? errorLabelStyle : undefined}>
+//                       {errors.name || t?.careersPageFormNameSurname || "Name/Surname"}
 //                     </span>
-//                     <Image
-//                       src="/icons/downloadCV.svg"
-//                       alt="downloadCV"
-//                       width={18}
-//                       height={18}
+//                     <input
+//                       ref={nameRef}
+//                       type="text"
+//                       placeholder={t?.careersPageFormNameSurname || "Name/Surname"}
+//                       value={name}
+//                       onChange={(e) => setName(e.target.value)}
+//                       aria-invalid={Boolean(errors.name)}
 //                     />
-//                   </button>
-//                   <input
-//                     type="file"
-//                     // DOCX + PDF dəstəyi
-//                     accept=".pdf,application/pdf,.docx,application/vnd.openxmlformats-officedocument.wordprocessingml.document"
-//                     ref={fileInputRef}
-//                     onChange={handleFileChange}
-//                     style={{ display: "none" }}
-//                   />
-//                   {errors.cv && <span style={cvErrorStyle}>{errors.cv}</span>}
+//                   </div>
+
+//                   {/* PHONE */}
+//                   <div className="sendMessageInput" style={{ position: "relative" }}>
+//                     <span style={errors.phone ? errorLabelStyle : undefined}>
+//                       {errors.phone || t?.careersPageFormPhone || "Phone"}
+//                     </span>
+//                     <input
+//                       ref={phoneRef}
+//                       type="text"
+//                       placeholder="+994 00 000 00 00"
+//                       value={phoneInput}
+//                       onChange={(e) => setPhoneInput(e.target.value)}
+//                       aria-invalid={Boolean(errors.phone)}
+//                     />
+//                   </div>
+
+//                   {/* EMAIL */}
+//                   <div className="sendMessageInput" style={{ position: "relative" }}>
+//                     <span style={errors.email ? errorLabelStyle : undefined}>
+//                       {errors.email || t?.careersPageFormEmail || "Email"}
+//                     </span>
+//                     <input
+//                       ref={emailRef}
+//                       type="email"
+//                       placeholder={t?.careersPageFormEmail || "Email"}
+//                       value={emailInput}
+//                       onChange={(e) => setEmailInput(e.target.value)}
+//                       aria-invalid={Boolean(errors.email)}
+//                     />
+//                   </div>
+
+//                   {/* CV BUTTON */}
+//                   <div className="downCV" style={{ position: "relative" }}>
+//                     <button
+//                       ref={cvButtonRef}
+//                       type="button"
+//                       className="downloadCV"
+//                       onClick={handleButtonClick}
+//                     >
+//                       <span>
+//                         {selectedFile
+//                           ? selectedFile.name
+//                           : t?.careersPageDownloadCV || "Download CV"}
+//                       </span>
+//                       <Image
+//                         src="/icons/downloadCV.svg"
+//                         alt="downloadCV"
+//                         width={18}
+//                         height={18}
+//                       />
+//                     </button>
+//                     <input
+//                       type="file"
+//                       accept=".pdf,.docx,application/pdf,application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+//                       ref={fileInputRef}
+//                       onChange={handleFileChange}
+//                       style={{ display: "none" }}
+//                     />
+//                     {errors.cv && <span style={cvErrorStyle}>{errors.cv}</span>}
+//                   </div>
+//                 </div>
+//               </div>
+
+//               {/* MESSAGE */}
+//               <div className="careersCVTextarea">
+//                 <div className="sendMessageTextarea" style={{ position: "relative" }}>
+//                   <span style={errors.message ? errorLabelStyle : undefined}>
+//                     {errors.message || t?.careersPageFormMessage || "Message"}
+//                   </span>
+//                   <textarea
+//                     ref={messageRef}
+//                     name="adentta"
+//                     id="adentta"
+//                     value={message}
+//                     onChange={(e) => setMessage(e.target.value)}
+//                     aria-invalid={Boolean(errors.message)}
+//                   ></textarea>
+
+//                   {/* 🔹 Spinner "Göndər" düyməsinin ortasında fırlanır */}
+//                   <div
+//                     style={{
+//                       position: "relative",
+//                       display: "inline-block",
+//                       width: "100%",
+//                     }}
+//                   >
+//                     <input
+//                       type="submit"
+//                       value={t?.careersPageFormEnter || "Göndər"}
+//                       disabled={isLoading}
+//                       style={{
+//                         color: isLoading ? "transparent" : "#fff",
+//                         transition: "color 0.2s ease",
+//                         cursor: isLoading ? "not-allowed" : "pointer",
+//                       }}
+//                     />
+//                     {isLoading && (
+//                       <div
+//                         style={{
+//                           position: "absolute",
+//                           top: "65%",
+//                           left: "50%",
+//                           marginTop: "-15px",
+//                           marginLeft: "-12px",
+//                           width: "24px",
+//                           height: "24px",
+//                           border: "3px solid rgba(255,255,255,0.3)",
+//                           borderTopColor: "#fff",
+//                           borderRadius: "50%",
+//                           animation: "spin 0.8s linear infinite",
+//                           pointerEvents: "none",
+//                         }}
+//                       ></div>
+//                     )}
+//                   </div>
+
+//                   {submitStatus === "success" && (
+//                     <span
+//                       style={{
+//                         color: "#1B5E20",
+//                         fontSize: "1.2rem",
+//                         marginTop: "0.8rem",
+//                         display: "block",
+//                       }}
+//                     >
+//                       {t?.formSubmitSuccess || "Məlumat uğurla göndərildi."}
+//                     </span>
+//                   )}
+//                   {submitStatus === "error" && (
+//                     <span
+//                       style={{
+//                         color: "#ff0000",
+//                         fontSize: "1.2rem",
+//                         marginTop: "0.8rem",
+//                         display: "block",
+//                       }}
+//                     >
+//                       {t?.formSubmitError ||
+//                         "Göndərmə zamanı xəta baş verdi. Zəhmət olmasa yenidən cəhd edin."}
+//                     </span>
+//                   )}
 //                 </div>
 //               </div>
 //             </div>
-
-//             {/* MESSAGE */}
-//             <div className="careersCVTextarea">
-//               <div className="sendMessageTextarea" style={{ position: "relative" }}>
-//                 <span style={errors.message ? errorLabelStyle : undefined}>
-//                   {errors.message
-//                     ? errors.message
-//                     : (t?.careersPageFormMessage || "Message")}
-//                 </span>
-//                 <textarea
-//                   ref={messageRef}
-//                   name="adentta"
-//                   id="adentta"
-//                   value={message}
-//                   onChange={(e) => setMessage(e.target.value)}
-//                   aria-invalid={Boolean(errors.message)}
-//                 ></textarea>
-
-//                 <input type="submit" value={t?.careersPageFormEnter || "Enter"} />
-
-//                 {submitStatus === "success" && (
-//                   <span
-//                     style={{
-//                       color: "#1B5E20",
-//                       fontSize: "1.2rem",
-//                       marginTop: "0.8rem",
-//                       display: "block",
-//                     }}
-//                   >
-//                     {t?.formSubmitSuccess || "Məlumat uğurla göndərildi."}
-//                   </span>
-//                 )}
-//                 {submitStatus === "error" && (
-//                   <span
-//                     style={{
-//                       color: "#ff0000",
-//                       fontSize: "1.2rem",
-//                       marginTop: "0.8rem",
-//                       display: "block",
-//                     }}
-//                   >
-//                     {t?.formSubmitError ||
-//                       "Göndərmə zamanı xəta baş verdi. Zəhmət olmasa yenidən cəhd edin."}
-//                   </span>
-//                 )}
-//               </div>
-//             </div>
 //           </div>
-//         </div>
-//       </form>
-//     </div>
+//         </form>
+//       </div>
+//     </>
 //   );
 // };
 
 // export default CareersCV;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -340,29 +490,28 @@ import axiosInstance from "@/lib/axios";
 const CareersCV = ({ t }) => {
   const fileInputRef = useRef(null);
 
-  // Form üçün state dəyişənləri
+  // Form state dəyişənləri
   const [name, setName] = useState("");
   const [phoneInput, setPhoneInput] = useState("");
+  const [isPhoneFocused, setIsPhoneFocused] = useState(false);
   const [emailInput, setEmailInput] = useState("");
   const [message, setMessage] = useState("");
   const [selectedFile, setSelectedFile] = useState(null);
   const [submitStatus, setSubmitStatus] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
 
-  // Validation üçün state
+  // Validation errors
   const [errors, setErrors] = useState({});
 
-  // ----- FOCUS üçün refs -----
+  // Refs for focus management
   const nameRef = useRef(null);
   const phoneRef = useRef(null);
   const emailRef = useRef(null);
   const messageRef = useRef(null);
   const cvButtonRef = useRef(null);
 
-  // Label xəta stili (span içində, yerini dəyişmir)
+  // Error styling
   const errorLabelStyle = { color: "#ff0000" };
-
-  // CV xəta mətni: overlay (content-i itələmir) + soldan 1.4rem offset
   const cvErrorStyle = {
     position: "absolute",
     left: "1.4rem",
@@ -376,7 +525,7 @@ const CareersCV = ({ t }) => {
     zIndex: 1,
   };
 
-  // Sadə yoxlama funksiyası
+  // Form validation
   const validateForm = () => {
     const newErrors = {};
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -387,23 +536,19 @@ const CareersCV = ({ t }) => {
     }
 
     if (!phoneInput.trim()) {
-      newErrors.phone =
-        t?.validationPhoneRequired || "Telefon nömrəsi məcburidir.";
+      newErrors.phone = t?.validationPhoneRequired || "Telefon nömrəsi məcburidir.";
     } else if (phoneDigits.length < 9) {
-      newErrors.phone =
-        t?.validationPhoneInvalid || "Telefon nömrəsi düzgün formatda deyil.";
+      newErrors.phone = t?.validationPhoneInvalid || "Telefon nömrəsi düzgün formatda deyil.";
     }
 
     if (!emailInput.trim()) {
       newErrors.email = t?.validationEmailRequired || "Email məcburidir.";
     } else if (!emailRegex.test(emailInput)) {
-      newErrors.email =
-        t?.validationEmailInvalid || "Email düzgün formatda deyil.";
+      newErrors.email = t?.validationEmailInvalid || "Email düzgün formatda deyil.";
     }
 
     if (!message.trim()) {
-      newErrors.message =
-        t?.validationMessageRequired || "Mesaj bölməsi məcburidir.";
+      newErrors.message = t?.validationMessageRequired || "Mesaj bölməsi məcburidir.";
     }
 
     if (!selectedFile) {
@@ -413,17 +558,72 @@ const CareersCV = ({ t }) => {
     return newErrors;
   };
 
+  // Phone input handler
+  const handlePhoneChange = (e) => {
+    let value = e.target.value;
+    
+    // Əgər +994 ilə başlayırsa, onu çıxarırıq
+    if (value.startsWith("+994 ")) {
+      value = value.slice(5);
+    } else if (value.startsWith("+994")) {
+      value = value.slice(4);
+    } else if (value.startsWith("994")) {
+      value = value.slice(3);
+    }
+    
+    // Yalnız rəqəmləri saxlayırıq
+    let digits = value.replace(/\D/g, "");
+    
+    // Maksimum 9 rəqəm
+    digits = digits.slice(0, 9);
+    
+    setPhoneInput(digits);
+    
+    // Xəta varsa təmizlə
+    if (errors.phone && digits.length >= 9) {
+      setErrors((prev) => {
+        const newErrors = { ...prev };
+        delete newErrors.phone;
+        return newErrors;
+      });
+    }
+  };
+
   // File input açma
   const handleButtonClick = () => {
     fileInputRef.current?.click();
   };
 
-  // File seçildiğində state'e yaz
+  // File seçildiğində
   const handleFileChange = (e) => {
     const file = e.target.files && e.target.files[0];
     if (file) {
+      // Fayl növünü yoxla (PDF və ya DOCX)
+      const allowedTypes = [
+        "application/pdf",
+        "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+      ];
+      
+      if (!allowedTypes.includes(file.type)) {
+        setErrors((prev) => ({
+          ...prev,
+          cv: t?.validationCVInvalidType || "Yalnız PDF və ya DOCX faylları qəbul edilir.",
+        }));
+        return;
+      }
+
+      // Fayl ölçüsünü yoxla (məs. 5MB)
+      const maxSize = 5 * 1024 * 1024; // 5MB
+      if (file.size > maxSize) {
+        setErrors((prev) => ({
+          ...prev,
+          cv: t?.validationCVTooLarge || "Fayl ölçüsü 5MB-dan çox ola bilməz.",
+        }));
+        return;
+      }
+
       setSelectedFile(file);
-      // Xəta varsa, təmizlə
+      // Xəta varsa təmizlə
       if (errors.cv) {
         setErrors((prev) => {
           const newErrors = { ...prev };
@@ -434,15 +634,15 @@ const CareersCV = ({ t }) => {
     }
   };
 
-  // Form göndərimi
+  // Form submit
   const handleSubmit = async (e) => {
     e.preventDefault();
     setSubmitStatus(null);
 
-    // Öncə validasiya
+    // Validasiya
     const foundErrors = validateForm();
     setErrors(foundErrors);
-    
+
     if (Object.keys(foundErrors).length > 0) {
       // İlk səhv sahəyə focus
       const order = ["name", "phone", "email", "message", "cv"];
@@ -461,23 +661,23 @@ const CareersCV = ({ t }) => {
 
     setIsLoading(true);
 
-    // FormData düzgün hazırlayırıq
+    // FormData hazırlayırıq
     const formData = new FormData();
     formData.append("key", "hr");
     formData.append("title", name);
-    
+
     // form_data JSON string olaraq
     const formDataJson = {
       name: name,
-      phone: phoneInput,
+      phone: "+994" + phoneInput,
       email: emailInput,
       message: message,
     };
     formData.append("form_data", JSON.stringify(formDataJson));
-    
-    // CV faylını əlavə edirik
+
+    // ⚠️ DİQQƏT: Backend-də cv_file adı ilə gözləyir
     if (selectedFile) {
-      formData.append("file", selectedFile);
+      formData.append("cv_file", selectedFile);
     }
 
     try {
@@ -496,6 +696,7 @@ const CareersCV = ({ t }) => {
         setMessage("");
         setSelectedFile(null);
         setErrors({});
+        setIsPhoneFocused(false);
       } else {
         setSubmitStatus("error");
       }
@@ -509,7 +710,6 @@ const CareersCV = ({ t }) => {
 
   return (
     <>
-      {/* 🔹 Spinner animasiyası üçün */}
       <style jsx>{`
         @keyframes spin {
           0% {
@@ -545,7 +745,16 @@ const CareersCV = ({ t }) => {
                       type="text"
                       placeholder={t?.careersPageFormNameSurname || "Name/Surname"}
                       value={name}
-                      onChange={(e) => setName(e.target.value)}
+                      onChange={(e) => {
+                        setName(e.target.value);
+                        if (errors.name && e.target.value.trim()) {
+                          setErrors((prev) => {
+                            const newErrors = { ...prev };
+                            delete newErrors.name;
+                            return newErrors;
+                          });
+                        }
+                      }}
                       aria-invalid={Boolean(errors.name)}
                     />
                   </div>
@@ -559,8 +768,12 @@ const CareersCV = ({ t }) => {
                       ref={phoneRef}
                       type="text"
                       placeholder="+994 00 000 00 00"
-                      value={phoneInput}
-                      onChange={(e) => setPhoneInput(e.target.value)}
+                      value={isPhoneFocused || phoneInput ? "+994 " + phoneInput : ""}
+                      onFocus={() => setIsPhoneFocused(true)}
+                      onBlur={() => {
+                        if (!phoneInput) setIsPhoneFocused(false);
+                      }}
+                      onChange={handlePhoneChange}
                       aria-invalid={Boolean(errors.phone)}
                     />
                   </div>
@@ -575,7 +788,16 @@ const CareersCV = ({ t }) => {
                       type="email"
                       placeholder={t?.careersPageFormEmail || "Email"}
                       value={emailInput}
-                      onChange={(e) => setEmailInput(e.target.value)}
+                      onChange={(e) => {
+                        setEmailInput(e.target.value);
+                        if (errors.email && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(e.target.value)) {
+                          setErrors((prev) => {
+                            const newErrors = { ...prev };
+                            delete newErrors.email;
+                            return newErrors;
+                          });
+                        }
+                      }}
                       aria-invalid={Boolean(errors.email)}
                     />
                   </div>
@@ -587,6 +809,7 @@ const CareersCV = ({ t }) => {
                       type="button"
                       className="downloadCV"
                       onClick={handleButtonClick}
+                      aria-invalid={Boolean(errors.cv)}
                     >
                       <span>
                         {selectedFile
@@ -623,11 +846,20 @@ const CareersCV = ({ t }) => {
                     name="adentta"
                     id="adentta"
                     value={message}
-                    onChange={(e) => setMessage(e.target.value)}
+                    onChange={(e) => {
+                      setMessage(e.target.value);
+                      if (errors.message && e.target.value.trim()) {
+                        setErrors((prev) => {
+                          const newErrors = { ...prev };
+                          delete newErrors.message;
+                          return newErrors;
+                        });
+                      }
+                    }}
                     aria-invalid={Boolean(errors.message)}
                   ></textarea>
 
-                  {/* 🔹 Spinner "Göndər" düyməsinin ortasında fırlanır */}
+                  {/* SUBMIT BUTTON with Spinner */}
                   <div
                     style={{
                       position: "relative",
@@ -649,10 +881,9 @@ const CareersCV = ({ t }) => {
                       <div
                         style={{
                           position: "absolute",
-                          top: "65%",
+                          top: "50%",
                           left: "50%",
-                          marginTop: "-15px",
-                          marginLeft: "-12px",
+                          transform: "translate(-50%, -50%)",
                           width: "24px",
                           height: "24px",
                           border: "3px solid rgba(255,255,255,0.3)",
@@ -665,6 +896,7 @@ const CareersCV = ({ t }) => {
                     )}
                   </div>
 
+                  {/* SUCCESS MESSAGE */}
                   {submitStatus === "success" && (
                     <span
                       style={{
@@ -677,6 +909,8 @@ const CareersCV = ({ t }) => {
                       {t?.formSubmitSuccess || "Məlumat uğurla göndərildi."}
                     </span>
                   )}
+
+                  {/* ERROR MESSAGE */}
                   {submitStatus === "error" && (
                     <span
                       style={{
