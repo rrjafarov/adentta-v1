@@ -612,12 +612,12 @@ const CareersCV = ({ t }) => {
         return;
       }
 
-      // Fayl ölçüsünü yoxla (məs. 5MB)
-      const maxSize = 5 * 1024 * 1024; // 5MB
+      // Fayl ölçüsünü yoxla (məs. 10MB)
+      const maxSize = 10 * 1024 * 1024; 
       if (file.size > maxSize) {
         setErrors((prev) => ({
           ...prev,
-          cv: t?.validationCVTooLarge || "Fayl ölçüsü 5MB-dan çox ola bilməz.",
+          cv: t?.validationCVTooLarge || "Fayl ölçüsü 10MB-dan çox ola bilməz.",
         }));
         return;
       }
