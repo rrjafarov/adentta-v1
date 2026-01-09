@@ -2375,7 +2375,7 @@ const ProductsPageFilter = ({
                               }}
                             >
                               <span>{child.title}</span>
-                              <p>({childProductCount})</p>
+                              {/* <p>({childProductCount})</p> */}
                             </li>
                           );
                         })
@@ -2404,7 +2404,7 @@ const ProductsPageFilter = ({
                                 }}
                               >
                                 <span>{parent.title}</span>
-                                <p>({parentProductCount})</p>
+                                {/* <p>({parentProductCount})</p> */}
                               </li>
 
                               {children.map((child) => {
@@ -2435,7 +2435,7 @@ const ProductsPageFilter = ({
                                     }}
                                   >
                                     <span>{child.title}</span>
-                                    <p>({childProductCount})</p>
+                                    {/* <p>({childProductCount})</p> */}
                                   </li>
                                 );
                               })}
