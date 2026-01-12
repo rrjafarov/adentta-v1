@@ -303,7 +303,7 @@ const getCategorySlug = (cat) =>
 // YALNIZ SLUG (ID YOX)
 const buildCategoryHref = (cat) => {
   const slug = getCategorySlug(cat) || slugify(String(cat?.title ?? ""));
-  return `/product?category=${encodeURIComponent(slug)}`;
+  return `/products?category=${encodeURIComponent(slug)}`;
 };
 
 const HeaderMenu = ({ t, categoryData = [], isHomePage }) => {
@@ -403,7 +403,7 @@ const HeaderMenu = ({ t, categoryData = [], isHomePage }) => {
               <ul>
                 <div className="dropdown">
                   <li>
-                    <Link className="productsLinkName" href="/product">
+                    <Link className="productsLinkName" href="/products">
                       {t?.products || "products"}
                     </Link>
                     <img className="bottomDown" src="/icons/bottomDown.svg" alt="" />

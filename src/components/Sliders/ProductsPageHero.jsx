@@ -7,27 +7,6 @@
 // import { Navigation } from "swiper/modules";
 // import Link from "next/link";
 
-// // --- Helper: slugify & slug getter (HeaderMenu ilə eyni məntiq) ---
-// const slugify = (text) => {
-//   if (!text) return "";
-//   return String(text)
-//     .toLowerCase()
-//     .normalize("NFKD")
-//     .replace(/[\u0300-\u036f]/g, "")
-//     .replace(/[^a-z0-9-]+/g, "-")
-//     .replace(/--+/g, "-")
-//     .replace(/^-+|-+$/g, "");
-// };
-
-// const getCategorySlug = (cat) =>
-//   cat?.url_slug ?? cat?.slug ?? cat?.url ?? cat?.urlSlug ?? slugify(cat?.title ?? "");
-
-// // YALNIZ SLUG (ID YOX)
-// const buildCategoryHref = (cat) => {
-//   const slug = getCategorySlug(cat) || slugify(String(cat?.title ?? ""));
-//   return `/product?category=${encodeURIComponent(slug)}`;
-// };
-
 // const ProductsPageHero = ({
 //   t,
 //   productData,
@@ -51,7 +30,7 @@
 //       <div className="container productsPageHero">
 //         <div className="productsPageHeroHeader">
 //           <div className="productsPageHeaderText">
-//             <h1>{title}</h1>
+//             <h4>{title}</h4>
 //             <p>{description}</p>
 //           </div>
 //           <div className="custom-navigation">
@@ -87,11 +66,12 @@
 //           >
 //             {subcategories?.map((item) => (
 //               <SwiperSlide key={item.id}>
-//                 <Link href={buildCategoryHref(item)}>
+//                 <Link href="#" >
 //                   <div className="productsPageSliderItem">
 //                     <div className="productsPageSliderInner">
 //                       <div className="productsPageSliderItemImage">
 //                         <img
+//                           // src={`https://admin.adentta.az/storage${item.icon}`}
 //                           src={
 //                             item?.image
 //                               ? `https://admin.adentta.az/storage${item.icon}`
@@ -128,6 +108,9 @@
 
 
 
+
+
+
 "use client";
 import React from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
@@ -137,7 +120,7 @@ import "../../app/[locale]/globals.scss";
 import { Navigation } from "swiper/modules";
 import Link from "next/link";
 
-// --- Helper: slugify ---
+// --- Helper: slugify & slug getter (HeaderMenu ilə eyni məntiq) ---
 const slugify = (text) => {
   if (!text) return "";
   return String(text)
@@ -150,16 +133,12 @@ const slugify = (text) => {
 };
 
 const getCategorySlug = (cat) =>
-  cat?.url_slug ??
-  cat?.slug ??
-  cat?.url ??
-  cat?.urlSlug ??
-  slugify(cat?.title ?? "");
+  cat?.url_slug ?? cat?.slug ?? cat?.url ?? cat?.urlSlug ?? slugify(cat?.title ?? "");
 
-// ✅ YALNIZ SLUG
+// YALNIZ SLUG (ID YOX)
 const buildCategoryHref = (cat) => {
   const slug = getCategorySlug(cat) || slugify(String(cat?.title ?? ""));
-  return `/products?category=${encodeURIComponent(slug)}`; // 🙂 product -> products
+  return `/product?category=${encodeURIComponent(slug)}`;
 };
 
 const ProductsPageHero = ({
@@ -172,11 +151,13 @@ const ProductsPageHero = ({
     selectedCategory?.title ||
     t?.productsPageAllEquipments ||
     "All Equipments Category";
-
   const description =
     selectedCategory?.meta_description ||
     t?.productsPageHeroText ||
     "Lorem ipsum dolor sit amet";
+
+  console.log("Selected Category:", selectedCategory);
+  console.log("Selgory:", subcategories);
 
   return (
     <section id="productsPageHero">
@@ -186,7 +167,6 @@ const ProductsPageHero = ({
             <h1>{title}</h1>
             <p>{description}</p>
           </div>
-
           <div className="custom-navigation">
             <button className="custom-prev">
               <img src="/icons/leftDownNavigate.svg" alt="prev" />
@@ -202,7 +182,7 @@ const ProductsPageHero = ({
             slidesPerView={6}
             spaceBetween={10}
             speed={1000}
-            loop
+            loop={true}
             modules={[Navigation]}
             navigation={{
               nextEl: ".custom-next",
@@ -216,6 +196,7 @@ const ProductsPageHero = ({
               1024: { slidesPerView: 5 },
               1280: { slidesPerView: 6 },
             }}
+            className="mySwiper"
           >
             {subcategories?.map((item) => (
               <SwiperSlide key={item.id}>
@@ -225,15 +206,14 @@ const ProductsPageHero = ({
                       <div className="productsPageSliderItemImage">
                         <img
                           src={
-                            item?.icon
-                              ? `https://admin.adentta.az/storage${item.icon}` // 🙂
+                            item?.image
+                              ? `https://admin.adentta.az/storage${item.icon}`
                               : "/images/adenttaDefaultImg.svg"
                           }
                           alt={item.title}
                         />
                       </div>
                     </div>
-
                     <div className="productsPageSliderItemText">
                       <span>{item.title}</span>
                     </div>

@@ -99,7 +99,7 @@ const Footer = async ({
 
           {/* Products (kategori filtreli) */}
           <div className="footerLinks">
-            <Link href="/product">
+            <Link href="/products">
               <span>{t.products || "Products"}</span>
             </Link>
             <ul>
@@ -107,7 +107,7 @@ const Footer = async ({
                 <li key={category.id}>
                   <Link
                     href={{
-                      pathname: "/product",
+                      pathname: "/products",
                       query: { category: category.url_slug },
                     }}
                   >
