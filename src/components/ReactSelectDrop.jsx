@@ -238,7 +238,7 @@ export default function ReactSelectDrop({ onChange, t }) {
     placeholder: (base) => ({
       ...base,
       color: "#293881",
-      fontSize: "1.8rem",
+      fontSize: "1.5rem",
       "@media (max-width: 768px)": {
         fontSize: "1.5rem",
       },
@@ -246,7 +246,7 @@ export default function ReactSelectDrop({ onChange, t }) {
     singleValue: (base) => ({
       ...base,
       color: "#293881",
-      fontSize: "1.8rem",
+      fontSize: "1.5rem",
       fontWeight: "500",
     }),
     dropdownIndicator: (base) => ({

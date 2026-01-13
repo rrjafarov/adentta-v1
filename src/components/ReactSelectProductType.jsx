@@ -190,7 +190,7 @@ export default function ReactSelectProductType({ onChange, t, pdfMembers = [] })
       boxShadow: "none",
       cursor: "pointer",
       fontSize: "1.5rem",
-      width: "18rem",
+      width: "19rem",
       height: "4.2921rem",
       color: "#293881",
       fontWeight: "500",
@@ -200,7 +200,7 @@ export default function ReactSelectProductType({ onChange, t, pdfMembers = [] })
       borderRadius: "12px",
       border: "1px solid #E6E9EF",
       color: "#293881",
-      width: "18rem",
+      width: "19rem",
       fontSize: "1.5rem",
       fontWeight: "500",
     }),
@@ -213,13 +213,13 @@ export default function ReactSelectProductType({ onChange, t, pdfMembers = [] })
       width: "100%",
       borderRadius: "15px",
       "@media (max-width: 768px)": {
-        fontSize: "1.6rem",
+        fontSize: "1.5rem",
       },
     }),
     placeholder: (base) => ({
       ...base,
       color: "#293881",
-      fontSize: "1.8rem",
+      fontSize: "1.5rem",
       "@media (max-width: 768px)": {
         fontSize: "1.5rem",
       },
@@ -227,7 +227,7 @@ export default function ReactSelectProductType({ onChange, t, pdfMembers = [] })
     singleValue: (base) => ({
       ...base,
       color: "#293881",
-      fontSize: "1.8rem",
+      fontSize: "1.5rem",
       fontWeight: "500",
     }),
     dropdownIndicator: (base) => ({

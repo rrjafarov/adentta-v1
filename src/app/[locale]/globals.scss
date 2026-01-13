@@ -7927,6 +7927,184 @@ ul {
   }
 }
 
+// .pdfCatalogCard {
+//   display: flex;
+//   flex-direction: column;
+//   gap: 1.55rem;
+
+//   .pdfCatalogCardImg {
+//     position: relative;
+//     border-radius: 1.5rem;
+//     height: 39.139rem;
+//     .pdfCatalogCardImgLink {
+//       width: 100%;
+//       height: 100%;
+//     }
+//     img {
+//       width: 100%;
+//       height: 100%;
+//       border-radius: 1.5rem;
+//     }
+
+//     .vatech {
+//       position: absolute;
+//       top: 2.26rem;
+//       left: 2.46rem;
+//       width: 7.9637rem;
+//       height: 4.1rem;
+//       flex-shrink: 0;
+//       border-radius: 2rem;
+//       background: #1c2759;
+//       display: flex;
+//       align-items: center;
+//       justify-content: center;
+
+//       span {
+//         color: #fff;
+//         font-size: 1.4rem;
+//         font-style: normal;
+//         font-weight: 400;
+//         line-height: normal;
+//       }
+//     }
+//   }
+
+//   .pdfCatalogCardInfo {
+//     height: 20rem;
+
+//     border-radius: 1.5rem;
+//     background: rgba(193, 217, 241, 0.2);
+
+//     .pdfCatalogCardInfoContent {
+//       padding: 2.4rem 3rem 2.22rem 3rem;
+
+//       h3 {
+//         color: #293881;
+//         font-size: 2rem;
+//         font-style: normal;
+//         font-weight: 600;
+//         line-height: normal;
+//         padding-bottom: 0.77rem;
+//         display: -webkit-box;
+//         -webkit-line-clamp: 2; /* YALNIZ 2 sətir göstər */
+//         -webkit-box-orient: vertical;
+//         overflow: hidden;
+//       }
+//       .pdfCatalogCardInfoParagraph {
+//         width: 31.6163rem;
+//         color: #8a8fab;
+//         font-size: 1.5rem;
+//         font-style: normal;
+//         font-weight: 400;
+//         line-height: 129.5%;
+//         /* 1.9425rem */
+//         display: -webkit-box;
+//         -webkit-line-clamp: 2; /* YALNIZ 2 sətir göstər */
+//         -webkit-box-orient: vertical;
+//         overflow: hidden;
+//       }
+
+//       p {
+//         width: 31.6163rem;
+//         color: #8a8fab;
+//         font-size: 1.5rem;
+//         font-style: normal;
+//         font-weight: 400;
+//         line-height: 129.5%;
+//         /* 1.9425rem */
+//       }
+
+//       button {
+//         margin-top: 1.65rem;
+//         width: 17.6342rem;
+//         height: 4.5rem;
+//         // padding: 1.35rem 2.35rem;
+//         flex-shrink: 0;
+//         border-radius: 3rem;
+//         background: #293880;
+//         display: flex;
+//         color: #fff;
+//         text-align: center;
+//         font-size: 1.5rem;
+//         font-style: normal;
+//         font-weight: 500;
+//         line-height: normal;
+//         letter-spacing: -0.0012rem;
+//         justify-content: center;
+//         align-items: center;
+//         gap: 1rem;
+
+//         img {
+//           width: 1.8rem;
+//           height: 1.8rem;
+//           flex-shrink: 0;
+//         }
+//       }
+//     }
+//   }
+// }
+// .pdfCatalogCardInfoParagraphDetailPage {
+//   width: 31.6163rem;
+//   color: #8a8fab;
+//   font-size: 1.5rem;
+//   font-style: normal;
+//   font-weight: 400;
+//   line-height: 129.5%;
+//   /* 1.9425rem */
+//   display: -webkit-box;
+//   -webkit-line-clamp: 2; /* YALNIZ 2 sətir göstər */
+//   -webkit-box-orient: vertical;
+//   overflow: hidden;
+//   p {
+//     font-size: 1.5rem;
+//     font-style: normal;
+//     font-weight: 400;
+//     line-height: 129.5%;
+//     /* 1.9425rem */
+//     display: -webkit-box;
+//     -webkit-line-clamp: 2; /* YALNIZ 2 sətir göstər */
+//     -webkit-box-orient: vertical;
+//     overflow: hidden;
+//   }
+// }
+// @media screen and (max-width: 768px) {
+//   .pdfCatalogCardInfoContent {
+//     p {
+//       width: 100% !important;
+//     }
+//   }
+//   .pdfCatalogCardInfoParagraph {
+//     width: 100% !important;
+//     font-size: 1.5rem;
+//   }
+//   .pdfCatalogCardInfoParagraphDetailPage {
+//     width: 100% !important;
+//     font-size: 1.5rem;
+//   }
+
+//   .pdfCatalogCardImg {
+//     position: relative;
+//     border-radius: 1.5rem;
+//     height: 48.139rem !important;
+//     img {
+//       width: 100%;
+//       height: 100%;
+//       border-radius: 1.5rem;
+//       object-fit: cover;
+//     }
+//   }
+// }
+
+
+
+
+
+
+
+
+
+
+
 .pdfCatalogCard {
   display: flex;
   flex-direction: column;
@@ -7944,6 +8122,7 @@ ul {
       width: 100%;
       height: 100%;
       border-radius: 1.5rem;
+      object-fit: cover;
     }
 
     .vatech {
@@ -7969,15 +8148,47 @@ ul {
     }
   }
 
+  /* Info box: FİXED height + absolute positioning for expansion */
   .pdfCatalogCardInfo {
-    height: 20rem;
-
+    position: relative; /* overlay üçün reference point */
     border-radius: 1.5rem;
     background: rgba(193, 217, 241, 0.2);
+    background: rgba(193, 217, 241, 0.20);
+
+    
+    /* FİXED HEIGHT - bütün kartlar eyni hündürlükdə */
+    height: 22rem;
+    overflow: visible; /* overlay görünsün deyə */
+
+    &.expanded {
+      /* Expand zamanı z-index artır ki, üstdəkilərin üstünə çıxsın */
+      z-index: 10;
+    }
 
     .pdfCatalogCardInfoContent {
+      position: relative;
       padding: 2.4rem 3rem 2.22rem 3rem;
+      background: transparent;
+      
+      border-radius: 1.5rem;
+      
+      /* Expand zamanı absolute position ilə overlay */
+      transition: all 0.35s ease;
+    }
 
+    &.expanded .pdfCatalogCardInfoContent {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 11;
+      background: rgba(193, 217, 241, 0.95); /* daha solid background overlay üçün */
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15); /* shadow əlavə et vizual ayrılma üçün */
+      max-height: 800px; /* kifayət qədər böyük limit */
+      overflow-y: auto; /* çox uzun mətn varsa scroll */
+    }
+
+    .pdfCatalogCardInfoContent {
       h3 {
         color: #293881;
         font-size: 2rem;
@@ -7986,10 +8197,12 @@ ul {
         line-height: normal;
         padding-bottom: 0.77rem;
         display: -webkit-box;
-        -webkit-line-clamp: 2; /* YALNIZ 2 sətir göstər */
+        -webkit-line-clamp: 2;
         -webkit-box-orient: vertical;
         overflow: hidden;
       }
+
+      /* Paragraph: collapsed = 2 lines; expanded = full */
       .pdfCatalogCardInfoParagraph {
         width: 31.6163rem;
         color: #8a8fab;
@@ -7997,11 +8210,19 @@ ul {
         font-style: normal;
         font-weight: 400;
         line-height: 129.5%;
-        /* 1.9425rem */
+
         display: -webkit-box;
-        -webkit-line-clamp: 2; /* YALNIZ 2 sətir göstər */
+        -webkit-line-clamp: 2;
         -webkit-box-orient: vertical;
         overflow: hidden;
+      }
+
+      .pdfCatalogCardInfoParagraph.expanded {
+        display: block;
+        -webkit-line-clamp: unset;
+        -webkit-box-orient: unset;
+        overflow: visible;
+        width: 100%;
       }
 
       p {
@@ -8011,14 +8232,29 @@ ul {
         font-style: normal;
         font-weight: 400;
         line-height: 129.5%;
-        /* 1.9425rem */
       }
 
-      button {
-        margin-top: 1.65rem;
+      /* Show more button */
+      .pdfCatalogShowMore {
+        // margin-top: 0.9rem;
+        background: transparent;
+        border: none;
+        color: #293881;
+        font-weight: 600;
+        font-size: 1.45rem;
+        cursor: pointer;
+        padding: 0;
+        display:block;
+        
+        &:hover {
+          text-decoration: underline;
+        }
+      }
+
+      button.pdfCatalogCardInfoLink {
+        margin-top: 1rem;
         width: 17.6342rem;
         height: 4.5rem;
-        // padding: 1.35rem 2.35rem;
         flex-shrink: 0;
         border-radius: 3rem;
         background: #293880;
@@ -8033,16 +8269,24 @@ ul {
         justify-content: center;
         align-items: center;
         gap: 1rem;
-
-        img {
-          width: 1.8rem;
-          height: 1.8rem;
-          flex-shrink: 0;
+        border: none;
+        cursor: pointer;
+        
+        &:hover {
+          background: #1f2a66;
         }
+      }
+
+      button.pdfCatalogCardInfoLink img {
+        width: 1.8rem;
+        height: 1.8rem;
+        flex-shrink: 0;
       }
     }
   }
 }
+
+/* Detail paragraph reuse */
 .pdfCatalogCardInfoParagraphDetailPage {
   width: 31.6163rem;
   color: #8a8fab;
@@ -8050,23 +8294,24 @@ ul {
   font-style: normal;
   font-weight: 400;
   line-height: 129.5%;
-  /* 1.9425rem */
   display: -webkit-box;
-  -webkit-line-clamp: 2; /* YALNIZ 2 sətir göstər */
+  -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
   overflow: hidden;
+  
   p {
     font-size: 1.5rem;
     font-style: normal;
     font-weight: 400;
     line-height: 129.5%;
-    /* 1.9425rem */
     display: -webkit-box;
-    -webkit-line-clamp: 2; /* YALNIZ 2 sətir göstər */
+    -webkit-line-clamp: 2;
     -webkit-box-orient: vertical;
     overflow: hidden;
   }
 }
+
+/* Responsive tweaks */
 @media screen and (max-width: 768px) {
   .pdfCatalogCardInfoContent {
     p {
@@ -8086,6 +8331,7 @@ ul {
     position: relative;
     border-radius: 1.5rem;
     height: 48.139rem !important;
+    
     img {
       width: 100%;
       height: 100%;
@@ -8093,7 +8339,35 @@ ul {
       object-fit: cover;
     }
   }
+  
+  /* Mobile-da overlay daha yaxşı görünsün */
+  .pdfCatalogCardInfo.expanded .pdfCatalogCardInfoContent {
+    max-height: 90vh;
+  }
 }
+
+/* Ölçü elementi: gizli, amma ölçüləri hesablanır */
+.pdfCatalogMeasure {
+  position: absolute;
+  visibility: hidden;
+  pointer-events: none;
+  z-index: -1;
+  top: -9999px;
+  left: -9999px;
+  width: auto;
+  font-size: 1.5rem;
+  line-height: 1.295;
+  font-weight: 400;
+  font-style: normal;
+  white-space: normal;
+  word-wrap: break-word;
+}
+
+
+
+
+
+
 
 // ? PdfCataog.jsx
 // !    PdfCataog Page
@@ -10784,6 +11058,12 @@ ul {
 
     .brandsDPCatalogCards {
       padding-bottom: 6.59rem;
+
+
+
+
+
+
 
       .pdfCatalogCard {
         display: flex;

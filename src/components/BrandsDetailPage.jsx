@@ -269,7 +269,7 @@ const BrandsDetailPage = async ({ t, brandsDetailDataDetail, otherBrands }) => {
                       </div>
                       <div className="pdfCatalogCardInfo">
                         <div className="pdfCatalogCardInfoContent">
-                          <span>{pdf.title}</span>
+                          <h3>{pdf.title}</h3>
                           {pdf.short_text && (
                             <div
                               className="pdfCatalogCardInfoParagraphDetailPage"
@@ -280,7 +280,6 @@ const BrandsDetailPage = async ({ t, brandsDetailDataDetail, otherBrands }) => {
                           )}
 
                           <a
-                            // href={`https://admin.adentta.az/storage/uploads/pdf/${pdf.id}.pdf`}
                             href={`https://admin.adentta.az/storage${pdf.pdf}`}
                             target="_blank"
                             download
@@ -468,3 +467,34 @@ const BrandsDetailPage = async ({ t, brandsDetailDataDetail, otherBrands }) => {
 };
 
 export default BrandsDetailPage;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
