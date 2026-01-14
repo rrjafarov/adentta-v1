@@ -1,3 +1,4 @@
+
 // "use client";
 // import Link from "next/link";
 // import React, { useEffect, useState } from "react";
@@ -14,17 +15,17 @@
 //   const [showDoctors, setShowDoctors] = useState(false);
 //   const [showEvents, setShowEvents] = useState(false);
 
-//   // Güvənli slug yaratma (slash və digər xüsusi simvolları - ilə əvəz edir)
+//   // Güvənli slug
 //   const slugify = (str) => {
 //     if (!str) return "";
 //     return str
 //       .toString()
 //       .toLowerCase()
 //       .trim()
-//       .replace(/\s+/g, "-") // boşluqları -
-//       .replace(/[^a-z0-9-]/g, "-") // hər şeyi a-z,0-9 və - xaricində -
-//       .replace(/-+/g, "-") // çoxlu - => bir -
-//       .replace(/^-|-$/g, ""); // baş və sondakı - sil
+//       .replace(/\s+/g, "-")
+//       .replace(/[^a-z0-9-]/g, "-")
+//       .replace(/-+/g, "-")
+//       .replace(/^-|-$/g, "");
 //   };
 
 //   // Fetch ve filtreleme
@@ -87,11 +88,11 @@
 //     }
 //   };
 
-//   // Enter tuşu ile yönlendirme
+//   // Enter ilə → /product-page
 //   const handleKeyDown = (e) => {
 //     if (e.key === "Enter" && searchTerm.trim() !== "") {
 //       router.push(
-//         `/products?per_page=12&search_text=${encodeURIComponent(searchTerm)}`
+//         `/product?per_page=12&search_text=${encodeURIComponent(searchTerm)}`
 //       );
 //       closePopup();
 //     }
@@ -129,7 +130,6 @@
 //                 <p className="infoMessageSearch">{t?.searchText || "Search"}</p>
 //               ) : filteredProducts.length > 0 ? (
 //                 filteredProducts.map((product) => {
-//                   // Ən təhlükəsiz slug: backend-dən gələn slug varsa onu istifadə et, yoxdursa bizim slugify
 //                   const safeSlug =
 //                     (product.slug && slugify(product.slug)) ||
 //                     slugify(product.title) ||
@@ -145,7 +145,6 @@
 //                           <h3>{product.title}</h3>
 //                           <div className="searchPopupContentInner">
 //                             <img
-//                               // src={`https://admin.adentta.az/storage${product.image}`}
 //                               src={
 //                                 product?.image
 //                                   ? `https://admin.adentta.az/storage${product.image}`
@@ -172,10 +171,10 @@
 
 //               <div className="popupSeeMore">
 //                 <Link
-//                   // href={`/products?per_page=12&search_text=${encodeURIComponent(
-//                   href={`/products?search_text=${encodeURIComponent(
+//                   href={`/product?per_page=12&search_text=${encodeURIComponent(
 //                     searchTerm
 //                   )}`}
+//                   onClick={closePopup}
 //                 >
 //                   {t?.searchShowMore || "Show more"}
 //                 </Link>
@@ -188,6 +187,16 @@
 //     </div>
 //   );
 // }
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -230,9 +239,7 @@ export default function SearchPopup({ t, closePopup }) {
     const fetchData = async () => {
       try {
         const res = await axiosInstance.get(
-          `/page-data/product?per_page=12&search_text=${encodeURIComponent(
-            searchTerm
-          )}`
+          `/page-data/product?per_page=12&search_text=${encodeURIComponent(searchTerm)}`
         );
         const products = res.data.data?.data || [];
         setProductData(products);
@@ -245,10 +252,7 @@ export default function SearchPopup({ t, closePopup }) {
     if (searchTerm.trim() !== "") {
       if (debounceTimeout) clearTimeout(debounceTimeout);
 
-      const timeout = setTimeout(() => {
-        fetchData();
-      }, 300);
-
+      const timeout = setTimeout(fetchData, 300);
       setDebounceTimeout(timeout);
     } else {
       setFilteredProducts([]);
@@ -257,11 +261,23 @@ export default function SearchPopup({ t, closePopup }) {
     return () => clearTimeout(debounceTimeout);
   }, [searchTerm]);
 
+  // title + code üzrə filter
   useEffect(() => {
+    const term = searchTerm.toLowerCase();
+
     setFilteredProducts(
-      productData.filter((product) =>
-        product.title?.toLowerCase().includes(searchTerm.toLowerCase())
-      )
+      productData.filter((product) => {
+        const title = product.title || "";
+        const code =
+          product.code !== undefined && product.code !== null
+            ? String(product.code)
+            : "";
+
+        return (
+          title.toLowerCase().includes(term) ||
+          code.toLowerCase().includes(term)
+        );
+      })
     );
   }, [searchTerm, productData]);
 
@@ -306,6 +322,7 @@ export default function SearchPopup({ t, closePopup }) {
               alt="close"
             />
           </div>
+
           <div className="searchPopupInner">
             <div className="searchingInput">
               <img src="/icons/searchIcon.svg" alt="search" />
@@ -324,7 +341,9 @@ export default function SearchPopup({ t, closePopup }) {
               <span>{t?.searchResults || "Search results"}</span>
 
               {searchTerm.trim() === "" ? (
-                <p className="infoMessageSearch">{t?.searchText || "Search"}</p>
+                <p className="infoMessageSearch">
+                  {t?.searchText || "Search"}
+                </p>
               ) : filteredProducts.length > 0 ? (
                 filteredProducts.map((product) => {
                   const safeSlug =
@@ -368,9 +387,7 @@ export default function SearchPopup({ t, closePopup }) {
 
               <div className="popupSeeMore">
                 <Link
-                  href={`/product?per_page=12&search_text=${encodeURIComponent(
-                    searchTerm
-                  )}`}
+                  href={`/product?per_page=12&search_text=${encodeURIComponent(searchTerm)}`}
                   onClick={closePopup}
                 >
                   {t?.searchShowMore || "Show more"}
@@ -384,6 +401,33 @@ export default function SearchPopup({ t, closePopup }) {
     </div>
   );
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

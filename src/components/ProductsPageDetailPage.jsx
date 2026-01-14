@@ -224,13 +224,14 @@ const ProductsPageDetailPage = ({
                     </div>
                   )}
 
-                  {productData?.country?.[0]?.title && (
+                  {productData?.brands?.[0]?.country?.[0]?.title && (
                     <div className="detailCountry">
                       <span>
                         {t?.productsPageCountryName || "Country Name"}:
                       </span>
                       <div className="detailCountryInner">
-                        <span>{productData.country[0].title}</span>
+                        <span>{productData.brands?.[0]?.country?.[0]?.title}</span>
+                        
                       </div>
                     </div>
                   )}
