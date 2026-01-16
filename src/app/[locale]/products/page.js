@@ -369,6 +369,7 @@ const Page = async ({ searchParams }) => {
         productData={productData}
         selectedCategory={selectedCategoryObj}
         subcategories={subcategoriesForSelected}
+        categoryData={categoryData}
       />
       <NewProductPage
         categoryData={categoryData}
