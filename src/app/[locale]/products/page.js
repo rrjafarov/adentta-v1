@@ -1,4 +1,3 @@
-
 import Footer from "@/components/Footer/Footer";
 import Header from "@/components/Header/Header";
 import ProductsPageHero from "@/components/Sliders/ProductsPageHero";
@@ -389,4 +388,3 @@ const Page = async ({ searchParams }) => {
 };
 
 export default Page;
-

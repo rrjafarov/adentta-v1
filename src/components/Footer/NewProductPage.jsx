@@ -264,6 +264,7 @@
 
 
 
+
 "use client";
 import Link from "next/link";
 import React, {
@@ -340,18 +341,6 @@ const FilterAccordion = ({ title, children }) => {
     </div>
   );
 };
-
-// const FilterAccordion = ({ title, children }) => {
-//   return (
-//     <div className="accordion">
-//       <button className="accordion-header">
-//         {title}
-//         <img src="/icons/minus.svg" alt="Toggle Icon" className="toggle-icon" />
-//       </button>
-//       <div className="accordion-content">{children}</div>
-//     </div>
-//   );
-// };
 
 const normalizeIds = (arr = []) =>
   Array.from(
@@ -512,7 +501,7 @@ const ProductsPageFilter = ({
     return cat?.title || null;
   }, [selectedCategoryIds, categoryData]);
 
-  // KATEQORİYA DƏYİŞİMİ: URL-ə yalnız SLUG yaz
+  // KATEQORİYA DƏYİŞİMİ: URL-ə yalnız SLUG yaz + router.push ilə navigation
   const handleCategoryToggleById = useCallback(
     (id) => {
       const numeric = Number(id);
@@ -524,6 +513,7 @@ const ProductsPageFilter = ({
 
         const params = new URLSearchParams(searchParams);
         params.delete("category");
+        params.delete("page"); // page-i sıfırla ki, yeni filterdən sonra 1-ci səhifədən başlasın
 
         if (arr.length > 0) {
           arr.forEach((cid) => {
@@ -539,23 +529,10 @@ const ProductsPageFilter = ({
           if (/^filters?\[.*\]/.test(k)) params.delete(k);
         });
 
-        const pathname =
-          typeof window !== "undefined"
-            ? window.location.pathname
-            : "/product-page";
         const newSearch = params.toString();
+        const newUrl = `/products${newSearch ? `?${newSearch}` : ""}`;
 
-        if (typeof window !== "undefined" && window.history?.pushState) {
-          window.history.pushState(
-            {},
-            "",
-            pathname + (newSearch ? `?${newSearch}` : "")
-          );
-        } else {
-          router.push(pathname + (newSearch ? `?${newSearch}` : ""), {
-            scroll: false,
-          });
-        }
+        router.push(newUrl, { scroll: false });
 
         return arr;
       });
@@ -570,7 +547,7 @@ const ProductsPageFilter = ({
     [handleCategoryToggleById]
   );
 
-  // BRAND toggle: URL-də brand=ID
+  // BRAND toggle: URL-də brand=ID + router.push
   const handleBrandToggleById = useCallback(
     (brandId) => {
       const bid = Number(brandId);
@@ -586,29 +563,18 @@ const ProductsPageFilter = ({
       else current.add(bid);
 
       params.delete("brand");
+      params.delete("page"); // page-i sıfırla
+
       Array.from(current).forEach((v) => params.append("brand", String(v)));
 
       Array.from(params.keys()).forEach((k) => {
         if (/^filters?\[.*\]/.test(k)) params.delete(k);
       });
 
-      const pathname =
-        typeof window !== "undefined"
-          ? window.location.pathname
-          : "/product-page";
       const newSearch = params.toString();
+      const newUrl = `/products${newSearch ? `?${newSearch}` : ""}`;
 
-      if (typeof window !== "undefined" && window.history?.pushState) {
-        window.history.pushState(
-          {},
-          "",
-          pathname + (newSearch ? `?${newSearch}` : "")
-        );
-      } else {
-        router.push(pathname + (newSearch ? `?${newSearch}` : ""), {
-          scroll: false,
-        });
-      }
+      router.push(newUrl, { scroll: false });
     },
     [router, searchParams]
   );
@@ -780,18 +746,14 @@ const ProductsPageFilter = ({
           return [...prevData, ...uniqueNewItems];
         });
 
-        const newUrl = new URL(window.location);
-        newUrl.searchParams.set("page", String(page));
-        const newSearch = newUrl.searchParams.toString();
-        if (typeof window !== "undefined" && window.history?.pushState) {
-          window.history.pushState(
-            {},
-            "",
-            newUrl.pathname + (newSearch ? "?" + newSearch : "")
-          );
-        }
+        // Page dəyişikliyi üçün router.push
+        const newParams = new URLSearchParams(searchParams);
+        newParams.set("page", String(page));
+        const newUrl = `/products?${newParams.toString()}`;
+        router.push(newUrl, { scroll: false });
+
         setCurrentPage(page);
-        prevParamsRef.current = newSearch;
+        prevParamsRef.current = newParams.toString();
       }
     } catch (error) {
       console.error("fetchMoreProducts error:", error);
@@ -1015,12 +977,6 @@ const ProductsPageFilter = ({
           )}
         </div>
 
-        {/* <div className="filterTop topper">
-          <strong>Adentta</strong>
-          <img src="/icons/rightDown.svg" alt="Adentta" />
-          <span>{t?.products}</span>
-        </div> */}
-
         {/* Axtarış nəticələri (ümumi TOTAL göstərilir) */}
         <div className="searchResultsProductCount">
           {searchText && (
@@ -1102,13 +1058,7 @@ const ProductsPageFilter = ({
                       : t?.productsPageFilterCategoryTitle || "Category"
                   }
                 >
-                  <ul
-                  // style={{
-                  //   maxHeight: "300px",
-                  //   overflowY: "auto",
-                  //   paddingRight: "4px",
-                  // }}
-                  >
+                  <ul>
                     {singleSelectedParent
                       ? childrenOfSelectedParent.map((child) => {
                           const childProductCount = getProductCountForCategory(
@@ -1133,7 +1083,6 @@ const ProductsPageFilter = ({
                               }}
                             >
                               <span>{child.title}</span>
-                              {/* <p>({childProductCount})</p> */}
                             </li>
                           );
                         })
@@ -1162,7 +1111,6 @@ const ProductsPageFilter = ({
                                 }}
                               >
                                 <span>{parent.title}</span>
-                                {/* <p>({parentProductCount})</p> */}
                               </li>
 
                               {children.map((child) => {
@@ -1193,7 +1141,6 @@ const ProductsPageFilter = ({
                                     }}
                                   >
                                     <span>{child.title}</span>
-                                    {/* <p>({childProductCount})</p> */}
                                   </li>
                                 );
                               })}
@@ -1270,7 +1217,6 @@ const ProductsPageFilter = ({
               <div className="productPageSorting">
                 <span>{t?.sortBy}</span>
                 <div>
-                  {/* 🔹 Sort: ReactSelect-a value/onChange verdik */}
                   <ReactSelect
                     t={t}
                     value={selectedOption}
@@ -1279,7 +1225,6 @@ const ProductsPageFilter = ({
                 </div>
               </div>
               <div className="row">
-                {/* 🔹 Siyahı sortdan sonra render olunur */}
                 {sortedProductData.map((data, index) => (
                   <div
                     key={`${data.id}-${index}`}
@@ -1287,9 +1232,6 @@ const ProductsPageFilter = ({
                   >
                     <Link
                     href={`/products/${slugify(data.title || "")}-${data.id}`}
-                      // href={`/products/${(data.title || "")
-                      //   .toLowerCase()
-                      //   .replace(/\s+/g, "-")}-${data.id}`}
                       className="block"
                     >
                       <div className="homePageProductCardContent">
@@ -1419,7 +1361,6 @@ const ProductsPageFilter = ({
 };
 
 export default ProductsPageFilter;
-
 
 
 
