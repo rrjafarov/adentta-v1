@@ -13,7 +13,6 @@ async function getTranslations() {
     const { data } = await axiosInstance.get("/translation-list");
     return data;
   } catch (err) {
-    console.log(err);
     return {};
   }
 }

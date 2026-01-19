@@ -317,7 +317,6 @@ const HomePageProducts = ({ categoryData, t }) => {
       
       setProductData(response.data?.data?.data || []);
     } catch (error) {
-      console.error("Error fetching products:", error);
       setProductData([]);
     } finally {
       setLoading(false);

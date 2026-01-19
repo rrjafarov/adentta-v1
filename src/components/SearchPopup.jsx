@@ -245,7 +245,6 @@ export default function SearchPopup({ t, closePopup }) {
         setProductData(products);
         setFilteredProducts(products);
       } catch (error) {
-        console.error("API'da data yoxdur", error);
       }
     };
 

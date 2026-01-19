@@ -8,7 +8,6 @@ async function getTranslations() {
     const data = axiosInstance.get("/translation-list");
     return data;
   } catch (err) {
-    console.log(err);
   }
 }
 
