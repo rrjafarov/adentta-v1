@@ -105,9 +105,6 @@
 
 
 
-
-
-
 "use client";
 import React from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
@@ -121,15 +118,32 @@ import Manat from "../../../public/icons/manat.svg";
 import "../../app/[locale]/globals.scss";
 
 // 🔹 Eyni slugify mentiqi (məhsul title → URL üçün təmiz slug)
+// const slugify = (text) => {
+//   if (!text) return "";
+//   return String(text)
+//     .toLowerCase()
+//     .normalize("NFKD")
+//     .replace(/[\u0300-\u036f]/g, "")
+//     .replace(/[^a-z0-9-]+/g, "-")
+//     .replace(/--+/g, "-")
+//     .replace(/^-+|-+$/g, "");
+// };
+
+// utils/slugify.js (və ya komponentdə)
 const slugify = (text) => {
   if (!text) return "";
-  return String(text)
-    .toLowerCase()
-    .normalize("NFKD")
-    .replace(/[\u0300-\u036f]/g, "")
-    .replace(/[^a-z0-9-]+/g, "-")
-    .replace(/--+/g, "-")
-    .replace(/^-+|-+$/g, "");
+  return (
+    String(text)
+      .toLowerCase()
+      .normalize("NFKD")
+      // türk/utf xarakterləri təmizləmə
+      .replace(/[\u0300-\u036f]/g, "")
+      // slash-i ayrıca tire ilə əvəz et (və bütün icazəsiz simvolları tire et)
+      .replace(/[\/\\]+/g, "-")
+      .replace(/[^a-z0-9-]+/g, "-")
+      .replace(/--+/g, "-")
+      .replace(/^-+|-+$/g, "")
+  );
 };
 
 const HomePageProductCard = ({ productData, t }) => {
@@ -202,8 +216,6 @@ const HomePageProductCard = ({ productData, t }) => {
 };
 
 export default HomePageProductCard;
-
-
 
 
 

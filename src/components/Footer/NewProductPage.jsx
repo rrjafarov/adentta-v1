@@ -281,16 +281,34 @@ import ReactSelect from "../ReactSelect";
 import Manat from "../../../public/icons/manat.svg";
 import axiosInstance from "@/lib/axios";
 
+// const slugify = (text) => {
+//   if (!text) return "";
+//   return String(text)
+//     .toLowerCase()
+//     .normalize("NFKD")
+//     .replace(/[\u0300-\u036f]/g, "")
+//     .replace(/[^a-z0-9-]+/g, "-")
+//     .replace(/--+/g, "-")
+//     .replace(/^-+|-+$/g, "");
+// };
+
+
+
 const slugify = (text) => {
   if (!text) return "";
   return String(text)
     .toLowerCase()
     .normalize("NFKD")
     .replace(/[\u0300-\u036f]/g, "")
+    // burada slash / və backslash \ də tire ilə əvəz olunur
+    .replace(/[\/\\]+/g, "-")
     .replace(/[^a-z0-9-]+/g, "-")
     .replace(/--+/g, "-")
     .replace(/^-+|-+$/g, "");
 };
+
+
+
 
 const getCategorySlug = (cat) =>
   cat?.url_slug ??

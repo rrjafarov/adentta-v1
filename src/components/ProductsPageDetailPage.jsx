@@ -121,16 +121,36 @@ const ProductsPageDetailPage = ({
       `${productData.title} - ${currentUrl}`
     )}`,
   };
+  // const slugify = (text) => {
+  //   if (!text) return "";
+  //   return String(text)
+  //     .toLowerCase()
+  //     .normalize("NFKD")
+  //     .replace(/[\u0300-\u036f]/g, "")
+  //     .replace(/[^a-z0-9-]+/g, "-")
+  //     .replace(/--+/g, "-")
+  //     .replace(/^-+|-+$/g, "");
+  // };
+
+
+
+
   const slugify = (text) => {
-    if (!text) return "";
-    return String(text)
-      .toLowerCase()
-      .normalize("NFKD")
-      .replace(/[\u0300-\u036f]/g, "")
-      .replace(/[^a-z0-9-]+/g, "-")
-      .replace(/--+/g, "-")
-      .replace(/^-+|-+$/g, "");
-  };
+  if (!text) return "";
+  return String(text)
+    .toLowerCase()
+    .normalize("NFKD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .replace(/[\/\\]+/g, "-")   // <-- burada / işarəsini - ilə əvəz edirik
+    .replace(/[^a-z0-9-]+/g, "-")
+    .replace(/--+/g, "-")
+    .replace(/^-+|-+$/g, "");
+};
+
+
+
+
+
 
   const handleCopy = () => {
     if (!currentUrl) return;
@@ -507,9 +527,10 @@ const ProductsPageDetailPage = ({
               {similarProducts.map((prod) => (
                 <div key={prod.id} className="xl-3 lg-3 md-6 sm-6">
                   <Link
-                    href={`/products/${prod?.title
-                      ?.toLowerCase()
-                      .replace(/\s+/g, "-")}-${prod.id}`}
+                  href={`/products/${slugify(`${prod.title}-${prod.id}`)}`}
+                    // href={`/products/${prod?.title
+                    //   ?.toLowerCase()
+                    //   .replace(/\s+/g, "-")}-${prod.id}`}
                     className="block"
                   >
                     <div className="detailPageBottomSimilar">
@@ -567,9 +588,13 @@ const ProductsPageDetailPage = ({
               {lastViewed.map((prod) => (
                 <div key={prod.id} className="xl-3 lg-3 md-6 sm-6">
                   <Link
-                    href={`/products/${prod?.title
-                      ?.toLowerCase()
-                      .replace(/\s+/g, "-")}-${prod.id}`}
+                    // href={`/products/${prod?.title
+                    //   ?.toLowerCase()
+                    //   .replace(/\s+/g, "-")}-${prod.id}`}
+
+
+                  href={`/products/${slugify(`${prod.title}-${prod.id}`)}`}
+
                     className="block"
                   >
                     <div className="detailPageBottomSimilar">
