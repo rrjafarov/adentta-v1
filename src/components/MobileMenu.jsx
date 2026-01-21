@@ -184,7 +184,7 @@ const getCategorySlug = (cat) =>
 // YALNIZ SLUG (ID YOX)
 const buildCategoryHref = (cat) => {
   const slug = getCategorySlug(cat) || slugify(String(cat?.title ?? ""));
-  return `/product?category=${encodeURIComponent(slug)}`;
+  return `/products?category=${encodeURIComponent(slug)}`;
 };
 
 const MobileMenu = ({ t, isOpen, setIsOpen, categoryData = [] }) => {

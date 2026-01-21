@@ -2614,10 +2614,15 @@ ul {
       padding: 2.87rem 0rem 0rem 1.5rem;
       display: flex;
       justify-content: space-between;
-
+      .productsPageSliderItemLink {
+        width: 100%;
+      }
       .productsPageSliderItem {
+        // width: 100%;
+
         .productsPageSliderInner {
-          width: 20.4rem;
+          // width: 20.4rem;
+          width: 100%;
           max-height: 22.2941rem;
           flex-shrink: 0;
           border-radius: 1.9336rem;
@@ -2626,7 +2631,8 @@ ul {
           cursor: pointer;
 
           .productsPageSliderItemImage {
-            width: 18.7308rem;
+            // width: 18.7308rem;
+            width: 92%;
             height: 20.4619rem;
             flex-shrink: 0;
             border-radius: 1.3336rem;
@@ -12125,23 +12131,12 @@ ul {
   }
 }
 
-
-
-
-
-
-
-
-
-
-
-
 .newSpinner {
   width: 98rem !important;
   margin-top: 2rem !important;
 }
 
-.loading-spinner{
+.loading-spinner {
   margin-top: 12rem !important;
 }
 

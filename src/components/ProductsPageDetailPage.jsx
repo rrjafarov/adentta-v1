@@ -222,6 +222,7 @@ const ProductsPageDetailPage = ({
                     </div>
                   )}
                 </div>
+                
                 <div className="brandAndCountry">
                   {productData?.brands?.[0]?.logo && (
                     <div className="detailBrand">
@@ -252,8 +253,7 @@ const ProductsPageDetailPage = ({
                         {t?.productsPageCountryName || "Country Name"}:
                       </span>
                       <div className="detailCountryInner">
-                        <span>{productData.brands?.[0]?.country?.[0]?.title}</span>
-                        
+                        <span>{productData.brands?.[0]?.country?.[0]?.title}</span>                        
                       </div>
                     </div>
                   )} */}
@@ -364,7 +364,7 @@ const ProductsPageDetailPage = ({
                         </div>
                       )}
 
-                      {productData.parametrs?.[0]?.title && (
+                      {/* {productData.parametrs?.[0]?.title && (
                         <div className="xl-4 lg-6 md-6 sm-12">
                           <span className="paramTitle">
                             {t?.productsPageDetailsParameters || "parametrs"}
@@ -375,7 +375,7 @@ const ProductsPageDetailPage = ({
                             </div>
                           </div>
                         </div>
-                      )}
+                      )} */}
 
                       {productData.sizes?.[0]?.title && (
                         <div className="xl-4 lg-6 md-6 sm-12">
@@ -579,6 +579,8 @@ const ProductsPageDetailPage = ({
           </div>
         </section>
       )}
+
+      
       {/* Last Viewed */}
       {lastViewed.length > 0 && (
         <section id="detailPagesSimilarsBottom">

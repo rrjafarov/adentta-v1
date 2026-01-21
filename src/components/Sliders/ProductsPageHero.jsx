@@ -133,7 +133,6 @@
 
 
 "use client";
-
 import React from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
@@ -176,13 +175,14 @@ const normalizeParentIds = (parentRaw) => {
 
 const buildCategoryHref = (cat) => {
   const slug = getCategorySlug(cat) || slugify(String(cat?.title ?? ""));
-  return `/product?category=${encodeURIComponent(slug)}`;
+  return `/products?category=${encodeURIComponent(slug)}`;
 };
 
 const ProductsPageHero = ({
   t,
   productData,
   categoryData, // yeni prop
+  
 }) => {
   const searchParams = useSearchParams();
 
@@ -241,7 +241,7 @@ const ProductsPageHero = ({
         <div className="productsPageSlider">
           <Swiper
             slidesPerView={6}
-            spaceBetween={10}
+            spaceBetween={15}
             speed={1000}
             loop={true}
             modules={[Navigation]}
@@ -261,7 +261,7 @@ const ProductsPageHero = ({
           >
             {subcategories.map((item) => (
               <SwiperSlide key={item.id}>
-                <Link href={buildCategoryHref(item)}>
+                <Link className="productsPageSliderItemLink" href={buildCategoryHref(item)}>
                   <div className="productsPageSliderItem">
                     <div className="productsPageSliderInner">
                       <div className="productsPageSliderItemImage">
