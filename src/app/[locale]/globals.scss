@@ -5691,6 +5691,7 @@ ul {
         display: flex;
         justify-content: center;
         align-items: center;
+        height: 45rem;
 
         .teamsPageCardImg {
           // width: 40.8rem;
@@ -5754,6 +5755,10 @@ ul {
 @media screen and (max-width: 768px) {
   .teamsPageCards {
     padding-bottom: 2rem !important;
+  }
+
+  .teamsPageCard {
+    height: 70rem !important;
   }
 
   .teamsPage {
