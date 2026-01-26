@@ -15,11 +15,14 @@
     "@splidejs/splide": "^4.1.4",
     "@svgr/webpack": "^8.1.0",
     "axios": "^1.7.9",
+    "clsx": "^2.1.1",
+    "cobe": "^0.6.5",
     "fix-react2shell-next": "^1.0.18",
     "framer-motion": "^12.1.0",
     "html-react-parser": "^5.2.5",
     "i18next": "^25.0.1",
     "js-cookie": "^3.0.5",
+    "motion": "^12.29.2",
     "next": "^15.1.9",
     "next-intl": "^4.0.2",
     "nprogress": "^0.2.0",
@@ -40,6 +43,7 @@
     "sass": "^1.85.1",
     "slick-carousel": "^1.8.1",
     "swiper": "^11.2.1",
+    "tailwind-merge": "^3.4.0",
     "uuid": "^11.1.0"
   },
   "devDependencies": {

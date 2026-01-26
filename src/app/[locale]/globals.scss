@@ -2019,19 +2019,66 @@ ul {
   }
 }
 
+
+
+// .globeBanner {
+//   width: 100vw;
+//   height: 36.4rem;
+//   flex-shrink: 0;
+
+//   img {
+//     width: 100%;
+//     // opacity: 0.3;
+//     width: 100vw;
+//     height: 36.4rem;
+//     object-fit: cover;
+//   }
+// }
+
+
+// .globeBanner {
+//   position: relative;
+//   width: 100vw;
+//   height: 36.4rem;
+//   overflow: hidden; /* ƏSAS NÖQTƏ */
+// }
+
+// .globeCanvas {
+//   position: absolute;
+//   left: 50%;
+//   bottom: -85%; /* yarısı gizlənsin deyə */
+//   transform: translateX(-50%);
+// }
+
+
+
 .globeBanner {
+  position: relative;
   width: 100vw;
   height: 36.4rem;
-  flex-shrink: 0;
-
-  img {
-    width: 100%;
-    // opacity: 0.3;
-    width: 100vw;
-    height: 36.4rem;
-    object-fit: cover;
-  }
+  overflow: hidden;
 }
+
+.globeCanvas {
+  position: absolute;
+  left: 50%;
+  bottom: -35%;       /* 👈 30–35% üçün ideal */
+  // transform: translateX(-50%);
+  transform: translateX(-80%); /* 👈 OPTİK DÜZƏLİŞ */
+}
+@media (max-width: 768px) {
+  .globeCanvas {
+  position: absolute;
+  left: 50%;
+  bottom: -35%;       /* 👈 30–35% üçün ideal */
+  // transform: translateX(-50%);
+  transform: translateX(-50%) !important; 
+}
+}
+
+
+
+
 
 @media (max-width: 768px) {
   .globalExcellence {

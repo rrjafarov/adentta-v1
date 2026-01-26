@@ -8,6 +8,7 @@ import { Pagination, Autoplay } from "swiper/modules";
 import Link from "next/link";
 import SeeMore from "../SeeMore";
 import Image from "next/image";
+import { Globe } from "../Footer/Globe";
 
 const GlobalExcellence = ({ brandsData, t }) => {
   return (
@@ -81,12 +82,14 @@ const GlobalExcellence = ({ brandsData, t }) => {
       </div>
 
       <div className="globeBanner">
-        <Image
+        {/* <Image
           src="/images/globeGIF.png"
           alt="globe"
           width={1000}
           height={500}
-        />
+        /> */}
+        <Globe className="globeCanvas" />
+        
       </div>
     </section>
   );
