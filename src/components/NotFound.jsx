@@ -14,7 +14,7 @@ const NotFound = ({t}) => {
 
   // Span için style
   const spanStyle = {
-    fontSize: "12rem",
+    fontSize: "16rem",
     color: "#293881",
     fontWeight: "600",
     fontFamily: '"Nunito", sans-serif' ,

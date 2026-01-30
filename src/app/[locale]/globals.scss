@@ -2019,8 +2019,6 @@ ul {
   }
 }
 
-
-
 // .globeBanner {
 //   width: 100vw;
 //   height: 36.4rem;
@@ -2034,7 +2032,6 @@ ul {
 //     object-fit: cover;
 //   }
 // }
-
 
 // .globeBanner {
 //   position: relative;
@@ -2050,35 +2047,29 @@ ul {
 //   transform: translateX(-50%);
 // }
 
-
-
 .globeBanner {
   position: relative;
   width: 100vw;
-  height: 36.4rem;
+  height: 40.4rem;
   overflow: hidden;
 }
 
 .globeCanvas {
   position: absolute;
   left: 50%;
-  bottom: -35%;       /* 👈 30–35% üçün ideal */
+  bottom: -25%; /* 👈 30–35% üçün ideal */
   // transform: translateX(-50%);
-  transform: translateX(-80%); /* 👈 OPTİK DÜZƏLİŞ */
+  transform: translateX(-50%); /* 👈 OPTİK DÜZƏLİŞ */
 }
 @media (max-width: 768px) {
   .globeCanvas {
-  position: absolute;
-  left: 50%;
-  bottom: -35%;       /* 👈 30–35% üçün ideal */
-  // transform: translateX(-50%);
-  transform: translateX(-50%) !important; 
+    position: absolute;
+    left: 50%;
+    bottom: -35%; /* 👈 30–35% üçün ideal */
+    // transform: translateX(-50%);
+    transform: translateX(-50%) !important;
+  }
 }
-}
-
-
-
-
 
 @media (max-width: 768px) {
   .globalExcellence {
@@ -6942,6 +6933,10 @@ ul {
 }
 
 // pagination
+
+
+
+
 // calendar
 .datePickerWrapper {
   position: relative;
@@ -6992,6 +6987,16 @@ ul {
   opacity: 0;
   cursor: pointer;
 }
+
+
+
+
+
+
+
+
+
+
 
 .selectStatus {
   // width: 16.0668rem;
@@ -12196,5 +12201,260 @@ ul {
   .newSpinner {
     width: 58rem !important;
     margin-top: 7rem !important;
+  }
+}
+
+
+
+.newSpinners{
+    margin: 11rem 0 !important;
+}
+.notFoundSmooth {
+  opacity: 0;
+  transform: scale(0.96);
+  animation: notFoundFade 0.45s ease-out forwards;
+}
+
+@keyframes notFoundFade {
+  from {
+    opacity: 0;
+    transform: scale(0.96);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+
+
+
+
+// !products page paginate
+
+// .custom-pagination button {
+//   padding: 6px 10px;
+//   border-radius: 6px;
+//   border: 1px solid #ddd;
+//   background: white;
+//   cursor: pointer;
+//   border-radius: 4rem;
+// border: 1px solid #D7E0ED;
+// background: #FFF;
+// }
+// .custom-pagination button[disabled] {
+//   opacity: 0.5;
+//   cursor: not-allowed;
+// }
+// .custom-pagination span {
+//   display: inline-block;
+//   // padding: 0 6px;
+// }
+
+
+
+
+
+
+/* pagination-adapted.css
+   1rem = 10px
+   Uyğunlaşdırılmış: .custom-pagination və fallback .pagination
+*/
+
+/* Container */
+.custom-paginationProducts,
+.pagination {
+  // min-width: 37.1643rem; /* əsas genişlik */
+  width: auto;
+  overflow: hidden;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  list-style: none;
+  border-radius: 4rem;
+  border: 0.1rem solid #d7e0ed;
+  background: #fff;
+  padding: 0.5rem; 
+  box-sizing: border-box;
+}
+
+/* Ümumi page item (sayı düymələri və s.) */
+.custom-paginationProducts .page-item,
+.pagination .page-item {
+  padding: 0.1rem 0;
+  cursor: pointer;
+}
+
+/* Previous (sol pill) - seçmək üçün aria-label istifadə et */
+.custom-paginationProducts button[aria-label="prev"],
+.pagination .page-item-pervious,
+.pagination .page-item-previous {
+  margin: 0rem;
+  width: 8.4496rem;
+  
+  height: 3.3809rem;
+  flex-shrink: 0;
+  border-radius: 4rem;
+  border: 0.1rem solid #d7e0ed;
+  background: #fff;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  box-shadow: 0.15rem 0.2rem 0.51rem rgba(41, 56, 129, 0.13);
+  /* görsel iç mətn üçün */
+  padding: 0;
+  color: #293881;
+font-size: 1.4rem;
+font-style: normal;
+font-weight: 500;
+line-height: 122%; /* 1.952rem */
+padding: 0 0.5rem;
+
+}
+
+/* Previous - içdəki link/mətn */
+.custom-paginationProducts button[aria-label="prev"] > .page-link-pervious,
+.pagination .page-link-pervious {
+  padding: 0.5rem;
+  color: #293881 !important;
+  background: transparent;
+  border: none;
+  display: inline-flex;
+  align-items: center;
+font-size: 1.6rem !important;
+font-style: normal;
+font-weight: 500;
+line-height: 122%; /* 1.952rem */
+}
+
+/* Next (sağ pill) */
+.custom-paginationProducts button[aria-label="next"],
+.pagination .page-item-next {
+  margin: 0rem;
+  width: auto;
+  height: 3.3809rem;
+  flex-shrink: 0;
+  color: #fff;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 4rem;
+  background: #293880;
+  box-shadow: 0.15rem 0.2rem 0.51rem rgba(41, 56, 129, 0.13);
+  padding: 0;
+  border: none;
+  color: #fff;
+font-size: 1.4rem;
+padding: 0 0.5rem;
+font-style: normal;
+font-weight: 500;
+line-height: 122%; /* 1.952rem */
+}
+
+/* Next - içdəki link/mətn */
+.custom-paginationProducts button[aria-label="next"] > .page-link-next,
+.pagination .page-link-next {
+  padding: 0.5rem 1rem;
+  font-size: 1.25rem;
+  font-weight: 500;
+  line-height: 1.22;
+  color: inherit;
+  background: transparent;
+  border: none;
+}
+
+/* Səhifə nömrəsi düyməsi (dairəvi) */
+/* Tövsiyə: renderPagination içindəki sayı düymələrinə `className="page-number"` ver */
+.custom-paginationProducts .page-number,
+.pagination .page-link,
+.custom-paginationProducts button.pageNumber,
+.pagination button.pageNumber {
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 3.7263rem;
+  height: 3.7263rem;
+  min-width: 3.7263rem;
+  flex-shrink: 0;
+  color: #293881;
+  font-size: 1.6rem;
+  font-weight: 500;
+  line-height: 1.22;
+  background: transparent;
+  border-radius: 50%;
+  border: 0.1rem solid transparent;
+  transition: transform 120ms ease, box-shadow 120ms ease, background-color 120ms ease;
+}
+
+/* Aktiv səhifə stil - şəkildəki kimi dairəvi ağ fon / hafif border */
+.custom-paginationProducts .page-number.active,
+.pagination .active .page-link,
+.custom-paginationProducts button[aria-current="page"],
+.pagination button[aria-current="page"] {
+  color: #293881;
+  border-radius: 50%;
+  border: 0.1rem solid #d7e0ed;
+  background: #fff;
+  box-shadow: 0 0.6rem 1.8rem rgba(41,56,129,0.06);
+  transform: translateY(-0.1rem);
+}
+
+/* Hover effekti (aktiv olmayanlara) */
+.custom-paginationProducts button:hover:not([disabled]):not([aria-current="page"]),
+.pagination button:hover:not([disabled]):not([aria-current="page"]) {
+  transform: translateY(-0.1rem);
+  box-shadow: 0.12rem 0.36rem 1.08rem rgba(41,56,129,0.06);
+}
+
+/* Ellipsis (…): render-da <span className="ellipsis">…</span> istifadə et */
+.custom-paginationProducts .ellipsis,
+.pagination .ellipsis,
+.custom-paginationProducts .dots,
+.pagination .dots {
+  font-size: 1.8rem;
+  color: #9aa3b5;
+  padding: 0 0.6rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Disabled state */
+.custom-paginationProducts button[disabled],
+.pagination button[disabled] {
+  opacity: 0.4;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
+/* Kiçik responsive düzəliş */
+@media (max-width: 520px) { /* 520px */
+  .custom-paginationProducts,
+  .pagination {
+    min-width: auto;
+    gap: 0.8rem;
+    padding: 0.6rem 1rem;
+    border-radius: 3.2rem;
+  }
+
+  .custom-paginationProducts .page-number,
+  .pagination .page-link {
+    width: 3.6rem;
+    height: 3.6rem;
+    min-width: 3.6rem;
+    font-size: 1.4rem;
+  }
+
+  .custom-paginationProducts button[aria-label="prev"],
+  .custom-paginationProducts button[aria-label="next"],
+  .pagination .page-item-pervious,
+  .pagination .page-item-next {
+    margin: 0.6rem;
+    width: auto;
+    padding: 0.8rem 1.2rem;
+    height: 3.6rem;
   }
 }

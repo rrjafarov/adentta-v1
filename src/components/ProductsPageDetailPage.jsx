@@ -170,12 +170,12 @@ const ProductsPageDetailPage = ({
               <strong>Adentta</strong>
             </Link>
             <img src="/icons/rightDown.svg" alt="Adentta" />
-            <Link href="/product">
+            <Link href="/products">
               <span>{t?.products || "Products"}</span>
             </Link>
             <img src="/icons/rightDown.svg" alt="Adentta" />
             <Link
-              href={`/product?category=${encodeURIComponent(
+              href={`/products?category=${encodeURIComponent(
                 productData.categories?.[0]?.url_slug || ""
               )}`}
             >
