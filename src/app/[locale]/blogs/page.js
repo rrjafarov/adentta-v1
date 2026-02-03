@@ -1,3 +1,267 @@
+// import BlogPages from "@/components/BlogPages";
+// import BlogsDetailPage from "@/components/BlogsDetailPage";
+// import Footer from "@/components/Footer/Footer";
+// import Header from "@/components/Header/Header";
+// import React from "react";
+// import { cookies } from "next/headers";
+// import axiosInstance from "@/lib/axios";
+
+// async function fetchBlogsPageData() {
+//   const cookieStore = await cookies();
+//   const lang = cookieStore.get("NEXT_LOCALE");
+
+//   try {
+//     const { data: blogs } = await axiosInstance.get(
+//       `/page-data/blog?per_page=999`,
+//       {
+//         // headers: { Lang: lang.value },
+//         cache: "no-store",
+//       }
+//     );
+//     return blogs;
+//   } catch (error) {
+//     throw error;
+//   }
+// }
+// // *categories
+// async function fetchCategoryPageData() {
+//   const cookieStore = await cookies();
+//   const lang = cookieStore.get("NEXT_LOCALE");
+
+//   try {
+//     const { data: category } = await axiosInstance.get(
+//       `/page-data/categories?per_page=999`,
+//       {
+//         // headers: { Lang: lang.value },
+//         cache: "no-store",
+//       }
+//     );
+//     return category;
+//   } catch (error) {
+//     throw error;
+//   }
+// }
+// // *categories
+// async function fetchBlogCategoryPageData() {
+//   const cookieStore = await cookies();
+//   const lang = cookieStore.get("NEXT_LOCALE");
+
+//   try {
+//     const { data: blogsCategory } = await axiosInstance.get(
+//       `/page-data/blog-categories`,
+//       {
+//         // headers: { Lang: lang.value },
+//         cache: "no-store",
+//       }
+//     );
+//     return blogsCategory;
+//   } catch (error) {
+//     throw error;
+//   }
+// }
+
+// async function getTranslations() {
+//   try {
+//     const data = axiosInstance.get("/translation-list");
+//     return data;
+//   } catch (err) {
+//     console.log(err);
+//   }
+// }
+// //! brandsApi
+// async function fetchBrandsPageData() {
+//   const cookieStore = await cookies();
+//   const lang = cookieStore.get("NEXT_LOCALE");
+
+//   try {
+//     const { data: brands } = await axiosInstance.get(
+//       // `/page-data/brands?per_page=999`,
+//       `/page-data/brands`,
+//       {
+//         // headers: { Lang: lang.value },
+//         cache: "no-store",
+//       }
+//     );
+//     return brands;
+//   } catch (error) {
+//     throw error;
+//   }
+// }
+// //! brandsApi
+
+// //! eventsApi
+// async function fetchEventsPageData() {
+//   const cookieStore = await cookies();
+//   const lang = cookieStore.get("NEXT_LOCALE");
+
+//   try {
+//     const { data: events } = await axiosInstance.get(
+//       // `/page-data/event?per_page=999`,
+//       `/page-data/event`,
+
+//       {
+//         // headers: { Lang: lang.value },
+//         cache: "no-store",
+//       }
+//     );
+//     return events;
+//   } catch (error) {
+//     throw error;
+//   }
+// }
+// //! eventsApi
+
+// async function fetchEventSeoData() {
+//   const cookieStore = await cookies();
+//   const lang = cookieStore.get("NEXT_LOCALE");
+
+//   try {
+//     const { data: aboutSeo } = await axiosInstance.get(
+//       `/page-data/blog-page-info`,
+//       {
+//         // headers: { Lang: lang.value },
+//         cache: "no-store",
+//       }
+//     );
+//     return aboutSeo;
+//   } catch (error) {
+//     throw error;
+//   }
+// }
+
+// // !generateMetaData
+// export async function generateMetadata() {
+//   const seo = await fetchEventSeoData();
+//   const imageUrl = seo?.data.og_image;
+//   const imageAlt = seo?.data.meta_title || "Adentta";
+//   const canonicalUrl = "https://adentta.az";
+//   const cookieStore = await cookies();
+//   const lang = cookieStore.get("NEXT_LOCALE");
+//   return {
+//     title: seo?.data.meta_title,
+//     description: seo?.data.meta_description,
+//     // icons: {
+//     //   icon: "https://adentta.az/favicon.ico.svg",
+//     // },
+//     openGraph: {
+//       title: seo?.data.meta_title || "Adentta",
+//       description: seo?.data.meta_description,
+//       url: canonicalUrl,
+//       images: [
+//         {
+//           url: `https://admin.adentta.az/storage${imageUrl}`,
+//           alt: imageAlt,
+//           width: 1200,
+//           height: 630,
+//         },
+//       ],
+//       site_name: "adentta.az",
+//       type: "website",
+//       locale: lang?.value,
+//     },
+//     twitter: {
+//       card: "summary_large_image",
+//       title: seo?.data.meta_title || "Adentta",
+//       description: seo?.data.meta_description || "Adentta",
+//       creator: "@adentta",
+//       site: "@adentta",
+//       images: [imageUrl],
+//     },
+//     alternates: {
+//       canonical: canonicalUrl,
+//     },
+//   };
+// }
+// // !generateMetaData
+
+// async function fetchSettingsPageData() {
+//   const cookieStore = await cookies();
+//   const lang = cookieStore.get("NEXT_LOCALE");
+
+//   try {
+//     const { data: setting } = await axiosInstance.get(`/page-data/setting`, {
+//       // headers: { Lang: lang.value },
+//       cache: "no-store",
+//     });
+//     return setting;
+//   } catch (error) {
+//     throw error;
+//   }
+// }
+// async function fetchContactPageData() {
+//   const cookieStore = await cookies();
+//   const lang = cookieStore.get("NEXT_LOCALE");
+//   try {
+//     const { data: contact } = await axiosInstance.get(`/page-data/contact`, {
+//       // headers: { Lang: lang.value },
+//       cache: "no-store",
+//     });
+//     return contact;
+//   } catch (error) {
+//     throw error;
+//   }
+// }
+// const page = async () => {
+//   const setting = await fetchSettingsPageData();
+//   const settingData = setting?.data || [];
+//   const brandsResponse = await fetchBrandsPageData();
+//   const brandsData = brandsResponse?.data?.data || [];
+
+//   const eventsResponse = await fetchEventsPageData();
+//   const eventsData = eventsResponse?.data?.data || [];
+
+//   const contact = await fetchContactPageData();
+
+//   const translations = await getTranslations();
+//   const t = translations?.data;
+//   const categoryResponse = await fetchCategoryPageData();
+//   const categoryData = categoryResponse?.data?.data || [];
+//   const blogsResponse = await fetchBlogsPageData();
+//   const blogData = blogsResponse?.data?.data || [];
+//   const blogsCategoryResponse = await fetchBlogCategoryPageData();
+//   const blogsCategoryData = blogsCategoryResponse?.data?.data || [];
+//   return (
+//     <div>
+//       <Header settingData={settingData} categoryData={categoryData} />
+//       <BlogPages
+//         t={t}
+//         blogsCategoryData={blogsCategoryData}
+//         blogData={blogData}
+//       />
+//       <Footer
+//         contact={contact}
+//         categoryData={categoryData}
+//         eventsData={eventsData}
+//         brandsData={brandsData}
+//       />
+//     </div>
+//   );
+// };
+
+// export default page;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// !.!
+
+
+
+
 import BlogPages from "@/components/BlogPages";
 import BlogsDetailPage from "@/components/BlogsDetailPage";
 import Footer from "@/components/Footer/Footer";
@@ -6,15 +270,14 @@ import React from "react";
 import { cookies } from "next/headers";
 import axiosInstance from "@/lib/axios";
 
-async function fetchBlogsPageData() {
+async function fetchBlogsPageData(page = 1) {
   const cookieStore = await cookies();
   const lang = cookieStore.get("NEXT_LOCALE");
 
   try {
     const { data: blogs } = await axiosInstance.get(
-      `/page-data/blog?per_page=999`,
+      `/page-data/blog?page=${page}`,
       {
-        // headers: { Lang: lang.value },
         cache: "no-store",
       }
     );
@@ -23,7 +286,7 @@ async function fetchBlogsPageData() {
     throw error;
   }
 }
-// *categories
+
 async function fetchCategoryPageData() {
   const cookieStore = await cookies();
   const lang = cookieStore.get("NEXT_LOCALE");
@@ -32,7 +295,6 @@ async function fetchCategoryPageData() {
     const { data: category } = await axiosInstance.get(
       `/page-data/categories?per_page=999`,
       {
-        // headers: { Lang: lang.value },
         cache: "no-store",
       }
     );
@@ -41,7 +303,7 @@ async function fetchCategoryPageData() {
     throw error;
   }
 }
-// *categories
+
 async function fetchBlogCategoryPageData() {
   const cookieStore = await cookies();
   const lang = cookieStore.get("NEXT_LOCALE");
@@ -50,7 +312,6 @@ async function fetchBlogCategoryPageData() {
     const { data: blogsCategory } = await axiosInstance.get(
       `/page-data/blog-categories`,
       {
-        // headers: { Lang: lang.value },
         cache: "no-store",
       }
     );
@@ -68,17 +329,15 @@ async function getTranslations() {
     console.log(err);
   }
 }
-//! brandsApi
+
 async function fetchBrandsPageData() {
   const cookieStore = await cookies();
   const lang = cookieStore.get("NEXT_LOCALE");
 
   try {
     const { data: brands } = await axiosInstance.get(
-      // `/page-data/brands?per_page=999`,
       `/page-data/brands`,
       {
-        // headers: { Lang: lang.value },
         cache: "no-store",
       }
     );
@@ -87,20 +346,15 @@ async function fetchBrandsPageData() {
     throw error;
   }
 }
-//! brandsApi
 
-//! eventsApi
 async function fetchEventsPageData() {
   const cookieStore = await cookies();
   const lang = cookieStore.get("NEXT_LOCALE");
 
   try {
     const { data: events } = await axiosInstance.get(
-      // `/page-data/event?per_page=999`,
       `/page-data/event`,
-
       {
-        // headers: { Lang: lang.value },
         cache: "no-store",
       }
     );
@@ -109,7 +363,6 @@ async function fetchEventsPageData() {
     throw error;
   }
 }
-//! eventsApi
 
 async function fetchEventSeoData() {
   const cookieStore = await cookies();
@@ -119,7 +372,6 @@ async function fetchEventSeoData() {
     const { data: aboutSeo } = await axiosInstance.get(
       `/page-data/blog-page-info`,
       {
-        // headers: { Lang: lang.value },
         cache: "no-store",
       }
     );
@@ -129,7 +381,6 @@ async function fetchEventSeoData() {
   }
 }
 
-// !generateMetaData
 export async function generateMetadata() {
   const seo = await fetchEventSeoData();
   const imageUrl = seo?.data.og_image;
@@ -140,9 +391,6 @@ export async function generateMetadata() {
   return {
     title: seo?.data.meta_title,
     description: seo?.data.meta_description,
-    // icons: {
-    //   icon: "https://adentta.az/favicon.ico.svg",
-    // },
     openGraph: {
       title: seo?.data.meta_title || "Adentta",
       description: seo?.data.meta_description,
@@ -172,7 +420,6 @@ export async function generateMetadata() {
     },
   };
 }
-// !generateMetaData
 
 async function fetchSettingsPageData() {
   const cookieStore = await cookies();
@@ -180,7 +427,6 @@ async function fetchSettingsPageData() {
 
   try {
     const { data: setting } = await axiosInstance.get(`/page-data/setting`, {
-      // headers: { Lang: lang.value },
       cache: "no-store",
     });
     return setting;
@@ -188,12 +434,12 @@ async function fetchSettingsPageData() {
     throw error;
   }
 }
+
 async function fetchContactPageData() {
   const cookieStore = await cookies();
   const lang = cookieStore.get("NEXT_LOCALE");
   try {
     const { data: contact } = await axiosInstance.get(`/page-data/contact`, {
-      // headers: { Lang: lang.value },
       cache: "no-store",
     });
     return contact;
@@ -201,6 +447,7 @@ async function fetchContactPageData() {
     throw error;
   }
 }
+
 const page = async () => {
   const setting = await fetchSettingsPageData();
   const settingData = setting?.data || [];
@@ -216,17 +463,20 @@ const page = async () => {
   const t = translations?.data;
   const categoryResponse = await fetchCategoryPageData();
   const categoryData = categoryResponse?.data?.data || [];
-  const blogsResponse = await fetchBlogsPageData();
-  const blogData = blogsResponse?.data?.data || [];
+  
+  const blogsResponse = await fetchBlogsPageData(1);
+  const initialBlogData = blogsResponse?.data?.data || [];
+  
   const blogsCategoryResponse = await fetchBlogCategoryPageData();
   const blogsCategoryData = blogsCategoryResponse?.data?.data || [];
+  
   return (
     <div>
       <Header settingData={settingData} categoryData={categoryData} />
       <BlogPages
         t={t}
         blogsCategoryData={blogsCategoryData}
-        blogData={blogData}
+        initialBlogData={initialBlogData}
       />
       <Footer
         contact={contact}

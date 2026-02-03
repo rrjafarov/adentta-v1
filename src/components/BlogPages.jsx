@@ -1,4 +1,3 @@
-
 // "use client";
 // import Image from "next/image";
 // import Link from "next/link";
@@ -53,7 +52,7 @@
 // const BlogPages = ({ t, blogData = [], blogsCategoryData = [] }) => {
 //   const pathname = usePathname() || "";
 //   const detected = pathname.split("/")[1];
-//   const locale = ["az","en","ru"].includes(detected) ? detected : "az";
+//   const locale = ["az", "en", "ru"].includes(detected) ? detected : "az";
 
 //   const allLabel = t?.allSelect || "All";
 //   const [selectedCategory, setSelectedCategory] = useState(allLabel);
@@ -106,28 +105,37 @@
 //       <div className="container">
 //         <div className="blogTop topper">
 //           <Link href="/">
-//             <h1 className="topper">Adentta</h1>
+//             <strong className="topper">Adentta</strong>
 //           </Link>
 //           <img className="topper" src="/icons/rightDown.svg" alt="Adentta" />
-//           <h4 className="topper">{t?.blogs || "Blogs"}</h4>
+//           <span className="topper">{t?.blogs || "Blogs"}</span>
 //         </div>
 
 //         <div className="blogPageHeaderText">
-//           <h2>{t?.blogsPageNews || "Blog news"}</h2>
-//           <span>{t?.blogsPageExploreOurBlogs || "Explore Our Blogs"}</span>
+//           <span>{t?.blogsPageNews || "Blog news"}</span>
+//           <h1>{t?.blogsPageExploreOurBlogs || "Explore Our Blogs"}</h1>
 //           <div className="blogFilter">
-//             {categoryList.map((title) => (
-//               <button
-//                 key={title}
-//                 className={`blgBtn ${
-//                   selectedCategory === title ? "active" : ""
-//                 }`}
-//                 onClick={() => setSelectedCategory(title)}
-//                 style={{ background: "transparent" }}
-//               >
-//                 {title}
-//               </button>
-//             ))}
+//             {categoryList.map((title) => {
+//               const isActive = selectedCategory === title;
+//               const isAll = title === allLabel;
+
+//               // Normal: 1px border, Active: 3px border (both #D7E0ED), "All" button background #D7E0ED
+//               const btnStyle = {
+//                 background: isAll ? "#D7E0ED" : "transparent",
+//                 border: isActive ? "3px solid #D7E0ED" : "1px solid #D7E0ED",
+//               };
+
+//               return (
+//                 <button
+//                   key={title}
+//                   className={`blgBtn ${isActive ? "active" : ""}`}
+//                   onClick={() => setSelectedCategory(title)}
+//                   style={btnStyle}
+//                 >
+//                   {title}
+//                 </button>
+//               );
+//             })}
 //           </div>
 //         </div>
 
@@ -164,7 +172,7 @@
 //                       <div className="blogCardContent">
 //                         <span>{blog.title}</span>
 //                         <div
-//                           dangerouslySetInnerHTML={{ __html: blog.content }}    
+//                           dangerouslySetInnerHTML={{ __html: blog.content }}
 //                         />
 //                       </div>
 
@@ -191,7 +199,7 @@
 
 
 
-
+// !.!
 
 
 
@@ -206,10 +214,12 @@
 
 
 "use client";
+
+import React, { useEffect, useRef, useState, useCallback, useMemo } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import React, { useState, useMemo } from "react";
 import { usePathname } from "next/navigation";
+import axiosInstance from "@/lib/axios";
 
 const monthNamesMap = {
   az: {
@@ -256,7 +266,7 @@ const monthNamesMap = {
   },
 };
 
-const BlogPages = ({ t, blogData = [], blogsCategoryData = [] }) => {
+const BlogPages = ({ t, initialBlogData = [], blogsCategoryData = [] }) => {
   const pathname = usePathname() || "";
   const detected = pathname.split("/")[1];
   const locale = ["az", "en", "ru"].includes(detected) ? detected : "az";
@@ -264,18 +274,83 @@ const BlogPages = ({ t, blogData = [], blogsCategoryData = [] }) => {
   const allLabel = t?.allSelect || "All";
   const [selectedCategory, setSelectedCategory] = useState(allLabel);
 
+  const [list, setList] = useState(initialBlogData || []);
+  const [page, setPage] = useState(1);
+  const [loading, setLoading] = useState(false);
+  const [hasMore, setHasMore] = useState(true);
+  const sentinelRef = useRef(null);
+  const fetchingRef = useRef(false);
+
   const categoryList = useMemo(
     () => [allLabel, ...blogsCategoryData.map((cat) => cat.title)],
     [blogsCategoryData, allLabel]
   );
 
+  const loadMore = useCallback(async () => {
+    if (loading || !hasMore || fetchingRef.current) return;
+    setLoading(true);
+    fetchingRef.current = true;
+
+    try {
+      // 1 saniyə delay
+      await new Promise((resolve) => setTimeout(resolve, 1000));
+
+      const nextPage = page + 1;
+      const res = await axiosInstance.get(`/page-data/blog?page=${nextPage}`);
+      const newData = res?.data?.data?.data || res?.data?.data || [];
+
+      if (!newData || newData.length === 0) {
+        setHasMore(false);
+      } else {
+        setList((prev) => [...prev, ...newData]);
+        setPage(nextPage);
+
+        const meta = res?.data?.data?.meta || res?.data?.meta || null;
+        if (meta) {
+          const current = meta.current_page ?? nextPage;
+          const last =
+            meta.last_page ??
+            (meta.total && meta.per_page
+              ? Math.ceil(meta.total / meta.per_page)
+              : null);
+          if (last !== null) setHasMore(current < last);
+        } else {
+          const perPage = res?.data?.data?.meta?.per_page ?? 12;
+          if (newData.length < perPage) setHasMore(false);
+        }
+      }
+    } catch (err) {
+      console.error("loadMore error:", err);
+    } finally {
+      setLoading(false);
+      fetchingRef.current = false;
+    }
+  }, [loading, hasMore, page]);
+
+  useEffect(() => {
+    const sentinel = sentinelRef.current;
+    if (!sentinel) return;
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting && hasMore && !loading) {
+            loadMore();
+          }
+        });
+      },
+      { root: null, rootMargin: "200px", threshold: 0.1 }
+    );
+    observer.observe(sentinel);
+    return () => observer.disconnect();
+  }, [loadMore, hasMore, loading]);
+
   const filteredBlogs = useMemo(() => {
-    const list = Array.isArray(blogData) ? [...blogData] : [];
+    const blogList = Array.isArray(list) ? [...list] : [];
 
     const byCategory =
       selectedCategory === allLabel
-        ? list
-        : list.filter(
+        ? blogList
+        : blogList.filter(
             (blog) =>
               Array.isArray(blog.category) &&
               blog.category.some((c) => c.title === selectedCategory)
@@ -288,7 +363,7 @@ const BlogPages = ({ t, blogData = [], blogsCategoryData = [] }) => {
     });
 
     return byCategory;
-  }, [blogData, selectedCategory, allLabel]);
+  }, [list, selectedCategory, allLabel]);
 
   const formatDate = (dateString) => {
     if (!dateString) return "";
@@ -326,7 +401,6 @@ const BlogPages = ({ t, blogData = [], blogsCategoryData = [] }) => {
               const isActive = selectedCategory === title;
               const isAll = title === allLabel;
 
-              // Normal: 1px border, Active: 3px border (both #D7E0ED), "All" button background #D7E0ED
               const btnStyle = {
                 background: isAll ? "#D7E0ED" : "transparent",
                 border: isActive ? "3px solid #D7E0ED" : "1px solid #D7E0ED",
@@ -393,8 +467,47 @@ const BlogPages = ({ t, blogData = [], blogsCategoryData = [] }) => {
               </div>
             ))}
           </div>
+
+          {/* Loading spinner - kartların altında, tam ortada */}
+          {loading && (
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+                width: "100%",
+                marginTop: "40px",
+                marginBottom: "40px",
+              }}
+            >
+              <div
+                style={{
+                  width: 50,
+                  height: 50,
+                  border: "6px solid #f3f3f3",
+                  borderTop: "6px solid #293881",
+                  borderRadius: "50%",
+                  animation: "spin 1s linear infinite",
+                }}
+              />
+            </div>
+          )}
+
+          {/* sentinel — observer üçün */}
+          <div ref={sentinelRef} style={{ height: 1, width: "100%" }} />
         </div>
       </div>
+
+      <style jsx>{`
+        @keyframes spin {
+          0% {
+            transform: rotate(0deg);
+          }
+          100% {
+            transform: rotate(360deg);
+          }
+        }
+      `}</style>
     </div>
   );
 };
