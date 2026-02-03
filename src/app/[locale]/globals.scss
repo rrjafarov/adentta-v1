@@ -6380,7 +6380,6 @@ ul {
     padding-top: 3.2rem;
     padding-bottom: 4.75rem;
     width: 100%;
-
     .ourBlog {
       display: flex;
       flex-direction: column;
@@ -6934,9 +6933,6 @@ ul {
 
 // pagination
 
-
-
-
 // calendar
 .datePickerWrapper {
   position: relative;
@@ -6988,16 +6984,6 @@ ul {
   cursor: pointer;
 }
 
-
-
-
-
-
-
-
-
-
-
 .selectStatus {
   // width: 16.0668rem;
   // height: 4.25rem;
@@ -7018,7 +7004,11 @@ ul {
   // background: #fff;
 }
 
-// calendar
+.paragraphBlogPrivate{
+  ul,ol{
+    display: none !important;
+  }
+}
 
 // ? EventsDetailPage.jsx
 .eventDPBack {
@@ -7100,60 +7090,11 @@ ul {
         }
         display: flex;
         flex-direction: column;
-
-        // .detailCalendar {
-        //   margin-top: 2.63rem;
-        //   // width: 18.3rem;
-        //   // width: 100%;
-        //   height: 7.4rem;
-        //   flex-shrink: 0;
-        //   border-radius: 1.45rem;
-        //   background: #e1ecfc;
-        //   display: flex;
-        //   align-items: center;
-        //   justify-content: center;
-
-        //   .detailCalendarItem {
-        //     display: flex;
-        //     align-items: center;
-        //     justify-content: center;
-        //     // width: 23.5rem;
-        //     // width: 17.3rem;
-        //     height: 6.6rem;
-        //     flex-shrink: 0;
-        //     border-radius: 1rem;
-        //     border: 1px solid #fff;
-        //     padding: 0.4rem;
-        //     gap: 1.5rem;
-
-        //     .detailCalendarContent {
-        //       span {
-        //         color: #293881;
-        //         font-size: 1.4rem;
-        //         font-style: normal;
-        //         font-weight: 600;
-        //         line-height: normal;
-        //         letter-spacing: -0.014rem;
-        //       }
-
-        //       p {
-        //         color: #293881;
-        //         font-size: 1.2rem;
-        //         font-style: normal;
-        //         font-weight: 500;
-        //         line-height: normal;
-        //         letter-spacing: -0.012rem;
-        //         opacity: 0.7;
-        //       }
-        //     }
-        //   }
-        // }
-
         .detailCalendar {
           margin-top: 2.63rem;
           // width: 18.3rem;
           // width: 100%;
-          height: 7.4rem; // ❗ toxunulmadı
+          height: 7.4rem; 
           flex-shrink: 0;
           border-radius: 1.45rem;
           background: #e1ecfc;
@@ -7548,6 +7489,8 @@ ul {
     }
   }
 }
+
+
 // !tampon bolge
 .paragraphBlog {
   color: #59649b;
@@ -11436,7 +11379,6 @@ ul {
       display: flex;
       justify-content: center;
       align-items: center;
-
       span {
         color: #293881;
         font-size: 4rem;
@@ -11449,7 +11391,15 @@ ul {
     .brandsDPBlogCards {
       padding-bottom: 7.12rem;
       .ourBlog {
+        width: 100%;
+        height: 47.3rem;
+        a {
+          width: 100%;
+          height: 100%;
+        }
         .blogCard {
+          width: 100%;
+          height: 100%;
           padding: 2rem;
           flex-shrink: 0;
           border-radius: 3rem;
@@ -11469,15 +11419,17 @@ ul {
           .blogCardImage {
             cursor: pointer;
             width: fit-content;
-            height: fit-content;
             flex-shrink: 0;
             border-radius: 3rem;
             position: relative;
             overflow: hidden;
-
+            height: 25rem;
             img {
               transition: all 0.4s ease;
-
+              width: 100%;
+              height: 100%;
+              height: 25rem;
+              // object-fit: cover;
               &:hover {
                 transform: scale(1.1);
               }
@@ -11594,7 +11546,6 @@ ul {
       align-items: center;
       padding-top: 7.03rem;
       padding-bottom: 3.05rem;
-
       span {
         color: #f3f7fc;
         font-size: 4rem;
@@ -12189,8 +12140,8 @@ ul {
 }
 
 .newSpinner {
-  width: 98rem !important;
-  margin-top: 2rem !important;
+  width: 97rem !important;
+  margin-top: 11rem !important;
 }
 
 .loading-spinner {
@@ -12204,10 +12155,8 @@ ul {
   }
 }
 
-
-
-.newSpinners{
-    margin: 11rem 0 !important;
+.newSpinners {
+  margin: 11rem 0 !important;
 }
 .notFoundSmooth {
   opacity: 0;
@@ -12225,10 +12174,6 @@ ul {
     transform: scale(1);
   }
 }
-
-
-
-
 
 // !products page paginate
 
@@ -12251,11 +12196,6 @@ ul {
 //   // padding: 0 6px;
 // }
 
-
-
-
-
-
 /* pagination-adapted.css
    1rem = 10px
    Uyğunlaşdırılmış: .custom-pagination və fallback .pagination
@@ -12275,7 +12215,7 @@ ul {
   border-radius: 4rem;
   border: 0.1rem solid #d7e0ed;
   background: #fff;
-  padding: 0.5rem; 
+  padding: 0.5rem;
   box-sizing: border-box;
 }
 
@@ -12292,7 +12232,7 @@ ul {
 .pagination .page-item-previous {
   margin: 0rem;
   width: 8.4496rem;
-  
+
   height: 3.3809rem;
   flex-shrink: 0;
   border-radius: 4rem;
@@ -12305,12 +12245,11 @@ ul {
   /* görsel iç mətn üçün */
   padding: 0;
   color: #293881;
-font-size: 1.4rem;
-font-style: normal;
-font-weight: 500;
-line-height: 122%; /* 1.952rem */
-padding: 0 0.5rem;
-
+  font-size: 1.4rem;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 122%; /* 1.952rem */
+  padding: 0 0.5rem;
 }
 
 /* Previous - içdəki link/mətn */
@@ -12322,10 +12261,10 @@ padding: 0 0.5rem;
   border: none;
   display: inline-flex;
   align-items: center;
-font-size: 1.6rem !important;
-font-style: normal;
-font-weight: 500;
-line-height: 122%; /* 1.952rem */
+  font-size: 1.6rem !important;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 122%; /* 1.952rem */
 }
 
 /* Next (sağ pill) */
@@ -12345,11 +12284,11 @@ line-height: 122%; /* 1.952rem */
   padding: 0;
   border: none;
   color: #fff;
-font-size: 1.4rem;
-padding: 0 0.5rem;
-font-style: normal;
-font-weight: 500;
-line-height: 122%; /* 1.952rem */
+  font-size: 1.4rem;
+  padding: 0 0.5rem;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 122%; /* 1.952rem */
 }
 
 /* Next - içdəki link/mətn */
@@ -12385,7 +12324,10 @@ line-height: 122%; /* 1.952rem */
   background: transparent;
   border-radius: 50%;
   border: 0.1rem solid transparent;
-  transition: transform 120ms ease, box-shadow 120ms ease, background-color 120ms ease;
+  transition:
+    transform 120ms ease,
+    box-shadow 120ms ease,
+    background-color 120ms ease;
 }
 
 /* Aktiv səhifə stil - şəkildəki kimi dairəvi ağ fon / hafif border */
@@ -12397,15 +12339,16 @@ line-height: 122%; /* 1.952rem */
   border-radius: 50%;
   border: 0.1rem solid #d7e0ed;
   background: #fff;
-  box-shadow: 0 0.6rem 1.8rem rgba(41,56,129,0.06);
+  box-shadow: 0 0.6rem 1.8rem rgba(41, 56, 129, 0.06);
   transform: translateY(-0.1rem);
 }
 
 /* Hover effekti (aktiv olmayanlara) */
-.custom-paginationProducts button:hover:not([disabled]):not([aria-current="page"]),
+.custom-paginationProducts
+  button:hover:not([disabled]):not([aria-current="page"]),
 .pagination button:hover:not([disabled]):not([aria-current="page"]) {
   transform: translateY(-0.1rem);
-  box-shadow: 0.12rem 0.36rem 1.08rem rgba(41,56,129,0.06);
+  box-shadow: 0.12rem 0.36rem 1.08rem rgba(41, 56, 129, 0.06);
 }
 
 /* Ellipsis (…): render-da <span className="ellipsis">…</span> istifadə et */
@@ -12431,7 +12374,8 @@ line-height: 122%; /* 1.952rem */
 }
 
 /* Kiçik responsive düzəliş */
-@media (max-width: 520px) { /* 520px */
+@media (max-width: 520px) {
+  /* 520px */
   .custom-paginationProducts,
   .pagination {
     min-width: auto;

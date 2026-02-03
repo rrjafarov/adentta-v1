@@ -104,7 +104,7 @@ const BlogsDetailPage = ({ t, blogDetail, otherBlogs }) => {
                           
                           <span>{blog.title}</span>
                           <div
-                            className="paragraphBlog"
+                            className="paragraphBlog paragraphBlogPrivate"
                             dangerouslySetInnerHTML={{
                               __html: blog.content,
                             }}
