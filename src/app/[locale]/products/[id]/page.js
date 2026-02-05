@@ -315,6 +315,58 @@ async function fetchEventsPageData() {
   }
 }
 
+
+/* ================= METADATA ================= */
+// export async function generateMetadata({ params }) {
+//   const id = params.id.split("-").pop();
+//   const product = await fetchProductById(id);
+
+//   if (!product) {
+//     return {
+//       title: "Adentta",
+//       description: "Product not found.",
+//     };
+//   }
+
+//   const imageUrl = product.image;
+//   const canonicalUrl = `https://adentta.az/products/${params.id}`;
+//   const cookieStore = await cookies();
+//   const lang = cookieStore.get("NEXT_LOCALE")?.value;
+
+//   return {
+//     title: product.title,
+//     description: product.content,
+//     openGraph: {
+//       title: product.title,
+//       description: product.content,
+//       url: canonicalUrl,
+//       images: [
+//         {
+//           url: `https://admin.adentta.az/storage${imageUrl}`,
+//           width: 1200,
+//           height: 630,
+//         },
+//       ],
+//       site_name: "adentta.az",
+//       type: "website",
+//       locale: lang,
+//     },
+//     twitter: {
+//       card: "summary_large_image",
+//       title: product.title,
+//       description: product.content,
+//       images: [imageUrl],
+//     },
+//     alternates: {
+//       canonical: canonicalUrl,
+//     },
+//   };
+// }
+
+
+
+
+
 /* ================= METADATA ================= */
 export async function generateMetadata({ params }) {
   const id = params.id.split("-").pop();
@@ -327,10 +379,24 @@ export async function generateMetadata({ params }) {
     };
   }
 
-  const imageUrl = product.image;
-  const canonicalUrl = `https://adentta.az/products/${params.id}`;
+  const imageUrl = product.image || "";
+  const baseUrl = "https://adentta.az";
   const cookieStore = await cookies();
-  const lang = cookieStore.get("NEXT_LOCALE")?.value;
+  const lang = cookieStore.get("NEXT_LOCALE")?.value || "az";
+
+  // locales siyahısını lazım olan dillərlə uyğunlaşdır
+  const locales = ["az", "ru", "en"];
+
+  // canonical: baseUrl/{lang}/products/{params.id}
+  const canonicalUrl = `${baseUrl}/${lang}/products/${params.id}`;
+
+  // languages map-i avtomatik qururuq
+  const languages = locales.reduce((acc, l) => {
+    acc[l] = `${baseUrl}/${l}/products/${params.id}`;
+    return acc;
+  }, {});
+  // x-default əlavə et
+  languages["x-default"] = baseUrl;
 
   return {
     title: product.title,
@@ -342,6 +408,7 @@ export async function generateMetadata({ params }) {
       images: [
         {
           url: `https://admin.adentta.az/storage${imageUrl}`,
+          alt: product.title || "Adentta",
           width: 1200,
           height: 630,
         },
@@ -354,13 +421,17 @@ export async function generateMetadata({ params }) {
       card: "summary_large_image",
       title: product.title,
       description: product.content,
-      images: [imageUrl],
+      creator: "@adentta",
+      site: "@adentta",
+      images: [`https://admin.adentta.az/storage${imageUrl}`],
     },
     alternates: {
       canonical: canonicalUrl,
+      languages,
     },
   };
 }
+
 
 /* ================= CONTACT ================= */
 async function fetchContactPageData() {
@@ -445,226 +516,3 @@ export default async function Page({ params }) {
   );
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-// // pages/products/[id]/page.js
-// import Header from "@/components/Header/Header";
-// import Footer from "@/components/Footer/Footer";
-// import ProductsPageDetailPage from "@/components/ProductsPageDetailPage";
-// import axiosInstance from "@/lib/axios";
-// import { cookies } from "next/headers";
-
-// /* ================= SETTINGS ================= */
-// async function fetchSettingsPageData() {
-//   try {
-//     const { data: setting } = await axiosInstance.get(
-//       `/page-data/setting`,
-//       { cache: "no-store" }
-//     );
-//     return setting;
-//   } catch (error) {
-//     throw error;
-//   }
-// }
-
-// /* ================= PRODUCT (ID ilə – YENİ ENDPOINT) ================= */
-// async function fetchProductById(id) {
-//   const { data } = await axiosInstance.get(
-//     `/first-page-data/${id}`,
-//     { cache: "no-store" }
-//   );
-//   return data?.data || data;
-// }
-
-// /* ================= CATEGORIES ================= */
-// async function fetchCategoryPageData() {
-//   try {
-//     const { data: category } = await axiosInstance.get(
-//       `/page-data/categories?per_page=999`,
-//       { cache: "no-store" }
-//     );
-//     return category;
-//   } catch (error) {
-//     throw error;
-//   }
-// }
-
-// /* ================= TRANSLATIONS ================= */
-// async function getTranslations() {
-//   try {
-//     const data = axiosInstance.get("/translation-list");
-//     return data;
-//   } catch (err) {
-//     console.log(err);
-//   }
-// }
-
-// /* ================= BRANDS ================= */
-// async function fetchBrandsPageData() {
-//   try {
-//     const { data: brands } = await axiosInstance.get(
-//       `/page-data/brands?per_page=999`,
-//       { cache: "no-store" }
-//     );
-//     return brands;
-//   } catch (error) {
-//     throw error;
-//   }
-// }
-
-// /* ================= EVENTS ================= */
-// async function fetchEventsPageData() {
-//   try {
-//     const { data: events } = await axiosInstance.get(
-//       `/page-data/event`,
-//       { cache: "no-store" }
-//     );
-//     return events;
-//   } catch (error) {
-//     throw error;
-//   }
-// }
-
-// /* ================= METADATA ================= */
-// export async function generateMetadata({ params }) {
-//   const slug = params.id.split("-").pop();
-//   const product = await fetchProductById(slug);
-
-//   if (!product) {
-//     return {
-//       title: "Adentta",
-//       description: "Product not found.",
-//     };
-//   }
-
-//   const imageUrl = product.image;
-//   const canonicalUrl = `https://adentta.az/products/${params.id}`;
-//   const cookieStore = await cookies();
-//   const lang = cookieStore.get("NEXT_LOCALE")?.value;
-
-//   return {
-//     title: product.title,
-//     description: product.content,
-//     openGraph: {
-//       title: product.title,
-//       description: product.content,
-//       url: canonicalUrl,
-//       images: [
-//         {
-//           url: `https://admin.adentta.az/storage${imageUrl}`,
-//           width: 1200,
-//           height: 630,
-//         },
-//       ],
-//       site_name: "adentta.az",
-//       type: "website",
-//       locale: lang,
-//     },
-//     twitter: {
-//       card: "summary_large_image",
-//       title: product.title,
-//       description: product.content,
-//       images: [imageUrl],
-//     },
-//     alternates: {
-//       canonical: canonicalUrl,
-//     },
-//   };
-// }
-
-// /* ================= CONTACT ================= */
-// async function fetchContactPageData() {
-//   try {
-//     const { data: contact } = await axiosInstance.get(
-//       `/page-data/contact`,
-//       { cache: "no-store" }
-//     );
-//     return contact;
-//   } catch (error) {
-//     throw error;
-//   }
-// }
-
-// /* ================= PAGE ================= */
-// export default async function Page({ params }) {
-//   const slug = params.id.split("-").pop();
-
-//   const productDetail = await fetchProductById(slug);
-//   if (!productDetail) return <div>Product not found.</div>;
-
-//   const categoryResponse = await fetchCategoryPageData();
-//   const categoryData = categoryResponse?.data?.data || [];
-
-//   const translations = await getTranslations();
-//   const t = translations?.data;
-
-//   const brandsResponse = await fetchBrandsPageData();
-//   const brandsData = brandsResponse?.data?.data || [];
-
-//   const eventsResponse = await fetchEventsPageData();
-//   const eventsData = eventsResponse?.data?.data || [];
-
-//   const setting = await fetchSettingsPageData();
-//   const settingData = setting?.data || [];
-
-//   const contact = await fetchContactPageData();
-//   const rawPhone = contact?.data?.phone || "";
-//   const whatsappNumber = rawPhone
-//     .replace(/\D+/g, "")
-//     .replace(/^00/, "")
-//     .replace(/^0/, "994")
-//     .replace(/^(?!994)/, "994");
-
-//   return (
-//     <>
-//       <div className="productBackground">
-//         <Header settingData={settingData} categoryData={categoryData} />
-//       </div>
-
-//       <ProductsPageDetailPage
-//         t={t}
-//         productData={productDetail}
-//         similarProducts={[]} // əvvəlki full-list logic artıq yoxdur
-//         whatsappNumber={whatsappNumber}
-//       />
-
-//       <Footer
-//         contact={contact}
-//         categoryData={categoryData}
-//         eventsData={eventsData}
-//         brandsData={brandsData}
-//       />
-//     </>
-//   );
-// }

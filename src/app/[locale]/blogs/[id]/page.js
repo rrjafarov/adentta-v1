@@ -131,6 +131,64 @@ const formatDate = (dateString) => {
   return `${day} ${month} ${year}`;
 };
 
+
+
+
+// export async function generateMetadata({ params }) {
+//   const slug = params.id.split("-").pop();
+//   const allBlogs = await fetchBlogsPageData();
+//   const blog = allBlogs.find((b) => b.id.toString() === slug);
+
+//   if (!blog) {
+//     return {
+//       title: "Adentta",
+//       description: "Blog not found.",
+//     };
+//   }
+
+//   const imageUrl = blog.image;
+//   const imageAlt = blog.title || "Adentta";
+//   const canonicalUrl = `https://adentta.az/brands/${params.id}`;
+
+//   const cookieStore = await cookies();
+//   const lang = cookieStore.get("NEXT_LOCALE")?.value;
+
+//   return {
+//     title: blog.title,
+//     description: blog.title,
+//     openGraph: {
+//       title: blog.title,
+//       description: blog.title,
+//       url: canonicalUrl,
+//       images: [
+//         {
+//           url: `https://admin.adentta.az/storage${imageUrl}`,
+//           alt: imageAlt,
+//           width: 1200,
+//           height: 630,
+//         },
+//       ],
+//       site_name: "adentta.az",
+//       type: "website",
+//       locale: lang,
+//     },
+//     twitter: {
+//       card: "summary_large_image",
+//       title: blog.title,
+//       description: blog.title,
+//       creator: "@adentta",
+//       site: "@adentta",
+//       images: [imageUrl],
+//     },
+//     alternates: {
+//       canonical: canonicalUrl,
+//     },
+//   };
+// }
+
+
+
+
 export async function generateMetadata({ params }) {
   const slug = params.id.split("-").pop();
   const allBlogs = await fetchBlogsPageData();
@@ -143,12 +201,26 @@ export async function generateMetadata({ params }) {
     };
   }
 
-  const imageUrl = blog.image;
+  const imageUrl = blog.image || "";
   const imageAlt = blog.title || "Adentta";
-  const canonicalUrl = `https://adentta.az/brands/${params.id}`;
+  const baseUrl = "https://adentta.az";
 
   const cookieStore = await cookies();
-  const lang = cookieStore.get("NEXT_LOCALE")?.value;
+  const lang = cookieStore.get("NEXT_LOCALE")?.value || "az";
+
+  // lazım olan dilləri burada tənzimləyə bilərsən
+  const locales = ["az", "ru", "en"];
+
+  // canonical: baseUrl/{lang}/blogs/{params.id}
+  const canonicalUrl = `${baseUrl}/${lang}/blogs/${params.id}`;
+
+  // alternates.languages map-i qururuq
+  const languages = locales.reduce((acc, l) => {
+    acc[l] = `${baseUrl}/${l}/blogs/${params.id}`;
+    return acc;
+  }, {});
+  // x-default əsas sayt
+  languages["x-default"] = baseUrl;
 
   return {
     title: blog.title,
@@ -175,13 +247,30 @@ export async function generateMetadata({ params }) {
       description: blog.title,
       creator: "@adentta",
       site: "@adentta",
-      images: [imageUrl],
+      images: [`https://admin.adentta.az/storage${imageUrl}`],
     },
     alternates: {
       canonical: canonicalUrl,
+      languages,
     },
   };
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 async function fetchContactPageData() {
   const cookieStore = await cookies();
   const lang = cookieStore.get("NEXT_LOCALE");
