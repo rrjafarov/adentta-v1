@@ -21,15 +21,16 @@ const SwiperJS = ({ heroSliderData, bannerData }) => {
                 <Swiper
                   slidesPerView={"auto"}
                   spaceBetween={20}
+                  loop="true"
                   pagination={{
                     clickable: true,
                     el: ".custom-pagination",
                   }}
                   autoplay={{
-                    delay: 3000,
+                    delay: 4000,
                     disableOnInteraction: false,
                   }}
-                  speed={4000}
+                  speed={3500}
                   modules={[Pagination, Autoplay]}
                   className="mySwiper"
                 >
