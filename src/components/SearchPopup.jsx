@@ -239,7 +239,7 @@ export default function SearchPopup({ t, closePopup }) {
     const fetchData = async () => {
       try {
         const res = await axiosInstance.get(
-          `/page-data/products?per_page=12&search_text=${encodeURIComponent(searchTerm)}`
+          `/page-data/product?per_page=12&search_text=${encodeURIComponent(searchTerm)}`
         );
         const products = res.data.data?.data || [];
         setProductData(products);
