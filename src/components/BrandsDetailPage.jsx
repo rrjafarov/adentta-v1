@@ -656,6 +656,40 @@ const BrandsDetailPage = ({ t, brandsDetailDataDetail, otherBrands }) => {
             </div>
           </div>
         </div>
+
+        {/* MOBILE */}
+
+         <div className="brandsDetaiLPageHeroMobile">
+          <div className="brandsDetaiLPageHeroImgMobile">
+            <Image
+              src={`https://admin.adentta.az/storage${brandsDetailDataDetail.mobil_banner}`}
+              alt="brandsDetail"
+              width={1400}
+              height={800}
+            />
+            <div className="brandsDetaiLPageHeroContentMobile">
+              {countryTitle && (
+                <div>
+                  <span>{countryTitle}</span>
+                </div>
+              )}
+              {categoryTitle && (
+                <div>
+                  <span>{categoryTitle}</span>
+                </div>
+              )}
+            </div>
+          </div>
+        </div>
+
+
+
+
+
+
+
+
+
         <div className="brandsDPTop ">
           <Link href="/">
             <strong className="topper">Adentta</strong>
