@@ -2065,9 +2065,12 @@ ul {
   .globeCanvas {
     position: absolute;
     left: 50%;
-    bottom: -35%; /* 👈 30–35% üçün ideal */
+    bottom: -0% !important; /* 👈 30–35% üçün ideal */
     // transform: translateX(-50%);
     transform: translateX(-50%) !important;
+  }
+  .globeBanner {
+    height: 51.4rem !important;
   }
 }
 
@@ -11804,8 +11807,6 @@ ul {
     }
   }
 }
-
-
 
 .brandsSliderGalleryImgDetail {
   width: 100%;
