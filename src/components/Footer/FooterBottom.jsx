@@ -1,4 +1,3 @@
-// !
 "use client";
 import Image from "next/image";
 import Link from "next/link";
@@ -6,12 +5,10 @@ import React, { useState } from "react";
 import Cookies from "js-cookie";
 import { useRouter } from "next/navigation";
 
-
-
-
-
 const FooterBottom = ({ t }) => {
   const router = useRouter();
+  const currentYear = new Date().getFullYear(); // 👈 əlavə etdik
+
   const [currentLang, setCurrentLang] = useState(
     () => Cookies.get("NEXT_LOCALE") || "az"
   );
@@ -19,10 +16,10 @@ const FooterBottom = ({ t }) => {
   const handleLangChange = (event) => {
     const lang = event.target.value;
     if (lang === currentLang) return;
+
     Cookies.set("NEXT_LOCALE", lang);
     setCurrentLang(lang);
 
-    // Remove any existing locale prefix from the path
     const currentPath =
       window.location.pathname.replace(/^\/[a-z]{2}(?=\/|$)/, "") || "/";
     const queryString = window.location.search || "";
@@ -36,7 +33,10 @@ const FooterBottom = ({ t }) => {
   return (
     <div className="container footerBottom">
       <div className="copyright">
-        <span>©2025 ADENTTA. {t?.allRightsReserved || "All rights reserved"}</span>
+        <span>
+          ©{currentYear} ADENTTA.{" "}
+          {t?.allRightsReserved || "All rights reserved"}
+        </span>
       </div>
 
       <div className="footerBottomInner">
@@ -52,27 +52,21 @@ const FooterBottom = ({ t }) => {
               <option value="az">az</option>
             </select>
           </div>
-          
+
           <Link href="/faq">
             <span>{t?.faqPageTitle || "FAQs"}</span>
           </Link>
-          <Image
-            src="/icons/footerDot.svg"
-            alt="dot"
-            width={4}
-            height={4}
-          />
+
+          <Image src="/icons/footerDot.svg" alt="dot" width={4} height={4} />
+
           <Link href="/privacy">
             <span className="policyBootmLine">
               {t?.privacyPageTitle || "Privacy & Policy"}
             </span>
           </Link>
-          <Image
-            src="/icons/footerDot.svg"
-            alt="dot"
-            width={4}
-            height={4}
-          />
+
+          <Image src="/icons/footerDot.svg" alt="dot" width={4} height={4} />
+
           <Link href="/support">
             <span className="policyBootmLine">
               {t?.userTermsPage || "User Terms"}
