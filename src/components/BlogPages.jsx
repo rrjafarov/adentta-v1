@@ -299,19 +299,6 @@
 
 // export default BlogPages;
 
-
-
-
-
-
-
-
-
-
-
-
-
-
 "use client";
 
 import React, {
@@ -478,6 +465,41 @@ const BlogPages = ({ t, initialBlogData = [], blogsCategoryData = [] }) => {
   return (
     <div className="blogPage">
       <div className="container">
+        <div className="blogTop topper">
+          <Link href="/">
+            <strong className="topper">Adentta</strong>
+          </Link>
+          <img className="topper" src="/icons/rightDown.svg" alt="Adentta" />
+          <span className="topper">{t?.blogs || "Blogs"}</span>
+        </div>
+
+        <div className="blogPageHeaderText">
+          <span>{t?.blogsPageNews || "Blog news"}</span>
+          <h1>{t?.blogsPageExploreOurBlogs || "Explore Our Blogs"}</h1>
+          <div className="blogFilter">
+            {categoryList.map((title) => {
+              const isActive = selectedCategory === title;
+              const isAll = title === allLabel;
+
+              const btnStyle = {
+                background: isAll ? "#D7E0ED" : "transparent",
+                border: isActive ? "3px solid #D7E0ED" : "1px solid #D7E0ED",
+              };
+
+              return (
+                <button
+                  key={title}
+                  className={`blgBtn ${isActive ? "active" : ""}`}
+                  onClick={() => setSelectedCategory(title)}
+                  style={btnStyle}
+                >
+                  {title}
+                </button>
+              );
+            })}
+          </div>
+        </div>
+
         <div className="blogCards">
           <div className="row">
             {filteredBlogs.map((blog) => (
@@ -565,49 +587,7 @@ const BlogPages = ({ t, initialBlogData = [], blogsCategoryData = [] }) => {
 
 export default BlogPages;
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 // ! SLUG ERROR VAR ASAGIDA
-
 
 // "use client";
 
