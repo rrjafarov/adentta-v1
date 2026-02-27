@@ -2103,13 +2103,14 @@ ul {
 
 //? Footer.jsx
 #footer {
-  background-image: url(../../../public/images/footerBackImg.png);
+  background-image: url(../../../public/images/footerBack.png);
   flex-shrink: 0;
   background-repeat: no-repeat;
   background-size: cover;
   background-position: center;
-  border-top-left-radius: 10rem;
-  border-top-right-radius: 10rem;
+  border-top-left-radius: 12.5rem;
+  border-top-right-radius: 12.5rem;
+  
 
   .footer {
     padding-top: 10.25rem;
@@ -5397,7 +5398,8 @@ ul {
 }
 
 #teamPage {
-  margin-top: 4.11rem;
+  padding-top: 4.11rem;
+  padding-bottom: 2rem;
 
   .teamPageBanner {
     img {
@@ -8868,7 +8870,7 @@ ul {
 }
 
 .contactPageAdress {
-  margin-bottom: 4.21rem;
+  padding-bottom: 4.21rem;
 
   .contactVideo {
     width: 100%;
@@ -8949,7 +8951,7 @@ ul {
 
 //
 .contactPageAdress {
-  margin-bottom: 4.21rem;
+  padding-bottom: 4.21rem;
 
   .contactVideo {
     width: 100%;
@@ -11915,14 +11917,12 @@ ul {
       align-items: center;
       flex-direction: column;
       gap: 1.5rem;
-      margin-bottom: 7.93rem;
+      padding-bottom: 7.93rem;
       flex-shrink: 0;
-
       h3 {
         background-color: #fff;
         text-transform: capitalize;
       }
-
       .accordion {
         max-width: 87.6rem;
         width: 100%;

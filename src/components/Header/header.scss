@@ -49,7 +49,6 @@ $adentta-06: #29282f !important;
 }
 
 .headerMenu {
-  // margin-top: 2.4rem;
   padding-top: 2.4rem;
   display: flex;
   justify-content: space-between;
@@ -233,14 +232,6 @@ $adentta-06: #29282f !important;
       transition: all 0.5s ease-in-out;
     }
   }
-  // .dropLine {
-  //   width: 110.4769rem;
-  //   margin-top: 5rem;
-  //   margin-bottom: 5rem;
-  //   height: 0.1rem;
-  //   opacity: 0.4;
-  //   background: #cbd9ef;
-  // }
   @media (max-width: 1024px) {
     .dropdown-content {
       width: 110rem !important;
@@ -294,54 +285,6 @@ $adentta-06: #29282f !important;
     transition: all 0.5s ease;
     top: 112px;
   }
-
-  // @media (max-width: 2001px) {
-  //   .dropdown-content {
-  //     top: 115px !important;
-  //   }
-  //   .dropdown-contentCompany {
-  //     top: 115px !important;
-  //   }
-  //   .dropdown-contentMedia {
-  //     top: 115px !important;
-  //   }
-  // }
-  // @media (min-width: 2000px) {
-  //   .dropdown-content {
-  //     top: 150px !important;
-  //   }
-  //   .dropdown-contentCompany {
-  //     top: 150px !important;
-  //   }
-  //   .dropdown-contentMedia {
-  //     top: 150px !important;
-  //   }
-  // }
-  // @media (max-width: 1364px) {
-  //   .dropdown-contentCompany {
-  //     top: 90px !important;
-  //   }
-  //   .dropdown-contentMedia {
-  //     top: 90px !important;
-  //   }
-  //   .dropdown-content {
-  //     top: 100px !important;
-  //   }
-  // }
-
-  // @media (max-width: 1024px) {
-  //   .dropdown-contentCompany {
-  //     top: 75px !important;
-  //   }
-  //   .dropdown-content {
-  //     top: 85px !important;
-  //   }
-  //   .dropdown-contentMedia {
-  //     top: 75px !important;
-  //   }
-  // }
-  //-----------------------------------
-
   .dropdownMedia {
     position: relative;
   }
@@ -350,8 +293,6 @@ $adentta-06: #29282f !important;
     position: absolute;
     z-index: 99;
     top: 100% !important;
-    // top: 112px;
-    // top: 15.2%;
     width: 30rem;
     flex-shrink: 0;
     border-radius: 1.4rem;
@@ -472,7 +413,9 @@ $adentta-06: #29282f !important;
     }
   }
 }
-
+.headerBacground{
+  background-color: transparent !important;
+}
 .mobileMenuIcon {
   display: none;
   img {

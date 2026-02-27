@@ -35,66 +35,6 @@ async function fetchAboutPageData() {
   }
 }
 
-// *categories
-async function fetchCategoryPageData() {
-  const cookieStore = await cookies();
-  const lang = cookieStore.get("NEXT_LOCALE");
-
-  try {
-    const { data: category } = await axiosInstance.get(
-      `/page-data/categories?per_page=999`,
-      {
-        // headers: { Lang: lang.value },
-        cache: "no-store",
-      }
-    );
-    return category;
-  } catch (error) {
-    throw error;
-  }
-}
-// *categories
-
-//! brandsApi
-async function fetchBrandsPageData() {
-  const cookieStore = await cookies();
-  const lang = cookieStore.get("NEXT_LOCALE");
-
-  try {
-    const { data: brands } = await axiosInstance.get(
-      `/page-data/brands`,
-      {
-        // headers: { Lang: lang.value },
-        cache: "no-store",
-      }
-    );
-    return brands;
-  } catch (error) {
-    throw error;
-  }
-}
-//! brandsApi
-
-//! eventsApi
-async function fetchEventsPageData() {
-  const cookieStore = await cookies();
-  const lang = cookieStore.get("NEXT_LOCALE");
-
-  try {
-    const { data: events } = await axiosInstance.get(
-      `/page-data/event`,
-      {
-        // headers: { Lang: lang.value },
-        cache: "no-store",
-      }
-    );
-    return events;
-  } catch (error) {
-    throw error;
-  }
-}
-//! eventsApi
-
 async function getTranslations() {
   try {
     const data = axiosInstance.get("/translation-list");
@@ -169,17 +109,10 @@ export async function generateMetadata() {
 // !generateMetaData
 
 const page = async () => {
-  const brandsResponse = await fetchBrandsPageData();
-  const brandsData = brandsResponse?.data?.data || [];
 
-  const eventsResponse = await fetchEventsPageData();
-  const eventsData = eventsResponse?.data?.data || [];
 
   const contact = await fetchAboutPageData();
-  // const contact = contactData?.data?.data || [];
 
-  const categoryResponse = await fetchCategoryPageData();
-  const categoryData = categoryResponse?.data?.data || [];
 
   const translations = await getTranslations();
   const t = translations?.data;
@@ -189,9 +122,9 @@ const page = async () => {
 
   return (
     <div id="contactUS">
-      <div className="headerTopNoneBack">
+      {/* <div className="headerTopNoneBack">
         <Header settingData={settingData} categoryData={categoryData} />
-      </div>
+      </div> */}
       <ContactUS
         t={t}
         wpNumber={contact?.data.wp_number}
@@ -209,12 +142,12 @@ const page = async () => {
         locationStore={contact?.data.location_store}
         videoTitle={contact?.data.video_title}
       />
-      <Footer
+      {/* <Footer
         contact={contact}
         categoryData={categoryData}
         eventsData={eventsData}
         brandsData={brandsData}
-      />
+      /> */}
     </div>
   );
 };

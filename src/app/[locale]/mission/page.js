@@ -5,34 +5,6 @@ import React from "react";
 import { cookies } from "next/headers";
 import axiosInstance from "@/lib/axios";
 
-async function fetchContactPageData() {
-  const cookieStore = await cookies();
-  const lang = cookieStore.get("NEXT_LOCALE");
-  try {
-    const { data: contact } = await axiosInstance.get(`/page-data/contact`, {
-      // headers: { Lang: lang.value },
-      cache: "no-store",
-    });
-    return contact;
-  } catch (error) {
-    throw error;
-  }
-}
-
-async function fetchSettingsPageData() {
-  const cookieStore = await cookies();
-  const lang = cookieStore.get("NEXT_LOCALE");
-
-  try {
-    const { data: setting } = await axiosInstance.get(`/page-data/setting`, {
-      // headers: { Lang: lang.value },
-      cache: "no-store",
-    });
-    return setting;
-  } catch (error) {
-    throw error;
-  }
-}
 
 async function fetchAboutPageData() {
   const cookieStore = await cookies();
@@ -48,59 +20,6 @@ async function fetchAboutPageData() {
     throw error;
   }
 }
-// *categories
-async function fetchCategoryPageData() {
-  const cookieStore = await cookies();
-  const lang = cookieStore.get("NEXT_LOCALE");
-
-  try {
-    const { data: category } = await axiosInstance.get(
-      `/page-data/categories?per_page=999`,
-      {
-        // headers: { Lang: lang.value },
-        cache: "no-store",
-      }
-    );
-    return category;
-  } catch (error) {
-    throw error;
-  }
-}
-// *categories
-
-//! brandsApi
-async function fetchBrandsPageData() {
-  const cookieStore = await cookies();
-  const lang = cookieStore.get("NEXT_LOCALE");
-
-  try {
-    const { data: brands } = await axiosInstance.get(`/page-data/brands`, {
-      // headers: { Lang: lang.value },
-      cache: "no-store",
-    });
-    return brands;
-  } catch (error) {
-    throw error;
-  }
-}
-//! brandsApi
-
-//! eventsApi
-async function fetchEventsPageData() {
-  const cookieStore = await cookies();
-  const lang = cookieStore.get("NEXT_LOCALE");
-
-  try {
-    const { data: events } = await axiosInstance.get(`/page-data/event`, {
-      // headers: { Lang: lang.value },
-      cache: "no-store",
-    });
-    return events;
-  } catch (error) {
-    throw error;
-  }
-}
-//! eventsApi
 
 async function getTranslations() {
   try {
@@ -112,24 +31,13 @@ async function getTranslations() {
 }
 
 const page = async () => {
-  const brandsResponse = await fetchBrandsPageData();
-  const brandsData = brandsResponse?.data?.data || [];
-
-  const eventsResponse = await fetchEventsPageData();
-  const eventsData = eventsResponse?.data?.data || [];
   const about = await fetchAboutPageData();
-  const categoryResponse = await fetchCategoryPageData();
-  const categoryData = categoryResponse?.data?.data || [];
   const translations = await getTranslations();
   const t = translations?.data;
-  const contact = await fetchContactPageData();
-
-  const setting = await fetchSettingsPageData();
-  const settingData = setting?.data || [];
 
   return (
     <div id="teamer">
-      <Header settingData={settingData} categoryData={categoryData} />
+      {/* <Header settingData={settingData} categoryData={categoryData} /> */}
       <MissionPageBanner
         t={t}
         misionTitle={about?.data.misson_title}
@@ -142,12 +50,12 @@ const page = async () => {
         visionSubTitle={about?.data.vision_sub_title}
         futureGoalSubTitle={about?.data.future_goal_sub_title}
       />
-      <Footer
+      {/* <Footer
         categoryData={categoryData}
         eventsData={eventsData}
         brandsData={brandsData}
         contact={contact}
-      />
+      /> */}
     </div>
   );
 };

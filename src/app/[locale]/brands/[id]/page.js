@@ -60,36 +60,8 @@ async function fetchBrandsPageDataFoot() {
 }
 //! brandsApi
 
-async function fetchContactPageData() {
-  const cookieStore = await cookies();
-  const lang = cookieStore.get("NEXT_LOCALE");
-  try {
-    const { data: contact } = await axiosInstance.get(`/page-data/contact`, {
-      // headers: { Lang: lang.value },
-      cache: "no-store",
-    });
-    return contact;
-  } catch (error) {
-    throw error;
-  }
-}
 
-//! eventsApi
-async function fetchEventsPageData() {
-  const cookieStore = await cookies();
-  const lang = cookieStore.get("NEXT_LOCALE");
 
-  try {
-    const { data: events } = await axiosInstance.get(`/page-data/event`, {
-      // headers: { Lang: lang.value },
-      cache: "no-store",
-    });
-    return events;
-  } catch (error) {
-    throw error;
-  }
-}
-//! eventsApi
 
 
 
@@ -153,29 +125,12 @@ export async function generateMetadata({ params }) {
 
 
 
-async function fetchSettingsPageData() {
-  const cookieStore = await cookies();
-  const lang = cookieStore.get("NEXT_LOCALE");
-
-  try {
-    const { data: setting } = await axiosInstance.get(`/page-data/setting`, {
-      // headers: { Lang: lang.value },
-      cache: "no-store",
-    });
-    return setting;
-  } catch (error) {
-    throw error;
-  }
-}
 
 const page = async ({ params }) => {
-    const contact = await fetchContactPageData();
 
   const brandsResponse = await fetchBrandsPageDataFoot();
   const brandsData = brandsResponse?.data?.data || [];
 
-  const eventsResponse = await fetchEventsPageData();
-  const eventsData = eventsResponse?.data?.data || [];
 
   const translations = await getTranslations();
   const t = translations?.data;
@@ -193,23 +148,15 @@ const page = async ({ params }) => {
   const categoryResponse = await fetchCategoryPageData();
   const categoryData = categoryResponse?.data?.data || [];
 
-  const setting = await fetchSettingsPageData();
-  const settingData = setting?.data || [];
   
 
   return (
     <div>
-      <div className="bradsBackColor">
-        <Header settingData={settingData}  categoryData={categoryData} />
-      </div>
 
 
       <BrandsDetailPage t={t} brandsDetailDataDetail={brandsDetailDataDetail} otherBrands={otherBrands} />
 
 
-      <div className="bradsBackColor">
-        <Footer contact={contact} categoryData={categoryData}  eventsData={eventsData} brandsData={brandsData} />
-      </div>
     </div>
   );
 };

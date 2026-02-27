@@ -1,48 +1,20 @@
-import Footer from '@/components/Footer/Footer'
-import Header from '@/components/Header/Header'
-import VideoGalery from '@/components/VideoGalery'
-import React from 'react'
+import VideoGalery from "@/components/VideoGalery";
+import React from "react";
 import { cookies } from "next/headers";
 import axiosInstance from "@/lib/axios";
 
-
-
-async function fetchContactPageData() {
-  const cookieStore = await cookies();
-  const lang = cookieStore.get("NEXT_LOCALE");
-  try {
-    const { data: contact } = await axiosInstance.get(`/page-data/contact`, {
-      // headers: { Lang: lang.value },
-      cache: "no-store",
-    });
-    return contact;
-  } catch (error) {
-    throw error;
-  }
-}
-async function fetchSettingsPageData() {
-  const cookieStore = await cookies();
-  const lang = cookieStore.get("NEXT_LOCALE");
-
-  try {
-    const { data: setting } = await axiosInstance.get(`/page-data/setting`, {
-      // headers: { Lang: lang.value },
-      cache: "no-store",
-    });
-    return setting;
-  } catch (error) {
-    throw error;
-  }
-}
 async function fetchAboutPageData() {
   const cookieStore = await cookies();
   const lang = cookieStore.get("NEXT_LOCALE");
 
   try {
-    const { data: videoCategory } = await axiosInstance.get(`/page-data/video-categories?per_page=999`, {
-      // headers: { Lang: lang.value },
-      cache: "no-store",
-    });
+    const { data: videoCategory } = await axiosInstance.get(
+      `/page-data/video-categories?per_page=999`,
+      {
+        // headers: { Lang: lang.value },
+        cache: "no-store",
+      },
+    );
     return videoCategory;
   } catch (error) {
     throw error;
@@ -58,84 +30,36 @@ async function getTranslations() {
   }
 }
 
-
-
 async function fetchVideoPageData() {
   const cookieStore = await cookies();
   const lang = cookieStore.get("NEXT_LOCALE");
 
   try {
-    const { data: videos } = await axiosInstance.get(`/page-data/video?per_page=999`, {
-      // headers: { Lang: lang.value },
-      cache: "no-store",
-    });
+    const { data: videos } = await axiosInstance.get(
+      `/page-data/video?per_page=999`,
+      {
+        // headers: { Lang: lang.value },
+        cache: "no-store",
+      },
+    );
     return videos;
   } catch (error) {
     throw error;
   }
 }
-// *categories
-async function fetchCategoryPageData() {
-  const cookieStore = await cookies();
-  const lang = cookieStore.get("NEXT_LOCALE");
-
-  try {
-    const { data: category } = await axiosInstance.get(`/page-data/categories?per_page=999`, {
-      // headers: { Lang: lang.value },
-      cache: "no-store",
-    });
-    return category;
-  } catch (error) {
-    throw error;
-  }
-}
-// *categories
-
-//! brandsApi
-async function fetchBrandsPageData() {
-  const cookieStore = await cookies();
-  const lang = cookieStore.get("NEXT_LOCALE");
-
-  try {
-    const { data: brands } = await axiosInstance.get(`/page-data/brands?per_page=999`, {
-      // headers: { Lang: lang.value },
-      cache: "no-store",
-    });
-    return brands;
-  } catch (error) {
-    throw error;
-  }
-}
-//! brandsApi
-
-//! eventsApi
-async function fetchEventsPageData() {
-  const cookieStore = await cookies();
-  const lang = cookieStore.get("NEXT_LOCALE");
-
-  try {
-    const { data: events } = await axiosInstance.get(`/page-data/event?per_page=999`, {
-      // headers: { Lang: lang.value },
-      cache: "no-store",
-    });
-    return events;
-  } catch (error) {
-    throw error;
-  }
-}
-//! eventsApi
-
-
 
 async function fetchVideoSeoData() {
   const cookieStore = await cookies();
   const lang = cookieStore.get("NEXT_LOCALE");
 
   try {
-    const { data: aboutSeo } = await axiosInstance.get(`/page-data/video-page-info`, {
-      // headers: { Lang: lang.value },
-      cache: "no-store",
-    });
+    const { data: aboutSeo } = await axiosInstance.get(
+      `/page-data/video-page-info`,
+      {
+        // headers: { Lang: lang.value },
+        cache: "no-store",
+      },
+    );
     return aboutSeo;
   } catch (error) {
     throw error;
@@ -186,35 +110,23 @@ export async function generateMetadata() {
 }
 // !generateMetaData
 
-
 const page = async () => {
-
   const translations = await getTranslations();
   const t = translations?.data;
 
-
-  const brandsResponse = await fetchBrandsPageData();
-  const brandsData = brandsResponse?.data?.data || [];
-
-  const eventsResponse = await fetchEventsPageData();
-  const eventsData = eventsResponse?.data?.data || [];
   const videoCategory = await fetchAboutPageData();
   const videos = await fetchVideoPageData();
   const videoCategoryData = videoCategory?.data?.data || [];
   const videosData = videos?.data?.data || [];
-  const categoryResponse = await fetchCategoryPageData();
-  const categoryData = categoryResponse?.data?.data || [];
-  const contact = await fetchContactPageData();
-
-  const setting = await fetchSettingsPageData();
-  const settingData = setting?.data || [];
   return (
     <div>
-        <Header settingData={settingData} categoryData={categoryData} />
-        <VideoGalery t={t} videosData={videosData} videoCategoryData={videoCategoryData} />
-        <Footer contact={contact} categoryData={categoryData}  eventsData={eventsData} brandsData={brandsData} />
+      <VideoGalery
+        t={t}
+        videosData={videosData}
+        videoCategoryData={videoCategoryData}
+      />
     </div>
-  )
-}
+  );
+};
 
-export default page
+export default page;

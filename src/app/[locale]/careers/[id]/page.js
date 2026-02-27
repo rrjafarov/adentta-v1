@@ -1,5 +1,3 @@
-
-
 import Footer from "@/components/Footer/Footer";
 import CareersDetailPage from "@/components/CareersDetailPage";
 import Header from "@/components/Header/Header";
@@ -18,73 +16,6 @@ async function fetchCareersPageData() {
   return careers.data.data;
 }
 
-async function fetchSettingsPageData() {
-  const cookieStore = await cookies();
-  const lang = cookieStore.get("NEXT_LOCALE");
-
-  try {
-    const { data: setting } = await axiosInstance.get(`/page-data/setting`, {
-      // headers: { Lang: lang.value },
-      cache: "no-store",
-    });
-    return setting;
-  } catch (error) {
-    throw error;
-  }
-}
-
-// *categories
-async function fetchCategoryPageData() {
-  const cookieStore = await cookies();
-  const lang = cookieStore.get("NEXT_LOCALE");
-
-  try {
-    const { data: category } = await axiosInstance.get(`/page-data/categories?per_page=999`, {
-      // headers: { Lang: lang.value },
-      cache: "no-store",
-    });
-    return category;
-  } catch (error) {
-    throw error;
-  }
-}
-// *categories
-
-
-//! brandsApi
-async function fetchBrandsPageData() {
-  const cookieStore = await cookies();
-  const lang = cookieStore.get("NEXT_LOCALE");
-
-  try {
-    const { data: brands } = await axiosInstance.get(`/page-data/brands`, {
-      // headers: { Lang: lang.value },
-      cache: "no-store",
-    });
-    return brands;
-  } catch (error) {
-    throw error;
-  }
-}
-//! brandsApi
-
-//! eventsApi
-async function fetchEventsPageData() {
-  const cookieStore = await cookies();
-  const lang = cookieStore.get("NEXT_LOCALE");
-
-  try {
-    const { data: events } = await axiosInstance.get(`/page-data/event`, {
-      // headers: { Lang: lang.value },
-      cache: "no-store",
-    });
-    return events;
-  } catch (error) {
-    throw error;
-  }
-}
-//! eventsApi
-
 async function getTranslations() {
   try {
     const data = axiosInstance.get("/translation-list");
@@ -94,17 +25,11 @@ async function getTranslations() {
   }
 }
 
-
-
-
-
-
 export async function generateMetadata({ params }) {
-  const slug = params.id.split("-").pop();  
-  const allCareers = await fetchCareersPageData();  
-  const careers = allCareers.find(b => b.id.toString() === slug);
+  const slug = params.id.split("-").pop();
+  const allCareers = await fetchCareersPageData();
+  const careers = allCareers.find((b) => b.id.toString() === slug);
 
-  
   if (!careers) {
     return {
       title: "Adentta",
@@ -153,48 +78,17 @@ export async function generateMetadata({ params }) {
   };
 }
 
-
-async function fetchContactPageData() {
-  const cookieStore = await cookies();
-  const lang = cookieStore.get("NEXT_LOCALE");
-  try {
-    const { data: contact } = await axiosInstance.get(`/page-data/contact`, {
-      // headers: { Lang: lang.value },
-      cache: "no-store",
-    });
-    return contact;
-  } catch (error) {
-    throw error;
-  }
-}
-
-
-
-
-
-
 export default async function Page({ params }) {
   const { id } = params;
-  const slug =  id.split("-").pop(); // URL'den gelen id'yi alıyoruz
-  
+  const slug = id.split("-").pop(); // URL'den gelen id'yi alıyoruz
+
   const translations = await getTranslations();
   const t = translations?.data;
 
-  const brandsResponse = await fetchBrandsPageData();
-  const brandsData = brandsResponse?.data?.data || [];
-    const contact = await fetchContactPageData();
-
-  const eventsResponse = await fetchEventsPageData();
-  const eventsData = eventsResponse?.data?.data || [];
   const careersData = await fetchCareersPageData(); // Kariyer verilerinin bulunduğu dizi
-  const categoryResponse = await fetchCategoryPageData();
-  const categoryData = categoryResponse?.data?.data || [];
+
   // URL'den gelen id ile eşleşen kariyer verisini buluyoruz:
   const careerDetail = careersData.find((item) => item.id.toString() === slug);
-
-
-  const setting = await fetchSettingsPageData();
-  const settingData = setting?.data || [];
 
   if (!careerDetail) {
     return <div>Career not found.</div>;
@@ -202,9 +96,7 @@ export default async function Page({ params }) {
 
   return (
     <div>
-      <Header settingData={settingData}  categoryData={categoryData} />
       <CareersDetailPage t={t} careerData={careerDetail} />
-      <Footer contact={contact} categoryData={categoryData}  eventsData={eventsData} brandsData={brandsData} />
     </div>
   );
 }

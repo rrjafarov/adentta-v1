@@ -20,25 +20,7 @@ async function fetchBlogsPageData() {
   );
   return blogs.data.data;
 }
-// *categories
-async function fetchCategoryPageData() {
-  const cookieStore = await cookies();
-  const lang = cookieStore.get("NEXT_LOCALE");
 
-  try {
-    const { data: category } = await axiosInstance.get(
-      `/page-data/categories?per_page=999`,
-      {
-        // headers: { Lang: lang.value },
-        cache: "no-store",
-      }
-    );
-    return category;
-  } catch (error) {
-    throw error;
-  }
-}
-// *categories
 
 async function getTranslations() {
   try {
@@ -49,64 +31,7 @@ async function getTranslations() {
   }
 }
 
-//! brandsApi
-async function fetchBrandsPageData() {
-  const cookieStore = await cookies();
-  const lang = cookieStore.get("NEXT_LOCALE");
 
-  try {
-    const { data: brands } = await axiosInstance.get(
-      // `/page-data/brands?per_page=999`,
-      `/page-data/brands`,
-
-      {
-        // headers: { Lang: lang.value },
-        cache: "no-store",
-      }
-    );
-    return brands;
-  } catch (error) {
-    throw error;
-  }
-}
-//! brandsApi
-
-async function fetchSettingsPageData() {
-  const cookieStore = await cookies();
-  const lang = cookieStore.get("NEXT_LOCALE");
-
-  try {
-    const { data: setting } = await axiosInstance.get(`/page-data/setting`, {
-      // headers: { Lang: lang.value },
-      cache: "no-store",
-    });
-    return setting;
-  } catch (error) {
-    throw error;
-  }
-}
-
-//! eventsApi
-async function fetchEventsPageData() {
-  const cookieStore = await cookies();
-  const lang = cookieStore.get("NEXT_LOCALE");
-
-  try {
-    const { data: events } = await axiosInstance.get(
-      // `/page-data/event?per_page=999`,
-      `/page-data/event`,
-
-      {
-        // headers: { Lang: lang.value },
-        cache: "no-store",
-      }
-    );
-    return events;
-  } catch (error) {
-    throw error;
-  }
-}
-//! eventsApi
 
 // Tarixləri Azərbaycan dilində formatlayan funksiya
 const formatDate = (dateString) => {
@@ -130,63 +55,6 @@ const formatDate = (dateString) => {
   const month = azMonths[date.getMonth() + 1];
   return `${day} ${month} ${year}`;
 };
-
-
-
-
-// export async function generateMetadata({ params }) {
-//   const slug = params.id.split("-").pop();
-//   const allBlogs = await fetchBlogsPageData();
-//   const blog = allBlogs.find((b) => b.id.toString() === slug);
-
-//   if (!blog) {
-//     return {
-//       title: "Adentta",
-//       description: "Blog not found.",
-//     };
-//   }
-
-//   const imageUrl = blog.image;
-//   const imageAlt = blog.title || "Adentta";
-//   const canonicalUrl = `https://adentta.az/brands/${params.id}`;
-
-//   const cookieStore = await cookies();
-//   const lang = cookieStore.get("NEXT_LOCALE")?.value;
-
-//   return {
-//     title: blog.title,
-//     description: blog.title,
-//     openGraph: {
-//       title: blog.title,
-//       description: blog.title,
-//       url: canonicalUrl,
-//       images: [
-//         {
-//           url: `https://admin.adentta.az/storage${imageUrl}`,
-//           alt: imageAlt,
-//           width: 1200,
-//           height: 630,
-//         },
-//       ],
-//       site_name: "adentta.az",
-//       type: "website",
-//       locale: lang,
-//     },
-//     twitter: {
-//       card: "summary_large_image",
-//       title: blog.title,
-//       description: blog.title,
-//       creator: "@adentta",
-//       site: "@adentta",
-//       images: [imageUrl],
-//     },
-//     alternates: {
-//       canonical: canonicalUrl,
-//     },
-//   };
-// }
-
-
 
 
 export async function generateMetadata({ params }) {
@@ -257,53 +125,13 @@ export async function generateMetadata({ params }) {
 }
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-async function fetchContactPageData() {
-  const cookieStore = await cookies();
-  const lang = cookieStore.get("NEXT_LOCALE");
-  try {
-    const { data: contact } = await axiosInstance.get(`/page-data/contact`, {
-      // headers: { Lang: lang.value },
-      cache: "no-store",
-    });
-    return contact;
-  } catch (error) {
-    throw error;
-  }
-}
-
 const page = async ({ params }) => {
-  const contact = await fetchContactPageData();
-
-  const setting = await fetchSettingsPageData();
-  const settingData = setting?.data || [];
-
-  const brandsResponse = await fetchBrandsPageData();
-  const brandsData = brandsResponse?.data?.data || [];
-
-  const eventsResponse = await fetchEventsPageData();
-  const eventsData = eventsResponse?.data?.data || [];
 
   const translations = await getTranslations();
   const t = translations?.data;
   const { id } = params;
   const slug = id.split("-").pop();
   const blogsData = await fetchBlogsPageData();
-  const categoryResponse = await fetchCategoryPageData();
-  const categoryData = categoryResponse?.data?.data || [];
   // URL'den gelen id ile eşleşen kariyer verisini buluyoruz:
   const rawBlogDetail = blogsData.find((item) => item.id.toString() === slug);
 
@@ -327,17 +155,10 @@ const page = async ({ params }) => {
   return (
     <div>
       <div className="eventDPBack">
-        <Header settingData={settingData} categoryData={categoryData} />
         <BlogsDetailPage
           t={t}
           blogDetail={blogDetail}
           otherBlogs={otherBlogs}
-        />
-        <Footer
-          contact={contact}
-          categoryData={categoryData}
-          eventsData={eventsData}
-          brandsData={brandsData}
         />
       </div>
     </div>

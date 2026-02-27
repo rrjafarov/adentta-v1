@@ -1,25 +1,8 @@
-
 import EventsPage from "@/components/EventsPage";
-import Footer from "@/components/Footer/Footer";
-import Header from "@/components/Header/Header";
 import React from "react";
 import { cookies } from "next/headers";
 import axiosInstance from "@/lib/axios";
 
-async function fetchSettingsPageData() {
-  const cookieStore = await cookies();
-  const lang = cookieStore.get("NEXT_LOCALE");
-
-  try {
-    const { data: setting } = await axiosInstance.get(`/page-data/setting`, {
-      // headers: { Lang: lang.value },
-      cache: "no-store",
-    });
-    return setting;
-  } catch (error) {
-    throw error;
-  }
-}
 
 async function fetchEventsPageData() {
   const cookieStore = await cookies();
@@ -44,42 +27,6 @@ async function getTranslations() {
     console.log(err);
   }
 }
-// *categories
-async function fetchCategoryPageData() {
-  const cookieStore = await cookies();
-  const lang = cookieStore.get("NEXT_LOCALE");
-
-  try {
-    const { data: category } = await axiosInstance.get(`/page-data/categories?per_page=999`, {
-      // headers: { Lang: lang.value },
-      cache: "no-store",
-    });
-    return category;
-  } catch (error) {
-    throw error;
-  }
-}
-// *categories
-
-
-//! brandsApi
-async function fetchBrandsPageData() {
-  const cookieStore = await cookies();
-  const lang = cookieStore.get("NEXT_LOCALE");
-
-  try {
-    // const { data: brands } = await axiosInstance.get(`/page-data/brands?per_page=999`, {
-    const { data: brands } = await axiosInstance.get(`/page-data/brands`, {
-
-      // headers: { Lang: lang.value },
-      cache: "no-store",
-    });
-    return brands;
-  } catch (error) {
-    throw error;
-  }
-}
-//! brandsApi
 
 
 
@@ -141,35 +88,14 @@ export async function generateMetadata() {
     },
   };
 }
-// !generateMetaData
-async function fetchContactPageData() {
-  const cookieStore = await cookies();
-  const lang = cookieStore.get("NEXT_LOCALE");
-  try {
-    const { data: contact } = await axiosInstance.get(`/page-data/contact`, {
-      // headers: { Lang: lang.value },
-      cache: "no-store",
-    });
-    return contact;
-  } catch (error) {
-    throw error;
-  }
-}
+
 
 const page = async () => {
-  const brandsResponse = await fetchBrandsPageData();
-  const brandsData = brandsResponse?.data?.data || [];
 
   const translations = await getTranslations();
   const t = translations?.data;
   const eventsResponse = await fetchEventsPageData();
   const eventsData = eventsResponse?.data?.data || [];
-  const categoryResponse = await fetchCategoryPageData();
-  const categoryData = categoryResponse?.data?.data || [];
-  const setting = await fetchSettingsPageData();
-  const settingData = setting?.data || [];
-  const contact = await fetchContactPageData();
-
   // Tarixə görə köhnədən yeniyə sıralama
   const sortedEvents = [...eventsData].sort((a, b) => {
     const dateA = new Date(a.event_start_date).getTime();
@@ -180,11 +106,7 @@ const page = async () => {
 
   return (
     <div>
-      <Header settingData={settingData} categoryData={categoryData} />
       <EventsPage t={t} eventsData={sortedEvents} />
-      <div className="eventsFooterBack">
-        <Footer contact={contact} categoryData={categoryData}  eventsData={eventsData} brandsData={brandsData} />
-      </div>
     </div>
   );
 };

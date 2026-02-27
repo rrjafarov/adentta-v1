@@ -1,5 +1,3 @@
-import Footer from "@/components/Footer/Footer";
-import Header from "@/components/Header/Header";
 import ProductsPageHero from "@/components/Sliders/ProductsPageHero";
 import NewProductPage from "@/components/Footer/NewProductPage";
 import React from "react";
@@ -190,16 +188,6 @@ async function fetchProductsPageData(searchParams = {}) {
   }
 }
 
-async function fetchSettingsPageData() {
-  try {
-    const { data: setting } = await axiosInstance.get(`/page-data/setting`, {
-      cache: "no-store",
-    });
-    return setting;
-  } catch (error) {
-    throw error;
-  }
-}
 
 async function fetchCategoryPageData() {
   try {
@@ -213,27 +201,7 @@ async function fetchCategoryPageData() {
   }
 }
 
-async function fetchContactPageData() {
-  try {
-    const { data: contact } = await axiosInstance.get(`/page-data/contact`, {
-      cache: "no-store",
-    });
-    return contact;
-  } catch (error) {
-    throw error;
-  }
-}
 
-async function fetchEventsPageData() {
-  try {
-    const { data: events } = await axiosInstance.get(`/page-data/event`, {
-      cache: "no-store",
-    });
-    return events;
-  } catch (error) {
-    throw error;
-  }
-}
 
 async function fetchBrandsPageData() {
   try {
@@ -315,15 +283,13 @@ export async function generateMetadata({ searchParams }) {
 
 const Page = async ({ searchParams }) => {
   const productData = await fetchProductsPageData(searchParams ?? {});
-  const setting = await fetchSettingsPageData();
-  const settingData = setting?.data || [];
+  
   const categoryResponse = await fetchCategoryPageData();
   const categoryData = categoryResponse?.data?.data || [];
-  const contact = await fetchContactPageData();
+  
   const brandsResponse = await fetchBrandsPageData();
   const brandsData = brandsResponse?.data?.data || [];
-  const eventsResponse = await fetchEventsPageData();
-  const eventsData = eventsResponse?.data?.data || [];
+  
   const translations = await getTranslations();
   const t = translations?.data;
 
@@ -362,7 +328,7 @@ const Page = async ({ searchParams }) => {
 
   return (
     <div>
-      <Header settingData={settingData} categoryData={categoryData} />
+      {/* <Header settingData={settingData} categoryData={categoryData} /> */}
       <ProductsPageHero
         t={t}
         productData={productData}
@@ -377,12 +343,12 @@ const Page = async ({ searchParams }) => {
         productData={productData}
         selectedCategory={selectedCategoryObj}
       />
-      <Footer
+      {/* <Footer
         contact={contact}
         categoryData={categoryData}
         eventsData={eventsData}
         brandsData={brandsData}
-      />
+      /> */}
     </div>
   );
 };

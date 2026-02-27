@@ -266,11 +266,11 @@ const Home = async () => {
 
   return (
     <div>
-      <Header
+      {/* <Header
         settingData={settingData}
         categoryData={categoryData}
         isHomePage={true}
-      />
+      /> */}
       <HeroSlider bannerData={bannerData} heroSliderData={heroSliderData} />
       <LittleCard t={t} />
       <HomePageProducts
@@ -282,14 +282,14 @@ const Home = async () => {
       <OurEventsHomePage t={t} eventsData={eventsData} />
       <GlobalExcellence t={t} brandsData={brandsData} />
       <OurBlogsHomePage t={t} blogData={blogData} />
-      <Footer
+      {/* <Footer
         contact={contact}
         isHomePage={true}
         t={t}
         categoryData={categoryData}
         eventsData={eventsData}
         brandsData={brandsData}
-      />
+      /> */}
     </div>
   );
 };

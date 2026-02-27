@@ -1,38 +1,8 @@
-import Footer from "@/components/Footer/Footer";
-import Header from "@/components/Header/Header";
 import TeamPage from "@/components/TeamPage";
 import Image from "next/image";
 import React from "react";
 import { cookies } from "next/headers";
 import axiosInstance from "@/lib/axios";
-
-async function fetchContactPageData() {
-  const cookieStore = await cookies();
-  const lang = cookieStore.get("NEXT_LOCALE");
-  try {
-    const { data: contact } = await axiosInstance.get(`/page-data/contact`, {
-      // headers: { Lang: lang.value },
-      cache: "no-store",
-    });
-    return contact;
-  } catch (error) {
-    throw error;
-  }
-}
-async function fetchSettingsPageData() {
-  const cookieStore = await cookies();
-  const lang = cookieStore.get("NEXT_LOCALE");
-
-  try {
-    const { data: setting } = await axiosInstance.get(`/page-data/setting`, {
-      // headers: { Lang: lang.value },
-      cache: "no-store",
-    });
-    return setting;
-  } catch (error) {
-    throw error;
-  }
-}
 
 async function fetchAboutPageData() {
   const cookieStore = await cookies();
@@ -58,60 +28,6 @@ async function getTranslations() {
   }
 }
 
-// *categories
-async function fetchCategoryPageData() {
-  const cookieStore = await cookies();
-  const lang = cookieStore.get("NEXT_LOCALE");
-
-  try {
-    const { data: category } = await axiosInstance.get(
-      `/page-data/categories?per_page=999`,
-      {
-        // headers: { Lang: lang.value },
-        cache: "no-store",
-      }
-    );
-    return category;
-  } catch (error) {
-    throw error;
-  }
-}
-// *categories
-
-//! brandsApi
-async function fetchBrandsPageData() {
-  const cookieStore = await cookies();
-  const lang = cookieStore.get("NEXT_LOCALE");
-
-  try {
-    const { data: brands } = await axiosInstance.get(`/page-data/brands`, {
-      // headers: { Lang: lang.value },
-      cache: "no-store",
-    });
-    return brands;
-  } catch (error) {
-    throw error;
-  }
-}
-//! brandsApi
-
-//! eventsApi
-async function fetchEventsPageData() {
-  const cookieStore = await cookies();
-  const lang = cookieStore.get("NEXT_LOCALE");
-
-  try {
-    const { data: events } = await axiosInstance.get(`/page-data/event`, {
-      // headers: { Lang: lang.value },
-      cache: "no-store",
-    });
-    return events;
-  } catch (error) {
-    throw error;
-  }
-}
-//! eventsApi
-
 async function fetchTeamSeoData() {
   const cookieStore = await cookies();
   const lang = cookieStore.get("NEXT_LOCALE");
@@ -122,7 +38,7 @@ async function fetchTeamSeoData() {
       {
         // headers: { Lang: lang.value },
         cache: "no-store",
-      }
+      },
     );
     return aboutSeo;
   } catch (error) {
@@ -141,9 +57,6 @@ export async function generateMetadata() {
   return {
     title: seo?.data.meta_title,
     description: seo?.data.meta_description,
-    // icons: {
-    //   icon: "https://adentta.az/favicon.ico.svg",
-    // },
     openGraph: {
       title: seo?.data.meta_title || "Adentta",
       description: seo?.data.meta_description,
@@ -177,32 +90,13 @@ export async function generateMetadata() {
 // !generateMetaData
 
 const page = async () => {
-  const brandsResponse = await fetchBrandsPageData();
-  const brandsData = brandsResponse?.data?.data || [];
-
-  const eventsResponse = await fetchEventsPageData();
-  const eventsData = eventsResponse?.data?.data || [];
   const translations = await getTranslations();
   const t = translations?.data;
   const teamResponse = await fetchAboutPageData();
   const teamMembers = teamResponse?.data?.data || [];
-  const categoryResponse = await fetchCategoryPageData();
-  const categoryData = categoryResponse?.data?.data || [];
-
-  const contact = await fetchContactPageData();
-
-  const setting = await fetchSettingsPageData();
-  const settingData = setting?.data || [];
   return (
     <div>
-      <Header settingData={settingData} categoryData={categoryData} />
       <TeamPage t={t} teamMembers={teamMembers} />
-      <Footer
-        categoryData={categoryData}
-        eventsData={eventsData}
-        brandsData={brandsData}
-        contact={contact}
-      />
     </div>
   );
 };

@@ -1,39 +1,7 @@
-import Footer from "@/components/Footer/Footer";
-import Header from "@/components/Header/Header";
 import Privacy from "@/components/Privacy";
 import React from "react";
 import { cookies } from "next/headers";
 import axiosInstance from "@/lib/axios";
-
-async function fetchContactPageData() {
-  const cookieStore = await cookies();
-  const lang = cookieStore.get("NEXT_LOCALE");
-  try {
-    const { data: contact } = await axiosInstance.get(`/page-data/contact`, {
-      // headers: { Lang: lang.value },
-      cache: "no-store",
-    });
-    return contact;
-  } catch (error) {
-    throw error;
-  }
-}
-
-async function fetchSettingsPageData() {
-  const cookieStore = await cookies();
-  const lang = cookieStore.get("NEXT_LOCALE");
-
-  try {
-    const { data: setting } = await axiosInstance.get(`/page-data/setting`, {
-      // headers: { Lang: lang.value },
-      cache: "no-store",
-    });
-    return setting;
-  } catch (error) {
-    throw error;
-  }
-}
-
 async function fetchPrivacyPageData() {
   const cookieStore = await cookies();
   const lang = cookieStore.get("NEXT_LOCALE");
@@ -48,58 +16,6 @@ async function fetchPrivacyPageData() {
     throw error;
   }
 }
-// *categories
-async function fetchCategoryPageData() {
-  const cookieStore = await cookies();
-  const lang = cookieStore.get("NEXT_LOCALE");
-
-  try {
-    const { data: category } = await axiosInstance.get(`/page-data/categories?per_page=999`, {
-      // headers: { Lang: lang.value },
-      cache: "no-store",
-    });
-    return category;
-  } catch (error) {
-    throw error;
-  }
-}
-// *categories
-
-
-//! brandsApi
-async function fetchBrandsPageData() {
-  const cookieStore = await cookies();
-  const lang = cookieStore.get("NEXT_LOCALE");
-
-  try {
-    const { data: brands } = await axiosInstance.get(`/page-data/brands`, {
-      // headers: { Lang: lang.value },
-      cache: "no-store",
-    });
-    return brands;
-  } catch (error) {
-    throw error;
-  }
-}
-//! brandsApi
-
-//! eventsApi
-async function fetchEventsPageData() {
-  const cookieStore = await cookies();
-  const lang = cookieStore.get("NEXT_LOCALE");
-
-  try {
-    const { data: events } = await axiosInstance.get(`/page-data/event`, {
-      // headers: { Lang: lang.value },
-      cache: "no-store",
-    });
-    return events;
-  } catch (error) {
-    throw error;
-  }
-}
-//! eventsApi
-
 async function getTranslations() {
   try {
     const data = axiosInstance.get("/translation-list");
@@ -108,11 +24,6 @@ async function getTranslations() {
     console.log(err);
   }
 }
-
-
-
-
-
 
 // !generateMetaData
 export async function generateMetadata({ params }) {
@@ -150,29 +61,15 @@ export async function generateMetadata({ params }) {
 
 
 const page = async () => {
-  const brandsResponse = await fetchBrandsPageData();
-  const brandsData = brandsResponse?.data?.data || [];
 
   const translations = await getTranslations();
   const t = translations?.data;
-
-  const eventsResponse = await fetchEventsPageData();
-  const eventsData = eventsResponse?.data?.data || [];
   const privacy = await fetchPrivacyPageData(); 
-  const categoryResponse = await fetchCategoryPageData();
-  const categoryData = categoryResponse?.data?.data || [];
-
-    const contact = await fetchContactPageData();
-
-  const setting = await fetchSettingsPageData();
-  const settingData = setting?.data || [];
   
   return (
     <div>
       <div className="faqBackImg">
-        <Header settingData={settingData} categoryData={categoryData} />
         <Privacy t={t} title={privacy?.data.title} content={privacy?.data.content} />
-        <Footer contact={contact} categoryData={categoryData}  eventsData={eventsData} brandsData={brandsData} />
       </div>
     </div>
   );
