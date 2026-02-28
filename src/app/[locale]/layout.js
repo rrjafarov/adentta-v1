@@ -64,6 +64,7 @@ import Header from "@/components/Header/Header";
 import Footer from "@/components/Footer/Footer";
 import NavigationProgress from "@/components/NavigationLoading";
 import Script from "next/script";
+import "@/components/Header/header.scss"
 
 export const metadata = {
   title: "Adentta - Dental Supplier",
