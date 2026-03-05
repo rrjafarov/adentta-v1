@@ -17,25 +17,9 @@ const WpLink = ({ t, whatsappNumber }) => {
     // `Salam, bu məhsul haqqında məlumat ala bilərəm?: ${currentUrl}`
     `${
       t?.wpMessage || "Salam, bu məhsul haqqında məlumat ala bilərəm?"
-    }: ${currentUrl}`
+    }: ${currentUrl}`,
   );
   return (
-    // <Link
-    //   href={`https://wa.me/${whatsappNumber}?text=${message}`}
-    //   prefetch={false}
-    //   target="_blank"
-    //   rel="noopener noreferrer"
-    //   className="wpButton"
-    // >
-    //   <div className="detailPageClickToWhatsapp">
-    //     <span>{t?.clickToOrder || "ClickToOrder"}</span>
-    //     <div className="dpWP">
-    //       <img src="/icons/whiteWP.svg" alt="WhatsApp Icon" />
-    //       <span>Whatsapp</span>
-    //     </div>
-    //   </div>
-    // </Link>
-
     <div className="detailPageClickToWhatsapp">
       <span>{t?.clickToOrder || "ClickToOrder"}</span>
 
@@ -54,6 +38,47 @@ const WpLink = ({ t, whatsappNumber }) => {
     </div>
   );
 };
+
+const PriceInquiry = ({ t, whatsappNumber, productData }) => {
+  const [currentUrl, setCurrentUrl] = useState("");
+
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      setCurrentUrl(window.location.href);
+    }
+  }, []);
+
+  const message = encodeURIComponent(
+    `${
+      t?.priceWhatsappMessage ||
+      "Salam, bu məhsulun qiyməti haqqında məlumat ala bilərəm?"
+    }
+
+    ${productData.title} 
+    ${currentUrl}`,
+  );
+
+  return (
+    <div className="detailPagePriceInqury">
+      <Link
+        href={`https://wa.me/${whatsappNumber}?text=${message}`}
+        prefetch={false}
+        target="_blank"
+        rel="noopener noreferrer"
+        className="dpPriceItem"
+      >
+        <span>{t?.priceMessage}</span>
+      </Link>
+    </div>
+  );
+};
+
+
+
+
+
+
+
 
 const DetailPageAccordion = ({ title, children }) => {
   const [isOpen, setIsOpen] = useState(false);
@@ -83,6 +108,11 @@ const ProductsPageDetailPage = ({
   const [copied, setCopied] = useState(false);
   const [lastViewed, setLastViewed] = useState([]);
 
+  const hasPrice =
+    productData?.price !== undefined &&
+    productData?.price !== null &&
+    Number(productData.price) > 0;
+
   // capture current URL
   useEffect(() => {
     if (typeof window !== "undefined") setCurrentUrl(window.location.href);
@@ -107,50 +137,31 @@ const ProductsPageDetailPage = ({
 
   const shareUrls = {
     telegram: `https://t.me/share/url?url=${encodeURIComponent(
-      currentUrl
+      currentUrl,
     )}&text=${encodeURIComponent(productData.title)}`,
     facebook: `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(
-      currentUrl
+      currentUrl,
     )}"e=${encodeURIComponent(productData.title)}`,
     linkedin: `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(
-      currentUrl
+      currentUrl,
     )}&title=${encodeURIComponent(
-      productData.title
+      productData.title,
     )}&summary=${encodeURIComponent(currentUrl)}`,
     whatsapp: `https://api.whatsapp.com/send?text=${encodeURIComponent(
-      `${productData.title} - ${currentUrl}`
+      `${productData.title} - ${currentUrl}`,
     )}`,
   };
-  // const slugify = (text) => {
-  //   if (!text) return "";
-  //   return String(text)
-  //     .toLowerCase()
-  //     .normalize("NFKD")
-  //     .replace(/[\u0300-\u036f]/g, "")
-  //     .replace(/[^a-z0-9-]+/g, "-")
-  //     .replace(/--+/g, "-")
-  //     .replace(/^-+|-+$/g, "");
-  // };
-
-
-
-
   const slugify = (text) => {
-  if (!text) return "";
-  return String(text)
-    .toLowerCase()
-    .normalize("NFKD")
-    .replace(/[\u0300-\u036f]/g, "")
-    .replace(/[\/\\]+/g, "-")   // <-- burada / işarəsini - ilə əvəz edirik
-    .replace(/[^a-z0-9-]+/g, "-")
-    .replace(/--+/g, "-")
-    .replace(/^-+|-+$/g, "");
-};
-
-
-
-
-
+    if (!text) return "";
+    return String(text)
+      .toLowerCase()
+      .normalize("NFKD")
+      .replace(/[\u0300-\u036f]/g, "")
+      .replace(/[\/\\]+/g, "-") // <-- burada / işarəsini - ilə əvəz edirik
+      .replace(/[^a-z0-9-]+/g, "-")
+      .replace(/--+/g, "-")
+      .replace(/^-+|-+$/g, "");
+  };
 
   const handleCopy = () => {
     if (!currentUrl) return;
@@ -176,7 +187,7 @@ const ProductsPageDetailPage = ({
             <img src="/icons/rightDown.svg" alt="Adentta" />
             <Link
               href={`/products?category=${encodeURIComponent(
-                productData.categories?.[0]?.url_slug || ""
+                productData.categories?.[0]?.url_slug || "",
               )}`}
             >
               <span>{productData.categories?.[0]?.title}</span>
@@ -207,12 +218,70 @@ const ProductsPageDetailPage = ({
                 </span>
                 <div className="productDetailRightTitle">
                   <h1>{productData.title}</h1>
-                  <div className="detailPagePrice">
-                    <div className="dpPriceItem">
-                      <span>{productData.price}</span>
-                      <Manat />
-                    </div>
+
+
+
+
+
+
+                  <div className="pricesDP">
+                    {hasPrice ? (
+                      <>
+                        <div className="detailPagePrice">
+                          <div className="dpPriceItem">
+                            <span>{productData.price}</span>
+                            <Manat />
+                          </div>
+                        </div>
+
+                        {productData.old_price &&
+                          Number(productData.old_price) > 0 && (
+                            <div className="detailPagePrice detailPageOldPrice">
+                              <div className="dpPriceItem">
+                                <span>{productData.old_price}</span>
+                                <Manat />
+                              </div>
+                            </div>
+                          )}
+                      </>
+                    ) : (
+                      <PriceInquiry
+                        t={t}
+                        whatsappNumber={whatsappNumber}
+                        productData={productData}
+                      />
+                    )}
                   </div>
+
+                  {/* <div className="pricesDP">
+                    <div className="detailPagePrice">
+                      <div className="dpPriceItem">
+                        <span>{productData.price}</span>
+                        <Manat />
+                      </div>
+                    </div>
+
+                    <div className="detailPagePrice detailPageOldPrice">
+                      <div className="dpPriceItem">
+                        <span>{productData.old_price}</span>
+                        <Manat />
+                      </div>
+                    </div>
+
+                    <div className="detailPagePriceInqury">
+                      <Link href="#" className="dpPriceItem">
+                        <span>{t?.priceMessage}</span>
+                      </Link>
+                    </div>
+                  </div> */}
+
+
+
+
+
+
+
+
 
                   {productData.quantity > 0 && (
                     <div className="detailPageQuantity">
@@ -222,7 +291,7 @@ const ProductsPageDetailPage = ({
                     </div>
                   )}
                 </div>
-                
+
                 <div className="brandAndCountry">
                   {productData?.brands?.[0]?.logo && (
                     <div className="detailBrand">
@@ -230,7 +299,7 @@ const ProductsPageDetailPage = ({
                       <div className="detailBrandInner">
                         <Link
                           href={`/brands/${slugify(
-                            productData.brands[0].title
+                            productData.brands[0].title,
                           )}-${productData.brands[0].id}`}
                           prefetch={false}
                         >
@@ -244,22 +313,6 @@ const ProductsPageDetailPage = ({
                       </div>
                     </div>
                   )}
-
-                  
-
-                  {/* {productData?.brands?.[0]?.country?.[0]?.title && (
-                    <div className="detailCountry">
-                      <span>
-                        {t?.productsPageCountryName || "Country Name"}:
-                      </span>
-                      <div className="detailCountryInner">
-                        <span>{productData.brands?.[0]?.country?.[0]?.title}</span>                        
-                      </div>
-                    </div>
-                  )} */}
-
-
-
                 </div>
                 <WpLink
                   t={t}
@@ -284,43 +337,7 @@ const ProductsPageDetailPage = ({
                   <DetailPageAccordion
                     title={t?.productsPageDetailsProducts || "Details Products"}
                   >
-                    {/* <div className="row">
-                      <div className="xl-6 lg-6 md-6 sm-12">
-                        <span className="paramTitle">
-                          {t?.productsPageDetailsParameters || "parametrs"}
-                        </span>
-                        <div className="productParametrs">
-                          <span>
-                            {productData.parametrs?.[0]?.title ?? "Yoxdur"}
-                          </span>
-                        </div>
-                      </div>
-                      <div className="xl-6 lg-6 md-6 sm-12">
-                        <span className="paramTitle">
-                          {t?.productsPageDetailsSize || "Size"}
-                        </span>
-                        <div className="productParametrs">
-                          <span>
-                            {productData.sizes?.[0]?.title ?? "Yoxdur"}
-                          </span>
-                        </div>
-                      </div>
-                      <div className="xl-6 lg-6 md-6 sm-12">
-                        <span className="paramTitle">
-                          {t?.productsPageDetailsCategory || "Size"}
-                        </span>
-                        <div className="productParametrs">
-                          <span>
-                            {productData.categories?.[0]?.title ?? "Yoxdur"}
-                          </span>
-                        </div>
-                      </div>
-                    </div> */}
-
                     <div className="row">
-
-
-
                       {productData.categories?.[0]?.parent_id?.[0]?.title && (
                         <div className="xl-8 lg-6 md-6 sm-12">
                           <span className="paramTitle">
@@ -332,7 +349,7 @@ const ProductsPageDetailPage = ({
                               <Link
                                 href={`/product?category=${encodeURIComponent(
                                   productData.categories?.[0]?.parent_id?.[0]
-                                    ?.url_slug || ""
+                                    ?.url_slug || "",
                                 )}`}
                               >
                                 <span>
@@ -345,13 +362,12 @@ const ProductsPageDetailPage = ({
                             </div>
                           </div>
 
-                          
                           {productData.categories?.[0]?.title && (
                             <div className="productParametrs">
                               <div className="productParametrsItem">
                                 <Link
                                   href={`/product?category=${encodeURIComponent(
-                                    productData.categories?.[0]?.url_slug || ""
+                                    productData.categories?.[0]?.url_slug || "",
                                   )}`}
                                 >
                                   <span>
@@ -363,20 +379,6 @@ const ProductsPageDetailPage = ({
                           )}
                         </div>
                       )}
-
-                      {/* {productData.parametrs?.[0]?.title && (
-                        <div className="xl-4 lg-6 md-6 sm-12">
-                          <span className="paramTitle">
-                            {t?.productsPageDetailsParameters || "parametrs"}
-                          </span>
-                          <div className="productParametrs">
-                            <div className="productParametrsItem">
-                              <span>{productData.parametrs?.[0]?.title}</span>
-                            </div>
-                          </div>
-                        </div>
-                      )} */}
-
                       {productData.sizes?.[0]?.title && (
                         <div className="xl-4 lg-6 md-6 sm-12">
                           <span className="paramTitle">
@@ -527,7 +529,7 @@ const ProductsPageDetailPage = ({
               {similarProducts.map((prod) => (
                 <div key={prod.id} className="xl-3 lg-3 md-6 sm-6">
                   <Link
-                  href={`/products/${slugify(`${prod.title}-${prod.id}`)}`}
+                    href={`/products/${slugify(`${prod.title}-${prod.id}`)}`}
                     // href={`/products/${prod?.title
                     //   ?.toLowerCase()
                     //   .replace(/\s+/g, "-")}-${prod.id}`}
@@ -538,7 +540,6 @@ const ProductsPageDetailPage = ({
                         <div className="homePageProCardImgs">
                           <div className="homePageProductCardContentImage">
                             <Image
-                              // src={`https://admin.adentta.az/storage${prod.image}`}
                               src={
                                 prod?.image
                                   ? `https://admin.adentta.az/storage${prod.image}`
@@ -580,7 +581,6 @@ const ProductsPageDetailPage = ({
         </section>
       )}
 
-      
       {/* Last Viewed */}
       {lastViewed.length > 0 && (
         <section id="detailPagesSimilarsBottom">
@@ -590,13 +590,7 @@ const ProductsPageDetailPage = ({
               {lastViewed.map((prod) => (
                 <div key={prod.id} className="xl-3 lg-3 md-6 sm-6">
                   <Link
-                    // href={`/products/${prod?.title
-                    //   ?.toLowerCase()
-                    //   .replace(/\s+/g, "-")}-${prod.id}`}
-
-
-                  href={`/products/${slugify(`${prod.title}-${prod.id}`)}`}
-
+                    href={`/products/${slugify(`${prod.title}-${prod.id}`)}`}
                     className="block"
                   >
                     <div className="detailPageBottomSimilar">
@@ -604,7 +598,6 @@ const ProductsPageDetailPage = ({
                         <div className="homePageProCardImgs">
                           <div className="homePageProductCardContentImage">
                             <Image
-                              // src={`https://admin.adentta.az/storage${prod.image}`}
                               src={
                                 prod?.image
                                   ? `https://admin.adentta.az/storage${prod.image}`

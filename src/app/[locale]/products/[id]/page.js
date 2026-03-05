@@ -1,5 +1,3 @@
-import Header from "@/components/Header/Header";
-import Footer from "@/components/Footer/Footer";
 import ProductsPageDetailPage from "@/components/ProductsPageDetailPage";
 import axiosInstance from "@/lib/axios";
 import { cookies } from "next/headers";
@@ -194,7 +192,6 @@ export default async function Page({ params }) {
       .slice(0, 4); // maksimum 4 oxşar məhsul
   }
 
-  // ✅ Render
   return (
     <>
       <div className="productBackground">
