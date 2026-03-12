@@ -1925,7 +1925,6 @@ ul {
     }
   }
 }
-
 .ourBlogs {
   background-color: white !important;
   padding-top: 0rem !important;
@@ -1976,10 +1975,6 @@ ul {
   padding-bottom: 3.4rem;
 }
 
-// .globalBrandSliderItem {
-//   // background-color: #fff;
-// }
-
 .seeMoreGlobal {
   margin-top: 3.4rem;
 }
@@ -2015,35 +2010,6 @@ ul {
     flex-shrink: 0;
   }
 }
-
-// .globeBanner {
-//   width: 100vw;
-//   height: 36.4rem;
-//   flex-shrink: 0;
-
-//   img {
-//     width: 100%;
-//     // opacity: 0.3;
-//     width: 100vw;
-//     height: 36.4rem;
-//     object-fit: cover;
-//   }
-// }
-
-// .globeBanner {
-//   position: relative;
-//   width: 100vw;
-//   height: 36.4rem;
-//   overflow: hidden; /* ƏSAS NÖQTƏ */
-// }
-
-// .globeCanvas {
-//   position: absolute;
-//   left: 50%;
-//   bottom: -85%; /* yarısı gizlənsin deyə */
-//   transform: translateX(-50%);
-// }
-
 .globeBanner {
   position: relative;
   width: 100vw;
@@ -2054,16 +2020,14 @@ ul {
 .globeCanvas {
   position: absolute;
   left: 50%;
-  bottom: -25%; /* 👈 30–35% üçün ideal */
-  // transform: translateX(-50%);
-  transform: translateX(-50%); /* 👈 OPTİK DÜZƏLİŞ */
+  bottom: -25%;
+  transform: translateX(-50%);
 }
 @media (max-width: 768px) {
   .globeCanvas {
     position: absolute;
     left: 50%;
-    bottom: -0% !important; /* 👈 30–35% üçün ideal */
-    // transform: translateX(-50%);
+    bottom: -0% !important;
     transform: translateX(-50%) !important;
   }
   .globeBanner {
@@ -2078,11 +2042,9 @@ ul {
     padding-left: 5rem !important;
     flex-direction: column !important;
     padding-right: 5rem !important;
-
     span {
       width: 100% !important;
     }
-
     p {
       width: 100% !important;
     }
@@ -2781,18 +2743,14 @@ ul {
 
 //! mobileFilter -------------start--------------------
 
-/* Genel filtre konteyneri stilleri */
 .filter-container {
   position: relative;
 }
 
-/* Accordion genel stilleri */
 .accordion {
   padding-left: 20px;
-  /* Soldan padding ekleniyor */
 }
 
-/* Mobilde filtre paneli için */
 @media (max-width: 768px) {
   .filter-title {
     border: 1.2px solid #ced2e2 !important;
@@ -2866,10 +2824,6 @@ ul {
   .close-btn {
     display: none;
   }
-
-  // .lineFiltered {
-  //   display: none;
-  // }
 
   .filter-titless {
     display: none;
@@ -3105,7 +3059,6 @@ ul {
 
 .productPageCards {
   padding: 6rem 0 4.24rem 0rem;
-
   .productPageSorting {
     display: flex;
     justify-content: flex-end;
@@ -3160,15 +3113,12 @@ ul {
   .homePageProductCardContent {
     display: flex;
     flex-direction: column;
-    // align-items: center;
     justify-content: space-between;
     cursor: pointer;
     border-radius: 3rem;
     border: 1px solid #dee4ec;
     width: 100%;
-    // min-height: 42rem;
     transition: all 0.4s ease;
-
     height: 45rem;
 
     &:hover {
@@ -3176,7 +3126,6 @@ ul {
         transform: scale(1.1);
         transition: all 0.4s ease;
       }
-
       .homePageProductCardContentBottom {
         img {
           transform: translate(3px, -5px);
@@ -3184,7 +3133,6 @@ ul {
         }
       }
     }
-
     .homePageProCardImgs {
       display: flex;
       justify-content: center;
@@ -3198,7 +3146,6 @@ ul {
       padding: 3.7rem 3.7rem 1.8rem 3.7rem;
       width: 24.4rem;
       height: 21.8rem;
-
       img {
         width: 100%;
         height: 100%;
@@ -3336,9 +3283,7 @@ ul {
     font-size: 2rem;
     font-style: normal;
     font-weight: 500;
-    // line-height: 0%;
     letter-spacing: -0.0016rem;
-    // padding-bottom: 2.65rem;
   }
 
   p .page-description-content {
@@ -12565,5 +12510,143 @@ ul {
 @media (max-width: 767.9px) {
   .thumbnailWrapper {
     display: none !important;
+  }
+}
+
+// !SUPPORT CARD DESIGN
+
+.productCardFastCard {
+  width: 100%;
+  height: 45rem;
+  border-radius: 3rem;
+  border: 1px solid #dee4ec;
+  background-color: #fff;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  a {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .productCardFastCardImage {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 3.7rem 3.7rem 1.8rem 3.7rem;
+    width: 25rem;
+    height: 22rem;
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+    }
+  }
+  .productCardFastCardContent {
+    padding: 0 2.5rem;
+    margin-top: 1.8rem;
+    span {
+      font-size: 2rem;
+      font-style: normal;
+      font-weight: 600;
+      line-height: normal;
+      color: $adentta-01;
+      width: 95% !important;
+      overflow: hidden;
+      display: -webkit-box;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+    }
+  }
+  .productCardFastCardContentPrice {
+    padding: 0 2.5rem;
+    margin-top: 1rem;
+    display: flex;
+    align-items: flex-end;
+    justify-content: flex-start;
+    gap: 1rem;
+    .productCardFastCardContentPriceItem {
+      width: 9.8rem;
+      height: 4.1rem;
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      border-radius: 2rem;
+      justify-content: center;
+      background-color: #f0ece3;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      #prices {
+        color: #293881;
+        font-size: 1.7rem;
+        font-style: normal;
+        font-weight: 600;
+        line-height: normal;
+      }
+    }
+    .productCardFastCardContentOldPriceItem {
+      width: 7.8rem;
+      height: 2.8rem;
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      border-radius: 2rem;
+      justify-content: center;
+      background-color: #fff;
+      border: 1px solid #293880;
+      position: relative;
+      opacity: 0.5;
+      #prices {
+        color: #293881;
+        font-size: 1.4rem;
+        font-style: normal;
+        font-weight: 600;
+        line-height: normal;
+        position: relative;
+        z-index: 1;
+      }
+      &::after {
+        content: "";
+        position: absolute;
+        top: 50%;
+        left: 0;
+        width: 100%;
+        height: 2px;
+        background-color: red;
+        transform: rotate(-15deg);
+        transform-origin: center;
+        z-index: 0;
+      }
+    }
+  }
+  .productCardFastCardLearnmore {
+    height: 6.3rem;
+    a {
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-top: 1px solid #dee4ec;
+      gap: 0.8rem;
+      height: 6.3rem;
+      width: 100%;
+    }
+    span {
+      color: #202054;
+      text-align: center;
+      font-size: 1.5611rem;
+      font-style: normal;
+      font-weight: 500;
+      line-height: normal;
+      letter-spacing: -0.012px;
+    }
+    img {
+      width: 1.3876rem;
+      height: 1.3876rem;
+    }
   }
 }

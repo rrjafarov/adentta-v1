@@ -18,13 +18,10 @@ async function fetchBrandsPageData() {
   const lang = cookieStore.get("NEXT_LOCALE");
 
   try {
-    const { data: brands } = await axiosInstance.get(
-      `/page-data/brands`,
-      {
-        // headers: { Lang: lang.value },
-        cache: "no-store",
-      }
-    );
+    const { data: brands } = await axiosInstance.get(`/page-data/brands`, {
+      // headers: { Lang: lang.value },
+      cache: "no-store",
+    });
     return brands;
   } catch (error) {
     throw error;
@@ -38,13 +35,10 @@ async function fetchEventsPageData() {
   const lang = cookieStore.get("NEXT_LOCALE");
 
   try {
-    const { data: events } = await axiosInstance.get(
-      `/page-data/event`,
-      {
-        // headers: { Lang: lang.value },
-        cache: "no-store",
-      }
-    );
+    const { data: events } = await axiosInstance.get(`/page-data/event`, {
+      // headers: { Lang: lang.value },
+      cache: "no-store",
+    });
     return events;
   } catch (error) {
     throw error;
@@ -64,7 +58,7 @@ async function fetchBlogsPageData() {
       {
         // headers: { Lang: lang.value },
         cache: "no-store",
-      }
+      },
     );
     return blogs;
   } catch (error) {
@@ -127,7 +121,7 @@ async function fetchCategoryPageData() {
       {
         // headers: { Lang: lang.value },
         cache: "no-store",
-      }
+      },
     );
     return category;
   } catch (error) {
@@ -264,32 +258,26 @@ const Home = async () => {
   const setting = await fetchSettingsPageData();
   const settingData = setting?.data || [];
 
+  const rawPhone = contact?.data?.phone || "";
+  const whatsappNumber = rawPhone
+    .replace(/\D+/g, "")
+    .replace(/^00/, "")
+    .replace(/^0/, "994")
+    .replace(/^(?!994)/, "994");
+
   return (
     <div>
-      {/* <Header
-        settingData={settingData}
-        categoryData={categoryData}
-        isHomePage={true}
-      /> */}
       <HeroSlider bannerData={bannerData} heroSliderData={heroSliderData} />
       <LittleCard t={t} />
-      <HomePageProducts
-        t={t}
-        categoryData={categoryData}
-      />
+      <HomePageProducts t={t} categoryData={categoryData} whatsappNumber={whatsappNumber} />
       <VideoProviderHomePage t={t} homepageData={homepageData} />
       <TopBrandsHomePage t={t} brandsData={brandsData} />
       <OurEventsHomePage t={t} eventsData={eventsData} />
       <GlobalExcellence t={t} brandsData={brandsData} />
       <OurBlogsHomePage t={t} blogData={blogData} />
-      {/* <Footer
-        contact={contact}
-        isHomePage={true}
-        t={t}
-        categoryData={categoryData}
-        eventsData={eventsData}
-        brandsData={brandsData}
-      /> */}
+
+
+      
     </div>
   );
 };

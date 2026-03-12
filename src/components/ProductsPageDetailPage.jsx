@@ -74,12 +74,6 @@ const PriceInquiry = ({ t, whatsappNumber, productData }) => {
 };
 
 
-
-
-
-
-
-
 const DetailPageAccordion = ({ title, children }) => {
   const [isOpen, setIsOpen] = useState(false);
   return (
@@ -274,13 +268,6 @@ const ProductsPageDetailPage = ({
                       </Link>
                     </div>
                   </div> */}
-
-
-
-
-
-
-
 
 
                   {productData.quantity > 0 && (

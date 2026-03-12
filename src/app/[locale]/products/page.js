@@ -3,6 +3,7 @@ import NewProductPage from "@/components/Footer/NewProductPage";
 import React from "react";
 import { cookies } from "next/headers";
 import axiosInstance from "@/lib/axios";
+import ProductCardFast from "@/components/Header/ProductCardFast";
 
 function buildRawQuery(searchParams = {}) {
   const parts = [];
@@ -343,6 +344,7 @@ const Page = async ({ searchParams }) => {
         productData={productData}
         selectedCategory={selectedCategoryObj}
       />
+      
       {/* <Footer
         contact={contact}
         categoryData={categoryData}
