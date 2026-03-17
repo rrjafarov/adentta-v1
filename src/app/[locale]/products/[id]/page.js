@@ -196,7 +196,6 @@ export default async function Page({ params }) {
     <>
       <div className="productBackground">
       </div>
-
       <ProductsPageDetailPage
         t={t}
         productData={productDetail}

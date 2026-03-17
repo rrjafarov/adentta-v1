@@ -7,6 +7,8 @@ import "swiper/css/autoplay";
 import "swiper/css/navigation";
 import HomePageProductCard from "./Sliders/HomePageProductCard";
 import axiosInstance from "@/lib/axios";
+import Link from "next/link";
+import { HiOutlinePercentBadge } from "react-icons/hi2";
 
 const HomePageProducts = ({ categoryData, t, whatsappNumber }) => {
   const [selectedCategory, setSelectedCategory] = useState(null);
@@ -18,7 +20,6 @@ const HomePageProducts = ({ categoryData, t, whatsappNumber }) => {
     fetchProducts(null);
   }, []);
 
-  // ✅ ÜÇÜN ALT KATEQORİYALARI TAP
   const getSubcategoryIds = (parentCategoryId) => {
     if (!Array.isArray(categoryData)) return [];
     
@@ -106,6 +107,9 @@ const HomePageProducts = ({ categoryData, t, whatsappNumber }) => {
         <h2>{t?.homeProductsTitle || "Explore Our Products"}</h2>
 
         <div className="buttons">
+          <div className="superOffers">
+            <Link href="#"><span>{t?.superOffers}</span> <HiOutlinePercentBadge color="red" className="offersIcon" /></Link>
+          </div>
           <div
             className={`btn btn-1 ${selectedCategory === null ? "active" : ""}`}
           >
@@ -113,7 +117,6 @@ const HomePageProducts = ({ categoryData, t, whatsappNumber }) => {
               <p>{t?.allSelect || "All"}</p>
             </button>
           </div>
-
           {/* Kategori slider */}
           <div className="category-slider-wrapper">
             <Swiper
@@ -152,7 +155,6 @@ const HomePageProducts = ({ categoryData, t, whatsappNumber }) => {
               ))}
             </Swiper>
           </div>
-
           <div className="swiper-navigation">
             <button className="swiper-button-prev-custom">
               <img src="/icons/bomLeft.svg" alt="left" />

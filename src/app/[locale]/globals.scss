@@ -12513,6 +12513,18 @@ ul {
   }
 }
 
+
+
+
+
+
+
+
+
+
+
+
+
 // !SUPPORT CARD DESIGN
 
 .productCardFastCard {
@@ -12680,5 +12692,21 @@ ul {
   &:hover {
     transform: scale(1.05);
     transition: 0.7s ease;
+  }
+}
+.superOffers{
+  a{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    span{
+      font-size: 2.6rem;
+      color: #293881;
+    }
+    .offersIcon{
+      margin-left: 0.5rem;
+      margin-right: 2.5rem;
+      font-size: 3.6rem;
+    }
   }
 }
