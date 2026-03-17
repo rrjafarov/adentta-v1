@@ -413,7 +413,7 @@ $adentta-06: #29282f !important;
     }
   }
 }
-.headerBacground{
+.headerBacground {
   background-color: transparent !important;
 }
 .mobileMenuIcon {
@@ -553,7 +553,7 @@ $adentta-06: #29282f !important;
         45rem - 5rem
       ); /* İçeriğin sığabileceği alana kaydırma ekler */
 
-      gap: 2.6rem;
+      gap: 3rem;
       span {
         padding-top: 3.2rem;
         color: #202054;
@@ -581,7 +581,7 @@ $adentta-06: #29282f !important;
           height: 15rem;
           object-fit: cover;
         }
-        h3 {
+        strong {
           color: #3f3fc8;
           font-size: 1.7rem;
           font-style: normal;
@@ -593,10 +593,15 @@ $adentta-06: #29282f !important;
         }
         p {
           color: #000;
-          font-size: 1.6rem;
+          font-size: 1.7rem;
           font-style: normal;
           font-weight: 400;
           line-height: 155%;
+          display: -webkit-box;
+          overflow: hidden;
+          text-overflow: ellipsis;
+          -webkit-line-clamp: 1;
+          -webkit-box-orient: vertical;
         }
         .prdtsTest {
           padding-top: 1.8rem;

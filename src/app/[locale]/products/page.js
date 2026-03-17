@@ -17,7 +17,6 @@ function buildRawQuery(searchParams = {}) {
   return parts.join("&");
 }
 
-// ------- SLUG HELPERS -------
 const slugify = (text) => {
   if (!text) return "";
   return String(text)
@@ -224,6 +223,25 @@ async function getTranslations() {
   }
 }
 
+
+
+async function fetchContactPageData() {
+  const cookieStore = await cookies();
+  const lang = cookieStore.get("NEXT_LOCALE");
+  try {
+    const { data: contact } = await axiosInstance.get(`/page-data/contact`, {
+      // headers: { Lang: lang.value },
+      cache: "no-store",
+    });
+    return contact;
+  } catch (error) {
+    throw error;
+  }
+}
+
+
+
+
 export async function generateMetadata({ searchParams }) {
   const catSlug = readCategorySlug(searchParams?.category);
   let metaSourceCategory = null;
@@ -240,8 +258,8 @@ export async function generateMetadata({ searchParams }) {
     metaSourceCategory = firstProduct?.categories?.[0] || null;
   }
 
-  const title = metaSourceCategory?.meta_title || "Adentta";
-  const description = metaSourceCategory?.meta_description || "Adentta";
+  const title = metaSourceCategory?.meta_title || "adentta";
+  const description = metaSourceCategory?.meta_description || "adentta";
   const canonicalUrl = "https://adentta.az";
 
   const cookieStore = await cookies();
@@ -283,11 +301,9 @@ export async function generateMetadata({ searchParams }) {
 }
 
 const Page = async ({ searchParams }) => {
-  const productData = await fetchProductsPageData(searchParams ?? {});
-  
+  const productData = await fetchProductsPageData(searchParams ?? {}); 
   const categoryResponse = await fetchCategoryPageData();
   const categoryData = categoryResponse?.data?.data || [];
-  
   const brandsResponse = await fetchBrandsPageData();
   const brandsData = brandsResponse?.data?.data || [];
   
@@ -327,6 +343,15 @@ const Page = async ({ searchParams }) => {
     });
   }
 
+  const contact = await fetchContactPageData();
+  const rawPhone = contact?.data?.phone || "";
+  const whatsappNumber = rawPhone
+    .replace(/\D+/g, "")
+    .replace(/^00/, "")
+    .replace(/^0/, "994")
+    .replace(/^(?!994)/, "994");
+
+
   return (
     <div>
       {/* <Header settingData={settingData} categoryData={categoryData} /> */}
@@ -343,14 +368,8 @@ const Page = async ({ searchParams }) => {
         t={t}
         productData={productData}
         selectedCategory={selectedCategoryObj}
+        whatsappNumber={whatsappNumber}
       />
-      
-      {/* <Footer
-        contact={contact}
-        categoryData={categoryData}
-        eventsData={eventsData}
-        brandsData={brandsData}
-      /> */}
     </div>
   );
 };

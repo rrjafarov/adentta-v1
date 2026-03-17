@@ -4,6 +4,7 @@ import Link from "next/link";
 import Image from "next/image";
 import Thumbnail from "./Sliders/Thumbnail";
 import Manat from "../../public/icons/manat.svg";
+import ProductCardFast from "@/components/Header/ProductCardFast";
 
 const WpLink = ({ t, whatsappNumber }) => {
   const [currentUrl, setCurrentUrl] = useState("");
@@ -72,7 +73,6 @@ const PriceInquiry = ({ t, whatsappNumber, productData }) => {
     </div>
   );
 };
-
 
 const DetailPageAccordion = ({ title, children }) => {
   const [isOpen, setIsOpen] = useState(false);
@@ -213,11 +213,6 @@ const ProductsPageDetailPage = ({
                 <div className="productDetailRightTitle">
                   <h1>{productData.title}</h1>
 
-
-
-
-
-
                   <div className="pricesDP">
                     {hasPrice ? (
                       <>
@@ -268,7 +263,6 @@ const ProductsPageDetailPage = ({
                       </Link>
                     </div>
                   </div> */}
-
 
                   {productData.quantity > 0 && (
                     <div className="detailPageQuantity">
@@ -515,51 +509,29 @@ const ProductsPageDetailPage = ({
             <div className="row">
               {similarProducts.map((prod) => (
                 <div key={prod.id} className="xl-3 lg-3 md-6 sm-6">
-                  <Link
-                    href={`/products/${slugify(`${prod.title}-${prod.id}`)}`}
-                    // href={`/products/${prod?.title
-                    //   ?.toLowerCase()
-                    //   .replace(/\s+/g, "-")}-${prod.id}`}
-                    className="block"
-                  >
-                    <div className="detailPageBottomSimilar">
-                      <div className="homePageProductCardContent">
-                        <div className="homePageProCardImgs">
-                          <div className="homePageProductCardContentImage">
-                            <Image
-                              src={
-                                prod?.image
-                                  ? `https://admin.adentta.az/storage${prod.image}`
-                                  : "/images/adenttaDefaultImg.svg"
-                              }
-                              alt={prod.title}
-                              width={400}
-                              height={400}
-                            />
-                          </div>
-                        </div>
-                        <div className="homePageProductCardContentInner">
-                          <div className="homePageProductCardContentText">
-                            <span>{prod.title}</span>
-                          </div>
-                          <div className="price">
-                            <div className="priceItem">
-                              <strong id="prices">{prod.price}</strong>
-                              <Manat />
-                            </div>
-                          </div>
-                        </div>
-                        <div className="homePageProductCardContentBottom">
-                          <span>{t?.learnMore || "Learn More"}</span>
-
-                          <img
-                            src="/icons/arrowTopRight.svg"
-                            alt="Learn More"
-                          />
-                        </div>
-                      </div>
-                    </div>
-                  </Link>
+                  <ProductCardFast
+                    whatsappNumber={whatsappNumber}
+                    id={prod.id}
+                    title={prod.title}
+                    image={
+                      prod?.image
+                        ? `https://admin.adentta.az/storage${prod.image}`
+                        : "/images/adenttaDefaultImg.svg"
+                    }
+                    price={prod.price}
+                    oldPrice={prod.old_price}
+                    t={t}
+                    slugify={(text) =>
+                      text
+                        .toLowerCase()
+                        .normalize("NFKD")
+                        .replace(/[\u0300-\u036f]/g, "")
+                        .replace(/[\/\\]+/g, "-")
+                        .replace(/[^a-z0-9-]+/g, "-")
+                        .replace(/--+/g, "-")
+                        .replace(/^-+|-+$/g, "")
+                    }
+                  />
                 </div>
               ))}
             </div>
@@ -576,48 +548,29 @@ const ProductsPageDetailPage = ({
             <div className="row">
               {lastViewed.map((prod) => (
                 <div key={prod.id} className="xl-3 lg-3 md-6 sm-6">
-                  <Link
-                    href={`/products/${slugify(`${prod.title}-${prod.id}`)}`}
-                    className="block"
-                  >
-                    <div className="detailPageBottomSimilar">
-                      <div className="homePageProductCardContent">
-                        <div className="homePageProCardImgs">
-                          <div className="homePageProductCardContentImage">
-                            <Image
-                              src={
-                                prod?.image
-                                  ? `https://admin.adentta.az/storage${prod.image}`
-                                  : "/images/adenttaDefaultImg.svg"
-                              }
-                              alt={prod.title}
-                              width={400}
-                              height={400}
-                            />
-                          </div>
-                        </div>
-                        <div className="homePageProductCardContentInner">
-                          <div className="homePageProductCardContentText">
-                            <span>{prod.title}</span>
-                          </div>
-                          <div className="price">
-                            <div className="priceItem">
-                              <strong id="prices">{prod.price}</strong>
-                              <Manat />
-                            </div>
-                          </div>
-                        </div>
-                        <div className="homePageProductCardContentBottom">
-                          <span>{t?.learnMore || "Learn More"}</span>
-
-                          <img
-                            src="/icons/arrowTopRight.svg"
-                            alt="Learn More"
-                          />
-                        </div>
-                      </div>
-                    </div>
-                  </Link>
+                  <ProductCardFast
+                    whatsappNumber={whatsappNumber}
+                    id={prod.id}
+                    title={prod.title}
+                    image={
+                      prod?.image
+                        ? `https://admin.adentta.az/storage${prod.image}`
+                        : "/images/adenttaDefaultImg.svg"
+                    }
+                    price={prod.price}
+                    oldPrice={prod.old_price}
+                    t={t}
+                    slugify={(text) =>
+                      text
+                        .toLowerCase()
+                        .normalize("NFKD")
+                        .replace(/[\u0300-\u036f]/g, "")
+                        .replace(/[\/\\]+/g, "-")
+                        .replace(/[^a-z0-9-]+/g, "-")
+                        .replace(/--+/g, "-")
+                        .replace(/^-+|-+$/g, "")
+                    }
+                  />
                 </div>
               ))}
             </div>

@@ -24,7 +24,7 @@ const slugify = (text) => {
     .replace(/^-+|-+$/g, "");
 };
 
-const HomePageProductCard = ({ productData = [], t }) => {
+const HomePageProductCard = ({ whatsappNumber, productData = [], t }) => {
   const visibleProducts = productData.slice(0, 5);
 
   return (
@@ -55,50 +55,8 @@ const HomePageProductCard = ({ productData = [], t }) => {
           >
             {visibleProducts.map((product) => (
               <SwiperSlide key={product.id}>
-                {/* <Link
-                  href={`/products/${slugify(product.title)}-${product.id}`}
-                  className="block"
-                >
-                  <div className="homePageProductCardContent">
-                    <div className="homePageProCardImgs">
-                      <div className="homePageProductCardContentImage">
-                        <Image
-                          src={
-                            product?.image
-                              ? `https://admin.adentta.az/storage${product.image}`
-                              : "/images/adenttaDefaultImg.svg"
-                          }
-                          alt={product?.title || "Product image"}
-                          width={800}
-                          height={800}
-                          priority
-                          unoptimized
-                        />
-                      </div>
-                    </div>
-
-                    <div className="homePageProductCardContentInner">
-                      <div className="homePageProductCardContentText">
-                        <span>{product.title}</span>
-                      </div>
-
-                      <div className="price">
-                        <div className="priceItem">
-                          <strong id="prices">{product.price}</strong>
-                          <Manat />
-                        </div>
-                      </div>
-                    </div>
-
-                    <div className="homePageProductCardContentBottom">
-                      <span>{t?.learnMore || "Learn more"}</span>
-                      <img src="/icons/arrowTopRight.svg" alt="arrow" />
-                    </div>
-                  </div>
-                </Link> */}
-
-
                 <ProductCardFast
+                  whatsappNumber={whatsappNumber}
                   id={product.id}
                   title={product.title}
                   image={
@@ -107,7 +65,7 @@ const HomePageProductCard = ({ productData = [], t }) => {
                       : "/images/adenttaDefaultImg.svg"
                   }
                   price={product.price}
-                  oldPrice ={product.old_price}
+                  oldPrice={product.old_price}
                   t={t}
                   slugify={(text) =>
                     text

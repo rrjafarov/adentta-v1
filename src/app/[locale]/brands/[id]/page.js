@@ -1,5 +1,3 @@
-import Footer from "@/components/Footer/Footer";
-import Header from "@/components/Header/Header";
 import React from "react";
 import BrandsDetailPage from "@/components/BrandsDetailPage";
 import axiosInstance from "@/lib/axios";
@@ -9,10 +7,13 @@ async function fetchBrandsPageData() {
   const cookieStore = await cookies();
   const lang = cookieStore.get("NEXT_LOCALE");
 
-  const { data: brands } = await axiosInstance.get(`/page-data/brands?per_page=999`, {
-    cache: "no-store",
-    // headers: { Lang: lang.value },
-  });
+  const { data: brands } = await axiosInstance.get(
+    `/page-data/brands?per_page=999`,
+    {
+      cache: "no-store",
+      // headers: { Lang: lang.value },
+    },
+  );
   return brands.data.data;
 }
 
@@ -22,10 +23,13 @@ async function fetchCategoryPageData() {
   const lang = cookieStore.get("NEXT_LOCALE");
 
   try {
-    const { data: category } = await axiosInstance.get(`/page-data/categories?per_page=999`, {
-      // headers: { Lang: lang.value },
-      cache: "no-store",
-    });
+    const { data: category } = await axiosInstance.get(
+      `/page-data/categories?per_page=999`,
+      {
+        // headers: { Lang: lang.value },
+        cache: "no-store",
+      },
+    );
     return category;
   } catch (error) {
     throw error;
@@ -42,17 +46,19 @@ async function getTranslations() {
   }
 }
 
-
 //! brandsApi
 async function fetchBrandsPageDataFoot() {
   const cookieStore = await cookies();
   const lang = cookieStore.get("NEXT_LOCALE");
 
   try {
-    const { data: brands } = await axiosInstance.get(`/page-data/brands?per_page=999`, {
-      // headers: { Lang: lang.value },
-      cache: "no-store",
-    });
+    const { data: brands } = await axiosInstance.get(
+      `/page-data/brands?per_page=999`,
+      {
+        // headers: { Lang: lang.value },
+        cache: "no-store",
+      },
+    );
     return brands;
   } catch (error) {
     throw error;
@@ -60,10 +66,19 @@ async function fetchBrandsPageDataFoot() {
 }
 //! brandsApi
 
-
-
-
-
+async function fetchContactPageData() {
+  const cookieStore = await cookies();
+  const lang = cookieStore.get("NEXT_LOCALE");
+  try {
+    const { data: contact } = await axiosInstance.get(`/page-data/contact`, {
+      // headers: { Lang: lang.value },
+      cache: "no-store",
+    });
+    return contact;
+  } catch (error) {
+    throw error;
+  }
+}
 
 export async function generateMetadata({ params }) {
   // URL-dən slug-u ayırırıq
@@ -73,7 +88,7 @@ export async function generateMetadata({ params }) {
   const allBrands = await fetchBrandsPageData();
 
   // Cari brendi tapırıq
-  const brand = allBrands.find(b => b.id.toString() === slug);
+  const brand = allBrands.find((b) => b.id.toString() === slug);
 
   if (!brand) {
     return {
@@ -123,44 +138,48 @@ export async function generateMetadata({ params }) {
   };
 }
 
-
-
-
 const page = async ({ params }) => {
-
   const brandsResponse = await fetchBrandsPageDataFoot();
   const brandsData = brandsResponse?.data?.data || [];
-
 
   const translations = await getTranslations();
   const t = translations?.data;
   const { id } = params;
-  const slug =  id.split("-").pop(); // URL'den gelen id'yi alıyoruz
+  const slug = id.split("-").pop(); // URL'den gelen id'yi alıyoruz
   const brandsDetailData = await fetchBrandsPageData();
 
-  const brandsDetailDataDetail = brandsDetailData.find((item) => item.id.toString() === slug);
+  const brandsDetailDataDetail = brandsDetailData.find(
+    (item) => item.id.toString() === slug,
+  );
 
   if (!brandsDetailDataDetail) {
     return <div>Blog not found.</div>;
   }
 
-  const otherBrands = brandsDetailData.filter((item) => item.id.toString() !== slug);
+  const otherBrands = brandsDetailData.filter(
+    (item) => item.id.toString() !== slug,
+  );
   const categoryResponse = await fetchCategoryPageData();
   const categoryData = categoryResponse?.data?.data || [];
 
-  
+  const contact = await fetchContactPageData();
+  const rawPhone = contact?.data?.phone || "";
+  const whatsappNumber = rawPhone
+    .replace(/\D+/g, "")
+    .replace(/^00/, "")
+    .replace(/^0/, "994")
+    .replace(/^(?!994)/, "994");
 
   return (
     <div>
-
-
-      <BrandsDetailPage t={t} brandsDetailDataDetail={brandsDetailDataDetail} otherBrands={otherBrands} />
-
-
+      <BrandsDetailPage
+        whatsappNumber={whatsappNumber}
+        t={t}
+        brandsDetailDataDetail={brandsDetailDataDetail}
+        otherBrands={otherBrands}
+      />
     </div>
   );
 };
 
 export default page;
-
-

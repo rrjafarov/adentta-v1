@@ -1,9 +1,52 @@
+"use client";
 import Image from "next/image";
 import Link from "next/link";
 import React from "react";
 import Manat from "../../../public/icons/manat.svg";
+import { useState, useEffect } from "react";
 
-const ProductCardFast = ({ id, title, image, price, oldPrice, t, slugify }) => {
+const PriceInquiryCard = ({ t, whatsappNumber, title, slug }) => {
+  const [currentUrl, setCurrentUrl] = useState("");
+
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      setCurrentUrl(`${window.location.origin}${slug}`);
+    }
+  }, [slug]);
+
+  const message = encodeURIComponent(
+    `${
+      t?.priceWhatsappMessage ||
+      "Salam, bu məhsulun qiyməti haqqında məlumat ala bilərəm?"
+    }
+    ${title} 
+    ${currentUrl}`,
+  );
+
+  return (
+    <div className="productsQueryButton">
+      <Link
+        href={`https://wa.me/${whatsappNumber}?text=${message}`}
+        prefetch={false}
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        <button>{t?.priceMessage}</button>
+      </Link>
+    </div>
+  );
+};
+
+const ProductCardFast = ({
+  id,
+  title,
+  image,
+  price,
+  oldPrice,
+  t,
+  slugify,
+  whatsappNumber,
+}) => {
   const productSlug = slugify(title);
 
   return (
@@ -22,8 +65,7 @@ const ProductCardFast = ({ id, title, image, price, oldPrice, t, slugify }) => {
         <span>{title}</span>
       </div>
 
-
-      {Number(price) > 0 && (
+      {Number(price) > 0 ? (
         <div className="productCardFastCardContentPrice">
           <div className="productCardFastCardContentPriceItem">
             <strong id="prices">{price}</strong>
@@ -37,9 +79,14 @@ const ProductCardFast = ({ id, title, image, price, oldPrice, t, slugify }) => {
             </div>
           )}
         </div>
+      ) : (
+        <PriceInquiryCard
+          t={t}
+          whatsappNumber={whatsappNumber}
+          title={title}
+          slug={`/products/${productSlug}-${id}`}
+        />
       )}
-
-
       <div className="productCardFastCardLearnmore">
         <Link href={`/products/${productSlug}-${id}`}>
           <span>{t?.learnMore || "Learn more"}</span>

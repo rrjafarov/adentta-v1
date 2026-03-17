@@ -8,6 +8,7 @@ import { Fancybox } from "@fancyapps/ui";
 import Manat from "../../public/icons/manat.svg";
 import "@fancyapps/ui/dist/fancybox/fancybox.css";
 import axiosInstance from "@/lib/axios";
+import ProductCardFast from "@/components/Header/ProductCardFast";
 
 Fancybox.bind("[data-fancybox]", {
   dragToClose: false,
@@ -16,7 +17,13 @@ Fancybox.bind("[data-fancybox]", {
   },
 });
 
-const PdfCatalogCard = ({ member, t, isExpanded, toggleExpand, currentBrandTitle }) => {
+const PdfCatalogCard = ({
+  member,
+  t,
+  isExpanded,
+  toggleExpand,
+  currentBrandTitle,
+}) => {
   const paragraphRef = useRef(null);
   const measureRef = useRef(null);
   const [isTruncated, setIsTruncated] = useState(false);
@@ -49,7 +56,11 @@ const PdfCatalogCard = ({ member, t, isExpanded, toggleExpand, currentBrandTitle
     <div className="xl-4 lg-4 md-6 sm-12">
       <div className="pdfCatalogCard">
         <div className="pdfCatalogCardImg">
-          <Link href={pdfHref} target="_blank" className="pdfCatalogCardImgLink">
+          <Link
+            href={pdfHref}
+            target="_blank"
+            className="pdfCatalogCardImgLink"
+          >
             <Image src={imgSrc} alt="catalog" width={500} height={500} />
           </Link>
           {currentBrandTitle && (
@@ -58,7 +69,9 @@ const PdfCatalogCard = ({ member, t, isExpanded, toggleExpand, currentBrandTitle
             </div>
           )}
         </div>
-        <div className={`pdfCatalogCardInfo ${isExpanded ? "expanded" : "collapsed"}`}>
+        <div
+          className={`pdfCatalogCardInfo ${isExpanded ? "expanded" : "collapsed"}`}
+        >
           <div className="pdfCatalogCardInfoContent">
             <h3>{member?.title}</h3>
             <div
@@ -66,7 +79,11 @@ const PdfCatalogCard = ({ member, t, isExpanded, toggleExpand, currentBrandTitle
               className={`pdfCatalogCardInfoParagraph ${isExpanded ? "expanded" : "collapsed"}`}
               dangerouslySetInnerHTML={{ __html: member?.short_text || "" }}
             />
-            <div ref={measureRef} className="pdfCatalogMeasure" aria-hidden="true" />
+            <div
+              ref={measureRef}
+              className="pdfCatalogMeasure"
+              aria-hidden="true"
+            />
             {isTruncated && (
               <button
                 type="button"
@@ -74,13 +91,20 @@ const PdfCatalogCard = ({ member, t, isExpanded, toggleExpand, currentBrandTitle
                 onClick={() => toggleExpand(member.id)}
                 aria-expanded={isExpanded}
               >
-                {isExpanded ? t?.showLess || "gizlət" : t?.showMorePdf || "..daha ətraflı"}
+                {isExpanded
+                  ? t?.showLess || "gizlət"
+                  : t?.showMorePdf || "..daha ətraflı"}
               </button>
             )}
             <Link href={pdfHref} target="_blank" passHref>
               <button className="pdfCatalogCardInfoLink">
                 {t?.pdfPageDownload || "Download PDF"}
-                <Image src="/icons/downloadIcon.svg" alt="download" width={100} height={100} />
+                <Image
+                  src="/icons/downloadIcon.svg"
+                  alt="download"
+                  width={100}
+                  height={100}
+                />
               </button>
             </Link>
           </div>
@@ -90,7 +114,12 @@ const PdfCatalogCard = ({ member, t, isExpanded, toggleExpand, currentBrandTitle
   );
 };
 
-const BrandsDetailPage = ({ t, brandsDetailDataDetail, otherBrands }) => {
+const BrandsDetailPage = ({
+  t,
+  brandsDetailDataDetail,
+  otherBrands,
+  whatsappNumber,
+}) => {
   const [productData, setProductData] = useState([]);
   const [expandedIds, setExpandedIds] = useState(new Set());
 
@@ -106,7 +135,9 @@ const BrandsDetailPage = ({ t, brandsDetailDataDetail, otherBrands }) => {
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        const { data: response } = await axiosInstance.get(`/page-data/product?per_page=9999`);
+        const { data: response } = await axiosInstance.get(
+          `/page-data/product?per_page=9999`,
+        );
         setProductData(response.data.data);
       } catch (error) {
         console.error(error);
@@ -163,7 +194,7 @@ const BrandsDetailPage = ({ t, brandsDetailDataDetail, otherBrands }) => {
 
         {/* MOBILE */}
 
-         <div className="brandsDetaiLPageHeroMobile">
+        <div className="brandsDetaiLPageHeroMobile">
           <div className="brandsDetaiLPageHeroImgMobile">
             <Image
               src={`https://admin.adentta.az/storage${brandsDetailDataDetail.mobil_banner}`}
@@ -186,14 +217,6 @@ const BrandsDetailPage = ({ t, brandsDetailDataDetail, otherBrands }) => {
           </div>
         </div>
 
-
-
-
-
-
-
-
-
         <div className="brandsDPTop ">
           <Link href="/">
             <strong className="topper">Adentta</strong>
@@ -215,7 +238,9 @@ const BrandsDetailPage = ({ t, brandsDetailDataDetail, otherBrands }) => {
             width={8}
             height={8}
           />
-          <span className="topper lastLink">{brandsDetailDataDetail.title}</span>
+          <span className="topper lastLink">
+            {brandsDetailDataDetail.title}
+          </span>
         </div>
         <section id="brandsDPAbout">
           <div className="row">
@@ -261,45 +286,29 @@ const BrandsDetailPage = ({ t, brandsDetailDataDetail, otherBrands }) => {
                     .slice(0, 4)
                     .map((product, index) => (
                       <div key={index} className="xl-3 lg-3 md-6 sm-6">
-                        <Link
-                          href={`/products/${product?.title
-                            ?.toLowerCase()
-                            .replace(/\s+/g, "-")}-${product.id}`}
-                          className="block"
-                        >
-                          <div className="homePageProductCardContent ">
-                            <div className="homePageProCardImgs">
-                              <div className="homePageProductCardContentImage">
-                                <img
-                                  src={
-                                    product?.image
-                                      ? `https://admin.adentta.az/storage${product.image}`
-                                      : "/images/adenttaDefaultImg.svg"
-                                  }
-                                  alt={product?.title || "Product image"}
-                                />
-                              </div>
-                            </div>
-                            <div className="homePageProductCardContentInner">
-                              <div className="homePageProductCardContentText ">
-                                <span>{product.title}</span>
-                              </div>
-                              <div className="price">
-                                <div className="priceItem">
-                                  <strong id="prices">{product.price}</strong>
-                                  <Manat />
-                                </div>
-                              </div>
-                            </div>
-                            <div className="homePageProductCardContentBottom">
-                              <span>{t?.learnMore || "Learn More"}</span>
-                              <img
-                                src="/icons/arrowTopRight.svg"
-                                alt="Learn more"
-                              />
-                            </div>
-                          </div>
-                        </Link>
+                        <ProductCardFast
+                          whatsappNumber={whatsappNumber}
+                          id={product.id}
+                          title={product.title}
+                          image={
+                            product?.image
+                              ? `https://admin.adentta.az/storage${product.image}`
+                              : "/images/adenttaDefaultImg.svg"
+                          }
+                          price={product.price}
+                          oldPrice={product.old_price}
+                          t={t}
+                          slugify={(text) =>
+                            text
+                              .toLowerCase()
+                              .normalize("NFKD")
+                              .replace(/[\u0300-\u036f]/g, "")
+                              .replace(/[\/\\]+/g, "-")
+                              .replace(/[^a-z0-9-]+/g, "-")
+                              .replace(/--+/g, "-")
+                              .replace(/^-+|-+$/g, "")
+                          }
+                        />
                       </div>
                     ))}
                 </div>
