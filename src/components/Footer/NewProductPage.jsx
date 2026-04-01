@@ -1008,16 +1008,17 @@ const ProductsPageFilter = ({
                         price={data.price}
                         oldPrice={data.old_price}
                         t={t}
-                        slugify={(text) =>
-                          text
-                            .toLowerCase()
-                            .normalize("NFKD")
-                            .replace(/[\u0300-\u036f]/g, "")
-                            .replace(/[\/\\]+/g, "-")
-                            .replace(/[^a-z0-9-]+/g, "-")
-                            .replace(/--+/g, "-")
-                            .replace(/^-+|-+$/g, "")
-                        }
+                        slugify={slugify}
+                        // slugify={(text) =>
+                        //   text
+                        //     .toLowerCase()
+                        //     .normalize("NFKD")
+                        //     .replace(/[\u0300-\u036f]/g, "")
+                        //     .replace(/[\/\\]+/g, "-")
+                        //     .replace(/[^a-z0-9-]+/g, "-")
+                        //     .replace(/--+/g, "-")
+                        //     .replace(/^-+|-+$/g, "")
+                        // }
                       />
                     </div>
                   ))
