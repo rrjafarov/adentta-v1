@@ -1,0 +1,690 @@
+// ! Doctors Page
+// ? Doctors.jsx
+
+.doctorsTop {
+  padding-top: 4.41rem;
+  padding-bottom: 4.24rem;
+  padding-left: 0.55rem;
+  display: flex;
+  gap: 1.15rem;
+
+  strong {
+    color: #293881;
+    font-size: 1.3rem;
+    font-style: normal;
+    font-weight: 500;
+    line-height: normal;
+    border-bottom: 1px solid #293881;
+    cursor: pointer;
+  }
+
+  img {
+    width: 1.4rem;
+    height: 1.4rem;
+    flex-shrink: 0;
+  }
+
+  span {
+    color: #293881;
+    font-size: 1.3rem;
+    font-style: normal;
+    font-weight: 500;
+    line-height: normal;
+    opacity: 0.3;
+    // cursor: pointer;
+  }
+}
+
+.doctorsPageHeaderText {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
+  h1 {
+    color: $adentta-01;
+    font-size: 4rem;
+    font-style: normal;
+    font-weight: 600;
+    line-height: 4rem;
+    /* 100% */
+  }
+
+  span {
+    color: #2273ec;
+    font-size: 1.4rem;
+    font-style: normal;
+    font-weight: 500;
+    line-height: normal;
+    letter-spacing: 0.056rem;
+    text-transform: uppercase;
+  }
+
+  p {
+    padding-top: 1.82rem;
+    width: 100%;
+    max-width: 61.0379rem;
+    color: $adentta-01;
+    text-align: center;
+    font-size: 1.8rem;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 2.4rem;
+    letter-spacing: 0.054rem;
+  }
+
+  .doctorsSelects {
+    margin: 1.88rem 0 3.64rem 0;
+    display: flex;
+    gap: 1.7rem;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+
+    .doctorsSelect {
+      // width: 20.0668rem;
+      // height: 4.25rem;
+      border-radius: 1rem;
+      // border: 1px solid #d7e0ed;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      position: relative;
+      background: rgba(255, 255, 255, 0.4);
+    }
+
+    .doctorsSelect select {
+      width: 100%;
+      height: 100%;
+      border: none;
+      border-radius: 1rem;
+      background-color: transparent;
+      outline: none;
+      cursor: pointer;
+      appearance: none;
+      text-align: center;
+      background-image: url("/icons/blueBottomArrow.svg");
+      background-repeat: no-repeat;
+      background-position: right 1rem center;
+      background-size: 2.4rem 2.4rem;
+      color: #293881;
+      font-size: 1.5rem;
+      font-style: normal;
+      font-weight: 400;
+      line-height: normal;
+      letter-spacing: -0.015rem;
+      text-align: start;
+      padding-left: 2rem;
+    }
+  }
+}
+
+#doctorsCards {
+  padding-bottom: 5rem;
+
+  .doctorsCards {
+    .doctorsCard {
+      flex-shrink: 0;
+      border-radius: 1.5rem;
+      border: 1px solid #dee4ec;
+      background: #fff;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+
+      .doctorsCardImg {
+        // width: 40.8rem;
+        width: 100%;
+        border-radius: 1.5rem;
+
+        // height: 100%;
+        height: 42.139rem;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        overflow: hidden;
+        // padding: 3.35rem 3.35rem 0 3.35rem;
+
+        img {
+          width: 100%;
+          height: 100%;
+          border-radius: 1.5rem;
+          object-fit: cover;
+          transition: all 0.4s ease;
+          border-radius: 1rem 1rem 0 0;
+
+          &:hover {
+            transform: scale(1.1);
+          }
+        }
+      }
+    }
+
+    .doctorsCardContent {
+      width: 100%;
+      height: 18rem;
+
+      .doctorJobTypes {
+        display: flex;
+        padding-bottom: 1.84rem;
+        gap: 1rem;
+
+        .doctorJobType {
+          height: 3.1061rem;
+          border-radius: 0.8rem;
+          background: #4d7abd;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          cursor: pointer;
+        }
+
+        span {
+          padding: 0.7rem 1.34rem;
+          color: #fff;
+          font-size: 1.4rem;
+          font-style: normal;
+          font-weight: 400;
+          line-height: normal;
+          text-align: center;
+        }
+      }
+
+      margin-top: 1.64rem;
+      border-radius: 1.5rem;
+      background: rgba(193, 217, 241);
+      background-color: #c1d9f133;
+      padding-top: 2.75rem;
+      padding-left: 2rem;
+      padding-right: 2rem;
+      padding-bottom: 3.46rem;
+
+      h3 {
+        color: $adentta-01;
+        font-size: 2rem;
+        font-style: normal;
+        font-weight: 600;
+        line-height: normal;
+      }
+
+      .doctorBey {
+        display: flex;
+        gap: 0.4rem;
+        padding-top: 1rem;
+        color: #000;
+        font-size: 1.4rem;
+        font-style: normal;
+        font-weight: 400;
+        line-height: 129.5%;
+        span {
+          font-size: 1.4rem;
+        }
+      }
+    }
+  }
+}
+
+@media (max-width: 768px) {
+  .doctorsPageHeaderText {
+    margin-top: 7rem !important;
+  }
+
+  .topper {
+    display: none;
+  }
+}
+
+@media (max-width: 768px) {
+  .doctorsCardContent {
+    h3 {
+      font-size: 2.5rem !important;
+    }
+  }
+
+  .doctorBey {
+    span {
+      font-size: 2rem !important;
+    }
+  }
+
+  .doctorDetailContent {
+    p {
+      font-size: 1.9rem !important;
+    }
+  }
+}
+
+// ? Doctors.jsx
+
+// ? DoctorsDetailPage.jsx
+.doctorsDetailProfile {
+  margin-top: 5rem;
+
+  .doctorProfile {
+    cursor: pointer;
+
+    .detailProfileImg {
+      background-color: white;
+      border: 1.5rem solid white;
+      width: 39.5rem;
+      height: 38rem;
+      transform: scale(1.1);
+      border-radius: 50%;
+
+      img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        border-radius: 50%;
+        border: 2px solid #f3f7fc;
+      }
+    }
+  }
+
+  .doctorDetailContent {
+    min-height: 38rem;
+    border-radius: 2rem;
+    background: #f3f7fc;
+    padding: 4rem 3.5rem 3rem 16.65rem;
+    margin-bottom: 2.2rem;
+
+    p {
+      padding-top: 3rem;
+      max-width: 49rem;
+      color: #000;
+      font-size: 1.6rem;
+      width: 100%;
+      font-style: normal;
+      font-weight: 400;
+      line-height: 2.5rem;
+      /* 156.25% */
+    }
+
+    .verticalLine {
+      width: 0.3rem;
+      height: 16.7797rem;
+      background: rgba(34, 115, 236, 0.5);
+      position: absolute;
+      left: 13rem;
+      top: 11rem;
+      border-radius: 2rem;
+    }
+
+    .preparation {
+      max-width: 69rem;
+    }
+
+    .doctorDetailContentHeader {
+      h3 {
+        color: #293881;
+        font-size: 3.2rem;
+        font-style: normal;
+        font-weight: 600;
+        line-height: normal;
+      }
+
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+
+      .doctorDetailJobTypes {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 1rem;
+
+        .doctorDetailJobType {
+          height: 3.1061rem;
+          border-radius: 0.8rem;
+          background: #4d7abd;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          cursor: pointer;
+        }
+
+        span {
+          padding: 0.7rem 1.34rem;
+          color: #fff;
+          font-size: 1.4rem;
+          font-style: normal;
+          font-weight: 400;
+          line-height: normal;
+          text-align: center;
+        }
+      }
+    }
+  }
+
+  .doctorDetailContentPreparation {
+    padding: 3.5rem 3.5rem 5rem 18.65rem;
+    position: relative;
+  }
+
+  .doctorDetailContentBrand {
+    max-width: 62.4117rem;
+
+    p {
+      max-width: 62.4117rem;
+    }
+  }
+
+  .detailBrandItems {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 2rem;
+    padding-top: 1rem;
+
+    .detailBrandItem {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      width: 13.5034rem;
+      height: 7.6821rem;
+      flex-shrink: 0;
+      border-radius: 1.1921rem;
+      border: 0.662px solid #dee4ec;
+    }
+  }
+
+  .doctorDetailContentInter {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+
+    .doctorDetailContentInterText {
+      display: flex;
+      width: 100%;
+      gap: 1.6rem;
+
+      span {
+        width: 100%;
+      }
+
+      .portodes {
+        width: 100%;
+      }
+
+      img {
+        padding-top: 1.3rem;
+      }
+    }
+  }
+
+  .certificates {
+    padding-top: 4.1rem;
+    display: flex;
+    gap: 2.83rem;
+
+    .certificateImg {
+      width: 17.5242rem;
+      height: 22.0152rem;
+      flex-shrink: 0;
+
+      img {
+        width: 100%;
+        height: 100%;
+      }
+    }
+  }
+}
+
+.doctorsDetailPageOtherDoctors {
+  padding: 7.91rem 0 5.34rem;
+
+  .doctorsOtherDoctors {
+    padding-bottom: 3.41rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    span {
+      color: $adentta-01;
+      font-size: 4rem;
+      font-style: normal;
+      font-weight: 600;
+      line-height: 4rem;
+      /* 100% */
+    }
+  }
+
+  .doctorsCards {
+    .doctorsCard {
+      flex-shrink: 0;
+      border-radius: 1.5rem;
+      border: 1px solid #dee4ec;
+      background: #fff;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+
+      .doctorsCardImg {
+        // width: 40.8rem;
+        border-radius: 1.5rem;
+
+        width: 100%;
+        height: 42.139rem;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        overflow: hidden;
+        // padding: 3.35rem 3.35rem 0 3.35rem;
+
+        img {
+          width: 100%;
+          border-radius: 1.5rem;
+
+          height: 100%;
+          object-fit: cover;
+          border-radius: 1rem 1rem 0 0;
+          transition: all 0.4s ease;
+
+          &:hover {
+            transform: scale(1.1);
+          }
+        }
+      }
+    }
+
+    .doctorsCardContent {
+      width: 100%;
+      height: 18rem;
+
+      .doctorJobTypes {
+        display: flex;
+        padding-bottom: 1.84rem;
+        gap: 1rem;
+
+        .doctorJobType {
+          height: 3.1061rem;
+          border-radius: 0.8rem;
+          background: #4d7abd;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          cursor: pointer;
+        }
+
+        span {
+          padding: 0.7rem 1.34rem;
+          color: #fff;
+          font-size: 1.4rem;
+          font-style: normal;
+          font-weight: 400;
+          line-height: normal;
+          text-align: center;
+        }
+      }
+
+      margin-top: 1.64rem;
+      border-radius: 1.5rem;
+      background: rgba(193, 217, 241);
+      background-color: #c1d9f133;
+      padding-top: 2.75rem;
+      padding-left: 2rem;
+      padding-right: 2rem;
+      padding-bottom: 3.46rem;
+
+      h3 {
+        color: $adentta-01;
+        font-size: 2rem;
+        font-style: normal;
+        font-weight: 600;
+        line-height: normal;
+      }
+
+      .doctorBey {
+        display: flex;
+        gap: 0.8rem;
+        padding-top: 1rem;
+        color: #000;
+        font-size: 1.5rem;
+        font-style: normal;
+        font-weight: 400;
+        line-height: 129.5%;
+        /* 1.9425rem */
+      }
+    }
+  }
+}
+
+.doctorSocialMedia {
+  margin-top: 3rem;
+
+  .doctorName {
+    color: #293881;
+    font-size: 3.2rem;
+    font-style: normal;
+    font-weight: 600;
+    line-height: normal;
+    padding-bottom: 2rem;
+  }
+
+  span {
+    color: #293881;
+    font-feature-settings: "liga" off;
+    font-size: 2rem;
+    font-style: normal;
+    font-weight: 500;
+    line-height: normal;
+  }
+
+  .doctorNumber {
+    display: flex;
+    flex-direction: column;
+    margin-top: 1.5rem;
+    gap: 2rem;
+
+    span {
+      color: #293881;
+      font-variant-numeric: lining-nums tabular-nums;
+      font-size: 1.6959rem;
+      font-style: normal;
+      font-weight: 400;
+      line-height: normal;
+      opacity: 0.5;
+    }
+
+    .doctorNumberIcon {
+      display: flex;
+      align-items: center;
+      gap: 2rem;
+
+      img {
+        width: 2rem;
+        height: 2rem;
+        flex-shrink: 0;
+      }
+
+      p {
+        color: #293881;
+        font-variant-numeric: lining-nums tabular-nums;
+        font-size: 1.5rem;
+        font-style: normal;
+        font-weight: 500;
+        line-height: normal;
+        letter-spacing: -0.034rem;
+      }
+    }
+
+    .doctorsSocialLinks {
+      display: flex;
+      justify-content: flex-start;
+      padding-top: 1rem;
+
+      ul {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 1.5rem;
+
+        li {
+          border: 1.5px solid $adentta-02;
+          border-radius: 50%;
+          padding: 1rem;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+
+          &:hover {
+            transform: translateY(-5px);
+            transition: all 0.4s ease;
+          }
+
+          img {
+            width: 2rem;
+            height: 2rem;
+          }
+        }
+      }
+    }
+  }
+}
+
+@media (max-width: 768px) {
+  .doctorProfile {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .doctorsNumbers {
+    display: flex;
+    gap: 4rem;
+  }
+
+  .doctorDetailContent {
+    padding: 3.5rem 3.5rem 5rem 5rem !important;
+  }
+
+  .verticalLine {
+    display: none;
+  }
+
+  .doctorNumberIcon {
+    p {
+      font-size: 2.2rem !important;
+    }
+
+    img {
+      width: 2.7rem !important;
+      height: 2.7rem !important;
+    }
+  }
+
+  .doctorsSocialLinks {
+    ul {
+      li {
+        padding: 1.5rem !important;
+
+        img {
+          width: 2.2rem !important;
+          height: 2.2rem !important;
+        }
+      }
+    }
+  }
+}
+
+// ? DoctorsDetailPage.jsx
+// ! Doctors Page

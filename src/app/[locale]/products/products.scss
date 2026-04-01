@@ -1,0 +1,159 @@
+.homePageProductCardContent {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  cursor: pointer;
+  border-radius: 3rem;
+  border: 1px solid #dee4ec;
+  width: 100%;
+  background-color: #fff;
+  height: 45rem;
+  transition: all 0.4s ease-in-out;
+  &:hover {
+    .homePageProductCardContentImage {
+      img {
+        transform: scale(1.1);
+        transition: all 0.4s ease-in-out;
+      }
+    }
+
+    .homePageProductCardContentBottom {
+      img {
+        transform: translate(3px, -5px);
+        transition: all 0.4s ease-in-out;
+      }
+    }
+  }
+
+  .homePageProCardImgs {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #fff;
+    border-radius: 3rem;
+  }
+
+  .homePageProductCardContentImage {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 3.7rem 3.7rem 1.8rem 3.7rem;
+    width: 25rem;
+    height: 22rem;
+
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+    }
+  }
+
+  .homePageProductCardContentInner {
+    display: flex;
+    justify-content: flex-start;
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .homePageProductCardContentText {
+    display: flex;
+    width: 100%;
+    justify-content: flex-start;
+    align-items: flex-start;
+    flex-direction: column;
+    padding-top: 1rem;
+    padding-left: 2rem;
+    padding-right: 3rem;
+    gap: 0.5rem;
+    overflow: hidden;
+
+    span {
+      font-size: 2rem;
+      font-style: normal;
+      font-weight: 600;
+      line-height: normal;
+      color: $adentta-01;
+      width: 95% !important;
+      overflow: hidden;
+      display: -webkit-box;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      -webkit-line-clamp: 2;
+      /* Maksimum göstəriləcək sətir sayı */
+      -webkit-box-orient: vertical;
+    }
+
+    p {
+      color: #8a8fab;
+      font-size: 1.5rem;
+      width: 95% !important;
+      overflow: hidden;
+      font-style: normal;
+      font-weight: 400;
+      line-height: 129.5%;
+      display: -webkit-box;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      -webkit-line-clamp: 2;
+      /* Maksimum göstəriləcək sətir sayı */
+      -webkit-box-orient: vertical;
+    }
+  }
+
+  .price {
+    margin-top: 1rem;
+    width: 9.8rem;
+    height: 4.1rem;
+    flex-shrink: 0;
+    margin-left: 2rem;
+    display: flex;
+    align-items: center;
+    border-radius: 2rem;
+    justify-content: center;
+    background-color: #f0ece3;
+
+    .priceItem {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 1rem 1rem;
+
+      #prices {
+        color: #293881;
+        font-size: 1.7rem;
+        font-style: normal;
+        font-weight: 600;
+        line-height: normal;
+      }
+    }
+  }
+
+  .homePageProductCardContentBottom {
+    margin-top: 1rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-top: 1px solid #dee4ec;
+    gap: 0.8rem;
+    height: 6.3rem;
+    width: 100%;
+
+    // padding-top: 1.8rem;
+    // padding-bottom: 2.6rem;
+    span {
+      color: #202054;
+      text-align: center;
+      font-size: 1.5611rem;
+      font-style: normal;
+      font-weight: 500;
+      line-height: normal;
+      letter-spacing: -0.012px;
+    }
+
+    img {
+      width: 1.3876rem;
+      height: 1.3876rem;
+    }
+  }
+}

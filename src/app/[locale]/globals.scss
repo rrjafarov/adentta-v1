@@ -8,7 +8,6 @@ $adentta-03: #293881 !important;
 $adentta-04: #f0ece3 !important;
 $adentta-05: #ddd2bf !important;
 $adentta-06: #29282f !important;
-// @import "../../components/Header/header.scss";
 
 @import url("https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,200..1000;1,200..1000&display=swap");
 
@@ -655,7 +654,6 @@ ul {
 }
 
 .swiperjs {
-  // margin-top: 4rem;
   padding-top: 4rem;
   padding: 0 1rem;
 }
@@ -665,9 +663,6 @@ ul {
 }
 
 @media (max-width: 767px) {
-  // .homePageHero {
-  //   display: none !important;
-  // }
   .mobileBannerSlider {
     display: block !important;
     height: 45rem !important;
@@ -787,74 +782,6 @@ ul {
 
 //? HomePageProducts.jsx  !! HomePage
 
-// #homePageProducts {
-//   background-color: #f9faf8 !important;
-//   .homePageProducts {
-//     padding-top: 5rem;
-//     span {
-//       text-align: start;
-//       font-size: 4.5rem;
-//       font-style: normal;
-//       font-weight: 600;
-//       line-height: normal;
-//       color: $adentta-01;
-//     }
-//     .buttons {
-//       display: flex !important;
-//       overflow: hidden;
-//       // align-items: center !important;
-//       // justify-content: center !important;
-//       // scrollbar-width: thin; // Firefox üçün
-//       // &::-webkit-scrollbar {
-//       //   padding-top: 1rem;
-//       //   height: 2px; // Chrome üçün scroll hündürlüyü
-//       // }
-//       gap: 1.3rem;
-//       padding-top: 1.2rem;
-//       .btn {
-//         border-radius: 2rem;
-//         display: flex;
-//         button {
-//           width: 18rem;
-//           // width: 100% !important;
-//           display: flex;
-//           justify-content: center;
-//           align-items: center;
-//           gap: 1rem;
-//           padding: 0.5rem;
-//           border-radius: 2rem;
-//           border: 1px solid #d7e0ed;
-//           // img {
-//           //   max-width: 4rem;
-//           //   height: 3rem;
-//           //   object-fit: contain;
-//           // }
-//           p {
-//             font-size: 1.7rem;
-//             font-style: normal;
-//             font-weight: 400;
-//             line-height: normal;
-//             color: $adentta-01;
-//           }
-//         }
-//       }
-//       .btn-1 {
-//         width: 10rem;
-//         button {
-//           background: #d7e0ed;
-//           color: $adentta-01;
-//           border-radius: 2rem;
-//           padding: 1.1rem 2.4rem;
-//           font-size: 1.6rem;
-//           font-style: normal;
-//           font-weight: 400;
-//           line-height: normal;
-//         }
-//       }
-//     }
-//   }
-// }
-
 #homePageProducts
   .homePageProducts
   .buttons
@@ -953,7 +880,6 @@ ul {
   background-size: cover !important;
   background-position: center !important;
   opacity: 1 !important;
-  // transition: all 0.4s ease !important;
 }
 
 .swiper-pagination-bullet-active {
@@ -962,7 +888,6 @@ ul {
   background-position: center !important;
   width: 1.9rem !important;
   height: 1.9rem !important;
-  // transition: all 0.4s ease !important;
 }
 
 .DPcustom-navigation {
@@ -989,7 +914,6 @@ ul {
 }
 
 .custom-pagination {
-  // margin-top: 1rem;
   margin-bottom: 1.5rem;
   display: flex;
   align-items: center;
@@ -1011,7 +935,6 @@ ul {
   display: flex;
   align-items: center;
   justify-content: center;
-  // gap: 1px;
 }
 
 .brands-custom-pagination {
@@ -1021,7 +944,6 @@ ul {
   display: flex;
   align-items: center;
   justify-content: center;
-  // gap: 1px;
 }
 
 .events-custom-pagination {
@@ -1030,7 +952,6 @@ ul {
   display: flex;
   align-items: center;
   justify-content: center;
-  // gap: 1px;
   padding-top: 2.3rem;
 }
 
@@ -1040,193 +961,17 @@ ul {
   display: flex;
   align-items: center;
   justify-content: center;
-  // gap: 1px;
   padding-top: 2.3rem;
 }
 
 // ? HomePageProductCard.jsx  !!HomePage
 .homePageProductCardAll {
   padding-bottom: 3.5rem;
-
   .homePageProductCard {
     display: flex;
     gap: 2rem;
 
-    // !   vacib
-    .homePageProductCardContent {
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-      cursor: pointer;
-      border-radius: 3rem;
-      border: 1px solid #dee4ec;
-      width: 100%;
-      background-color: #fff;
-      // min-height: 42rem;
-      height: 45rem;
-      transition: all 0.4s ease-in-out;
-      &:hover {
-        .homePageProductCardContentImage {
-          img {
-            transform: scale(1.1);
-            transition: all 0.4s ease-in-out;
-          }
-        }
-
-        .homePageProductCardContentBottom {
-          img {
-            transform: translate(3px, -5px);
-            transition: all 0.4s ease-in-out;
-          }
-        }
-      }
-
-      .homePageProCardImgs {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        background-color: #fff;
-        border-radius: 3rem;
-      }
-
-      .homePageProductCardContentImage {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        padding: 3.7rem 3.7rem 1.8rem 3.7rem;
-        width: 25rem;
-        height: 22rem;
-
-        img {
-          width: 100%;
-          height: 100%;
-          object-fit: contain;
-        }
-      }
-
-      .homePageProductCardContentInner {
-        display: flex;
-        justify-content: flex-start;
-        flex-direction: column;
-        align-items: flex-start;
-      }
-
-      .homePageProductCardContentText {
-        display: flex;
-        width: 100%;
-        justify-content: flex-start;
-        align-items: flex-start;
-        flex-direction: column;
-        padding-top: 1rem;
-        padding-left: 2rem;
-        padding-right: 3rem;
-        gap: 0.5rem;
-        overflow: hidden;
-
-        span {
-          font-size: 2rem;
-          font-style: normal;
-          font-weight: 600;
-          line-height: normal;
-          color: $adentta-01;
-          width: 95% !important;
-          overflow: hidden;
-          display: -webkit-box;
-          overflow: hidden;
-          text-overflow: ellipsis;
-          -webkit-line-clamp: 2;
-          /* Maksimum göstəriləcək sətir sayı */
-          -webkit-box-orient: vertical;
-        }
-
-        p {
-          color: #8a8fab;
-          font-size: 1.5rem;
-          width: 95% !important;
-          overflow: hidden;
-          font-style: normal;
-          font-weight: 400;
-          line-height: 129.5%;
-          display: -webkit-box;
-          overflow: hidden;
-          text-overflow: ellipsis;
-          -webkit-line-clamp: 2;
-          /* Maksimum göstəriləcək sətir sayı */
-          -webkit-box-orient: vertical;
-        }
-      }
-
-      .price {
-        margin-top: 1rem;
-        width: 9.8rem;
-        height: 4.1rem;
-        flex-shrink: 0;
-        margin-left: 2rem;
-        display: flex;
-        align-items: center;
-        border-radius: 2rem;
-        justify-content: center;
-        background-color: #f0ece3;
-
-        .priceItem {
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          padding: 1rem 1rem;
-
-          #prices {
-            color: #293881;
-            font-size: 1.7rem;
-            font-style: normal;
-            font-weight: 600;
-            line-height: normal;
-          }
-        }
-      }
-
-      .homePageProductCardContentBottom {
-        margin-top: 1rem;
-        cursor: pointer;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        border-top: 1px solid #dee4ec;
-        gap: 0.8rem;
-        height: 6.3rem;
-        width: 100%;
-
-        // padding-top: 1.8rem;
-        // padding-bottom: 2.6rem;
-        span {
-          color: #202054;
-          text-align: center;
-          font-size: 1.5611rem;
-          font-style: normal;
-          font-weight: 500;
-          line-height: normal;
-          letter-spacing: -0.012px;
-        }
-
-        img {
-          width: 1.3876rem;
-          height: 1.3876rem;
-        }
-      }
-    }
-
-    // !    vacib
-  }
-}
-
-@media (max-width: 768px) {
-  .homePageProductCardContentText {
-    span {
-      font-size: 2rem !important;
-    }
-
-    p {
-      font-size: 1.7rem !important;
-    }
+    // ! burdan silindi kohne card css-i
   }
 }
 
@@ -1980,7 +1725,6 @@ ul {
 }
 
 .globalExBrands {
-  // margin: 3.4rem 0;
   padding: 3.4rem 0;
   width: 19.4rem;
   height: 10.3rem;
@@ -1995,7 +1739,6 @@ ul {
   img {
     flex-shrink: 0;
     object-fit: contain;
-    // padding: 2.3rem 3.2rem;
     padding: 0.2rem 0.2rem;
     background: transparent;
     position: absolute;
@@ -2062,7 +1805,6 @@ ul {
 
 //? Footer.jsx
 #footer {
-  // background-image: url(../../../public/images/footerBack.png);
   background-color: #1c2759;
   flex-shrink: 0;
   background-repeat: no-repeat;
@@ -2230,7 +1972,6 @@ ul {
         h3,
         li {
           position: relative;
-          // cursor: pointer;
           display: inline-block;
           width: max-content;
 
@@ -2267,7 +2008,6 @@ ul {
         display: flex;
         justify-content: flex-start;
         align-items: flex-start;
-        // width: 100%;
         height: 100% !important;
 
         span {
@@ -2299,7 +2039,6 @@ ul {
 
         .footerPolicy {
           display: flex;
-          // justify-content: space-between;
           flex-wrap: wrap;
           gap: 1rem;
           align-items: center;
@@ -2433,7 +2172,6 @@ ul {
     .footerBottomInner {
       padding-top: 1rem;
       flex-direction: column !important;
-      // align-items: flex-start !important;
       gap: 1rem !important;
 
       .footerPolicy {
@@ -2468,7 +2206,6 @@ ul {
   }
 
   .footerLinks {
-    // margin-right: 5rem !important;
     h3 {
       font-size: 2.5rem !important;
     }
@@ -2502,7 +2239,6 @@ ul {
 
     .footerBottomInner {
       flex-direction: column !important;
-      // align-items: flex-start !important;
       gap: 1rem !important;
       margin-bottom: 2rem !important;
     }
@@ -2619,10 +2355,7 @@ ul {
         width: 100%;
       }
       .productsPageSliderItem {
-        // width: 100%;
-
         .productsPageSliderInner {
-          // width: 20.4rem;
           width: 100%;
           max-height: 22.2941rem;
           flex-shrink: 0;
@@ -2632,7 +2365,6 @@ ul {
           cursor: pointer;
 
           .productsPageSliderItemImage {
-            // width: 18.7308rem;
             width: 92%;
             height: 20.4619rem;
             flex-shrink: 0;
@@ -2644,8 +2376,6 @@ ul {
             align-items: center;
 
             img {
-              // width: 17.7631rem;
-              // height: 19.4017rem;
               width: 100%;
               height: 100%;
               flex-shrink: 0;
@@ -2782,7 +2512,6 @@ ul {
     transform: translateX(0);
   }
 
-  /* Kapat butonu için stil */
   .close-btn {
     position: absolute;
     top: 20px;
@@ -2878,7 +2607,6 @@ ul {
 .selectedFilter {
   margin-top: 2rem;
   flex-shrink: 0;
-  // border: 1px solid #d7e0ed;
   display: flex;
   flex-wrap: wrap;
   gap: 1rem;
@@ -2903,7 +2631,6 @@ ul {
       line-height: normal;
       cursor: pointer;
       margin-bottom: 0.3rem;
-      // letter-spacing: -0.01rem;
     }
 
     p {
@@ -3109,161 +2836,7 @@ ul {
     }
   }
 
-  // !
-  .homePageProductCardContent {
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    cursor: pointer;
-    border-radius: 3rem;
-    border: 1px solid #dee4ec;
-    width: 100%;
-    transition: all 0.4s ease;
-    height: 45rem;
-
-    &:hover {
-      img {
-        transform: scale(1.1);
-        transition: all 0.4s ease;
-      }
-      .homePageProductCardContentBottom {
-        img {
-          transform: translate(3px, -5px);
-          transition: all 0.4s ease;
-        }
-      }
-    }
-    .homePageProCardImgs {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-    }
-
-    .homePageProductCardContentImage {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: 3.7rem 3.7rem 1.8rem 3.7rem;
-      width: 24.4rem;
-      height: 21.8rem;
-      img {
-        width: 100%;
-        height: 100%;
-        object-fit: contain;
-      }
-    }
-
-    .homePageProductCardContentInner {
-      display: flex;
-      justify-content: flex-start;
-      flex-direction: column;
-      align-items: flex-start;
-    }
-
-    .homePageProductCardContentText {
-      display: flex;
-      width: 100%;
-      justify-content: flex-start;
-      align-items: flex-start;
-      flex-direction: column;
-      padding-top: 1rem;
-      padding-left: 2rem;
-      padding-right: 3rem;
-      gap: 0.5rem;
-      overflow: hidden;
-
-      span {
-        font-size: 2rem;
-        font-style: normal;
-        font-weight: 600;
-        line-height: normal;
-        color: $adentta-01;
-        width: 98% !important;
-        overflow: hidden;
-        display: -webkit-box;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        -webkit-line-clamp: 2;
-        /* Maksimum göstəriləcək sətir sayı */
-        -webkit-box-orient: vertical;
-      }
-
-      p {
-        color: #8a8fab;
-        font-size: 1.5rem;
-        width: 98% !important;
-        overflow: hidden;
-        font-style: normal;
-        font-weight: 400;
-        line-height: 129.5%;
-        display: -webkit-box;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        -webkit-line-clamp: 2;
-        /* Maksimum göstəriləcək sətir sayı */
-        -webkit-box-orient: vertical;
-      }
-    }
-
-    .price {
-      margin-top: 1rem;
-      width: 9.8rem;
-      height: 4.1rem;
-      flex-shrink: 0;
-      margin-left: 2rem;
-      display: flex;
-      align-items: center;
-      border-radius: 2rem;
-      justify-content: center;
-      background-color: #f0ece3;
-
-      .priceItem {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        padding: 1rem 1rem;
-
-        #prices {
-          color: #293881;
-          font-size: 1.7rem;
-          font-style: normal;
-          font-weight: 600;
-          line-height: normal;
-        }
-      }
-    }
-
-    .homePageProductCardContentBottom {
-      margin-top: 1rem;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      border-top: 1px solid #dee4ec;
-      gap: 0.8rem;
-      height: 6.3rem;
-      width: 100%;
-
-      // padding-top: 1.8rem;
-      // padding-bottom: 2.6rem;
-      span {
-        color: #202054;
-        text-align: center;
-        font-size: 1.5611rem;
-        font-style: normal;
-        font-weight: 500;
-        line-height: normal;
-        letter-spacing: -0.012px;
-      }
-
-      img {
-        width: 1.3876rem;
-        height: 1.3876rem;
-      }
-    }
-  }
-
-  // !
+  // ! burdan silindi kohne card css-i
 }
 
 @media (max-width: 768px) {
@@ -3287,7 +2860,6 @@ ul {
   }
 
   p .page-description-content {
-    // padding-top: 1.74rem;
     padding-bottom: 2.65rem;
     font-size: 1.6rem;
     font-style: normal;
@@ -3300,8 +2872,6 @@ ul {
   }
 
   .seoPtagOnly {
-    // padding-top: 1.74rem;
-    // padding-bottom: 2.65rem;
     padding-top: 1rem;
     font-size: 1.5rem;
     font-style: normal;
@@ -3318,13 +2888,11 @@ ul {
   h4,
   h5,
   h6 {
-    // color: #293881 !important;
     font-size: 1.8rem;
     font-style: normal;
     font-weight: 500;
     line-height: 1.15;
     letter-spacing: -0.0016rem;
-    // padding-bottom: 2.65rem;
     padding: 1.5rem 0 1rem;
   }
 
@@ -3351,11 +2919,9 @@ ul {
     font-weight: 500;
     line-height: 0%;
     letter-spacing: -0.0016rem;
-    // padding-bottom: 2.65rem;
   }
 
   p .page-description-content {
-    // padding-top: 1.74rem;
     padding-bottom: 2.65rem;
     font-size: 1.6rem;
     font-style: normal;
@@ -3368,8 +2934,6 @@ ul {
   }
 
   .seoPtagOnly {
-    // padding-top: 1.74rem;
-    // padding-bottom: 2.65rem;
     padding-top: 1rem;
     font-size: 1.5rem;
     font-style: normal;
@@ -3386,13 +2950,11 @@ ul {
   h4,
   h5,
   h6 {
-    // color: #293881 !important;
     font-size: 1.8rem;
     font-style: normal;
     font-weight: 500;
     line-height: 1.15;
     letter-spacing: -0.0016rem;
-    // padding-bottom: 2.65rem;
     padding: 1.5rem 0 1rem;
   }
 
@@ -3419,13 +2981,11 @@ ul {
   }
 
   .page-description-content {
-    // padding-top: 1.74rem;
     padding-bottom: 3rem;
     font-size: 1.5rem;
     font-style: normal;
     font-weight: 400;
     line-height: 155%;
-    // opacity: 0.7;
     background: linear-gradient(180deg, #1c1c1c -52.81%, #fff 201.54%);
     background-clip: text;
     -webkit-background-clip: text;
@@ -3466,7 +3026,6 @@ ul {
   display: flex;
   flex-direction: column;
   height: 49rem;
-  // width: 15.5rem !important;
   width: 11.5rem;
   margin: 0;
   padding: 0;
@@ -3474,8 +3033,6 @@ ul {
 }
 
 .thumbnailSwiper .swiper-slide {
-  // width: 15rem;
-  // height: 15.2rem;
   width: 11.5rem;
   height: 11.2rem;
   width: 100%;
@@ -3825,11 +3382,6 @@ ul {
       font-weight: 500;
       line-height: normal;
       letter-spacing: 0.018rem;
-      // cursor: pointer;
-      // &:hover {
-      //   transform: scale(1.1);
-      //   transition: all 0.4s ease;
-      // }
     }
 
     .dpWP {
@@ -3915,7 +3467,6 @@ ul {
 
 .paramTitle {
   color: #435090;
-  // font-family: Mulish;
   font-size: 1.2rem;
   font-style: normal;
   font-weight: 500;
@@ -3931,23 +3482,21 @@ ul {
   margin-right: 1rem;
   border-radius: 4rem;
   border: 1px solid #d7e0ed;
-  display: inline-flex; // <-- BUNU ƏLAVƏ ET
+  display: inline-flex;
   justify-content: center;
   align-items: center;
   background: #f4f8ff;
-  width: fit-content; // <-- istəsən bunu da əlavə et
+  width: fit-content;
   .productParametrsItem {
     padding: 0.8rem 2rem !important;
     span {
       color: #293881 !important;
       font-size: 1.5rem;
-      // padding: 1.2rem 2rem !important;
     }
     a {
       span {
         color: #293881 !important;
         font-size: 1.5rem;
-        // padding: 1.2rem 2rem !important;
       }
     }
   }
@@ -4103,163 +3652,7 @@ ul {
     font-weight: 600;
     line-height: normal;
   }
-
-  .homePageProductCardContent {
-    display: flex;
-    flex-direction: column;
-    // align-items: center;
-    justify-content: space-between;
-    cursor: pointer;
-    border-radius: 3rem;
-    border: 1px solid #dee4ec;
-    width: 100%;
-    transition: all 0.4s ease;
-    height: 45rem;
-
-    &:hover {
-      img {
-        transform: scale(1.1);
-        transition: all 0.4s ease;
-      }
-
-      .homePageProductCardContentBottom {
-        img {
-          transform: translate(3px, -5px);
-          transition: all 0.4s ease;
-        }
-      }
-    }
-
-    .homePageProCardImgs {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-    }
-
-    .homePageProductCardContentImage {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: 3.7rem 3.7rem 1.8rem 3.7rem;
-      width: 24.4rem;
-      height: 21.8rem;
-
-      img {
-        width: 100%;
-        height: 100%;
-        object-fit: contain;
-      }
-    }
-
-    .homePageProductCardContentInner {
-      display: flex;
-      justify-content: flex-start;
-      flex-direction: column;
-      align-items: flex-start;
-    }
-
-    .homePageProductCardContentText {
-      display: flex;
-      width: 100%;
-      justify-content: flex-start;
-      align-items: flex-start;
-      flex-direction: column;
-      padding-top: 1rem;
-      padding-left: 2rem;
-      padding-right: 3rem;
-      gap: 0.5rem;
-      overflow: hidden;
-
-      span {
-        font-size: 2rem;
-        font-style: normal;
-        font-weight: 600;
-        line-height: normal;
-        color: $adentta-01;
-        width: 95% !important;
-        overflow: hidden;
-        display: -webkit-box;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        -webkit-line-clamp: 2;
-        /* Maksimum göstəriləcək sətir sayı */
-        -webkit-box-orient: vertical;
-      }
-
-      p {
-        color: #8a8fab;
-        font-size: 1.5rem;
-        width: 95% !important;
-        overflow: hidden;
-        font-style: normal;
-        font-weight: 400;
-        line-height: 129.5%;
-        display: -webkit-box;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        -webkit-line-clamp: 2;
-        /* Maksimum göstəriləcək sətir sayı */
-        -webkit-box-orient: vertical;
-      }
-    }
-
-    .price {
-      margin-top: 1rem;
-      width: 9.8rem;
-      height: 4.1rem;
-      flex-shrink: 0;
-      margin-left: 2rem;
-      display: flex;
-      align-items: center;
-      border-radius: 2rem;
-      justify-content: center;
-      background-color: #f0ece3;
-
-      .priceItem {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        padding: 1rem 1rem;
-
-        #prices {
-          color: #293881;
-          font-size: 1.7rem;
-          font-style: normal;
-          font-weight: 600;
-          line-height: normal;
-        }
-      }
-    }
-
-    .homePageProductCardContentBottom {
-      margin-top: 1rem;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      border-top: 1px solid #dee4ec;
-      gap: 0.8rem;
-      height: 6.3rem;
-      width: 100%;
-
-      // padding-top: 1.8rem;
-      // padding-bottom: 2.6rem;
-      span {
-        color: #202054;
-        text-align: center;
-        font-size: 1.5611rem;
-        font-style: normal;
-        font-weight: 500;
-        line-height: normal;
-        letter-spacing: -0.012px;
-      }
-
-      img {
-        width: 1.3876rem;
-        height: 1.3876rem;
-      }
-    }
-  }
+  // ! burdan silindi kohne card css-i
   margin-bottom: 5rem;
 }
 
@@ -4297,10 +3690,6 @@ ul {
     display: flex;
     justify-content: center;
     align-items: center;
-    // &:hover {
-    //   transform: scale(1.2);
-    //   transition: all 0.4s ease;
-    // }
   }
 
   .detailPageShareLinkCOPY {
@@ -4314,10 +3703,6 @@ ul {
     border-radius: 0.6814rem;
     border: 0.852px solid #dee4ec;
 
-    // &:hover {
-    //   transform: scale(1.1);
-    //   transition: all 0.4s ease;
-    // }
     span {
       color: #293881;
       text-align: center;
@@ -4366,7 +3751,6 @@ ul {
 
 // !    About Page
 .aboutBanner {
-  // background-image: url(../../public/images/aboutPageBanner.png);
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
@@ -4395,7 +3779,6 @@ ul {
     border-radius: inherit; // Konteyner ile aynı yuvarlama
     opacity: 0.7;
     background: linear-gradient(180deg, #fff 0%, #3d4252 80%, #0b1523 100%);
-    // background: linear-gradient(180deg, #fff 0%, #8c919e 80%, #696f76 100%);
     mix-blend-mode: multiply;
     pointer-events: none; // Gradient katmanının etkileşime girmemesi için
   }
@@ -4430,7 +3813,6 @@ ul {
       font-weight: 500;
       line-height: normal;
       opacity: 0.3;
-      // cursor: pointer;
     }
   }
 
@@ -4549,11 +3931,9 @@ ul {
   background-repeat: no-repeat;
   background-size: cover;
   background-position: center;
-  // max-width: 30.1rem;
   height: 42.2754rem;
   border-radius: 2.5rem;
   flex-shrink: 0;
-  // width: 23%;
   position: relative;
 
   .countUpFirstCardTxt {
@@ -4589,12 +3969,10 @@ ul {
 }
 
 .secondCountCard {
-  // background-image: url(../../public/images/countUpBack2.png);
   background-image: url(../../../public/images/countUpBack2.png);
   background-repeat: no-repeat;
   background-size: cover;
   background-position: center;
-  // max-width: 30.1rem;
   height: 27.9011rem;
   flex-shrink: 0;
   display: flex;
@@ -4631,31 +4009,25 @@ ul {
   img {
     position: absolute;
     bottom: 4rem;
-    // left: 4.15rem;
-    // right: 4.15rem;
     left: 50%;
     right: 50%;
     transform: translateX(-50%);
     max-width: 21.7927rem;
     height: 6.066rem;
     width: 100%;
-    // height: 100%;
     flex-shrink: 0;
     object-fit: contain;
   }
 }
 
 .thirdCountCard {
-  // background-image: url(../../public/images/countUpBack3.png);
   background-image: url(../../../public/images/countUpBack3.png);
   background-repeat: no-repeat;
   background-size: cover;
   background-position: center;
-  // max-width: 30.1rem;
   height: 32.2344rem;
   border-radius: 2.5rem;
   flex-shrink: 0;
-  // width: 23%;
   position: relative;
 
   img {
@@ -4706,15 +4078,12 @@ ul {
 }
 
 .fourCountCard {
-  // background-image: url(../../public/images/countUpBack4.png);
   background-image: url(../../../public/images/countUpBack4.png);
   background-repeat: no-repeat;
   background-size: cover;
   background-position: center;
-  // max-width: 30.1rem;
   height: 39.1396rem;
   flex-shrink: 0;
-  // width: 23%;
   border-radius: 2.5rem;
   position: relative;
 
@@ -4757,17 +4126,10 @@ ul {
     display: flex;
     justify-content: center;
     align-items: center;
-
-    // position: relative;
     .countImage2 {
-      // bottom: 2.15rem !important;
-      // left: 2.15rem !important;
-      // max-width: 18.7927rem !important;
-      // width: 100%;
       height: 5.066rem;
       flex-shrink: 0;
       object-fit: cover;
-      // padding: 0 1rem;
     }
   }
 }
@@ -4861,13 +4223,11 @@ ul {
 #changeYearFolder {
   background-color: #1c2759;
   color: #fff;
-  // font-family: "SF Pro Rounded";
 }
 
 .verticalSliderHeaderText {
   p {
     color: #fff;
-    // font-family: "SF Pro Rounded";
     font-size: 1.4rem;
     font-style: normal;
     font-weight: 500;
@@ -4901,12 +4261,10 @@ ul {
 
 .vertical-slider-left {
   width: 25%;
-  // width: 20rem;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  // height: 100%;
 }
 
 .vertical-slider-wrapper {
@@ -4918,7 +4276,6 @@ ul {
 
 .vertical-swiper {
   height: 95%;
-  // height: 5rem;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -4959,7 +4316,6 @@ ul {
   margin-right: 2rem;
   font-size: 5.5rem;
   color: #fff;
-  // background-image: url(../../public/icons/ellipses.svg.svg);
   background-repeat: no-repeat;
   background-size: cover;
   background-position: center;
@@ -5029,7 +4385,6 @@ ul {
   }
 }
 
-/* Mevcut CSS kodlarınızın altına ekleyin veya mobil için ayrı bir dosya oluşturun */
 @media (max-width: 767px) {
   .verticalSliderHeaderText {
     display: flex;
@@ -5050,7 +4405,6 @@ ul {
   .vertical-slider-left {
     width: 100%;
     margin: 0 auto;
-    /* Slider’ın wrapper’ında fazla boşluk kalmasın */
     padding: 0 1rem;
   }
 
@@ -5098,8 +4452,6 @@ ul {
 // ? AboutPageParallax.jsx
 #aboutPageParallax {
   padding-top: 5rem;
-  // width: 144rem;
-  // height: 162.3958rem;
   padding-bottom: 5.35rem;
   flex-shrink: 0;
   background: #cbd9ef;
@@ -5201,7 +4553,6 @@ ul {
     .directorAvatar {
       position: relative;
       width: 53.5rem;
-      // height: 49.4408rem;
       height: 68rem;
       flex-shrink: 0;
       margin-bottom: 10rem;
@@ -5218,11 +4569,8 @@ ul {
       .directorOffice {
         position: absolute;
         bottom: -8rem;
-        /* Negatif offset değeri azaltıldı */
         right: -8rem;
-        /* Negatif offset değeri azaltıldı */
         z-index: 1;
-        /* Diğer içeriklerin arkasında yer alması sağlandı */
         max-width: 36.9189rem;
         height: 25.3534rem;
 
@@ -5324,8 +4672,6 @@ ul {
   .directorMessageLeft {
     display: flex !important;
     flex-direction: column !important;
-    // justify-content: center !important;
-    // align-items: center !important;
     width: 100% !important;
     padding: 0 2rem !important;
 
@@ -5360,9 +4706,6 @@ ul {
     flex-direction: column !important;
     justify-content: center !important;
     align-items: center !important;
-
-    // justify-content: flex-start !important;
-    // align-items: flex-start !important;
     .directorSecondParagraph {
       width: 100%;
       max-width: 50.0369rem;
@@ -5689,12 +5032,10 @@ ul {
       font-weight: 500;
       line-height: normal;
       opacity: 0.3;
-      // cursor: pointer;
     }
   }
 
   .teamsPageHeaderText {
-    // text-align: center;
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -5750,8 +5091,6 @@ ul {
         height: 45rem;
 
         .teamsPageCardImg {
-          // width: 40.8rem;
-          // height: 38.139rem;
           width: 100%;
           height: 100%;
           border-radius: 1.5rem;
@@ -5760,7 +5099,6 @@ ul {
           align-items: center;
           overflow: hidden;
 
-          // padding: 3.35rem 3.35rem 0 3.35rem;
           img {
             width: 100%;
             height: 100%;
@@ -6150,7 +5488,6 @@ ul {
       font-weight: 500;
       line-height: normal;
       opacity: 0.3;
-      // cursor: pointer;
     }
   }
 
@@ -6163,10 +5500,8 @@ ul {
       padding-top: 4.56rem;
       max-width: 94rem;
       width: 100%;
-      // height: 110.239rem;
       flex-shrink: 0;
       display: flex;
-      // justify-content: flex-start;
       align-items: flex-start;
       flex-direction: column;
 
@@ -6200,12 +5535,9 @@ ul {
       }
 
       .blogDetailImage {
-        // padding: 0 1rem;
         padding-top: 2.75rem;
 
         img {
-          // width: fit-content;
-          // height: fit-content;
           object-fit: cover;
           width: 94rem;
           height: 43.3179rem;
@@ -6260,7 +5592,6 @@ ul {
           font-style: normal;
           font-weight: 400;
           line-height: 174%;
-          /* 2.784rem */
           max-width: 72.5641rem;
         }
       }
@@ -6306,7 +5637,6 @@ ul {
       position: relative !important;
       width: 100%;
       object-fit: cover;
-      // min-height: 34.9569rem;
       flex-shrink: 0;
       height: 50rem;
 
@@ -6492,7 +5822,6 @@ ul {
             overflow: hidden;
             text-overflow: ellipsis;
             -webkit-line-clamp: 2;
-            /* Maksimum göstəriləcək sətir sayı */
             -webkit-box-orient: vertical;
           }
 
@@ -6507,7 +5836,6 @@ ul {
             overflow: hidden;
             text-overflow: ellipsis;
             -webkit-line-clamp: 2;
-            /* Maksimum göstəriləcək sətir sayı */
             -webkit-box-orient: vertical;
             display: none !important;
 
@@ -6605,7 +5933,6 @@ ul {
     font-weight: 500;
     line-height: normal;
     opacity: 0.3;
-    // cursor: pointer;
   }
 }
 
@@ -6635,7 +5962,6 @@ ul {
 
   .eventPageHead {
     display: flex;
-    // flex-wrap: wrap;
   }
 
   .eventPageHeaderText {
@@ -6668,8 +5994,6 @@ ul {
 
     p {
       padding-top: 2.15rem;
-      // width: 100%;
-      // width: 60.7rem;
       color: $adentta-01;
       font-size: 1.6rem;
       font-style: normal;
@@ -6704,8 +6028,6 @@ ul {
       }
 
       .eventCard {
-        // width: 100%;
-        // cahnge
         height: 52.3rem;
         display: flex;
         justify-content: space-between;
@@ -6717,8 +6039,6 @@ ul {
 
         .eventCardImage {
           cursor: pointer;
-          // width: 100%;
-          // change
           height: 27.8rem;
           flex-shrink: 0;
           border-radius: 3rem;
@@ -6780,7 +6100,6 @@ ul {
         }
 
         .eventCardContent {
-          // padding: 2.35rem 0 2rem 1.21rem;
           padding: 1.5rem 2rem 2rem 1.2rem;
           width: 100%;
           height: 20.5rem;
@@ -6791,13 +6110,11 @@ ul {
             font-style: normal;
             font-weight: 600;
             line-height: normal;
-            // padding-bottom: 0.8rem;
             width: 95% !important;
             display: -webkit-box;
             overflow: hidden;
             text-overflow: ellipsis;
             -webkit-line-clamp: 2;
-            /* Maksimum göstəriləcək sətir sayı */
             -webkit-box-orient: vertical;
           }
 
@@ -6813,16 +6130,9 @@ ul {
             overflow: hidden;
             text-overflow: ellipsis;
             -webkit-line-clamp: 2;
-            /* Maksimum göstəriləcək sətir sayı */
             -webkit-box-orient: vertical;
           }
         }
-
-        // .eventCartLine {
-        //   width: 23.9rem;
-        //   height: 0.1rem;
-        //   background: #dee4ec;
-        // }
         .eventCardBottom {
           border-top: 1px solid #dee4ec;
           padding-top: 2rem;
@@ -6861,7 +6171,6 @@ ul {
 }
 
 // !
-// pagination
 .pagination {
   min-width: 37.1643rem;
   overflow: hidden;
@@ -7003,8 +6312,6 @@ ul {
 }
 
 .selectStatus {
-  // width: 16.0668rem;
-  // height: 4.25rem;
   border-radius: 1rem;
   border: 1px solid #d7e0ed;
   display: flex;
@@ -7019,7 +6326,6 @@ ul {
 .selectStatus select:focus {
   border: 1px solid #007bff;
   box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
-  // background: #fff;
 }
 
 .paragraphBlogPrivate {
@@ -7067,7 +6373,6 @@ ul {
       font-weight: 500;
       line-height: normal;
       opacity: 0.3;
-      // cursor: pointer;
     }
   }
 
@@ -7105,14 +6410,11 @@ ul {
           font-style: normal;
           font-weight: 600;
           line-height: 4.4rem;
-          // width: 70.7451rem;
         }
         display: flex;
         flex-direction: column;
         .detailCalendar {
           margin-top: 2.63rem;
-          // width: 18.3rem;
-          // width: 100%;
           height: 7.4rem;
           flex-shrink: 0;
           border-radius: 1.45rem;
@@ -7636,7 +6938,6 @@ ul {
       font-weight: 500;
       line-height: normal;
       opacity: 0.3;
-      // cursor: pointer;
     }
   }
 
@@ -7759,34 +7060,6 @@ ul {
           object-fit: cover;
           border-radius: 1.5rem;
         }
-
-        // .videoGaleryPlay {
-        //   position: absolute;
-        //   bottom: 0;
-        //   right: 0;
-        //   display: flex;
-        //   gap: 1rem;
-        //   align-items: center;
-        //   justify-content: center;
-        //   background-color: #fff;
-        //   padding: 5rem 1rem 2rem 3rem;
-        //   z-index: 1;
-        //   // border-top-left-radius: 400rem;
-        //   span {
-        //     color: #293881;
-        //     font-size: 1.5rem;
-        //     font-style: normal;
-        //     font-weight: 500;
-        //     line-height: normal;
-        //     letter-spacing: 0.015rem;
-        //   }
-
-        //   img {
-        //     width: 30px;
-        //     height: 30px;
-        //     flex-shrink: 0;
-        //   }
-        // }
         .videoGaleryPlay {
           position: absolute;
           bottom: 0;
@@ -7798,7 +7071,6 @@ ul {
           background-color: #fff;
           width: 14rem;
           height: 12rem;
-          // padding: 5rem 1rem 0rem 3rem;
           z-index: 1000;
           clip-path: polygon(16rem 0, 100% 0, 100% 100%, 0 100%, 0 12.5rem);
           padding-bottom: 1.6rem;
@@ -7861,7 +7133,6 @@ ul {
       font-weight: 500;
       line-height: normal;
       opacity: 0.3;
-      // cursor: pointer;
     }
   }
 
@@ -7916,7 +7187,6 @@ ul {
         align-items: center;
         position: relative;
       }
-
       .catalogSelect select {
         width: 100%;
         height: 100%;
@@ -7941,178 +7211,8 @@ ul {
         padding-left: 2rem;
       }
     }
-
-    //
   }
 }
-
-// .pdfCatalogCard {
-//   display: flex;
-//   flex-direction: column;
-//   gap: 1.55rem;
-
-//   .pdfCatalogCardImg {
-//     position: relative;
-//     border-radius: 1.5rem;
-//     height: 39.139rem;
-//     .pdfCatalogCardImgLink {
-//       width: 100%;
-//       height: 100%;
-//     }
-//     img {
-//       width: 100%;
-//       height: 100%;
-//       border-radius: 1.5rem;
-//     }
-
-//     .vatech {
-//       position: absolute;
-//       top: 2.26rem;
-//       left: 2.46rem;
-//       width: 7.9637rem;
-//       height: 4.1rem;
-//       flex-shrink: 0;
-//       border-radius: 2rem;
-//       background: #1c2759;
-//       display: flex;
-//       align-items: center;
-//       justify-content: center;
-
-//       span {
-//         color: #fff;
-//         font-size: 1.4rem;
-//         font-style: normal;
-//         font-weight: 400;
-//         line-height: normal;
-//       }
-//     }
-//   }
-
-//   .pdfCatalogCardInfo {
-//     height: 20rem;
-
-//     border-radius: 1.5rem;
-//     background: rgba(193, 217, 241, 0.2);
-
-//     .pdfCatalogCardInfoContent {
-//       padding: 2.4rem 3rem 2.22rem 3rem;
-
-//       h3 {
-//         color: #293881;
-//         font-size: 2rem;
-//         font-style: normal;
-//         font-weight: 600;
-//         line-height: normal;
-//         padding-bottom: 0.77rem;
-//         display: -webkit-box;
-//         -webkit-line-clamp: 2; /* YALNIZ 2 sətir göstər */
-//         -webkit-box-orient: vertical;
-//         overflow: hidden;
-//       }
-//       .pdfCatalogCardInfoParagraph {
-//         width: 31.6163rem;
-//         color: #8a8fab;
-//         font-size: 1.5rem;
-//         font-style: normal;
-//         font-weight: 400;
-//         line-height: 129.5%;
-//         /* 1.9425rem */
-//         display: -webkit-box;
-//         -webkit-line-clamp: 2; /* YALNIZ 2 sətir göstər */
-//         -webkit-box-orient: vertical;
-//         overflow: hidden;
-//       }
-
-//       p {
-//         width: 31.6163rem;
-//         color: #8a8fab;
-//         font-size: 1.5rem;
-//         font-style: normal;
-//         font-weight: 400;
-//         line-height: 129.5%;
-//         /* 1.9425rem */
-//       }
-
-//       button {
-//         margin-top: 1.65rem;
-//         width: 17.6342rem;
-//         height: 4.5rem;
-//         // padding: 1.35rem 2.35rem;
-//         flex-shrink: 0;
-//         border-radius: 3rem;
-//         background: #293880;
-//         display: flex;
-//         color: #fff;
-//         text-align: center;
-//         font-size: 1.5rem;
-//         font-style: normal;
-//         font-weight: 500;
-//         line-height: normal;
-//         letter-spacing: -0.0012rem;
-//         justify-content: center;
-//         align-items: center;
-//         gap: 1rem;
-
-//         img {
-//           width: 1.8rem;
-//           height: 1.8rem;
-//           flex-shrink: 0;
-//         }
-//       }
-//     }
-//   }
-// }
-// .pdfCatalogCardInfoParagraphDetailPage {
-//   width: 31.6163rem;
-//   color: #8a8fab;
-//   font-size: 1.5rem;
-//   font-style: normal;
-//   font-weight: 400;
-//   line-height: 129.5%;
-//   /* 1.9425rem */
-//   display: -webkit-box;
-//   -webkit-line-clamp: 2; /* YALNIZ 2 sətir göstər */
-//   -webkit-box-orient: vertical;
-//   overflow: hidden;
-//   p {
-//     font-size: 1.5rem;
-//     font-style: normal;
-//     font-weight: 400;
-//     line-height: 129.5%;
-//     /* 1.9425rem */
-//     display: -webkit-box;
-//     -webkit-line-clamp: 2; /* YALNIZ 2 sətir göstər */
-//     -webkit-box-orient: vertical;
-//     overflow: hidden;
-//   }
-// }
-// @media screen and (max-width: 768px) {
-//   .pdfCatalogCardInfoContent {
-//     p {
-//       width: 100% !important;
-//     }
-//   }
-//   .pdfCatalogCardInfoParagraph {
-//     width: 100% !important;
-//     font-size: 1.5rem;
-//   }
-//   .pdfCatalogCardInfoParagraphDetailPage {
-//     width: 100% !important;
-//     font-size: 1.5rem;
-//   }
-
-//   .pdfCatalogCardImg {
-//     position: relative;
-//     border-radius: 1.5rem;
-//     height: 48.139rem !important;
-//     img {
-//       width: 100%;
-//       height: 100%;
-//       border-radius: 1.5rem;
-//       object-fit: cover;
-//     }
-//   }
-// }
 
 .pdfCatalogCard {
   display: flex;
@@ -8156,20 +7256,15 @@ ul {
       }
     }
   }
-
-  /* Info box: FİXED height + absolute positioning for expansion */
   .pdfCatalogCardInfo {
-    position: relative; /* overlay üçün reference point */
+    position: relative;
     border-radius: 1.5rem;
     background: rgba(193, 217, 241, 0.2);
     background: rgba(193, 217, 241, 0.2);
-
-    /* FİXED HEIGHT - bütün kartlar eyni hündürlükdə */
     height: 22rem;
-    overflow: visible; /* overlay görünsün deyə */
+    overflow: visible;
 
     &.expanded {
-      /* Expand zamanı z-index artır ki, üstdəkilərin üstünə çıxsın */
       z-index: 10;
     }
 
@@ -8177,10 +7272,7 @@ ul {
       position: relative;
       padding: 2.4rem 3rem 2.22rem 3rem;
       background: transparent;
-
       border-radius: 1.5rem;
-
-      /* Expand zamanı absolute position ilə overlay */
       transition: all 0.35s ease;
     }
 
@@ -8353,13 +7445,11 @@ ul {
     }
   }
 
-  /* Mobile-da overlay daha yaxşı görünsün */
   .pdfCatalogCardInfo.expanded .pdfCatalogCardInfoContent {
     max-height: 90vh;
   }
 }
 
-/* Ölçü elementi: gizli, amma ölçüləri hesablanır */
 .pdfCatalogMeasure {
   position: absolute;
   visibility: hidden;
@@ -8955,14 +8045,12 @@ ul {
       }
 
       .contactPageCardVideo {
-        // max-width: 140rem;
         width: 144rem;
       }
     }
   }
 }
 
-//
 .contactPageAdress {
   padding-bottom: 4.21rem;
 
@@ -9033,15 +8121,9 @@ ul {
           }
         }
       }
-
-      .contactPageCardVideo {
-        // width: 144rem;
-      }
     }
   }
 }
-
-//
 
 // ? ContactUS.jsx
 // !    ContactUS Page
@@ -9090,7 +8172,6 @@ ul {
       font-weight: 500;
       line-height: normal;
       opacity: 0.3;
-      // cursor: pointer;
     }
   }
 
@@ -9233,10 +8314,6 @@ ul {
     align-items: center;
 
     .careersPageWorkLeftContent {
-      // padding-top: 10.61rem;
-      // padding-bottom: 10.61rem;
-      // padding-left: 8.95rem;
-      // padding-right: 12.85rem;
       height: 31.35rem;
       width: 100%;
       display: flex;
@@ -9245,9 +8322,7 @@ ul {
       flex-direction: column;
       border-radius: 2rem;
       background: #deeaf7;
-
       span {
-        // max-width: 30.4rem;
         width: 38.4rem;
         color: #293881;
         font-size: 3.2rem;
@@ -9272,16 +8347,12 @@ ul {
   }
 
   .careersPageWorkRight {
-    // width: 100%;
-    // height: 100%;
     border-radius: 2rem;
-
     .careersPageWorkRightImg {
       border-radius: 2rem;
       width: 100%;
       height: 31.35rem;
       flex-shrink: 0;
-
       img {
         width: 100%;
         height: 100%;
@@ -9355,10 +8426,8 @@ ul {
       font-style: normal;
       font-weight: 400;
       line-height: 131.2%;
-      /* 1.7783rem */
       opacity: 0.8;
       max-width: 26.3242rem;
-      // padding: 0 1rem;
     }
 
     transition: all 0.4s ease;
@@ -9381,7 +8450,6 @@ ul {
       color: #fff;
       border-radius: 1.1618rem;
       background: #293881;
-      /* fallback for old browsers */
     }
   }
 }
@@ -9395,9 +8463,7 @@ ul {
     align-items: center !important;
     flex-direction: column !important;
     text-align: center;
-
     p {
-      // max-width: 26.3242rem;
       width: 16rem !important;
     }
   }
@@ -9432,7 +8498,6 @@ ul {
       font-style: normal;
       font-weight: 400;
       line-height: 2.5rem;
-      /* 178.571% */
       opacity: 0.7;
       padding: 0 2rem;
     }
@@ -9478,12 +8543,12 @@ ul {
 
 .careersSwiper {
   overflow: visible !important;
-  .swiper-wrapper {
-    // .swiper-slide-active {
-    //   transform: scaleX(1) scaleY(1.1) !important;
-    //   transition: transform 0.5s ease-in-out !important;
-    // }
-  }
+  // .swiper-wrapper {
+  //   // .swiper-slide-active {
+  //   //   transform: scaleX(1) scaleY(1.1) !important;
+  //   //   transition: transform 0.5s ease-in-out !important;
+  //   // }
+  // }
 }
 
 // ? Careers.jsx
@@ -9519,7 +8584,6 @@ ul {
       font-weight: 500;
       line-height: normal;
       opacity: 0.3;
-      // cursor: pointer;
     }
   }
 
@@ -9574,18 +8638,6 @@ ul {
       display: flex;
       flex-direction: column;
       gap: 2rem;
-      // ul {
-      //   li {
-      //     max-width: 50rem;
-      //     color: #000;
-      //     font-size: 1.6rem;
-      //     font-style: normal;
-      //     font-weight: 400;
-      //     line-height: 2.5rem;
-
-      //   }
-      // }
-
       ul {
         list-style: none;
         margin: 0;
@@ -9925,707 +8977,6 @@ ul {
 
 // ! Careers Page
 
-// ! Doctors Page
-// ? Doctors.jsx
-
-.doctorsTop {
-  padding-top: 4.41rem;
-  padding-bottom: 4.24rem;
-  padding-left: 0.55rem;
-  display: flex;
-  gap: 1.15rem;
-
-  strong {
-    color: #293881;
-    font-size: 1.3rem;
-    font-style: normal;
-    font-weight: 500;
-    line-height: normal;
-    border-bottom: 1px solid #293881;
-    cursor: pointer;
-  }
-
-  img {
-    width: 1.4rem;
-    height: 1.4rem;
-    flex-shrink: 0;
-  }
-
-  span {
-    color: #293881;
-    font-size: 1.3rem;
-    font-style: normal;
-    font-weight: 500;
-    line-height: normal;
-    opacity: 0.3;
-    // cursor: pointer;
-  }
-}
-
-.doctorsPageHeaderText {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-
-  h1 {
-    color: $adentta-01;
-    font-size: 4rem;
-    font-style: normal;
-    font-weight: 600;
-    line-height: 4rem;
-    /* 100% */
-  }
-
-  span {
-    color: #2273ec;
-    font-size: 1.4rem;
-    font-style: normal;
-    font-weight: 500;
-    line-height: normal;
-    letter-spacing: 0.056rem;
-    text-transform: uppercase;
-  }
-
-  p {
-    padding-top: 1.82rem;
-    width: 100%;
-    max-width: 61.0379rem;
-    color: $adentta-01;
-    text-align: center;
-    font-size: 1.8rem;
-    font-style: normal;
-    font-weight: 400;
-    line-height: 2.4rem;
-    letter-spacing: 0.054rem;
-  }
-
-  .doctorsSelects {
-    margin: 1.88rem 0 3.64rem 0;
-    display: flex;
-    gap: 1.7rem;
-    justify-content: center;
-    align-items: center;
-    flex-wrap: wrap;
-
-    .doctorsSelect {
-      // width: 20.0668rem;
-      // height: 4.25rem;
-      border-radius: 1rem;
-      // border: 1px solid #d7e0ed;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      position: relative;
-      background: rgba(255, 255, 255, 0.4);
-    }
-
-    .doctorsSelect select {
-      width: 100%;
-      height: 100%;
-      border: none;
-      border-radius: 1rem;
-      background-color: transparent;
-      outline: none;
-      cursor: pointer;
-      appearance: none;
-      text-align: center;
-      background-image: url("/icons/blueBottomArrow.svg");
-      background-repeat: no-repeat;
-      background-position: right 1rem center;
-      background-size: 2.4rem 2.4rem;
-      color: #293881;
-      font-size: 1.5rem;
-      font-style: normal;
-      font-weight: 400;
-      line-height: normal;
-      letter-spacing: -0.015rem;
-      text-align: start;
-      padding-left: 2rem;
-    }
-  }
-}
-
-#doctorsCards {
-  padding-bottom: 5rem;
-
-  .doctorsCards {
-    .doctorsCard {
-      flex-shrink: 0;
-      border-radius: 1.5rem;
-      border: 1px solid #dee4ec;
-      background: #fff;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-
-      .doctorsCardImg {
-        // width: 40.8rem;
-        width: 100%;
-        border-radius: 1.5rem;
-
-        // height: 100%;
-        height: 42.139rem;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        overflow: hidden;
-        // padding: 3.35rem 3.35rem 0 3.35rem;
-
-        img {
-          width: 100%;
-          height: 100%;
-          border-radius: 1.5rem;
-          object-fit: cover;
-          transition: all 0.4s ease;
-          border-radius: 1rem 1rem 0 0;
-
-          &:hover {
-            transform: scale(1.1);
-          }
-        }
-      }
-    }
-
-    .doctorsCardContent {
-      width: 100%;
-      height: 18rem;
-
-      .doctorJobTypes {
-        display: flex;
-        padding-bottom: 1.84rem;
-        gap: 1rem;
-
-        .doctorJobType {
-          height: 3.1061rem;
-          border-radius: 0.8rem;
-          background: #4d7abd;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          cursor: pointer;
-        }
-
-        span {
-          padding: 0.7rem 1.34rem;
-          color: #fff;
-          font-size: 1.4rem;
-          font-style: normal;
-          font-weight: 400;
-          line-height: normal;
-          text-align: center;
-        }
-      }
-
-      margin-top: 1.64rem;
-      border-radius: 1.5rem;
-      background: rgba(193, 217, 241);
-      background-color: #c1d9f133;
-      padding-top: 2.75rem;
-      padding-left: 2rem;
-      padding-right: 2rem;
-      padding-bottom: 3.46rem;
-
-      h3 {
-        color: $adentta-01;
-        font-size: 2rem;
-        font-style: normal;
-        font-weight: 600;
-        line-height: normal;
-      }
-
-      .doctorBey {
-        display: flex;
-        gap: 0.4rem;
-        padding-top: 1rem;
-        color: #000;
-        font-size: 1.4rem;
-        font-style: normal;
-        font-weight: 400;
-        line-height: 129.5%;
-        span {
-          font-size: 1.4rem;
-        }
-      }
-    }
-  }
-}
-
-@media (max-width: 768px) {
-  .doctorsPageHeaderText {
-    margin-top: 7rem !important;
-  }
-
-  .topper {
-    display: none;
-  }
-}
-
-@media (max-width: 768px) {
-  .doctorsCardContent {
-    h3 {
-      font-size: 2.5rem !important;
-    }
-  }
-
-  .doctorBey {
-    span {
-      font-size: 2rem !important;
-    }
-  }
-
-  .doctorDetailContent {
-    p {
-      font-size: 1.9rem !important;
-    }
-  }
-}
-
-// ? Doctors.jsx
-
-// ? DoctorsDetailPage.jsx
-.doctorsDetailProfile {
-  margin-top: 5rem;
-
-  .doctorProfile {
-    cursor: pointer;
-
-    .detailProfileImg {
-      background-color: white;
-      border: 1.5rem solid white;
-      width: 39.5rem;
-      height: 38rem;
-      transform: scale(1.1);
-      border-radius: 50%;
-
-      img {
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-        border-radius: 50%;
-        border: 2px solid #f3f7fc;
-      }
-    }
-  }
-
-  .doctorDetailContent {
-    min-height: 38rem;
-    border-radius: 2rem;
-    background: #f3f7fc;
-    padding: 4rem 3.5rem 3rem 16.65rem;
-    margin-bottom: 2.2rem;
-
-    p {
-      padding-top: 3rem;
-      max-width: 49rem;
-      color: #000;
-      font-size: 1.6rem;
-      width: 100%;
-      font-style: normal;
-      font-weight: 400;
-      line-height: 2.5rem;
-      /* 156.25% */
-    }
-
-    .verticalLine {
-      width: 0.3rem;
-      height: 16.7797rem;
-      background: rgba(34, 115, 236, 0.5);
-      position: absolute;
-      left: 13rem;
-      top: 11rem;
-      border-radius: 2rem;
-    }
-
-    .preparation {
-      max-width: 69rem;
-    }
-
-    .doctorDetailContentHeader {
-      h3 {
-        color: #293881;
-        font-size: 3.2rem;
-        font-style: normal;
-        font-weight: 600;
-        line-height: normal;
-      }
-
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-
-      .doctorDetailJobTypes {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        gap: 1rem;
-
-        .doctorDetailJobType {
-          height: 3.1061rem;
-          border-radius: 0.8rem;
-          background: #4d7abd;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          cursor: pointer;
-        }
-
-        span {
-          padding: 0.7rem 1.34rem;
-          color: #fff;
-          font-size: 1.4rem;
-          font-style: normal;
-          font-weight: 400;
-          line-height: normal;
-          text-align: center;
-        }
-      }
-    }
-  }
-
-  .doctorDetailContentPreparation {
-    padding: 3.5rem 3.5rem 5rem 18.65rem;
-    position: relative;
-  }
-
-  .doctorDetailContentBrand {
-    max-width: 62.4117rem;
-
-    p {
-      max-width: 62.4117rem;
-    }
-  }
-
-  .detailBrandItems {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 2rem;
-    padding-top: 1rem;
-
-    .detailBrandItem {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      width: 13.5034rem;
-      height: 7.6821rem;
-      flex-shrink: 0;
-      border-radius: 1.1921rem;
-      border: 0.662px solid #dee4ec;
-    }
-  }
-
-  .doctorDetailContentInter {
-    width: 100%;
-    display: flex;
-    flex-direction: column;
-
-    .doctorDetailContentInterText {
-      display: flex;
-      width: 100%;
-      gap: 1.6rem;
-
-      span {
-        width: 100%;
-      }
-
-      .portodes {
-        width: 100%;
-      }
-
-      // span {
-      //   padding-top: 3rem;
-      //   max-width: 49rem;
-      //   color: #000;
-      //   font-size: 1.6rem;
-      //   width: 100%;
-      //   font-style: normal;
-      //   font-weight: 400;
-      //   line-height: 2.5rem; /* 156.25% */
-      // }
-      img {
-        padding-top: 1.3rem;
-      }
-    }
-  }
-
-  .certificates {
-    padding-top: 4.1rem;
-    display: flex;
-    gap: 2.83rem;
-
-    .certificateImg {
-      width: 17.5242rem;
-      height: 22.0152rem;
-      flex-shrink: 0;
-
-      img {
-        width: 100%;
-        height: 100%;
-      }
-    }
-  }
-}
-
-.doctorsDetailPageOtherDoctors {
-  padding: 7.91rem 0 5.34rem;
-
-  .doctorsOtherDoctors {
-    padding-bottom: 3.41rem;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-
-    span {
-      color: $adentta-01;
-      font-size: 4rem;
-      font-style: normal;
-      font-weight: 600;
-      line-height: 4rem;
-      /* 100% */
-    }
-  }
-
-  .doctorsCards {
-    .doctorsCard {
-      flex-shrink: 0;
-      border-radius: 1.5rem;
-      border: 1px solid #dee4ec;
-      background: #fff;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-
-      .doctorsCardImg {
-        // width: 40.8rem;
-        border-radius: 1.5rem;
-
-        width: 100%;
-        height: 42.139rem;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        overflow: hidden;
-        // padding: 3.35rem 3.35rem 0 3.35rem;
-
-        img {
-          width: 100%;
-          border-radius: 1.5rem;
-
-          height: 100%;
-          object-fit: cover;
-          border-radius: 1rem 1rem 0 0;
-          transition: all 0.4s ease;
-
-          &:hover {
-            transform: scale(1.1);
-          }
-        }
-      }
-    }
-
-    .doctorsCardContent {
-      width: 100%;
-      height: 18rem;
-
-      .doctorJobTypes {
-        display: flex;
-        padding-bottom: 1.84rem;
-        gap: 1rem;
-
-        .doctorJobType {
-          height: 3.1061rem;
-          border-radius: 0.8rem;
-          background: #4d7abd;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          cursor: pointer;
-        }
-
-        span {
-          padding: 0.7rem 1.34rem;
-          color: #fff;
-          font-size: 1.4rem;
-          font-style: normal;
-          font-weight: 400;
-          line-height: normal;
-          text-align: center;
-        }
-      }
-
-      margin-top: 1.64rem;
-      border-radius: 1.5rem;
-      background: rgba(193, 217, 241);
-      background-color: #c1d9f133;
-      padding-top: 2.75rem;
-      padding-left: 2rem;
-      padding-right: 2rem;
-      padding-bottom: 3.46rem;
-
-      h3 {
-        color: $adentta-01;
-        font-size: 2rem;
-        font-style: normal;
-        font-weight: 600;
-        line-height: normal;
-      }
-
-      .doctorBey {
-        display: flex;
-        gap: 0.8rem;
-        padding-top: 1rem;
-        color: #000;
-        font-size: 1.5rem;
-        font-style: normal;
-        font-weight: 400;
-        line-height: 129.5%;
-        /* 1.9425rem */
-      }
-    }
-  }
-}
-
-.doctorSocialMedia {
-  margin-top: 3rem;
-
-  .doctorName {
-    color: #293881;
-    font-size: 3.2rem;
-    font-style: normal;
-    font-weight: 600;
-    line-height: normal;
-    padding-bottom: 2rem;
-  }
-
-  span {
-    color: #293881;
-    font-feature-settings: "liga" off;
-    font-size: 2rem;
-    font-style: normal;
-    font-weight: 500;
-    line-height: normal;
-  }
-
-  .doctorNumber {
-    display: flex;
-    flex-direction: column;
-    margin-top: 1.5rem;
-    gap: 2rem;
-
-    span {
-      color: #293881;
-      font-variant-numeric: lining-nums tabular-nums;
-      font-size: 1.6959rem;
-      font-style: normal;
-      font-weight: 400;
-      line-height: normal;
-      opacity: 0.5;
-    }
-
-    .doctorNumberIcon {
-      display: flex;
-      align-items: center;
-      gap: 2rem;
-
-      img {
-        width: 2rem;
-        height: 2rem;
-        flex-shrink: 0;
-      }
-
-      p {
-        color: #293881;
-        font-variant-numeric: lining-nums tabular-nums;
-        font-size: 1.5rem;
-        font-style: normal;
-        font-weight: 500;
-        line-height: normal;
-        letter-spacing: -0.034rem;
-      }
-    }
-
-    .doctorsSocialLinks {
-      display: flex;
-      justify-content: flex-start;
-      padding-top: 1rem;
-
-      ul {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        gap: 1.5rem;
-
-        li {
-          border: 1.5px solid $adentta-02;
-          border-radius: 50%;
-          padding: 1rem;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-
-          &:hover {
-            transform: translateY(-5px);
-            transition: all 0.4s ease;
-          }
-
-          img {
-            width: 2rem;
-            height: 2rem;
-          }
-        }
-      }
-    }
-  }
-}
-
-@media (max-width: 768px) {
-  .doctorProfile {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-  }
-
-  .doctorsNumbers {
-    display: flex;
-    gap: 4rem;
-  }
-
-  .doctorDetailContent {
-    padding: 3.5rem 3.5rem 5rem 5rem !important;
-  }
-
-  .verticalLine {
-    display: none;
-  }
-
-  .doctorNumberIcon {
-    p {
-      font-size: 2.2rem !important;
-    }
-
-    img {
-      width: 2.7rem !important;
-      height: 2.7rem !important;
-    }
-  }
-
-  .doctorsSocialLinks {
-    ul {
-      li {
-        padding: 1.5rem !important;
-
-        img {
-          width: 2.2rem !important;
-          height: 2.2rem !important;
-        }
-      }
-    }
-  }
-}
-
-// ? DoctorsDetailPage.jsx
-// ! Doctors Page
-
 // ! Brands Page
 #brandsPageCards {
   padding-bottom: 5.19rem;
@@ -10636,8 +8987,6 @@ ul {
     background: #f4f4f6;
 
     .brandsPageCard {
-      // width: 100%;
-      // height: 31.6rem;
       flex-shrink: 0;
       padding: 1.6rem;
 
@@ -10829,7 +9178,6 @@ ul {
     }
 
     .brandsDPAboutText {
-      // padding-left: 6rem;
       display: flex;
       gap: 1.59rem;
       flex-direction: column;
@@ -10890,160 +9238,7 @@ ul {
       padding-top: 6.8rem;
 
       // ! HomePageProductsSliderCard
-      .homePageProductCardContent {
-        background-color: #fff;
-        display: flex;
-        flex-direction: column;
-        // align-items: center;
-        justify-content: space-between;
-        cursor: pointer;
-        border-radius: 3rem;
-        border: 1px solid #dee4ec;
-        width: 100%;
-        height: 44rem;
-        transition: all 0.4s ease-in-out;
-
-        &:hover {
-          img {
-            transform: scale(1.1);
-            transition: all 0.4s ease-in-out;
-          }
-
-          .homePageProductCardContentBottom {
-            img {
-              transform: translate(3px, -5px);
-              transition: all 0.4s ease-in-out;
-            }
-          }
-        }
-
-        .homePageProCardImgs {
-          display: flex;
-          justify-content: center;
-          align-items: center;
-        }
-
-        .homePageProductCardContentImage {
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          padding: 3.7rem 3.7rem 1.8rem 3.7rem;
-          width: 25rem;
-          height: 23rem;
-
-          img {
-            width: 100%;
-            height: 100%;
-          }
-        }
-
-        .homePageProductCardContentInner {
-          display: flex;
-          justify-content: flex-start;
-          flex-direction: column;
-          align-items: flex-start;
-        }
-
-        .homePageProductCardContentText {
-          display: flex;
-          width: 100%;
-          justify-content: flex-start;
-          align-items: flex-start;
-          flex-direction: column;
-          padding-top: 1rem;
-          padding-left: 2rem;
-          padding-right: 3rem;
-          gap: 0.5rem;
-          overflow: hidden;
-
-          span {
-            font-size: 2rem;
-            font-style: normal;
-            font-weight: 600;
-            line-height: normal;
-            color: $adentta-01;
-            width: 95% !important;
-            overflow: hidden;
-            display: -webkit-box;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            -webkit-line-clamp: 2;
-            /* Maksimum göstəriləcək sətir sayı */
-            -webkit-box-orient: vertical;
-          }
-
-          p {
-            color: #8a8fab;
-            font-size: 1.5rem;
-            width: 95% !important;
-            overflow: hidden;
-            font-style: normal;
-            font-weight: 400;
-            line-height: 129.5%;
-            display: -webkit-box;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            -webkit-line-clamp: 2;
-            /* Maksimum göstəriləcək sətir sayı */
-            -webkit-box-orient: vertical;
-          }
-        }
-
-        .price {
-          margin-top: 1rem;
-          width: 9.8rem;
-          height: 4.1rem;
-          flex-shrink: 0;
-          margin-left: 2rem;
-          display: flex;
-          align-items: center;
-          border-radius: 2rem;
-          justify-content: center;
-          background-color: #f0ece3;
-
-          .priceItem {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 1rem 1rem;
-
-            #prices {
-              color: #293881;
-              font-size: 1.7rem;
-              font-style: normal;
-              font-weight: 600;
-              line-height: normal;
-            }
-          }
-        }
-
-        .homePageProductCardContentBottom {
-          margin-top: 1rem;
-          cursor: pointer;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          border-top: 1px solid #dee4ec;
-          gap: 0.8rem;
-          height: 6.3rem;
-          width: 100%;
-
-          span {
-            color: #202054;
-            text-align: center;
-            font-size: 1.5611rem;
-            font-style: normal;
-            font-weight: 500;
-            line-height: normal;
-            letter-spacing: -0.012px;
-          }
-
-          img {
-            width: 1.3876rem;
-            height: 1.3876rem;
-          }
-        }
-      }
+      // ! burdan silindi kohne card css-i
 
       // ! HomePageProductsSliderCard
     }
@@ -11100,107 +9295,6 @@ ul {
         line-height: normal;
       }
     }
-
-    // .brandsDPCatalogCards {
-    //   padding-bottom: 6.59rem;
-
-    //   .pdfCatalogCard {
-    //     display: flex;
-    //     flex-direction: column;
-    //     gap: 1.55rem;
-    //     // padding: 0 3rem;
-    //     .pdfCatalogCardImg {
-    //       position: relative;
-    //       // height: 38.139rem;
-    //       height: 39.139rem;
-    //       img {
-    //         width: 100%;
-    //       }
-    //       .vatech {
-    //         position: absolute;
-    //         top: 2.26rem;
-    //         left: 2.46rem;
-    //         width: 7.9637rem;
-    //         height: 4.1rem;
-    //         flex-shrink: 0;
-    //         border-radius: 2rem;
-    //         background: #1c2759;
-    //         display: flex;
-    //         align-items: center;
-    //         justify-content: center;
-
-    //         span {
-    //           color: #fff;
-    //           font-size: 1.4rem;
-    //           font-style: normal;
-    //           font-weight: 400;
-    //           line-height: normal;
-    //         }
-    //       }
-    //     }
-
-    //     .pdfCatalogCardInfo {
-    //       border-radius: 1.5rem;
-    //       background: rgba(193, 217, 241, 0.2);
-    //       height: 20rem;
-    //       .pdfCatalogCardInfoContent {
-    //         padding: 2.75rem 0 2.22rem 3rem;
-    //         display: flex;
-    //         flex-direction: column;
-    //         h3 {
-    //           color: #293881;
-    //           font-size: 2rem;
-    //           font-style: normal;
-    //           font-weight: 600;
-    //           line-height: normal;
-    //           padding-bottom: 0.77rem;
-    //         }
-
-    //         p {
-    //           width: 31.6163rem;
-    //           color: #8a8fab;
-    //           font-size: 1.5rem;
-    //           font-style: normal;
-    //           font-weight: 400;
-    //           line-height: 129.5%;
-    //           display: -webkit-box;
-    //           -webkit-line-clamp: 2;
-    //           -webkit-box-orient: vertical;
-    //           overflow: hidden;
-    //           text-overflow: ellipsis;
-    //         }
-
-    //         button {
-    //           margin-top: 2.65rem;
-    //           width: 17.6342rem;
-    //           height: 4.5rem;
-    //           // padding: 1.35rem 2.35rem;
-    //           flex-shrink: 0;
-    //           border-radius: 3rem;
-    //           background: #293880;
-    //           display: flex;
-    //           color: #fff;
-    //           text-align: center;
-    //           font-size: 1.5rem;
-    //           font-style: normal;
-    //           font-weight: 500;
-    //           line-height: normal;
-    //           letter-spacing: -0.0012rem;
-    //           justify-content: center;
-    //           align-items: center;
-    //           gap: 1rem;
-
-    //           img {
-    //             width: 1.8rem;
-    //             height: 1.8rem;
-    //             flex-shrink: 0;
-    //           }
-    //         }
-    //       }
-    //     }
-    //   }
-    // }
-
     .brandsDPCatalogCards {
       padding-bottom: 6.59rem;
     }
@@ -11554,7 +9648,6 @@ ul {
               font-style: normal;
               font-weight: 400;
               line-height: 174%;
-              // max-width: 72.5641rem;
               display: flex !important
 ;
               flex-direction: column !important;
@@ -11892,7 +9985,6 @@ ul {
       font-weight: 500;
       line-height: normal;
       opacity: 0.3;
-      // cursor: pointer;
     }
   }
 
@@ -11939,7 +10031,6 @@ ul {
       .accordion {
         max-width: 87.6rem;
         width: 100%;
-        // height: 20.7809rem;
         border-radius: 1.5rem;
         background-color: #fff;
         padding: 2.7rem 2.53rem 2.7rem 4.63rem;
@@ -12171,7 +10262,7 @@ ul {
 }
 
 #nprogress .bar {
-  background: #293881 !important; // Burada istədiyin rəngi yaz (məs: #08316F, red, green)
+  background: #293881 !important;
 }
 
 #nprogress .peg {
@@ -12180,7 +10271,6 @@ ul {
     0 0 5px #293881 !important;
 }
 
-/* Spinner varsa, onu da dəyişə bilərsən */
 #nprogress .spinner-icon {
   border-top-color: red;
   border-left-color: red;
@@ -12279,36 +10369,8 @@ ul {
   }
 }
 
-// !products page paginate
-
-// .custom-pagination button {
-//   padding: 6px 10px;
-//   border-radius: 6px;
-//   border: 1px solid #ddd;
-//   background: white;
-//   cursor: pointer;
-//   border-radius: 4rem;
-// border: 1px solid #D7E0ED;
-// background: #FFF;
-// }
-// .custom-pagination button[disabled] {
-//   opacity: 0.5;
-//   cursor: not-allowed;
-// }
-// .custom-pagination span {
-//   display: inline-block;
-//   // padding: 0 6px;
-// }
-
-/* pagination-adapted.css
-   1rem = 10px
-   Uyğunlaşdırılmış: .custom-pagination və fallback .pagination
-*/
-
-/* Container */
 .custom-paginationProducts,
 .pagination {
-  // min-width: 37.1643rem; /* əsas genişlik */
   width: auto;
   overflow: hidden;
   flex-shrink: 0;
@@ -12323,14 +10385,11 @@ ul {
   box-sizing: border-box;
 }
 
-/* Ümumi page item (sayı düymələri və s.) */
 .custom-paginationProducts .page-item,
 .pagination .page-item {
   padding: 0.1rem 0;
   cursor: pointer;
 }
-
-/* Previous (sol pill) - seçmək üçün aria-label istifadə et */
 .custom-paginationProducts button[aria-label="prev"],
 .pagination .page-item-pervious,
 .pagination .page-item-previous {
@@ -12346,7 +10405,6 @@ ul {
   justify-content: center;
   align-items: center;
   box-shadow: 0.15rem 0.2rem 0.51rem rgba(41, 56, 129, 0.13);
-  /* görsel iç mətn üçün */
   padding: 0;
   color: #293881;
   font-size: 1.4rem;
@@ -12356,7 +10414,6 @@ ul {
   padding: 0 0.5rem;
 }
 
-/* Previous - içdəki link/mətn */
 .custom-paginationProducts button[aria-label="prev"] > .page-link-pervious,
 .pagination .page-link-pervious {
   padding: 0.5rem;
@@ -12371,7 +10428,6 @@ ul {
   line-height: 122%; /* 1.952rem */
 }
 
-/* Next (sağ pill) */
 .custom-paginationProducts button[aria-label="next"],
 .pagination .page-item-next {
   margin: 0rem;
@@ -12392,10 +10448,9 @@ ul {
   padding: 0 0.5rem;
   font-style: normal;
   font-weight: 500;
-  line-height: 122%; /* 1.952rem */
+  line-height: 122%;
 }
 
-/* Next - içdəki link/mətn */
 .custom-paginationProducts button[aria-label="next"] > .page-link-next,
 .pagination .page-link-next {
   padding: 0.5rem 1rem;
@@ -12407,8 +10462,6 @@ ul {
   border: none;
 }
 
-/* Səhifə nömrəsi düyməsi (dairəvi) */
-/* Tövsiyə: renderPagination içindəki sayı düymələrinə `className="page-number"` ver */
 .custom-paginationProducts .page-number,
 .pagination .page-link,
 .custom-paginationProducts button.pageNumber,
@@ -12434,7 +10487,6 @@ ul {
     background-color 120ms ease;
 }
 
-/* Aktiv səhifə stil - şəkildəki kimi dairəvi ağ fon / hafif border */
 .custom-paginationProducts .page-number.active,
 .pagination .active .page-link,
 .custom-paginationProducts button[aria-current="page"],
@@ -12447,7 +10499,6 @@ ul {
   transform: translateY(-0.1rem);
 }
 
-/* Hover effekti (aktiv olmayanlara) */
 .custom-paginationProducts
   button:hover:not([disabled]):not([aria-current="page"]),
 .pagination button:hover:not([disabled]):not([aria-current="page"]) {
@@ -12455,7 +10506,6 @@ ul {
   box-shadow: 0.12rem 0.36rem 1.08rem rgba(41, 56, 129, 0.06);
 }
 
-/* Ellipsis (…): render-da <span className="ellipsis">…</span> istifadə et */
 .custom-paginationProducts .ellipsis,
 .pagination .ellipsis,
 .custom-paginationProducts .dots,
@@ -12468,7 +10518,6 @@ ul {
   justify-content: center;
 }
 
-/* Disabled state */
 .custom-paginationProducts button[disabled],
 .pagination button[disabled] {
   opacity: 0.4;
@@ -12477,9 +10526,7 @@ ul {
   box-shadow: none;
 }
 
-/* Kiçik responsive düzəliş */
 @media (max-width: 520px) {
-  /* 520px */
   .custom-paginationProducts,
   .pagination {
     min-width: auto;
@@ -12512,18 +10559,6 @@ ul {
     display: none !important;
   }
 }
-
-
-
-
-
-
-
-
-
-
-
-
 
 // !SUPPORT CARD DESIGN
 
@@ -12694,16 +10729,16 @@ ul {
     transition: 0.7s ease;
   }
 }
-.superOffers{
-  a{
+.superOffers {
+  a {
     display: flex;
     justify-content: center;
     align-items: center;
-    span{
+    span {
       font-size: 2.6rem;
       color: #293881;
     }
-    .offersIcon{
+    .offersIcon {
       margin-left: 0.5rem;
       margin-right: 2.5rem;
       font-size: 3.6rem;
