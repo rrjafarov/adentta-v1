@@ -6,9 +6,6 @@ import { Pagination, Autoplay } from "swiper/modules";
 import "swiper/css";
 import "swiper/css/pagination";
 import "swiper/css/autoplay";
-import Link from "next/link";
-import Image from "next/image";
-import Manat from "../../../public/icons/manat.svg";
 import "../../app/[locale]/globals.scss";
 import ProductCardFast from "@/components/Header/ProductCardFast";
 
@@ -111,3 +108,19 @@ const HomePageProductCard = ({ whatsappNumber, productData = [], t }) => {
 };
 
 export default HomePageProductCard;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// ! 01.04.26 - KATEQORİYA VƏ SUPER OFFERS FİLTRELƏMƏSİ ƏLAVƏ EDİLDİ
+

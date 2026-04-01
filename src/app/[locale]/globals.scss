@@ -10730,7 +10730,7 @@ ul {
   }
 }
 .superOffers {
-  a {
+  button {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -10740,7 +10740,7 @@ ul {
     }
     .offersIcon {
       margin-left: 0.5rem;
-      margin-right: 2.5rem;
+      margin-right: 0.5rem;
       font-size: 3.6rem;
     }
   }
