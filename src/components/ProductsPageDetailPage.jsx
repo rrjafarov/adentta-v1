@@ -96,6 +96,7 @@ const ProductsPageDetailPage = ({
   whatsappNumber,
   productData,
   similarProducts = [],
+  cardsData,
 }) => {
   const [thumbsSwiper, setThumbsSwiper] = useState(null);
   const [currentUrl, setCurrentUrl] = useState("");
@@ -452,28 +453,23 @@ const ProductsPageDetailPage = ({
                     }
                   >
                     <div className="bankCarts">
-                      <div className="bankCart">
-                        <img
-                          src="/images/kapitalBankImg.png"
-                          alt="Kapital Bank"
-                        />
-                      </div>
-                      <div className="bankCart">
-                        <img src="/images/tamKartImg.png" alt="TamKart" />
-                      </div>
-                      <div className="bankCart">
-                        <img src="/images/albaliKartImg.png" alt="AlbaliKart" />
-                      </div>
-                      <div className="bankCart">
-                        <img
-                          src="/images/leobankKartImg.png"
-                          alt="LeoBankKart"
-                        />
-                      </div>
+                      {cardsData.map((card) => (
+                        <div key={card.id} className="bankCart">
+                          <img
+                            src={`https://admin.adentta.az/storage${card.card_image}`}
+                            alt={card.title}
+                          />
+                        </div>
+                      ))}
                     </div>
                   </DetailPageAccordion>
                 </div>
               </div>
+
+
+
+
+
               <div className="detailPageShareLinks mobileProductLink">
                 <span>{t?.productsPageShare || "Share with"}:</span>
                 {Object.entries(shareUrls).map(([key, url]) => (

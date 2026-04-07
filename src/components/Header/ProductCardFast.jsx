@@ -62,7 +62,9 @@ const ProductCardFast = ({
         </div>
       </Link>
       <div className="productCardFastCardContent">
-        <span>{title}</span>
+        <Link href={`/products/${productSlug}-${id}`}>
+          <span>{title}</span>
+        </Link>
       </div>
 
       {Number(price) > 0 ? (

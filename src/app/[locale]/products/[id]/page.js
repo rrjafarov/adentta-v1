@@ -67,6 +67,19 @@ async function fetchEventsPageData() {
   }
 }
 
+
+async function fetchCardsPageData() {
+  try {
+    const { data: events } = await axiosInstance.get(
+      `/page-data/installment-cards`,
+      { cache: "no-store" }
+    );
+    return events;
+  } catch (error) {
+    throw error;
+  }
+}
+
 export async function generateMetadata({ params }) {
   const id = params.id.split("-").pop();
   const product = await fetchProductById(id);
@@ -165,6 +178,9 @@ export default async function Page({ params }) {
   const eventsResponse = await fetchEventsPageData();
   const eventsData = eventsResponse?.data?.data || [];
 
+  const cardsResponse = await fetchCardsPageData();
+  const cardsData = cardsResponse?.data?.data || [];
+
   const setting = await fetchSettingsPageData();
   const settingData = setting?.data || [];
 
@@ -201,6 +217,7 @@ export default async function Page({ params }) {
         productData={productDetail}
         similarProducts={similarProducts}
         whatsappNumber={whatsappNumber}
+        cardsData={cardsData}
       />
     </>
   );
