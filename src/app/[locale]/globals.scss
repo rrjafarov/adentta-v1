@@ -10591,7 +10591,6 @@ ul {
     }
   }
 
-  
   .productCardFastCardContent {
     padding: 0 2.5rem;
     margin-top: 1.8rem;
@@ -10620,6 +10619,7 @@ ul {
     .productCardFastCardContentPriceItem {
       width: 9.8rem;
       height: 4.1rem;
+      cursor: pointer;
       flex-shrink: 0;
       display: flex;
       align-items: center;
@@ -10629,6 +10629,11 @@ ul {
       display: flex;
       align-items: center;
       justify-content: center;
+      transition: 0.3s ease;
+      &:hover {
+        transform: scale(1.05);
+        transition: 0.3s ease;
+      }
       #prices {
         color: #293881;
         font-size: 1.7rem;
