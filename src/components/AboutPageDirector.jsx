@@ -15,7 +15,6 @@ const AboutPageDirector = ({
           <div className="directorMessageLeft">
             <div className="directorAvatar">
               <Image
-                // src="/images/directorIMG.png"
                 src={`https://admin.adentta.az/storage${directorImage}`}
                 alt="director"
                 width={400}
@@ -23,7 +22,6 @@ const AboutPageDirector = ({
               />
               <div className="directorOffice">
                 <Image
-                  // src="/images/directorOfficeIMG.png"
                   src={`https://admin.adentta.az/storage${directorImage2}`}
                   alt="director"
                   width={400}

@@ -10,12 +10,10 @@ const WpLink = ({ t, whatsappNumber }) => {
   const [currentUrl, setCurrentUrl] = useState("");
   useEffect(() => {
     if (typeof window !== "undefined") {
-      // setCurrentUrl(window.location.href);
       setCurrentUrl(window.location.href);
     }
   }, []);
   const message = encodeURIComponent(
-    // `Salam, bu məhsul haqqında məlumat ala bilərəm?: ${currentUrl}`
     `${
       t?.wpMessage || "Salam, bu məhsul haqqında məlumat ala bilərəm?"
     }: ${currentUrl}`,
@@ -242,29 +240,6 @@ const ProductsPageDetailPage = ({
                       />
                     )}
                   </div>
-
-                  {/* <div className="pricesDP">
-                    <div className="detailPagePrice">
-                      <div className="dpPriceItem">
-                        <span>{productData.price}</span>
-                        <Manat />
-                      </div>
-                    </div>
-
-                    <div className="detailPagePrice detailPageOldPrice">
-                      <div className="dpPriceItem">
-                        <span>{productData.old_price}</span>
-                        <Manat />
-                      </div>
-                    </div>
-
-                    <div className="detailPagePriceInqury">
-                      <Link href="#" className="dpPriceItem">
-                        <span>{t?.priceMessage}</span>
-                      </Link>
-                    </div>
-                  </div> */}
-
                   {productData.quantity > 0 && (
                     <div className="detailPageQuantity">
                       <div className="dpQuantityItem">

@@ -19,12 +19,7 @@ const Support = ({ t, title, content }) => {
         </div>
         <div className="supportPageContent">
           <div className="supportPageContentText">
-            {/* <div className="supportPageContentTextInner">
-              <span>{title}</span>
-              <div className="supportPageContentTextInnerParagraph">
-                <div dangerouslySetInnerHTML={{ __html: content }}></div>
-              </div>
-            </div> */}
+           
 
             <div className="supportPageContentTextInner">
               <span>{title}</span>

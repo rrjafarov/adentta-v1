@@ -35,7 +35,6 @@ const AboutPageParallax = ({
             data-fancybox="videos"
           >
             <Image
-              // src="/images/parallaxImg.png"
               src={`https://admin.adentta.az/storage${videoCover}`}
               alt="###"
               width={800}
@@ -43,7 +42,6 @@ const AboutPageParallax = ({
             />
             <div className="aboutPageParallaxText">
               <span>VIDEO</span>
-              {/* <p>Advanced Equipments for Better Care</p> */}
               <p>{videoTitle}</p>
               <div className="parallaxPlayIcon">
                 <Image
