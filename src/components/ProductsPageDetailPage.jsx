@@ -205,10 +205,10 @@ const ProductsPageDetailPage = ({
             {/* Right: info, accordions, share */}
             <div className="xl-6 md-6 lg-6 sm-12">
               <div className="productDetailRight">
-                <span>
+                {/* <span>
                   {t?.productsPageProductCode || "Product code"}: #{" "}
                   <span>{productData.code}</span>
-                </span>
+                </span> */}
                 <div className="productDetailRightTitle">
                   <h1>{productData.title}</h1>
 
@@ -296,6 +296,11 @@ const ProductsPageDetailPage = ({
                     <DetailPageAccordion
                       title={t?.productsPageAboutProducts || "About products"}
                     >
+                      <span className="productCodeDP">
+                        {t?.productsPageProductCode || "Product code"}: #{" "}
+                        <span>{productData.code}</span>
+                      </span>
+
                       <div
                         dangerouslySetInnerHTML={{
                           __html: productData.content,
