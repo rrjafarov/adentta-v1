@@ -82,13 +82,13 @@ const GlobalExcellence = ({ brandsData, t }) => {
       </div>
 
       <div className="globeBanner">
-        {/* <Image
+        <Image
           src="/images/globeGIF.png"
           alt="globe"
-          width={1000}
-          height={500}
-        /> */}
-        <Globe className="globeCanvas" />
+          width={2000}
+          height={2000}
+        />
+        {/* <Globe className="globeCanvas" /> */}
         
       </div>
     </section>

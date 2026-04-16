@@ -240,13 +240,27 @@ const ProductsPageDetailPage = ({
                       />
                     )}
                   </div>
-                  {productData.quantity > 0 && (
+                  {/* {productData.quantity > 0 && (
                     <div className="detailPageQuantity">
                       <div className="dpQuantityItem">
                         <span>{t?.inStock || "Stoktadır"} : </span>
                       </div>
                     </div>
-                  )}
+                  )} */}
+
+                  <div className="detailPageQuantity">
+                    <div className="dpQuantityItem">
+                      {productData.quantity > 0 ? (
+                        <span className="inStockText">
+                          {t?.inStock || "Stoktadır"} :
+                        </span>
+                      ) : (
+                        <p className="notAvailableText">
+                          {t?.notAviableQuantity || "Mövcud deyil"} :
+                        </p>
+                      )}
+                    </div>
+                  </div>
                 </div>
 
                 <div className="brandAndCountry">
@@ -440,10 +454,6 @@ const ProductsPageDetailPage = ({
                   </DetailPageAccordion>
                 </div>
               </div>
-
-
-
-
 
               <div className="detailPageShareLinks mobileProductLink">
                 <span>{t?.productsPageShare || "Share with"}:</span>
