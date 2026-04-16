@@ -1,62 +1,3 @@
-// import "./globals.scss";
-// export const metadata = {
-//   title: "Adentta - Dental Supplier",
-//   description: "Adentta Dental Supplier",
-// };
-// export const viewport = {
-//   width: "device-width",
-//   initialScale: 1,
-//   maximumScale: 1,
-// };
-
-
-// import NavigationProgress from "@/components/NavigationLoading";
-// import Script from "next/script";
-
-// export default async function RootLayout({ children, params }) {
-//   const { locale } = await params;
-
-//   return (
-//     <html lang={locale || "az"}>
-//       <head>
-//         <meta
-//           name="viewport"
-//           content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"
-//         />
-//         {/* GA4 */}
-//         <Script
-//           src="https://www.googletagmanager.com/gtag/js?id=G-S6C3MFRQLQ"
-//           strategy="afterInteractive"
-//         />
-//         <Script id="ga-init" strategy="afterInteractive">
-//           {`
-//             window.dataLayer = window.dataLayer || [];
-//             function gtag(){dataLayer.push(arguments);}
-//             gtag('js', new Date());
-//             gtag('config', 'G-S6C3MFRQLQ');
-//           `}
-//         </Script>
-//       </head>
-//       <body suppressHydrationWarning>
-//         <NavigationProgress />
-//         {children}
-//       </body>
-//     </html>
-//   );
-// }
-
-
-
-
-
-
-
-
-
-
-
-
-
 import "./globals.scss";
 import { cookies } from "next/headers";
 import axiosInstance from "@/lib/axios";
@@ -117,7 +58,7 @@ async function fetchBrandsPageData() {
   const cookieStore = cookies();
   const lang = cookieStore.get("NEXT_LOCALE");
 
-  const { data } = await axiosInstance.get(`/page-data/brands`, {
+  const { data } = await axiosInstance.get(`/page-data/brands?per_page=7`, {
     cache: "no-store",
   });
 
@@ -128,7 +69,7 @@ async function fetchEventsPageData() {
   const cookieStore = cookies();
   const lang = cookieStore.get("NEXT_LOCALE");
 
-  const { data } = await axiosInstance.get(`/page-data/event`, {
+  const { data } = await axiosInstance.get(`/page-data/event?per_page=6`, {
     cache: "no-store",
   });
 
