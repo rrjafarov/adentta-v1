@@ -2459,6 +2459,12 @@ ul {
   padding-bottom: 4rem;
 }
 
+@media (max-width: 768px) {
+ .dptopper{
+  display: none !important;
+ }
+}
+
 .filter-container {
   width: 100%;
 }
@@ -3129,9 +3135,9 @@ ul {
     align-items: center;
     flex-direction: column;
     gap: 2rem;
-
     div {
-      width: 100%;
+      width: 100% !important;
+
     }
   }
 }
@@ -10239,13 +10245,13 @@ ul {
 .detailPageQuantity {
   .dpQuantityItem {
     span {
-      font-size: 2.4rem;
+      font-size: 2rem;
       color: #46c756;
       font-weight: 600;
       padding-top: 1rem;
     }
     p {
-      font-size: 2.4rem;
+      font-size: 2rem;
       color: #ec1f27;
       font-weight: 600;
       padding-top: 1rem;

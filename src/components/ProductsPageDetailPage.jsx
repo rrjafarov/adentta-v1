@@ -169,7 +169,7 @@ const ProductsPageDetailPage = ({
       {/* Product Detail */}
       <section id="productPageDPsection">
         <div className="container">
-          <div className="filterTop dptopper topper">
+          <div className="filterTop dptopper topper ">
             <Link href="/">
               <strong>Adentta</strong>
             </Link>
