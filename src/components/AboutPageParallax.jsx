@@ -23,7 +23,8 @@ const AboutPageParallax = ({
   directorMessage,
   directorImage,
   t,
-  directorImage2
+  directorImage2,
+  directorSignature,
 }) => {
   return (
     <section id="aboutPageParallax">
@@ -60,6 +61,7 @@ const AboutPageParallax = ({
           directorMessage={directorMessage}
           directorImage={directorImage}
           directorImage2={directorImage2}
+          directorSignature={directorSignature}
         />
       </div>
     </section>

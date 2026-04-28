@@ -46,11 +46,11 @@ export async function generateMetadata({ params }) {
   const lang = cookieStore.get("NEXT_LOCALE")?.value;
 
   return {
-    title: careers.title,
-    description: careers.title,
+    title: careers.meta_title || careers.title || "Adentta",
+    description: careers.meta_description || "Adentta Careers",
     openGraph: {
-      title: careers.title,
-      description: careers.title,
+      title: careers.meta_title || careers.title || "Adentta",
+      description: careers.meta_description || "Adentta Careers",
       url: canonicalUrl,
       images: [
         {
@@ -66,8 +66,8 @@ export async function generateMetadata({ params }) {
     },
     twitter: {
       card: "summary_large_image",
-      title: careers.title,
-      description: careers.title,
+      title: careers.meta_title || careers.title || "Adentta",
+      description: careers.meta_description || "Adentta Careers",
       creator: "@adentta",
       site: "@adentta",
       images: [imageUrl],

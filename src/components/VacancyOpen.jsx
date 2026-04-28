@@ -2,46 +2,77 @@ import Image from "next/image";
 import Link from "next/link";
 import React from "react";
 
-const VacancyOpen = ({ vacancy ,t }) => {
+const generateSlug = (text = "") => {
+  return text
+    .toLowerCase()
+    .replace(/ə/g, "e")
+    .replace(/ı/g, "i")
+    .replace(/ö/g, "o")
+    .replace(/ğ/g, "g")
+    .replace(/ü/g, "u")
+    .replace(/ş/g, "s")
+    .replace(/ç/g, "c")
+    .replace(/[^a-z0-9\s-]/g, "")
+    .trim()
+    .replace(/\s+/g, "-");
+};
+
+const VacancyOpen = ({ vacancy, t }) => {
   return (
     <div className="openVacanacies">
       <div className="container">
         <div className="openVacancyCardHeader">
           <h2>{t?.careersPageVacancyTitle || "Open Vacancies"}</h2>
         </div>
+
         <div className="vacancyCards">
           <div className="row">
+            {vacancy.map((vacancyData) => {
+              const slug =
+                vacancyData?.slug || generateSlug(vacancyData?.title);
 
-            {vacancy.map((vacancyData) => (
-              <div key={vacancyData.id} className="xl-6 lg-6 md-6 sm-12">
-                <Link href={`/careers/${vacancyData?.title?.toLowerCase().replace(/\s+/g, '-')}-${vacancyData.id}`} className="block">
-                  <div className="vacancyCard">
-                    <div className="vacancyCardHead">
-                      <span>{vacancyData.title}</span>
-                      <Image
-                        src="/icons/vacancyCartRightArrow.svg"
-                        alt="vacancy"
-                        width={100}
-                        height={100}
-                      />
-                    </div>
-                    <div className="vacancyCardItem">
-                      <span>{t?.careersPageDeadLine || "Application Deadline"}:</span>
-                      <p>{vacancyData.deadline}</p>
-                    </div>
-                    <div className="vacancyCardItem">
-                      <span>{t?.careersPageEmployment || "Application Deadline"}:</span>
-                      <p>{vacancyData.employment_type}</p>
-                    </div>
-                    <div className="vacancyCardItem">
-                      <span>{t?.careersPageLocation || "Application Deadline"}:</span>
-                      <p>{vacancyData.location}</p>
+              return (
+                <div key={vacancyData.id} className="xl-6 lg-6 md-6 sm-12">
+                  <Link
+                    href={`/careers/${slug}-${vacancyData.id}`}
+                    className="block"
+                  >
+                    <div className="vacancyCard">
+                      <div className="vacancyCardHead">
+                        <span>{vacancyData.title}</span>
+                        <Image
+                          src="/icons/vacancyCartRightArrow.svg"
+                          alt="vacancy"
+                          width={100}
+                          height={100}
+                        />
+                      </div>
 
+                      <div className="vacancyCardItem">
+                        <span>
+                          {t?.careersPageDeadLine || "Application Deadline"}:
+                        </span>
+                        <p>{vacancyData.deadline}</p>
+                      </div>
+
+                      <div className="vacancyCardItem">
+                        <span>
+                          {t?.careersPageEmployment || "Employment Type"}:
+                        </span>
+                        <p>{vacancyData.employment_type}</p>
+                      </div>
+
+                      <div className="vacancyCardItem">
+                        <span>
+                          {t?.careersPageLocation || "Location"}:
+                        </span>
+                        <p>{vacancyData.location}</p>
+                      </div>
                     </div>
-                  </div>
-                </Link>
-              </div>
-            ))}
+                  </Link>
+                </div>
+              );
+            })}
           </div>
         </div>
       </div>
@@ -49,4 +80,4 @@ const VacancyOpen = ({ vacancy ,t }) => {
   );
 };
 
-export default VacancyOpen;
+export default VacancyOpen; 

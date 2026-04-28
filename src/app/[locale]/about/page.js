@@ -152,16 +152,10 @@ const page = async () => {
         directorMessage={about?.data.director_message}
         directorImage={about?.data.director_image_1}
         directorImage2={about?.data.director_image_2}
+        directorSignature={about?.data.director_signature}
       />
 
-      {/* <div className="aboutFooterBack">
-        <Footer
-          contact={contact}
-          categoryData={categoryData}
-          eventsData={eventsData}
-          brandsData={brandsData}
-        />
-      </div> */}
+      
     </div>
   );
 };

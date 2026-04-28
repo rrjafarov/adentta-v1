@@ -7,6 +7,7 @@ const AboutPageDirector = ({
   directorImage,
   directorImage2,
   directorMessage,
+  directorSignature,
 }) => {
   return (
     <div className="directorMessage">
@@ -51,8 +52,8 @@ const AboutPageDirector = ({
 
             <div className="directorSignaturess">
               <span>{directorName}</span>
-              <Image
-                src="/icons/signature.svg"
+              <Image    
+                src={`https://admin.adentta.az/storage${directorSignature}`}
                 alt="signature"
                 width={100}
                 height={100}
