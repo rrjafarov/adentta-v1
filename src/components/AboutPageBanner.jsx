@@ -33,7 +33,7 @@ const AboutPageBanner = ({
             width={1200}
             height={500}
           />
-          <div className="aboutTop topper">
+          <div className="aboutTop topper breadcrumbsNone">
             <Link href="/">
               <strong className="topper">Adentta</strong>
             </Link>

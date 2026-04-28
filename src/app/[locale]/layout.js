@@ -5,7 +5,7 @@ import Header from "@/components/Header/Header";
 import Footer from "@/components/Footer/Footer";
 import NavigationProgress from "@/components/NavigationLoading";
 import Script from "next/script";
-import "@/components/Header/header.scss"
+import "@/components/Header/header.scss";
 
 export const metadata = {
   title: "Adentta - Dental Supplier",
@@ -17,8 +17,6 @@ export const viewport = {
   initialScale: 1,
   maximumScale: 1,
 };
-
-/* ================= FETCH FUNCTIONS ================= */
 
 async function fetchSettingsPageData() {
   const cookieStore = cookies();
@@ -37,7 +35,7 @@ async function fetchCategoryPageData() {
 
   const { data } = await axiosInstance.get(
     `/page-data/categories?per_page=999`,
-    { cache: "no-store" }
+    { cache: "no-store" },
   );
 
   return data?.data?.data || [];
@@ -65,15 +63,27 @@ async function fetchBrandsPageData() {
   return data?.data?.data || [];
 }
 
-async function fetchEventsPageData() {
-  const cookieStore = cookies();
-  const lang = cookieStore.get("NEXT_LOCALE");
+// async function fetchEventsPageData() {
+//   const cookieStore = cookies();
+//   const lang = cookieStore.get("NEXT_LOCALE");
 
+//   const { data } = await axiosInstance.get(`/page-data/event?per_page=6`, {
+//     cache: "no-store",
+//   });
+
+//   return data?.data?.data || [];
+// }
+
+
+
+async function fetchEventsPageData() {
   const { data } = await axiosInstance.get(`/page-data/event?per_page=6`, {
     cache: "no-store",
   });
 
-  return data?.data?.data || [];
+  const events = data?.data?.data || [];
+
+  return events.filter((item) => item.event_status === "0");
 }
 
 async function getTranslations() {
@@ -84,26 +94,17 @@ async function getTranslations() {
   return data;
 }
 
-/* ================= ROOT LAYOUT ================= */
-
 export default async function RootLayout({ children, params }) {
   const { locale } = params;
-  /* 🔥 Paralel fetch – daha professional */
-  const [
-    settingData,
-    categoryData,
-    contact,
-    brandsData,
-    eventsData,
-    t
-  ] = await Promise.all([
-    fetchSettingsPageData(),
-    fetchCategoryPageData(),
-    fetchContactPageData(),
-    fetchBrandsPageData(),
-    fetchEventsPageData(),
-    getTranslations(),
-  ]);
+  const [settingData, categoryData, contact, brandsData, eventsData, t] =
+    await Promise.all([
+      fetchSettingsPageData(),
+      fetchCategoryPageData(),
+      fetchContactPageData(),
+      fetchBrandsPageData(),
+      fetchEventsPageData(),
+      getTranslations(),
+    ]);
 
   return (
     <html lang={locale || "az"}>
@@ -129,17 +130,8 @@ export default async function RootLayout({ children, params }) {
 
       <body suppressHydrationWarning>
         <NavigationProgress />
-
-        {/* ✅ HEADER */}
-        <Header
-          settingData={settingData}
-          categoryData={categoryData}
-          t={t}
-        />
-
+        <Header settingData={settingData} categoryData={categoryData} t={t} />
         {children}
-
-        {/* ✅ FOOTER */}
         <Footer
           contact={contact}
           categoryData={categoryData}

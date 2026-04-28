@@ -2460,9 +2460,9 @@ ul {
 }
 
 @media (max-width: 768px) {
- .dptopper{
-  display: none !important;
- }
+  .dptopper {
+    display: none !important;
+  }
 }
 
 .filter-container {
@@ -3137,7 +3137,6 @@ ul {
     gap: 2rem;
     div {
       width: 100% !important;
-
     }
   }
 }
@@ -5188,7 +5187,117 @@ ul {
 
 // ?    TeamPage.jsx
 // !    Team Page
+.brandsTop {
+  padding-top: 4.41rem;
+  padding-left: 0.55rem;
+  display: flex;
+  gap: 1.15rem;
 
+  strong {
+    color: #293881;
+    font-size: 1.3rem;
+    font-style: normal;
+    font-weight: 500;
+    line-height: normal;
+    border-bottom: 1px solid #293881;
+    cursor: pointer;
+  }
+
+  img {
+    width: 1.4rem;
+    height: 1.4rem;
+    flex-shrink: 0;
+  }
+
+  span {
+    color: #293881;
+    font-size: 1.3rem;
+    font-style: normal;
+    font-weight: 500;
+    line-height: normal;
+    opacity: 0.3;
+    // cursor: pointer;
+  }
+}
+.brandPageHeaderText {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
+  h1 {
+    color: $adentta-01;
+    font-size: 4rem;
+    font-style: normal;
+    font-weight: 600;
+    line-height: 4rem;
+    /* 100% */
+  }
+
+  span {
+    color: #2273ec;
+    font-size: 1.4rem;
+    font-style: normal;
+    font-weight: 500;
+    line-height: normal;
+    letter-spacing: 0.056rem;
+    text-transform: uppercase;
+  }
+
+  p {
+    padding-top: 1.82rem;
+    width: 100%;
+    max-width: 61.0379rem;
+    color: $adentta-01;
+    text-align: center;
+    font-size: 1.8rem;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 2.4rem;
+    letter-spacing: 0.054rem;
+  }
+
+  .brandSelects {
+    margin: 1.88rem 0 3.64rem 0;
+    display: flex;
+    gap: 1.7rem;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    .brandSelect {
+      border-radius: 1rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      position: relative;
+      background: rgba(255, 255, 255, 0.4);
+    }
+
+    .brandSelect select {
+      width: 100%;
+      height: 100%;
+      border: none;
+      border-radius: 1rem;
+      background-color: transparent;
+      outline: none;
+      cursor: pointer;
+      appearance: none;
+      text-align: center;
+      background-image: url("/icons/blueBottomArrow.svg");
+      background-repeat: no-repeat;
+      background-position: right 1rem center;
+      background-size: 2.4rem 2.4rem;
+      color: #293881;
+      font-size: 1.5rem;
+      font-style: normal;
+      font-weight: 400;
+      line-height: normal;
+      letter-spacing: -0.015rem;
+      text-align: start;
+      padding-left: 2rem;
+    }
+  }
+}
 // !    Blog Page
 // ? BlogPages.jsx
 .blogPage {
@@ -10773,4 +10882,25 @@ ul {
 
 .productCodeDP {
   padding: 1rem 0;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+@media screen and (max-width: 768px) {
+  .topper {
+    display: none !important;
+  }
 }

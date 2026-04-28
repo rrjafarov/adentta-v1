@@ -1,3 +1,140 @@
+// import VideoGalery from "@/components/VideoGalery";
+// import React from "react";
+// import { cookies } from "next/headers";
+// import axiosInstance from "@/lib/axios";
+
+// async function fetchAboutPageData() {
+//   const cookieStore = await cookies();
+//   const lang = cookieStore.get("NEXT_LOCALE");
+
+//   try {
+//     const { data: videoCategory } = await axiosInstance.get(
+//       `/page-data/video-categories?per_page=999`,
+//       {
+//         // headers: { Lang: lang.value },
+//         cache: "no-store",
+//       },
+//     );
+//     return videoCategory;
+//   } catch (error) {
+//     throw error;
+//   }
+// }
+
+// async function getTranslations() {
+//   try {
+//     const data = axiosInstance.get("/translation-list");
+//     return data;
+//   } catch (err) {
+//     console.log(err);
+//   }
+// }
+
+// async function fetchVideoPageData() {
+//   const cookieStore = await cookies();
+//   const lang = cookieStore.get("NEXT_LOCALE");
+
+//   try {
+//     const { data: videos } = await axiosInstance.get(
+//       `/page-data/video?per_page=999`,
+//       {
+//         // headers: { Lang: lang.value },
+//         cache: "no-store",
+//       },
+//     );
+//     return videos;
+//   } catch (error) {
+//     throw error;
+//   }
+// }
+
+// async function fetchVideoSeoData() {
+//   const cookieStore = await cookies();
+//   const lang = cookieStore.get("NEXT_LOCALE");
+
+//   try {
+//     const { data: aboutSeo } = await axiosInstance.get(
+//       `/page-data/video-page-info`,
+//       {
+//         // headers: { Lang: lang.value },
+//         cache: "no-store",
+//       },
+//     );
+//     return aboutSeo;
+//   } catch (error) {
+//     throw error;
+//   }
+// }
+// // !generateMetaData
+// export async function generateMetadata() {
+//   const seo = await fetchVideoSeoData();
+//   const imageUrl = seo?.data.og_image;
+//   const imageAlt = seo?.data.meta_title || "Adentta";
+//   const canonicalUrl = "https://adentta.az";
+//   const cookieStore = await cookies();
+//   const lang = cookieStore.get("NEXT_LOCALE");
+//   return {
+//     title: seo?.data.meta_title,
+//     description: seo?.data.meta_description,
+//     // icons: {
+//     //   icon: "https://adentta.az/favicon.ico.svg",
+//     // },
+//     openGraph: {
+//       title: seo?.data.meta_title || "Adentta",
+//       description: seo?.data.meta_description,
+//       url: canonicalUrl,
+//       images: [
+//         {
+//           url: `https://admin.adentta.az/storage${imageUrl}`,
+//           alt: imageAlt,
+//           width: 1200,
+//           height: 630,
+//         },
+//       ],
+//       site_name: "adentta.az",
+//       type: "website",
+//       locale: lang?.value,
+//     },
+//     twitter: {
+//       card: "summary_large_image",
+//       title: seo?.data.meta_title || "Adentta",
+//       description: seo?.data.meta_description || "Adentta",
+//       creator: "@adentta",
+//       site: "@adentta",
+//       images: [imageUrl],
+//     },
+//     alternates: {
+//       canonical: canonicalUrl,
+//     },
+//   };
+// }
+// // !generateMetaData
+
+// const page = async () => {
+//   const translations = await getTranslations();
+//   const t = translations?.data;
+
+//   const videoCategory = await fetchAboutPageData();
+//   const videos = await fetchVideoPageData();
+//   const videoCategoryData = videoCategory?.data?.data || [];
+//   const videosData = videos?.data?.data || [];
+//   return (
+//     <div>
+//       <VideoGalery
+//         t={t}
+//         videosData={videosData}
+//         videoCategoryData={videoCategoryData}
+//       />
+//     </div>
+//   );
+// };
+
+// export default page;
+
+
+
+// ! new fast version
+
 import VideoGalery from "@/components/VideoGalery";
 import React from "react";
 import { cookies } from "next/headers";
@@ -11,7 +148,6 @@ async function fetchAboutPageData() {
     const { data: videoCategory } = await axiosInstance.get(
       `/page-data/video-categories?per_page=999`,
       {
-        // headers: { Lang: lang.value },
         cache: "no-store",
       },
     );
@@ -30,15 +166,14 @@ async function getTranslations() {
   }
 }
 
-async function fetchVideoPageData() {
+async function fetchVideoPageData(page = 1) {
   const cookieStore = await cookies();
   const lang = cookieStore.get("NEXT_LOCALE");
 
   try {
     const { data: videos } = await axiosInstance.get(
-      `/page-data/video?per_page=999`,
+      `/page-data/video?page=${page}`,
       {
-        // headers: { Lang: lang.value },
         cache: "no-store",
       },
     );
@@ -56,7 +191,6 @@ async function fetchVideoSeoData() {
     const { data: aboutSeo } = await axiosInstance.get(
       `/page-data/video-page-info`,
       {
-        // headers: { Lang: lang.value },
         cache: "no-store",
       },
     );
@@ -65,7 +199,7 @@ async function fetchVideoSeoData() {
     throw error;
   }
 }
-// !generateMetaData
+
 export async function generateMetadata() {
   const seo = await fetchVideoSeoData();
   const imageUrl = seo?.data.og_image;
@@ -76,9 +210,6 @@ export async function generateMetadata() {
   return {
     title: seo?.data.meta_title,
     description: seo?.data.meta_description,
-    // icons: {
-    //   icon: "https://adentta.az/favicon.ico.svg",
-    // },
     openGraph: {
       title: seo?.data.meta_title || "Adentta",
       description: seo?.data.meta_description,
@@ -108,21 +239,21 @@ export async function generateMetadata() {
     },
   };
 }
-// !generateMetaData
 
 const page = async () => {
   const translations = await getTranslations();
   const t = translations?.data;
 
   const videoCategory = await fetchAboutPageData();
-  const videos = await fetchVideoPageData();
+  const videos = await fetchVideoPageData(1);
   const videoCategoryData = videoCategory?.data?.data || [];
-  const videosData = videos?.data?.data || [];
+  const initialVideosData = videos?.data?.data || [];
+
   return (
     <div>
       <VideoGalery
         t={t}
-        videosData={videosData}
+        initialVideosData={initialVideosData}
         videoCategoryData={videoCategoryData}
       />
     </div>

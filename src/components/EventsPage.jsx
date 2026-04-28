@@ -1,16 +1,246 @@
+// "use client";
+// import Image from "next/image";
+// import Link from "next/link";
+// import React, { useState, useEffect } from "react";
+// import ReactPaginate from "react-paginate";
+// import DataPicker from "@/components/DataPicker";
+// import Cookies from "js-cookie";
+
+// const itemsPerPage = 12;
+
+// const EventsPage = ({ eventsData, t }) => {
+//   const [currentPage, setCurrentPage] = useState(0);
+//   const [filteredEvents, setFilteredEvents] = useState(eventsData);
+
+//   useEffect(() => {
+//     console.log("eventsData:", eventsData);
+//     console.log(
+//       "event_status dəyərləri:",
+//       eventsData.map((event) => event.event_status)
+//     );
+//   }, [eventsData]);
+
+//   // Filter funksiyası
+//   const handleFilterChange = ({ status, date }) => {
+//     console.log("Seçilən status:", status);
+//     console.log("Seçilən tarix:", date);
+//     let filtered = eventsData;
+
+//     // önce status filtrele
+//     if (status && status !== "all") {
+//       filtered = filtered.filter((event) => {
+//         const statusMap = {
+//           ongoing: [0, "ongoing", "0"],
+//           expected: [1, "expected", "1"],
+//           finished: [2, "finished", "2"],
+//         };
+//         return statusMap[status].includes(event.event_status);
+//       });
+//     }
+
+//     // ardından tarih filtrele
+//     if (date) {
+//       const sel = new Date(date).toDateString();
+//       filtered = filtered.filter(
+//         (event) => new Date(event.event_start_date).toDateString() === sel
+//       );
+//     }
+
+//     console.log("Filterlənmiş eventlər:", filtered);
+//     setFilteredEvents(filtered);
+//     setCurrentPage(0);
+//   };
+
+//   // Səhifə sayı
+//   const pageCount = Math.ceil(filteredEvents.length / itemsPerPage);
+
+//   // Göstəriləcək eventlər
+//   const displayedEvents = filteredEvents.slice(
+//     currentPage * itemsPerPage,
+//     (currentPage + 1) * itemsPerPage
+//   );
+
+//   // Səhifə dəyişmə
+//   const handlePageClick = (event) => {
+//     setCurrentPage(event.selected);
+//   };
+
+//   const lang = Cookies.get("NEXT_LOCALE") || "az";
+
+//   const formatDate = (dateString) => {
+//     const date = new Date(dateString);
+//     const day = date.getDate().toString().padStart(2, "0");
+//     const year = date.getFullYear();
+
+//     let month;
+//     if (lang === "az") {
+//       const azMonths = {
+//         1: "yan",
+//         2: "fev",
+//         3: "mar",
+//         4: "apr",
+//         5: "may",
+//         6: "iyn",
+//         7: "iyl",
+//         8: "avq",
+//         9: "sen",
+//         10: "okt",
+//         11: "noy",
+//         12: "dek",
+//       };
+//       month = azMonths[date.getMonth() + 1];
+//     } else {
+//       month = new Intl.DateTimeFormat(lang, { month: "short" })
+//         .format(date)
+//         .replace(".", "");
+//     }
+
+//     return `${day} ${month} ${year}`;
+//   };
+
+//   const formatStatus = (status) => {
+//     if (status === 0 || status === "ongoing" || status === "0")
+//       return t?.ongoing || "ongoing";
+//     if (status === 1 || status === "expected" || status === "1")
+//       return t?.expected || "expected";
+//     if (status === 2 || status === "finished" || status === "2")
+//       return t?.finished || "finished";
+//     return status;
+//   };
+
+//   return (
+//     <>
+//       <div className="container">
+//         <div className="eventTop topper">
+//           <Link href="/">
+//             <strong>Adentta</strong>
+//           </Link>
+//           <img src="/icons/rightDown.svg" alt="Adentta" />
+//           <span>{t?.events || "Events"}</span>
+//         </div>
+//       </div>
+
+//       <div className="eventPage">
+//         <div className="container">
+//           <div className="eventPageHead flex justify-between items-center">
+//             <div className="eventPageHeaderText">
+//               <span>{t?.events || "Events"}</span>
+//               <h2>{t?.eventsPageExploreOurEvents || "Events"}</h2>
+//               <p>{t?.eventsPageSubText || "Events"}</p>
+//             </div>
+//             <DataPicker
+//               t={t}
+//               eventsData={eventsData}
+//               onFilterChange={handleFilterChange}
+//             />
+//           </div>
+
+//           <div className="eventsCards">
+//             {filteredEvents.length === 0 ? (
+//               <p className="eventNotFound">{t?.eventNotFound}</p>
+//             ) : (
+//               <div className="row">
+//                 {displayedEvents.map((event) => (
+//                   <div key={event.id} className="xl-4 lg-4 md-6 sm-12">
+//                     <div className="ourEvent">
+//                       <Link
+//                         href={`/events/${(event?.slug || event?.title)
+//                           ?.toLowerCase()
+//                           .replace(/\s+/g, "-")}-${event.id}`}
+//                       >
+//                         <div className="eventCard">
+//                           <div className="eventCardImage">
+//                             {event.image && (
+//                               <Image
+//                                 src={`https://admin.adentta.az/storage${event.image}`}
+//                                 alt={event.title}
+//                                 width={400}
+//                                 height={400}
+//                               />
+//                             )}
+//                             <div className="eventCardImageDate">
+//                               <span className="eventCardDate">
+//                                 {formatDate(event.event_start_date)}
+//                               </span>
+//                               <span className="eventCardDateStatus">
+//                                 <Image
+//                                   src="/icons/eventCardTimeICN.svg"
+//                                   alt="time"
+//                                   width={16}
+//                                   height={16}
+//                                 />
+//                                 {formatStatus(event.event_status)}
+//                               </span>
+//                             </div>
+//                           </div>
+//                           <div className="eventCardContent">
+//                             <span>{event.title}</span>
+//                             <p>{event.sub_title}</p>
+//                           </div>
+//                           <div className="eventCardBottom">
+//                             <span>{t?.learnMore || "Learn More"}</span>
+//                             <img src="/icons/arrowTopRight.svg" alt="arrow" />
+//                           </div>
+//                         </div>
+//                       </Link>
+//                     </div>
+//                   </div>
+//                 ))}
+//               </div>
+//             )}
+//           </div>
+
+//           {pageCount > 1 && (
+//             <div className="eventsPaginate">
+//               <ReactPaginate
+//                 previousLabel={t?.paginatePrev || "Previous"}
+//                 nextLabel={t?.paginateNext || "Next"}
+//                 breakLabel="..."
+//                 pageCount={pageCount}
+//                 marginPagesDisplayed={2}
+//                 pageRangeDisplayed={3}
+//                 onPageChange={handlePageClick}
+//                 containerClassName="pagination"
+//                 pageClassName="page-item"
+//                 pageLinkClassName="page-link"
+//                 previousClassName="page-item-pervious"
+//                 previousLinkClassName="page-link-pervious"
+//                 nextClassName="page-item-next"
+//                 nextLinkClassName="page-link-next"
+//                 breakClassName="page-item"
+//                 breakLinkClassName="page-link"
+//                 activeClassName="active"
+//               />
+//             </div>
+//           )}
+//         </div>
+//       </div>
+//     </>
+//   );
+// };
+
+// export default EventsPage;
+
+
+
+// ! Yeni fast version
+
+
+
 "use client";
 import Image from "next/image";
 import Link from "next/link";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import ReactPaginate from "react-paginate";
 import DataPicker from "@/components/DataPicker";
 import Cookies from "js-cookie";
+import { useRouter } from "next/navigation";
 
-const itemsPerPage = 9;
-
-const EventsPage = ({ eventsData, t }) => {
-  const [currentPage, setCurrentPage] = useState(0);
+const EventsPage = ({ eventsData, t, currentPage = 1, totalPages = 1 }) => {
   const [filteredEvents, setFilteredEvents] = useState(eventsData);
+  const [loading, setLoading] = useState(false);
+  const cardsRef = useRef(null);
+  const router = useRouter();
 
   useEffect(() => {
     console.log("eventsData:", eventsData);
@@ -20,13 +250,16 @@ const EventsPage = ({ eventsData, t }) => {
     );
   }, [eventsData]);
 
-  // Filter funksiyası
+  useEffect(() => {
+    setFilteredEvents(eventsData);
+    setLoading(false);
+  }, [eventsData]);
+
   const handleFilterChange = ({ status, date }) => {
     console.log("Seçilən status:", status);
     console.log("Seçilən tarix:", date);
     let filtered = eventsData;
 
-    // önce status filtrele
     if (status && status !== "all") {
       filtered = filtered.filter((event) => {
         const statusMap = {
@@ -38,7 +271,6 @@ const EventsPage = ({ eventsData, t }) => {
       });
     }
 
-    // ardından tarih filtrele
     if (date) {
       const sel = new Date(date).toDateString();
       filtered = filtered.filter(
@@ -48,21 +280,19 @@ const EventsPage = ({ eventsData, t }) => {
 
     console.log("Filterlənmiş eventlər:", filtered);
     setFilteredEvents(filtered);
-    setCurrentPage(0);
   };
 
-  // Səhifə sayı
-  const pageCount = Math.ceil(filteredEvents.length / itemsPerPage);
-
-  // Göstəriləcək eventlər
-  const displayedEvents = filteredEvents.slice(
-    currentPage * itemsPerPage,
-    (currentPage + 1) * itemsPerPage
-  );
-
-  // Səhifə dəyişmə
   const handlePageClick = (event) => {
-    setCurrentPage(event.selected);
+    const selectedPage = event.selected + 1;
+
+    setLoading(true);
+    router.push(`/events?page=${selectedPage}`);
+
+    setTimeout(() => {
+      if (cardsRef.current) {
+        cardsRef.current.scrollIntoView({ behavior: "smooth", block: "start" });
+      }
+    }, 300);
   };
 
   const lang = Cookies.get("NEXT_LOCALE") || "az";
@@ -110,6 +340,20 @@ const EventsPage = ({ eventsData, t }) => {
 
   return (
     <>
+      <style>{`
+        @keyframes spin {
+          0% { transform: rotate(0deg); }
+          100% { transform: rotate(360deg); }
+        }
+        @keyframes fadeIn {
+          from { opacity: 0; transform: translateY(10px); }
+          to { opacity: 1; transform: translateY(0); }
+        }
+        .eventsCards .row {
+          animation: fadeIn 0.4s ease;
+        }
+      `}</style>
+
       <div className="container">
         <div className="eventTop topper">
           <Link href="/">
@@ -135,12 +379,25 @@ const EventsPage = ({ eventsData, t }) => {
             />
           </div>
 
-          <div className="eventsCards">
-            {filteredEvents.length === 0 ? (
+          <div className="eventsCards" ref={cardsRef}>
+            {loading ? (
+              <div style={{ display: "flex", justifyContent: "center", margin: "80px 0" }}>
+                <div
+                  style={{
+                    width: 50,
+                    height: 50,
+                    border: "6px solid #f3f3f3",
+                    borderTop: "6px solid #293881",
+                    borderRadius: "50%",
+                    animation: "spin 1s linear infinite",
+                  }}
+                />
+              </div>
+            ) : filteredEvents.length === 0 ? (
               <p className="eventNotFound">{t?.eventNotFound}</p>
             ) : (
               <div className="row">
-                {displayedEvents.map((event) => (
+                {filteredEvents.map((event) => (
                   <div key={event.id} className="xl-4 lg-4 md-6 sm-12">
                     <div className="ourEvent">
                       <Link
@@ -190,13 +447,14 @@ const EventsPage = ({ eventsData, t }) => {
             )}
           </div>
 
-          {pageCount > 1 && (
+          {totalPages > 1 && (
             <div className="eventsPaginate">
               <ReactPaginate
                 previousLabel={t?.paginatePrev || "Previous"}
                 nextLabel={t?.paginateNext || "Next"}
                 breakLabel="..."
-                pageCount={pageCount}
+                pageCount={totalPages}
+                forcePage={currentPage - 1}
                 marginPagesDisplayed={2}
                 pageRangeDisplayed={3}
                 onPageChange={handlePageClick}
@@ -220,3 +478,5 @@ const EventsPage = ({ eventsData, t }) => {
 };
 
 export default EventsPage;
+
+

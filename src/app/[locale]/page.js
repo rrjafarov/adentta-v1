@@ -53,7 +53,6 @@ async function fetchBlogsPageData() {
 
   try {
     const { data: blogs } = await axiosInstance.get(
-      // `/page-data/blog?per_page=999`,
       `/page-data/blog?per_page=5`,
       {
         // headers: { Lang: lang.value },

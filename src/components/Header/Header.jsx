@@ -60,6 +60,9 @@ const Header = ({ t, categoryDropData, categoryData, isHomePage, settingData }) 
   else if (cleanedPath.startsWith("/brands/") && cleanedPath !== "/brands") {
     backgroundColor = "#F3F7FC";
   }
+   else if (cleanedPath.startsWith("/events/") && cleanedPath !== "/events") {
+    backgroundColor = "#fafafa";
+  }
 
   return (
     <div
