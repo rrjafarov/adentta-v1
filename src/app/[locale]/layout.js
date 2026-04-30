@@ -138,16 +138,7 @@
 
 
 
-
-
-
-
-
-
-
-
-
-// ! new tag manager
+// ! tag manager
 
 import "./globals.scss";
 import { cookies } from "next/headers";
@@ -258,19 +249,6 @@ new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
 j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
 })(window,document,'script','dataLayer','GTM-N3HN9VXT');`}
-        </Script>
-        {/* GA4 */}
-        <Script
-          src="https://www.googletagmanager.com/gtag/js?id=G-S6C3MFRQLQ"
-          strategy="afterInteractive"
-        />
-        <Script id="ga-init" strategy="afterInteractive">
-          {`
-            window.dataLayer = window.dataLayer || [];
-            function gtag(){dataLayer.push(arguments);}
-            gtag('js', new Date());
-            gtag('config', 'G-S6C3MFRQLQ');
-          `}
         </Script>
       </head>
 
