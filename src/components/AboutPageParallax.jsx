@@ -36,7 +36,7 @@ const AboutPageParallax = ({
             data-fancybox="videos"
           >
             <Image
-              src={`https://admin.adentta.az/storage${videoCover}`}
+              src={`${process.env.NEXT_PUBLIC_STORAGE_URL}${videoCover}`}
               alt="###"
               width={800}
               height={400}

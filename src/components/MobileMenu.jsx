@@ -195,7 +195,7 @@ const MobileMenu = ({ t, isOpen, setIsOpen, categoryData = [] }) => {
                   ) : (
                     roots.map((category) => {
                       const iconSrc = category.icon
-                        ? `https://admin.adentta.az/storage${category.icon}`
+                        ? `${process.env.NEXT_PUBLIC_STORAGE_URL}${category.icon}`
                         : null;
 
                       return (

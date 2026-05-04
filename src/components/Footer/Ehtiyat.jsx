@@ -1231,7 +1231,7 @@ const ProductsPageFilter = ({
                               <img
                                 src={
                                   data?.image
-                                    ? `https://admin.adentta.az/storage${data.image}`
+                                    ? `${process.env.NEXT_PUBLIC_STORAGE_URL}${data.image}`
                                     : "/images/adenttaDefaultImg.svg"
                                 }
                                 alt=""

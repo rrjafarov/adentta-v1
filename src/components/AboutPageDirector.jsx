@@ -16,15 +16,15 @@ const AboutPageDirector = ({
           <div className="directorMessageLeft">
             <div className="directorAvatar">
               <Image
-                src={`https://admin.adentta.az/storage${directorImage}`}
+                src={`${process.env.NEXT_PUBLIC_STORAGE_URL}${directorImage}`}
                 alt="director"
                 width={400}
                 height={400}
               />
               <div className="directorOffice">
                 <Image
-                  src={`https://admin.adentta.az/storage${directorImage2}`}
-                  alt="director"
+                  src={`${process.env.NEXT_PUBLIC_STORAGE_URL}${directorImage2}`}
+                  alt="office"
                   width={400}
                   height={400}
                 />
@@ -53,7 +53,7 @@ const AboutPageDirector = ({
             <div className="directorSignaturess">
               <span>{directorName}</span>
               <Image    
-                src={`https://admin.adentta.az/storage${directorSignature}`}
+                src={`${process.env.NEXT_PUBLIC_STORAGE_URL}${directorSignature}`}
                 alt="signature"
                 width={100}
                 height={100}

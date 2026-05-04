@@ -37,7 +37,6 @@ const page = async () => {
 
   return (
     <div id="teamer">
-      {/* <Header settingData={settingData} categoryData={categoryData} /> */}
       <MissionPageBanner
         t={t}
         misionTitle={about?.data.misson_title}
@@ -50,12 +49,7 @@ const page = async () => {
         visionSubTitle={about?.data.vision_sub_title}
         futureGoalSubTitle={about?.data.future_goal_sub_title}
       />
-      {/* <Footer
-        categoryData={categoryData}
-        eventsData={eventsData}
-        brandsData={brandsData}
-        contact={contact}
-      /> */}
+      
     </div>
   );
 };

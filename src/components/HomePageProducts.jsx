@@ -197,7 +197,7 @@ const HomePageProducts = ({ categoryData, t, whatsappNumber }) => {
                       onClick={() => handleCategorySelect(Number(category.id))}
                     >
                       <img
-                        src={`https://admin.adentta.az/storage${category.icon}`}
+                        src={`${process.env.NEXT_PUBLIC_STORAGE_URL}${category.icon}`}
                         alt={category.title || "category name"}
                       />
                       <p>{category.title}</p>

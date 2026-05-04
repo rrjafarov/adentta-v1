@@ -224,9 +224,6 @@
 
 
 // ! Yeni fast version
-
-
-
 "use client";
 import Image from "next/image";
 import Link from "next/link";
@@ -409,7 +406,7 @@ const EventsPage = ({ eventsData, t, currentPage = 1, totalPages = 1 }) => {
                           <div className="eventCardImage">
                             {event.image && (
                               <Image
-                                src={`https://admin.adentta.az/storage${event.image}`}
+                                src={`${process.env.NEXT_PUBLIC_STORAGE_URL}${event.image}`}
                                 alt={event.title}
                                 width={400}
                                 height={400}

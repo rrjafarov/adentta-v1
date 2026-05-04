@@ -5,7 +5,6 @@ import Link from "next/link";
 import React, { useState, useEffect, useRef, useCallback } from "react";
 import BrandsDetailPageSlider from "@/components/Sliders/BrandsDetailPageSlider";
 import { Fancybox } from "@fancyapps/ui";
-import Manat from "../../public/icons/manat.svg";
 import "@fancyapps/ui/dist/fancybox/fancybox.css";
 import axiosInstance from "@/lib/axios";
 import ProductCardFast from "@/components/Header/ProductCardFast";
@@ -46,10 +45,10 @@ const PdfCatalogCard = ({
   }, [checkTruncation, member?.short_text]);
 
   const imgSrc = member?.image
-    ? `https://admin.adentta.az/storage${member.image}`
+    ? `${process.env.NEXT_PUBLIC_STORAGE_URL}${member.image}`
     : "/images/placeholder.png";
   const pdfHref = member?.pdf
-    ? `https://admin.adentta.az/storage${member.pdf}`
+    ? `${process.env.NEXT_PUBLIC_STORAGE_URL}${member.pdf}`
     : "#";
 
   return (
@@ -172,7 +171,7 @@ const BrandsDetailPage = ({
         <div className="brandsDetaiLPageHero">
           <div className="brandsDetaiLPageHeroImg">
             <Image
-              src={`https://admin.adentta.az/storage${brandsDetailDataDetail.image}`}
+              src={`${process.env.NEXT_PUBLIC_STORAGE_URL}${brandsDetailDataDetail.image}`}
               alt="brandsDetail"
               width={1400}
               height={800}
@@ -197,7 +196,7 @@ const BrandsDetailPage = ({
         <div className="brandsDetaiLPageHeroMobile">
           <div className="brandsDetaiLPageHeroImgMobile">
             <Image
-              src={`https://admin.adentta.az/storage${brandsDetailDataDetail.mobil_banner}`}
+              src={`${process.env.NEXT_PUBLIC_STORAGE_URL}${brandsDetailDataDetail.mobil_banner}`}
               alt="brandsDetail"
               width={1400}
               height={800}
@@ -248,7 +247,7 @@ const BrandsDetailPage = ({
               <div className="detailPageBrandImgBorder">
                 <div className="detailPageBrandImg">
                   <Image
-                    src={`https://admin.adentta.az/storage${brandsDetailDataDetail.logo}`}
+                    src={`${process.env.NEXT_PUBLIC_STORAGE_URL}${brandsDetailDataDetail.logo}`}
                     alt="Brand logo"
                     width={400}
                     height={400}
@@ -292,7 +291,7 @@ const BrandsDetailPage = ({
                           title={product.title}
                           image={
                             product?.image
-                              ? `https://admin.adentta.az/storage${product.image}`
+                              ? `${process.env.NEXT_PUBLIC_STORAGE_URL}${product.image}`
                               : "/images/adenttaDefaultImg.svg"
                           }
                           price={product.price}
@@ -374,13 +373,13 @@ const BrandsDetailPage = ({
                   .map((certificate, index) => (
                     <div key={index} className="xl-3 lg-3 md-6 sm-6">
                       <Link
-                        href={`https://admin.adentta.az/storage${certificate}`}
+                        href={`${process.env.NEXT_PUBLIC_STORAGE_URL}${certificate}`}
                         className="block brandsDPCertificatesImg"
                         data-fancybox="certificates-gallery"
                       >
                         <div className="brandDPCertificatesGaleryImg">
                           <Image
-                            src={`https://admin.adentta.az/storage${certificate}`}
+                            src={`${process.env.NEXT_PUBLIC_STORAGE_URL}${certificate}`}
                             alt={`Certificate ${index + 1}`}
                             width={300}
                             height={300}
@@ -414,7 +413,7 @@ const BrandsDetailPage = ({
                         <div className="blogCard">
                           <div className="blogCardImage">
                             <Image
-                              src={`https://admin.adentta.az/storage${blog.image}`}
+                              src={`${process.env.NEXT_PUBLIC_STORAGE_URL}${blog.image}`}
                               alt="blog"
                               width={400}
                               height={400}
@@ -453,7 +452,7 @@ const BrandsDetailPage = ({
               <div className="aboutPageParallax">
                 <Link className="block" href={videoUrl} data-fancybox="videos">
                   <Image
-                    src={`https://admin.adentta.az/storage${videoCover}`}
+                    src={`${process.env.NEXT_PUBLIC_STORAGE_URL}${videoCover}`}
                     alt="###"
                     width={900}
                     height={400}
@@ -498,7 +497,7 @@ const BrandsDetailPage = ({
                           <div className="topBrandLittleImg">
                             {brand.logo && (
                               <Image
-                                src={`https://admin.adentta.az/storage${brand.logo}`}
+                                src={`${process.env.NEXT_PUBLIC_STORAGE_URL}${brand.logo}`}
                                 alt={brand.title}
                                 width={400}
                                 height={400}

@@ -38,7 +38,7 @@ export async function generateMetadata({ params }) {
       images: [
         {
           // url: `/favicon.ico.svg`,
-          url: `https://admin.adentta.az/storage${data?.og_image}`,
+          url: `${process.env.NEXT_PUBLIC_STORAGE_URL}${data?.og_image}`,
           alt: data?.title,
           width: 1200,
           height: 630,
@@ -50,7 +50,7 @@ export async function generateMetadata({ params }) {
       card: "summary_large_image",
       title: data?.title || "Adentta – Stomatoloji Məhsullar və Peşəkar Diş Həlləri",
       description: data?.content || "Adentta – Stomatoloji Məhsullar və Peşəkar Diş Həlləri",
-      url: `https://admin.adentta.az/storage${data?.og_image}`,
+      url: `${process.env.NEXT_PUBLIC_STORAGE_URL}${data?.og_image}`,
     },
   };
 }

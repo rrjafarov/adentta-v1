@@ -9,7 +9,6 @@ const LittleCard = ({t}) => {
             <img src="icons/timerCarIcon.svg" alt="" />
           </div>
           <div className="littleCardItemText">
-            {/* <span>Çatdırılma</span> */}
             <span>{t?.deliver || "Delivery"}</span>
             <p>{t?.deliveryContent || "Free delivery to all our regions	"}</p>
           </div>

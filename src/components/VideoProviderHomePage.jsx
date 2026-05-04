@@ -73,16 +73,11 @@ const VideoProviderHomePage = ({ homepageData, t }) => {
           <Link href={homepageData.video_url} data-fancybox="videos">
             <div className="vidProviderVideoContent">
               <Image
-                src={`https://admin.adentta.az/storage${homepageData.video_cover}`}
+                src={`${process.env.NEXT_PUBLIC_STORAGE_URL}${homepageData.video_cover}`}
                 alt={homepageData.meta_title || "video"}
                 width={500}
                 height={500}
               />
-              
-              {/* <img
-                src={`https://admin.adentta.az/storage${homepageData.video_cover}`}
-                alt="video"
-              /> */}
               <div className="happyCustomer">
                 <div className="smallHappyCustomer">
                   <span>

@@ -67,8 +67,8 @@ const GlobalExcellence = ({ brandsData, t }) => {
           <SwiperSlide key={brand.id} className="globalBrandSliderItem">
             <div className="globalExBrands">
               <img
-                src={`https://admin.adentta.az/storage${brand.logo}`}
-                alt=""
+                src={`${process.env.NEXT_PUBLIC_STORAGE_URL}${brand.logo}`}
+                alt={brand.title}
               />
             </div>
           </SwiperSlide>

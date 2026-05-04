@@ -235,7 +235,7 @@ const Brands = ({ initialBrandsData = [], t }) => {
                       <div className="brandsPageCardImg">
                         {brand.logo && (
                           <Image
-                            src={`https://admin.adentta.az/storage${brand.logo}`}
+                            src={`${process.env.NEXT_PUBLIC_STORAGE_URL}${brand.logo}`}
                             alt={brand.title}
                             width={500}
                             height={500}

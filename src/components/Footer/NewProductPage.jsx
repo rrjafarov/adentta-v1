@@ -953,45 +953,6 @@ const ProductsPageFilter = ({
 
                 {sortedProductData.length > 0 ? (
                   sortedProductData.map((data, index) => (
-                    // <div
-                    //   key={`${data.id}-${index}`}
-                    //   className="xl-4 lg-4 md-6 sm-6"
-                    // >
-                    //   <Link
-                    //     href={`/products/${slugify(data.title || "")}-${data.id}`}
-                    //     className="block"
-                    //   >
-                    //     <div className="homePageProductCardContent">
-                    //       <div className="homePageProCardImgs">
-                    //         <div className="homePageProductCardContentImage">
-                    //           <img
-                    //             src={
-                    //               data?.image
-                    //                 ? `https://admin.adentta.az/storage${data.image}`
-                    //                 : "/images/adenttaDefaultImg.svg"
-                    //             }
-                    //             alt=""
-                    //           />
-                    //         </div>
-                    //       </div>
-                    //       <div className="homePageProductCardContentInner">
-                    //         <div className="homePageProductCardContentText">
-                    //           <span>{data.title}</span>
-                    //         </div>
-                    //         <div className="price">
-                    //           <div className="priceItem">
-                    //             <strong id="prices">{data.price}</strong>
-                    //             <Manat />
-                    //           </div>
-                    //         </div>
-                    //       </div>
-                    //       <div className="homePageProductCardContentBottom">
-                    //         <span>{t?.learnMore}</span>
-                    //         <img src="/icons/arrowTopRight.svg" alt="" />
-                    //       </div>
-                    //     </div>
-                    //   </Link>
-                    // </div>
                     <div
                       key={`${data.id}-${index}`}
                       className="xl-4 lg-4 md-6 sm-6"
@@ -1002,23 +963,13 @@ const ProductsPageFilter = ({
                         title={data.title}
                         image={
                           data?.image
-                            ? `https://admin.adentta.az/storage${data.image}`
+                            ? `${process.env.NEXT_PUBLIC_STORAGE_URL}${data.image}`
                             : "/images/adenttaDefaultImg.svg"
                         }
                         price={data.price}
                         oldPrice={data.old_price}
                         t={t}
                         slugify={slugify}
-                        // slugify={(text) =>
-                        //   text
-                        //     .toLowerCase()
-                        //     .normalize("NFKD")
-                        //     .replace(/[\u0300-\u036f]/g, "")
-                        //     .replace(/[\/\\]+/g, "-")
-                        //     .replace(/[^a-z0-9-]+/g, "-")
-                        //     .replace(/--+/g, "-")
-                        //     .replace(/^-+|-+$/g, "")
-                        // }
                       />
                     </div>
                   ))

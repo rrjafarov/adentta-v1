@@ -200,7 +200,7 @@ export async function generateMetadata({ params }) {
       url: canonicalUrl,
       images: [
         {
-          url: `https://admin.adentta.az/storage${imageUrl}`,
+          url: `${process.env.NEXT_PUBLIC_STORAGE_URL}${imageUrl}`,
           alt: imageAlt,
           width: 1200,
           height: 630,
@@ -216,7 +216,7 @@ export async function generateMetadata({ params }) {
       description: event.title,
       creator: "@adentta",
       site: "@adentta",
-      images: [`https://admin.adentta.az/storage${imageUrl}`],
+      images: [`${process.env.NEXT_PUBLIC_STORAGE_URL}${imageUrl}`],
     },
     alternates: {
       canonical: canonicalUrl,

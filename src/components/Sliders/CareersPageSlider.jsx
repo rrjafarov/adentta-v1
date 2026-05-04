@@ -50,13 +50,13 @@ const CareersPageSlider = ({ lifeOnHereData }) => {
           lifeOnHereData.photos.map((photo, index) => (
             <SwiperSlide key={index} className="careersSwiperSlide">
               <Link
-                href={`https://admin.adentta.az/storage${photo}`}
+                href={`${process.env.NEXT_PUBLIC_STORAGE_URL}${photo}`}
                 data-fancybox="videos"
                 className="careersSliderGalleryImg"
               >
                 <div className="careersImageFillWrapper">
                   <Image
-                    src={`https://admin.adentta.az/storage${photo}`}
+                    src={`${process.env.NEXT_PUBLIC_STORAGE_URL}${photo}`}
                     alt={`Slide ${index}`}
                     fill
                     sizes="(max-width: 1280px) 100vw, 33vw"

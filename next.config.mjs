@@ -8,7 +8,7 @@ const withNextIntl = createNextIntlPlugin({
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   images: {
-    
+    output: "standalone",
     remotePatterns: [
       {
         protocol: "https",
@@ -17,8 +17,6 @@ const nextConfig = {
       },
     ],
   },
-
-  // output: "export",
 
   webpack(config) {
     config.module.rules.push({

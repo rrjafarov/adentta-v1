@@ -4,10 +4,7 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
 import "swiper/css/pagination";
 import "swiper/css/autoplay";
-
-// import "../../app/globals.scss";
 import "../../app/[locale]/globals.scss";
-
 import { Pagination, Autoplay } from "swiper/modules";
 import SeeMore from "../SeeMore";
 import Link from "next/link";
@@ -73,8 +70,8 @@ const TopBrandsHomePage = ({ brandsData, t }) => {
                     <div className="topBrandImg">
                       <div className="topBrandLittleImg">
                         <img
-                          src={`https://admin.adentta.az/storage${brand.logo}`}
-                          alt=""
+                          src={`${process.env.NEXT_PUBLIC_STORAGE_URL}${brand.logo}`}
+                          alt={brand.title}
                         />
                       </div>
                     </div>

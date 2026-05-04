@@ -251,7 +251,7 @@ const ProductCard = React.memo(({ product, t }) => (
       <div className="homePageProductCardContent">
         <div className="homePageProCardImgs">
           <div className="homePageProductCardContentImage">
-            <img src={`https://admin.adentta.az/storage${product.image}`} alt={product.title} loading="lazy" />
+            <img src={`${process.env.NEXT_PUBLIC_STORAGE_URL}${product.image}`} alt={product.title} loading="lazy" />
           </div>
         </div>
         <div className="homePageProductCardContentInner">

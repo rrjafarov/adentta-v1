@@ -2,24 +2,7 @@ import React from "react";
 import Image from "next/image";
 import CountUp from "react-countup";
 
-// import { cookies } from "next/headers";
-// import axiosInstance from "@/lib/axios";
 
-// async function fetchAboutPageData() {
-//   const cookieStore = await cookies();
-//   const lang = cookieStore.get("NEXT_LOCALE");
-
-//   try {
-//     const { data: about } = await axiosInstance.get(`/page-data/about`, {
-//       // headers: { Lang: lang.value },
-//       cache: "no-store",
-//     });
-//     return about;
-//   } catch (error) {
-//     console.error("Failed to fetch about page data", error);
-//     throw error;
-//   }
-// }
 
 const AboutPageCountUp = ({
   statistica1,
@@ -35,9 +18,6 @@ const AboutPageCountUp = ({
   statistica4Img,
   t
 }) => {
-  // const about = await fetchAboutPageData();
-  // const aboutYears = about?.data?.data || [];
-  // console.log(aboutYears, "kkdkk");
 
   return (
     <div className="container">
@@ -54,8 +34,7 @@ const AboutPageCountUp = ({
                     className="countNumber"
                   />
                   <Image
-                    // src="/images/countUpInner1.png"
-                    src={`https://admin.adentta.az/storage${statistica1Img}`}
+                    src={`${process.env.NEXT_PUBLIC_STORAGE_URL}${statistica1Img}`}
                     alt="Medical Device"
                     width={100}
                     height={100}
@@ -76,8 +55,7 @@ const AboutPageCountUp = ({
                     />
                   </div>
                   <Image
-                    // src="/images/countUpInner2.png"
-                    src={`https://admin.adentta.az/storage${statistica2Img}`}
+                    src={`${process.env.NEXT_PUBLIC_STORAGE_URL}${statistica2Img}`}
                     alt="Medical Device"
                     width={100}
                     height={100}
@@ -103,8 +81,7 @@ const AboutPageCountUp = ({
                     <span className="stats-text">{t?.productPerMouth || "154 products per mouth"}</span>
                   </div>
                   <Image
-                    // src="/images/countUpInner3.png"
-                    src={`https://admin.adentta.az/storage${statistica3Img}`}
+                    src={`${process.env.NEXT_PUBLIC_STORAGE_URL}${statistica3Img}`}
                     alt="Medical Device"
                     width={100}
                     height={100}
@@ -125,8 +102,7 @@ const AboutPageCountUp = ({
                     />
                   </div>
                   <Image
-                    // src="/images/countUpInner4.png"
-                    src={`https://admin.adentta.az/storage${statistica4Img}`}
+                    src={`${process.env.NEXT_PUBLIC_STORAGE_URL}${statistica4Img}`}
                     alt="Medical Device"
                     width={100}
                     height={100}

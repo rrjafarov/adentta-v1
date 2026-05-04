@@ -68,7 +68,7 @@ export async function generateMetadata() {
   const canonicalUrl = "https://adentta.az";
   const cookieStore = await cookies();
   const lang = cookieStore.get("NEXT_LOCALE");
-  const fullOg = imageUrl ? `https://admin.adentta.az/storage${imageUrl}` : undefined;
+  const fullOg = imageUrl ? `${process.env.NEXT_PUBLIC_STORAGE_URL}${imageUrl}` : undefined;
 
   return {
     title: seo?.data?.meta_title,

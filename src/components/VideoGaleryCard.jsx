@@ -37,7 +37,7 @@ const VideoGaleryCard = ({ video, selectedCategory = "All" }) => {
 
           <div className="videoGaleryImg">
             <LazyLoadImage
-              src={`https://admin.adentta.az/storage${thumbnail}`}
+              src={`${process.env.NEXT_PUBLIC_STORAGE_URL}${thumbnail}`}
               effect="blur"
               className="videoGaleryCardImg"
             />

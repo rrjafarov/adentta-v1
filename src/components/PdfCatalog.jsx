@@ -36,11 +36,11 @@ const PdfCatalogCard = ({ member, t, isExpanded, toggleExpand }) => {
   }, [checkTruncation, member?.short_text]);
 
   const imgSrc = member?.image
-    ? `https://admin.adentta.az/storage${member.image}`
+    ? `${process.env.NEXT_PUBLIC_STORAGE_URL}${member.image}`
     : "/images/placeholder.png";
 
   const pdfHref = member?.pdf
-    ? `https://admin.adentta.az/storage${member.pdf}`
+    ? `${process.env.NEXT_PUBLIC_STORAGE_URL}${member.pdf}`
     : "#";
 
   const brandTitle = member?.brand_id?.[0]?.title || t?.noBrand || "";

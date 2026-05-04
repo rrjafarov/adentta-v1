@@ -58,7 +58,7 @@ const HomePageProductCard = ({ whatsappNumber, productData = [], t }) => {
                   title={product.title}
                   image={
                     product?.image
-                      ? `https://admin.adentta.az/storage${product.image}`
+                      ? `${process.env.NEXT_PUBLIC_STORAGE_URL}${product.image}`
                       : "/images/adenttaDefaultImg.svg"
                   }
                   price={product.price}

@@ -93,7 +93,7 @@ const TeamPage = ({ t, teamMembers = [] }) => {
                     <div className="teamsPageCardImg">
                       {member.image && (
                         <Image
-                          src={`https://admin.adentta.az/storage${member.image}`}
+                          src={`${process.env.NEXT_PUBLIC_STORAGE_URL}${member.image}`}
                           alt={member.title}
                           width={400}
                           height={400}

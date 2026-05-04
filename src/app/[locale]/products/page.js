@@ -275,7 +275,7 @@ export async function generateMetadata({ searchParams }) {
       images: metaSourceCategory?.icon
         ? [
             {
-              url: `https://admin.adentta.az/storage${metaSourceCategory.icon}`,
+              url: `${process.env.NEXT_PUBLIC_STORAGE_URL}${metaSourceCategory.icon}`,
               alt: title,
               width: 1200,
               height: 630,
@@ -293,7 +293,7 @@ export async function generateMetadata({ searchParams }) {
       creator: "@adentta",
       site: "@adentta",
       images: metaSourceCategory?.icon
-        ? [`https://admin.adentta.az/storage${metaSourceCategory.icon}`]
+        ? [`${process.env.NEXT_PUBLIC_STORAGE_URL}${metaSourceCategory.icon}`]
         : [],
     },
     alternates: { canonical: canonicalUrl },
@@ -354,7 +354,6 @@ const Page = async ({ searchParams }) => {
 
   return (
     <div>
-      {/* <Header settingData={settingData} categoryData={categoryData} /> */}
       <ProductsPageHero
         t={t}
         productData={productData}

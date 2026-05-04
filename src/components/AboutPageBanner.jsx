@@ -28,7 +28,7 @@ const AboutPageBanner = ({
       <div className="container">
         <div className="aboutBanner">
           <Image
-            src={`https://admin.adentta.az/storage/${image}`}
+            src={`${process.env.NEXT_PUBLIC_STORAGE_URL}${image}`}
             alt="banner"
             width={1200}
             height={500}
@@ -52,7 +52,6 @@ const AboutPageBanner = ({
 
         <div className="aboutContent">
           <span>{t?.aboutBannerTitle || "About us"}</span>
-          {/* <span>Who we are?</span> */}
           <h2>{title}</h2>
           <div dangerouslySetInnerHTML={{ __html: content }}></div>
 

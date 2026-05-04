@@ -275,7 +275,7 @@ const ProductsPageDetailPage = ({
                           prefetch={false}
                         >
                           <Image
-                            src={`https://admin.adentta.az/storage${productData.brands[0].logo}`}
+                            src={`${process.env.NEXT_PUBLIC_STORAGE_URL}${productData.brands[0].logo}`}
                             alt={productData.brands[0].name || "Brand"}
                             width={400}
                             height={400}
@@ -450,7 +450,7 @@ const ProductsPageDetailPage = ({
                       {cardsData.map((card) => (
                         <div key={card.id} className="bankCart">
                           <img
-                            src={`https://admin.adentta.az/storage${card.card_image}`}
+                            src={`${process.env.NEXT_PUBLIC_STORAGE_URL}${card.card_image}`}
                             alt={card.title}
                           />
                         </div>
@@ -501,7 +501,7 @@ const ProductsPageDetailPage = ({
                     title={prod.title}
                     image={
                       prod?.image
-                        ? `https://admin.adentta.az/storage${prod.image}`
+                        ? `${process.env.NEXT_PUBLIC_STORAGE_URL}${prod.image}`
                         : "/images/adenttaDefaultImg.svg"
                     }
                     price={prod.price}
@@ -540,7 +540,7 @@ const ProductsPageDetailPage = ({
                     title={prod.title}
                     image={
                       prod?.image
-                        ? `https://admin.adentta.az/storage${prod.image}`
+                        ? `${process.env.NEXT_PUBLIC_STORAGE_URL}${prod.image}`
                         : "/images/adenttaDefaultImg.svg"
                     }
                     price={prod.price}

@@ -39,7 +39,7 @@ const SwiperJS = ({ heroSliderData, bannerData }) => {
                       <Link href={slider.link || "#"}>
                         <div className="swiperSlideContent">
                           <Image
-                            src={`https://admin.adentta.az/storage${slider.image}`}
+                            src={`${process.env.NEXT_PUBLIC_STORAGE_URL}${slider.image}`}
                             alt="slider"
                             width={840}
                             height={500}
@@ -61,7 +61,7 @@ const SwiperJS = ({ heroSliderData, bannerData }) => {
                       className="swiperSlideContent swiperSlideContentSmall"
                     >
                       <Image
-                        src={`https://admin.adentta.az/storage/${banner.image}`}
+                        src={`${process.env.NEXT_PUBLIC_STORAGE_URL}${banner.image}`}
                         alt="banner"
                         width={400}
                         height={400}

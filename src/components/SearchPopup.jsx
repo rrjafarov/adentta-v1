@@ -160,7 +160,7 @@ export default function SearchPopup({ t, closePopup }) {
                             <img
                               src={
                                 product?.image
-                                  ? `https://admin.adentta.az/storage${product.image}`
+                                  ? `${process.env.NEXT_PUBLIC_STORAGE_URL}${product.image}`
                                   : "/images/adenttaDefaultImg.svg"
                               }
                               alt={product.title}

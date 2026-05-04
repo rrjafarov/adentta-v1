@@ -178,7 +178,7 @@ export async function generateMetadata() {
       url: canonicalUrl,
       images: [
         {
-          url: `https://admin.adentta.az/storage${imageUrl}`,
+          url: `${process.env.NEXT_PUBLIC_STORAGE_URL}${imageUrl}`,
           alt: imageAlt,
           width: 1200,
           height: 630,

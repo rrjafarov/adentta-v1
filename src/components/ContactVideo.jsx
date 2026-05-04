@@ -24,36 +24,7 @@ const ContactVideo = ({ videoUrl, videoTitle }) => {
   const embedUrl = convertYouTubeToEmbed(videoUrl);
 
   return (
-    // <div className="contactPageAdress">
-    //   <Link
-    //     // href={"https://www.youtube.com/watch?v=93H-FqHYiEE"}
-    //     href={videoUrl}
-    //     target="_blank"
-    //     className="contactVideo"
-    //     data-fancybox="videos"
-    //   >
-    //     <div className="contactPageAdressVideo">
-    //       <LazyLoadImage
-    //         src="/images/contactParallaxImg.png"
-    //         effect="blur"
-    //         className="contactPageCardVideo"
-    //       />
-    //         <div className="contactPageAdressVideoText">
-    //           <span>VIDEO</span>
-    //           {/* <p>Advanced Equipments for Better Care</p> */}
-    //           <p>{videoTitle}</p>
-    //           <div className="contactPagePlayIcon">
-    //             <Image
-    //               src="/icons/videoPlayIcon.svg"
-    //               alt="play"
-    //               width={28}
-    //               height={28}
-    //             />
-    //           </div>
-    //         </div>
-    //     </div>
-    //   </Link>
-    // </div>
+   
 
     <div className="contactPageAdress">
       <div style={{ position: "relative", paddingBottom: "45%", height: 0 }}>

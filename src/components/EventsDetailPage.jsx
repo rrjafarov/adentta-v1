@@ -76,7 +76,7 @@ const EventsDetailPage = ({ t, eventsDetail, otherEvents }) => {
             <div className="eventDetailImage">
               <Image
                 // src="/images/eventDetailBanner.png"
-                src={`https://admin.adentta.az/storage${eventsDetail.image}`}
+                src={`${process.env.NEXT_PUBLIC_STORAGE_URL}${eventsDetail.image}`}
                 alt="eventDetail"
                 width={940}
                 height={500}
@@ -115,7 +115,7 @@ const EventsDetailPage = ({ t, eventsDetail, otherEvents }) => {
                       <div className="eventCardImage">
                         {event.image && (
                           <Image
-                            src={`https://admin.adentta.az/storage${event.image}`}
+                            src={`${process.env.NEXT_PUBLIC_STORAGE_URL}${event.image}`}
                             alt={event.title}
                             width={300}
                             height={300}

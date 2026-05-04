@@ -81,8 +81,7 @@ export async function generateMetadata({ params }) {
       description: data?.meta_description,
       images: [
         {
-          // url: `/favicon.ico.svg`,
-          url: `https://admin.adentta.az/storage${data?.og_image}`,
+          url: `${process.env.NEXT_PUBLIC_STORAGE_URL}${data?.og_image}`,
           alt: data?.meta_title,
           width: 1200,
           height: 630,
@@ -98,7 +97,7 @@ export async function generateMetadata({ params }) {
       description:
         data?.meta_description ||
         "Adentta – Stomatoloji Məhsullar və Peşəkar Diş Həlləri",
-      url: `https://admin.adentta.az/storage${data?.og_image}`,
+      url: `${process.env.NEXT_PUBLIC_STORAGE_URL}${data?.og_image}`,
     },
   };
 }

@@ -97,7 +97,7 @@ const Thumbnail = ({ productData, t }) => {
               <SwiperSlide key={`img-thumb-${idx}`}>
                 <div className="productDetailPageImgSlider">
                   <Image
-                    src={`https://admin.adentta.az/storage${src}`}
+                    src={`${process.env.NEXT_PUBLIC_STORAGE_URL}${src}`}
                     alt={`Thumbnail ${idx + 1}`}
                     width={800}
                     height={800}
@@ -114,7 +114,7 @@ const Thumbnail = ({ productData, t }) => {
                   <img
                     src={
                       productData.cover_image
-                        ? `https://admin.adentta.az/storage${productData.cover_image}`
+                        ? `${process.env.NEXT_PUBLIC_STORAGE_URL}${productData.cover_image}`
                         : `https://img.youtube.com/vi/${youtubeId}/mqdefault.jpg`
                     }
                     alt="Video thumbnail"
@@ -172,12 +172,12 @@ const Thumbnail = ({ productData, t }) => {
               <SwiperSlide key={`img-slide-${idx}`}>
                 <div className="mainSwiperImages">
                   <Link
-                    href={`https://admin.adentta.az/storage${src}`}
+                    href={`${process.env.NEXT_PUBLIC_STORAGE_URL}${src}`}
                     className="DPgalleryImg block"
                     data-fancybox="gallery"
                   >
                     <Image
-                      src={`https://admin.adentta.az/storage${src}`}
+                      src={`${process.env.NEXT_PUBLIC_STORAGE_URL}${src}`}
                       alt={`Ana resim ${idx + 1}`}
                       width={800}
                       height={800}
@@ -200,7 +200,7 @@ const Thumbnail = ({ productData, t }) => {
                     <img
                       src={
                         productData.cover_image
-                          ? `https://admin.adentta.az/storage${productData.cover_image}`
+                          ? `${process.env.NEXT_PUBLIC_STORAGE_URL}${productData.cover_image}`
                           : `https://img.youtube.com/vi/${youtubeId}/maxresdefault.jpg`
                       }
                       alt="Video"

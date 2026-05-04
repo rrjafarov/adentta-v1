@@ -1,6 +1,4 @@
-import Footer from "@/components/Footer/Footer";
 import CareersDetailPage from "@/components/CareersDetailPage";
-import Header from "@/components/Header/Header";
 import axiosInstance from "@/lib/axios";
 import { cookies } from "next/headers";
 import React from "react";
@@ -54,7 +52,7 @@ export async function generateMetadata({ params }) {
       url: canonicalUrl,
       images: [
         {
-          url: `https://admin.adentta.az/storage${imageUrl}`,
+          url: `${process.env.NEXT_PUBLIC_STORAGE_URL}${imageUrl}`,
           alt: imageAlt,
           width: 1200,
           height: 630,
@@ -70,7 +68,7 @@ export async function generateMetadata({ params }) {
       description: careers.meta_description || "Adentta Careers",
       creator: "@adentta",
       site: "@adentta",
-      images: [imageUrl],
+      images: [`${process.env.NEXT_PUBLIC_STORAGE_URL}${imageUrl}`],
     },
     alternates: {
       canonical: canonicalUrl,

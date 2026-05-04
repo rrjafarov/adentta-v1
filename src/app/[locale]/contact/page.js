@@ -82,7 +82,7 @@ export async function generateMetadata() {
       url: canonicalUrl,
       images: [
         {
-          url: `https://admin.adentta.az/storage${imageUrl}`,
+          url: `${process.env.NEXT_PUBLIC_STORAGE_URL}${imageUrl}`,
           alt: imageAlt,
           width: 1200,
           height: 630,
@@ -122,9 +122,7 @@ const page = async () => {
 
   return (
     <div id="contactUS">
-      {/* <div className="headerTopNoneBack">
-        <Header settingData={settingData} categoryData={categoryData} />
-      </div> */}
+    
       <ContactUS
         t={t}
         wpNumber={contact?.data.wp_number}
@@ -142,12 +140,7 @@ const page = async () => {
         locationStore={contact?.data.location_store}
         videoTitle={contact?.data.video_title}
       />
-      {/* <Footer
-        contact={contact}
-        categoryData={categoryData}
-        eventsData={eventsData}
-        brandsData={brandsData}
-      /> */}
+      
     </div>
   );
 };

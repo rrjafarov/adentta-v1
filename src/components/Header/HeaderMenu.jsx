@@ -84,7 +84,7 @@ const HeaderMenu = ({ t, categoryData = [], isHomePage }) => {
     );
 
   const buildIconSrc = (iconPath) =>
-    iconPath ? `https://admin.adentta.az/storage${iconPath}` : null;
+    iconPath ? `${process.env.NEXT_PUBLIC_STORAGE_URL}${iconPath}` : null;
 
   return (
     <div className="headerBacground">
@@ -144,7 +144,7 @@ const HeaderMenu = ({ t, categoryData = [], isHomePage }) => {
                               ) : (
                                 roots.map((category) => {
                                   const children = getChildrenForRoot(category.id);
-                                  const iconSrc = `https://admin.adentta.az/storage${category.icon}`;
+                                  const iconSrc = `${process.env.NEXT_PUBLIC_STORAGE_URL}${category.icon}`;
                                   return (
                                     <div key={category.id} className="column">
                                       <Link href={buildCategoryHref(category)}>

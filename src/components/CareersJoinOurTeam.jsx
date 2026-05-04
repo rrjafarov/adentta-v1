@@ -1,6 +1,3 @@
-// "use client";
-// import React, { useEffect, useState } from "react";
-import axios from "axios";
 import Image from "next/image";
 import { cookies } from "next/headers";
 import axiosInstance from "@/lib/axios";
@@ -42,13 +39,11 @@ const CareersJoinOurTeam = async ({t}) => {
             <div className="row">
               {joinOurTeamData.map((item) => (
                 <div key={item.id} className="xl-4 lg-4 md-6 sm-6">
-                  {/* <CareersJoinOurTeamCard /> */}
+                  
                   <div className="careersJoinOurTeamCards">
                     <div className="careersJoinOurTeamCard">
                       <Image
-                        // src="/icons/joinourTeam.svg"
-                        src={`https://admin.adentta.az/storage${item.image}`}
-                        
+                        src={`${process.env.NEXT_PUBLIC_STORAGE_URL}${item.image}`}
                         alt="joinouream"
                         width={100}
                         height={100}

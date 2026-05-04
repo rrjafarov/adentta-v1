@@ -82,12 +82,12 @@ const BlogDetailSlider = ({ blogDetail, t }) => {
           {blogDetail.image_gallery.map((img, index) => (
             <SwiperSlide key={index}>
               <Link
-                href={`https://admin.adentta.az/storage${img}`}
+                href={`${process.env.NEXT_PUBLIC_STORAGE_URL}${img}`}
                 className="blogSliderGalleryImg"
                 data-fancybox="gallery"
               >
                 <Image
-                  src={`https://admin.adentta.az/storage${img}`}
+                  src={`${process.env.NEXT_PUBLIC_STORAGE_URL}${img}`}
                   className="blogSliderCardImg"
                   alt="gallery"
                   width={400}
@@ -117,7 +117,7 @@ const BlogDetailSlider = ({ blogDetail, t }) => {
               rel="noopener noreferrer"
             >
               <Image
-                src={`https://admin.adentta.az/storage${blogDetail.video_cover}`}
+                src={`${process.env.NEXT_PUBLIC_STORAGE_URL}${blogDetail.video_cover}`}
                 className="blogSliderCardImgVideo"
                 alt="video cover"
                 width={850}

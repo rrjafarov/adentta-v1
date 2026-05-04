@@ -112,7 +112,7 @@ const OurEventsHomePage = ({ eventsData, t }) => {
                   <div className="ourEvent">
                     <div className="ourEventImage">
                       <Image
-                        src={`https://admin.adentta.az/storage${event.image}`}
+                        src={`${process.env.NEXT_PUBLIC_STORAGE_URL}${event.image}`}
                         alt={event.title}
                         width={300}
                         height={300}

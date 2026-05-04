@@ -134,7 +134,7 @@ const ProductsPageHero = ({
                         <Image
                           src={
                             item?.icon
-                              ? `https://admin.adentta.az/storage${item.icon}`
+                              ? `${process.env.NEXT_PUBLIC_STORAGE_URL}${item.icon}`
                               : "/images/adenttaDefaultImg.svg"
                           }
                           alt={item.title}

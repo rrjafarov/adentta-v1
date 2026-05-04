@@ -210,7 +210,7 @@ const BlogPages = ({ t, initialBlogData = [], blogsCategoryData = [] }) => {
                       <div className="blogCardImage">
                         {blog.image && (
                           <Image
-                            src={`https://admin.adentta.az/storage${blog.image}`}
+                            src={`${process.env.NEXT_PUBLIC_STORAGE_URL}${blog.image}`}
                             alt={blog.title}
                             width={300}
                             height={300}
