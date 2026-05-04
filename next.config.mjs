@@ -7,8 +7,8 @@ const withNextIntl = createNextIntlPlugin({
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  output: "standalone",
   images: {
-    output: "standalone",
     remotePatterns: [
       {
         protocol: "https",
