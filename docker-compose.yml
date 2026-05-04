@@ -1,0 +1,25 @@
+services:
+  adentta:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        NEXT_PUBLIC_BASE_URL: https://api.adentta.az/api/v1
+        NEXT_PUBLIC_STORAGE_URL: https://admin.adentta.az/storage
+        CANONICAL_DOMAIN: https://adentta.az
+    container_name: adentta-app
+    restart: "no"
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=production
+      - PORT=3000
+      - NEXT_PUBLIC_BASE_URL=https://api.adentta.az/api/v1
+      - NEXT_PUBLIC_STORAGE_URL=https://admin.adentta.az/storage
+      - CANONICAL_DOMAIN=https://adentta.az
+    networks:
+      - adentta-network
+
+networks:
+  adentta-network:
+    driver: bridge

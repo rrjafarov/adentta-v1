@@ -1,0 +1,32 @@
+# Version control
+.git
+.gitignore
+
+# Dependencies (reinstalled inside container)
+node_modules
+
+# Next.js build output (rebuilt inside container)
+.next
+out
+
+# Environment files
+.env
+.env.*
+
+# Docker files
+Dockerfile*
+docker-compose*.yml
+.dockerignore
+
+# Dev / docs
+README.md
+*.md
+
+# Logs
+npm-debug.log*
+yarn-error.log*
+.pnpm-debug.log*
+
+# OS
+.DS_Store
+Thumbs.db
