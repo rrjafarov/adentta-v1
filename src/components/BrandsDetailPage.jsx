@@ -269,7 +269,6 @@ const BrandsDetailPage = ({
         </section>
       </div>
 
-      {/* Digər bölmələr (products, slider, certificates, blogs, video, other brands) dəyişməz qalır */}
       {brandsDetailDataDetail &&
         Array.isArray(brandsDetailDataDetail.product) &&
         brandsDetailDataDetail.product.length > 0 && (

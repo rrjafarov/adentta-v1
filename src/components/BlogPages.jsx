@@ -56,14 +56,20 @@ const monthNamesMap = {
   },
 };
 
-const slugify = (text = "") =>
-  text
+const generateSlug = (text = "") => {
+  return text
     .toLowerCase()
-    .replace(/["""''«»„"]/g, "")
-    .replace(/[^a-z0-9\u0080-\uFFFF\s-]/g, "")
+    .replace(/ə/g, "e")
+    .replace(/ı/g, "i")
+    .replace(/ö/g, "o")
+    .replace(/ğ/g, "g")
+    .replace(/ü/g, "u")
+    .replace(/ş/g, "s")
+    .replace(/ç/g, "c")
+    .replace(/[^a-z0-9\s-]/g, "")
     .trim()
-    .replace(/\s+/g, "-")
-    .replace(/-+/g, "-");
+    .replace(/\s+/g, "-");
+};
 
 const BlogPages = ({ t, initialBlogData = [], blogsCategoryData = [] }) => {
   const pathname = usePathname() || "";
@@ -71,12 +77,13 @@ const BlogPages = ({ t, initialBlogData = [], blogsCategoryData = [] }) => {
   const locale = ["az", "en", "ru"].includes(detected) ? detected : "az";
 
   const allLabel = t?.allSelect || "All";
-  const [selectedCategory, setSelectedCategory] = useState(allLabel);
 
+  const [selectedCategory, setSelectedCategory] = useState(allLabel);
   const [list, setList] = useState(initialBlogData || []);
   const [page, setPage] = useState(1);
   const [loading, setLoading] = useState(false);
   const [hasMore, setHasMore] = useState(true);
+
   const sentinelRef = useRef(null);
   const fetchingRef = useRef(false);
 
@@ -87,15 +94,17 @@ const BlogPages = ({ t, initialBlogData = [], blogsCategoryData = [] }) => {
 
   const loadMore = useCallback(async () => {
     if (loading || !hasMore || fetchingRef.current) return;
+
     setLoading(true);
     fetchingRef.current = true;
 
     try {
       const nextPage = page + 1;
       const res = await axiosInstance.get(`/page-data/blog?page=${nextPage}`);
+
       const newData = res?.data?.data?.data || res?.data?.data || [];
 
-      if (!newData || newData.length === 0) {
+      if (!newData.length) {
         setHasMore(false);
       } else {
         setList((prev) => [...prev, ...newData]);
@@ -121,7 +130,7 @@ const BlogPages = ({ t, initialBlogData = [], blogsCategoryData = [] }) => {
           }
         });
       },
-      { root: null, rootMargin: "200px", threshold: 0.1 },
+      { rootMargin: "200px", threshold: 0.1 },
     );
 
     observer.observe(sentinel);
@@ -131,24 +140,21 @@ const BlogPages = ({ t, initialBlogData = [], blogsCategoryData = [] }) => {
   const filteredBlogs = useMemo(() => {
     const blogList = Array.isArray(list) ? [...list] : [];
 
-    const byCategory =
-      selectedCategory === allLabel
-        ? blogList
-        : blogList.filter(
-            (blog) =>
-              Array.isArray(blog.category) &&
-              blog.category.some((c) => c.title === selectedCategory),
-          );
+    if (selectedCategory === allLabel) return blogList;
 
-    return byCategory;
+    return blogList.filter(
+      (blog) =>
+        Array.isArray(blog.category) &&
+        blog.category.some((c) => c.title === selectedCategory),
+    );
   }, [list, selectedCategory, allLabel]);
 
   const formatDate = (dateString) => {
     if (!dateString) return "";
-    const timestamp = Date.parse(dateString);
-    if (isNaN(timestamp)) return "";
 
-    const date = new Date(timestamp);
+    const date = new Date(dateString);
+    if (isNaN(date)) return "";
+
     const day = date.getDate().toString().padStart(2, "0");
     const monthIndex = date.getMonth() + 1;
     const year = date.getFullYear();
@@ -167,29 +173,30 @@ const BlogPages = ({ t, initialBlogData = [], blogsCategoryData = [] }) => {
           <Link href="/">
             <strong className="topper">Adentta</strong>
           </Link>
-          <img className="topper" src="/icons/rightDown.svg" alt="Adentta" />
+          <img className="topper" src="/icons/rightDown.svg" alt="" />
           <span className="topper">{t?.blogs || "Blogs"}</span>
         </div>
 
         <div className="blogPageHeaderText">
           <span>{t?.blogsPageNews || "Blog news"}</span>
           <h1>{t?.blogsPageExploreOurBlogs || "Explore Our Blogs"}</h1>
+
           <div className="blogFilter">
             {categoryList.map((title) => {
               const isActive = selectedCategory === title;
               const isAll = title === allLabel;
 
-              const btnStyle = {
-                background: isAll ? "#D7E0ED" : "transparent",
-                border: isActive ? "3px solid #D7E0ED" : "1px solid #D7E0ED",
-              };
-
               return (
                 <button
                   key={title}
-                  className={`blgBtn ${isActive ? "active" : ""}`}
                   onClick={() => setSelectedCategory(title)}
-                  style={btnStyle}
+                  className={`blgBtn ${isActive ? "active" : ""}`}
+                  style={{
+                    background: isAll ? "#D7E0ED" : "transparent",
+                    border: isActive
+                      ? "3px solid #D7E0ED"
+                      : "1px solid #D7E0ED",
+                  }}
                 >
                   {title}
                 </button>
@@ -200,68 +207,57 @@ const BlogPages = ({ t, initialBlogData = [], blogsCategoryData = [] }) => {
 
         <div className="blogCards">
           <div className="row">
-            {filteredBlogs.map((blog) => (
-              <div key={blog.id} className="xl-3 lg-4 md-6 sm-12">
-                <div className="ourBlog">
-                  <Link
-                    href={`/blogs/${slugify(blog?.slug || blog?.title)}-${blog.id}`}
-                  >
-                    <div className="blogCard">
-                      <div className="blogCardImage">
-                        {blog.image && (
-                          <Image
-                            src={`${process.env.NEXT_PUBLIC_STORAGE_URL}${blog.image}`}
-                            alt={blog.title}
-                            width={300}
-                            height={300}
-                          />
-                        )}
-                        {blog.published_date &&
-                          !isNaN(Date.parse(blog.published_date)) && (
+            {filteredBlogs.map((blog) => {
+              const slug = blog?.slug || generateSlug(blog?.title);
+
+              return (
+                <div key={blog.id} className="xl-3 lg-4 md-6 sm-12">
+                  <div className="ourBlog">
+                    <Link href={`/blogs/${slug}-${blog.id}`}>
+                      <div className="blogCard">
+                        <div className="blogCardImage">
+                          {blog.image && (
+                            <Image
+                              src={`${process.env.NEXT_PUBLIC_STORAGE_URL}${blog.image}`}
+                              alt={blog.title}
+                              width={300}
+                              height={300}
+                            />
+                          )}
+
+                          {blog.published_date && (
                             <div className="blogCardImageDate">
                               <span className="blogCardDate">
                                 {formatDate(blog.published_date)}
                               </span>
                             </div>
                           )}
-                      </div>
+                        </div>
 
-                      <div className="blogCardContent">
-                        <span>{blog.title}</span>
-                        <div
-                          dangerouslySetInnerHTML={{ __html: blog.content }}
-                        />
-                      </div>
+                        <div className="blogCardContent">
+                          <span>{blog.title}</span>
+                          <div
+                            dangerouslySetInnerHTML={{
+                              __html: blog.content,
+                            }}
+                          />
+                        </div>
 
-                      <div className="blogCardBottom">
-                        <span>{t?.learnMore || "Learn More"}</span>
-                        <img src="/icons/arrowTopRight.svg" alt="" />
+                        <div className="blogCardBottom">
+                          <span>{t?.learnMore || "Learn More"}</span>
+                          <img src="/icons/arrowTopRight.svg" alt="" />
+                        </div>
                       </div>
-                    </div>
-                  </Link>
+                    </Link>
+                  </div>
                 </div>
-              </div>
-            ))}
+              );
+            })}
           </div>
 
           {loading && (
-            <div
-              style={{
-                display: "flex",
-                justifyContent: "center",
-                margin: "40px 0",
-              }}
-            >
-              <div
-                style={{
-                  width: 50,
-                  height: 50,
-                  border: "6px solid #f3f3f3",
-                  borderTop: "6px solid #293881",
-                  borderRadius: "50%",
-                  animation: "spin 1s linear infinite",
-                }}
-              />
+            <div className="loadingWrapper">
+              <div className="spinner" />
             </div>
           )}
 
@@ -270,6 +266,21 @@ const BlogPages = ({ t, initialBlogData = [], blogsCategoryData = [] }) => {
       </div>
 
       <style jsx>{`
+        .loadingWrapper {
+          display: flex;
+          justify-content: center;
+          margin: 40px 0;
+        }
+
+        .spinner {
+          width: 50px;
+          height: 50px;
+          border: 6px solid #f3f3f3;
+          border-top: 6px solid #293881;
+          border-radius: 50%;
+          animation: spin 1s linear infinite;
+        }
+
         @keyframes spin {
           from {
             transform: rotate(0deg);

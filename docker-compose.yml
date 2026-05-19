@@ -7,8 +7,8 @@ services:
         NEXT_PUBLIC_BASE_URL: https://api.adentta.az/api/v1
         NEXT_PUBLIC_STORAGE_URL: https://admin.adentta.az/storage
         CANONICAL_DOMAIN: https://adentta.az
-    container_name: adentta-app
-    restart: "no"
+    container_name: adentta-front
+    restart: unless-stopped
     ports:
       - "3000:3000"
     environment:

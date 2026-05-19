@@ -1,8 +1,202 @@
+// import React from "react";
+// import Image from "next/image";
+// import BlogDetailSlider from "./Sliders/BlogDetailSlider";
+// import Link from "next/link";
+// import Cookies from "js-cookie";
+
+// const EventsDetailPage = ({ t, eventsDetail, otherEvents }) => {
+//   const lang = Cookies.get("NEXT_LOCALE") || "az";
+
+//   const formatDate = (dateString) => {
+//     const date = new Date(dateString);
+//     const day = date.getDate().toString().padStart(2, "0");
+//     const year = date.getFullYear();
+
+//     let month;
+//     if (lang === "az") {
+//       // Azerbaijani month abbreviations
+//       const azMonths = {
+//         1: "yan",
+//         2: "fev",
+//         3: "mar",
+//         4: "apr",
+//         5: "may",
+//         6: "iyn",
+//         7: "iyl",
+//         8: "avq",
+//         9: "sen",
+//         10: "okt",
+//         11: "noy",
+//         12: "dek",
+//       };
+//       month = azMonths[date.getMonth() + 1];
+//     } else {
+//       month = new Intl.DateTimeFormat(lang, { month: "short" })
+//         .format(date)
+//         .replace(".", "");
+//     }
+
+//     return `${day} ${month} ${year}`;
+//   };
+//   return (
+//     <div id="eventDetailPage">
+//       <div className="container">
+//         <div className="eventDetailTop topperEvents">
+//           <Link href="/">
+//             <strong>Adentta</strong>
+//           </Link>
+//           <img className="topper" src="/icons/rightDown.svg" alt="Adentta" />
+//           <Link href="/events">
+//             <span>{t?.events || "Events"}</span>
+//           </Link>
+//           <img className="topper" src="/icons/rightDown.svg" alt="Adentta" />
+//           <span>{eventsDetail.title}</span>
+//         </div>
+
+//         <div className="eventDetailPage">
+//           <div className="eventDetailInner">
+//             <div className="eventDetailHeaderText">
+//               <p>{t?.eventsPageEventDetails || "Events details"}</p>
+//               <h1>{eventsDetail.title}</h1>
+//               <div className="detailCalendar">
+//                 <div className="detailCalendarItem">
+//                   <img src="/icons/date.svg" alt="Calendar" />
+//                   <div className="detailCalendarContent">
+//                     {/* <span>{formatDate(eventsDetail.event_start_date)}</span> */}
+//                     <span>
+//                       {formatDate(eventsDetail.event_start_date)}
+//                       {eventsDetail.event_end_date &&
+//                         ` - ${formatDate(eventsDetail.event_end_date)}`}
+//                     </span>
+//                     {/* <p>19:00</p> */}
+//                   </div>
+//                 </div>
+//               </div>
+//             </div>
+//             <div className="eventDetailImage">
+//               <Image
+//                 // src="/images/eventDetailBanner.png"
+//                 src={`${process.env.NEXT_PUBLIC_STORAGE_URL}${eventsDetail.image}`}
+//                 alt="eventDetail"
+//                 width={940}
+//                 height={500}
+//               />
+//             </div>
+
+//             <div className="eventDetailText">
+//               <div
+//                 className="paragraphBlog"
+//                 dangerouslySetInnerHTML={{ __html: eventsDetail.content }}
+//               />
+
+//               <br />
+//             </div>
+//           </div>
+//         </div>
+
+//         <div className="blogDetailSlider">
+//           <BlogDetailSlider t={t} eventsDetail={eventsDetail} />
+//         </div>
+
+//         <div className="eventsDetailsBottomCard">
+//           <div className="eventsDetailsBottomCardHeadText">
+//             <span>{t?.eventsPageOtherEvents || "Other Events"}</span>
+//           </div>
+//           <div className="row">
+//             {otherEvents.splice(0, 3).map((event) => (
+//               <div key={event.id} className="xl-4 lg-4 md-6 sm-12">
+//                 <div className="ourEvent">
+//                   <Link
+//                     href={`/events/${(event?.slug || event?.title)
+//                       ?.toLowerCase()
+//                       .replace(/\s+/g, "-")}-${event.id}`}
+//                   >
+//                     <div className="eventCard">
+//                       <div className="eventCardImage">
+//                         {event.image && (
+//                           <Image
+//                             src={`${process.env.NEXT_PUBLIC_STORAGE_URL}${event.image}`}
+//                             alt={event.title}
+//                             width={300}
+//                             height={300}
+//                           />
+//                         )}
+//                         <div className="eventCardImageDate">
+//                           <span className="eventCardDate">
+//                             {formatDate(event.event_start_date)}
+//                           </span>
+//                           <span className="eventCardDateStatus">
+//                             <Image
+//                               src="/icons/eventCardTimeICN.svg"
+//                               alt="time"
+//                               width={16}
+//                               height={16}
+//                             />
+//                             {event.event_status == 2
+//                               ? t?.finished || "finished"
+//                               : event.event_status == 1
+//                               ? t?.expedted || "expedted"
+//                               : event.event_status == 0
+//                               ? t?.ongoing || "ongoing"
+//                               : event.event_status}
+//                           </span>
+//                         </div>
+//                       </div>
+
+//                       <div className="eventCardContent">
+//                         <span>{event.title}</span>
+//                         <p>{event.sub_title}</p>
+//                       </div>
+//                       <div className="eventCardLine"></div>
+
+//                       <div className="eventCardBottom">
+//                         <span>{t?.learnMore || "Learn More"}</span>
+//                         <img src="/icons/arrowTopRight.svg" alt="" />
+//                       </div>
+//                     </div>
+//                   </Link>
+//                 </div>
+//               </div>
+//             ))}
+//           </div>
+//         </div>
+//       </div>
+//     </div>
+//   );
+// };
+
+// export default EventsDetailPage;
+
+
+
+
+
+
+
+
+
+
+
 import React from "react";
 import Image from "next/image";
 import BlogDetailSlider from "./Sliders/BlogDetailSlider";
 import Link from "next/link";
 import Cookies from "js-cookie";
+
+const generateSlug = (text = "") => {
+  return text
+    .toLowerCase()
+    .replace(/ə/g, "e")
+    .replace(/ı/g, "i")
+    .replace(/ö/g, "o")
+    .replace(/ğ/g, "g")
+    .replace(/ü/g, "u")
+    .replace(/ş/g, "s")
+    .replace(/ç/g, "c")
+    .replace(/[^a-z0-9\s-]/g, "")
+    .trim()
+    .replace(/\s+/g, "-");
+};
 
 const EventsDetailPage = ({ t, eventsDetail, otherEvents }) => {
   const lang = Cookies.get("NEXT_LOCALE") || "az";
@@ -14,7 +208,6 @@ const EventsDetailPage = ({ t, eventsDetail, otherEvents }) => {
 
     let month;
     if (lang === "az") {
-      // Azerbaijani month abbreviations
       const azMonths = {
         1: "yan",
         2: "fev",
@@ -38,6 +231,7 @@ const EventsDetailPage = ({ t, eventsDetail, otherEvents }) => {
 
     return `${day} ${month} ${year}`;
   };
+
   return (
     <div id="eventDetailPage">
       <div className="container">
@@ -58,24 +252,23 @@ const EventsDetailPage = ({ t, eventsDetail, otherEvents }) => {
             <div className="eventDetailHeaderText">
               <p>{t?.eventsPageEventDetails || "Events details"}</p>
               <h1>{eventsDetail.title}</h1>
+
               <div className="detailCalendar">
                 <div className="detailCalendarItem">
                   <img src="/icons/date.svg" alt="Calendar" />
                   <div className="detailCalendarContent">
-                    {/* <span>{formatDate(eventsDetail.event_start_date)}</span> */}
                     <span>
                       {formatDate(eventsDetail.event_start_date)}
                       {eventsDetail.event_end_date &&
                         ` - ${formatDate(eventsDetail.event_end_date)}`}
                     </span>
-                    {/* <p>19:00</p> */}
                   </div>
                 </div>
               </div>
             </div>
+
             <div className="eventDetailImage">
               <Image
-                // src="/images/eventDetailBanner.png"
                 src={`${process.env.NEXT_PUBLIC_STORAGE_URL}${eventsDetail.image}`}
                 alt="eventDetail"
                 width={940}
@@ -88,7 +281,6 @@ const EventsDetailPage = ({ t, eventsDetail, otherEvents }) => {
                 className="paragraphBlog"
                 dangerouslySetInnerHTML={{ __html: eventsDetail.content }}
               />
-
               <br />
             </div>
           </div>
@@ -102,14 +294,15 @@ const EventsDetailPage = ({ t, eventsDetail, otherEvents }) => {
           <div className="eventsDetailsBottomCardHeadText">
             <span>{t?.eventsPageOtherEvents || "Other Events"}</span>
           </div>
+
           <div className="row">
             {otherEvents.splice(0, 3).map((event) => (
               <div key={event.id} className="xl-4 lg-4 md-6 sm-12">
                 <div className="ourEvent">
                   <Link
-                    href={`/events/${(event?.slug || event?.title)
-                      ?.toLowerCase()
-                      .replace(/\s+/g, "-")}-${event.id}`}
+                    href={`/events/${
+                      event?.slug || generateSlug(event?.title)
+                    }-${event.id}`}
                   >
                     <div className="eventCard">
                       <div className="eventCardImage">
@@ -121,10 +314,12 @@ const EventsDetailPage = ({ t, eventsDetail, otherEvents }) => {
                             height={300}
                           />
                         )}
+
                         <div className="eventCardImageDate">
                           <span className="eventCardDate">
                             {formatDate(event.event_start_date)}
                           </span>
+
                           <span className="eventCardDateStatus">
                             <Image
                               src="/icons/eventCardTimeICN.svg"
@@ -132,10 +327,11 @@ const EventsDetailPage = ({ t, eventsDetail, otherEvents }) => {
                               width={16}
                               height={16}
                             />
+
                             {event.event_status == 2
                               ? t?.finished || "finished"
                               : event.event_status == 1
-                              ? t?.expedted || "expedted"
+                              ? t?.expected || "expected"
                               : event.event_status == 0
                               ? t?.ongoing || "ongoing"
                               : event.event_status}
@@ -147,6 +343,7 @@ const EventsDetailPage = ({ t, eventsDetail, otherEvents }) => {
                         <span>{event.title}</span>
                         <p>{event.sub_title}</p>
                       </div>
+
                       <div className="eventCardLine"></div>
 
                       <div className="eventCardBottom">
@@ -166,3 +363,10 @@ const EventsDetailPage = ({ t, eventsDetail, otherEvents }) => {
 };
 
 export default EventsDetailPage;
+
+
+
+
+
+
+

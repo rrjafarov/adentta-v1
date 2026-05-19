@@ -18,10 +18,13 @@ async function fetchBrandsPageData() {
   const lang = cookieStore.get("NEXT_LOCALE");
 
   try {
-    const { data: brands } = await axiosInstance.get(`/page-data/brands?per_page=7`, {
-      // headers: { Lang: lang.value },
-      cache: "no-store",
-    });
+    const { data: brands } = await axiosInstance.get(
+      `/page-data/brands?per_page=7`,
+      {
+        // headers: { Lang: lang.value },
+        cache: "no-store",
+      },
+    );
     return brands;
   } catch (error) {
     throw error;
@@ -35,10 +38,13 @@ async function fetchEventsPageData() {
   const lang = cookieStore.get("NEXT_LOCALE");
 
   try {
-    const { data: events } = await axiosInstance.get(`/page-data/event?per_page=5`, {
-      // headers: { Lang: lang.value },
-      cache: "no-store",
-    });
+    const { data: events } = await axiosInstance.get(
+      `/page-data/event?per_page=5`,
+      {
+        // headers: { Lang: lang.value },
+        cache: "no-store",
+      },
+    );
     return events;
   } catch (error) {
     throw error;
@@ -268,15 +274,16 @@ const Home = async () => {
     <div>
       <HeroSlider bannerData={bannerData} heroSliderData={heroSliderData} />
       <LittleCard t={t} />
-      <HomePageProducts t={t} categoryData={categoryData} whatsappNumber={whatsappNumber} />
+      <HomePageProducts
+        t={t}
+        categoryData={categoryData}
+        whatsappNumber={whatsappNumber}
+      />
       <VideoProviderHomePage t={t} homepageData={homepageData} />
       <TopBrandsHomePage t={t} brandsData={brandsData} />
       <OurEventsHomePage t={t} eventsData={eventsData} />
       <GlobalExcellence t={t} brandsData={brandsData} />
       <OurBlogsHomePage t={t} blogData={blogData} />
-
-
-      
     </div>
   );
 };

@@ -1,5 +1,5 @@
 "use client";
-import React, { useRef, useState } from "react";
+import React from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
 import "swiper/css/pagination";
@@ -10,6 +10,21 @@ import Link from "next/link";
 import Image from "next/image";
 import SeeMore from "../SeeMore";
 
+const generateSlug = (text = "") => {
+  return text
+    .toLowerCase()
+    .replace(/ə/g, "e")
+    .replace(/ı/g, "i")
+    .replace(/ö/g, "o")
+    .replace(/ğ/g, "g")
+    .replace(/ü/g, "u")
+    .replace(/ş/g, "s")
+    .replace(/ç/g, "c")
+    .replace(/[^a-z0-9\s-]/g, "")
+    .trim()
+    .replace(/\s+/g, "-");
+};
+
 const OurBlogsHomePage = ({ blogData, t }) => {
   return (
     <section id="ourEvents" className="ourBlogs">
@@ -19,7 +34,7 @@ const OurBlogsHomePage = ({ blogData, t }) => {
         <Swiper
           slidesPerView={"4"}
           spaceBetween={20}
-          loop={"true"}
+          loop={true}
           pagination={{
             clickable: true,
             el: ".blogs-custom-pagination",
@@ -56,45 +71,48 @@ const OurBlogsHomePage = ({ blogData, t }) => {
           modules={[Pagination, Autoplay]}
           className="mySwiper"
         >
-          {blogData.slice(0, 5).map((blog) => (
-            <SwiperSlide key={blog.id}>
-              <Link
-                href={`/blogs/${(blog?.slug || blog?.title)
-                  ?.toLowerCase()
-                  .replace(/\s+/g, "-")}-${blog.id}`}
-                className="block"
-              >
-                <div className="ourEvents ourBlogs">
-                  <div className="ourEvent ourBlogshh">
-                    <div className="ourEventImage ourEventImageBlog">
-                      <Image
-                        src={`${process.env.NEXT_PUBLIC_STORAGE_URL}${blog.image}`}
-                        alt={blog.title}
-                        width={300}
-                        height={300}
-                      />
-                    </div>
+          {blogData?.slice(0, 5).map((blog) => {
+            const slug = blog?.slug || generateSlug(blog?.title);
 
-                    <div className="ourEventContent thisIsBlog">
-                      <span> {blog.title}</span>
-                      <div
-                        dangerouslySetInnerHTML={{ __html: blog.content }}
-                      ></div>
-                    </div>
+            return (
+              <SwiperSlide key={blog.id}>
+                <Link
+                  href={`/blogs/${slug}-${blog.id}`}
+                  className="block"
+                >
+                  <div className="ourEvents ourBlogs">
+                    <div className="ourEvent ourBlogshh">
+                      <div className="ourEventImage ourEventImageBlog">
+                        <Image
+                          src={`${process.env.NEXT_PUBLIC_STORAGE_URL}${blog.image}`}
+                          alt={blog.title}
+                          width={300}
+                          height={300}
+                        />
+                      </div>
 
-                    <div className="ourEventBottom">
-                      <span>{t?.learnMore || "Learn More"}</span>
-                      <img src="/icons/arrowTopRight.svg" alt="" />
+                      <div className="ourEventContent thisIsBlog">
+                        <span>{blog.title}</span>
+                        <div
+                          dangerouslySetInnerHTML={{ __html: blog.content }}
+                        />
+                      </div>
+
+                      <div className="ourEventBottom">
+                        <span>{t?.learnMore || "Learn More"}</span>
+                        <img src="/icons/arrowTopRight.svg" alt="" />
+                      </div>
                     </div>
                   </div>
-                </div>
-              </Link>
-            </SwiperSlide>
-          ))}
+                </Link>
+              </SwiperSlide>
+            );
+          })}
         </Swiper>
-        <div className="blogs-custom-pagination"></div>
 
-        <div className="container flex justify-center seeMoreGlobal ">
+        <div className="blogs-custom-pagination" />
+
+        <div className="container flex justify-center seeMoreGlobal">
           <Link href={"/blogs"}>
             <SeeMore t={t} />
           </Link>

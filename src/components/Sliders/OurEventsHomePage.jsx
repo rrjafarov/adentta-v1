@@ -1,5 +1,5 @@
 "use client";
-import React, { useRef, useState } from "react";
+import React from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
 import "swiper/css/pagination";
@@ -11,6 +11,21 @@ import Cookies from "js-cookie";
 import Image from "next/image";
 import SeeMore from "../SeeMore";
 
+const generateSlug = (text = "") => {
+  return text
+    .toLowerCase()
+    .replace(/ə/g, "e")
+    .replace(/ı/g, "i")
+    .replace(/ö/g, "o")
+    .replace(/ğ/g, "g")
+    .replace(/ü/g, "u")
+    .replace(/ş/g, "s")
+    .replace(/ç/g, "c")
+    .replace(/[^a-z0-9\s-]/g, "")
+    .trim()
+    .replace(/\s+/g, "-");
+};
+
 const OurEventsHomePage = ({ eventsData, t }) => {
   const lang = Cookies.get("NEXT_LOCALE") || "az";
 
@@ -20,6 +35,7 @@ const OurEventsHomePage = ({ eventsData, t }) => {
     const year = date.getFullYear();
 
     let month;
+
     if (lang === "az") {
       const azMonths = {
         1: "yan",
@@ -63,7 +79,7 @@ const OurEventsHomePage = ({ eventsData, t }) => {
         <Swiper
           slidesPerView={"3"}
           spaceBetween={20}
-          loop={"true"}
+          loop={true}
           pagination={{
             clickable: true,
             el: ".events-custom-pagination",
@@ -100,50 +116,52 @@ const OurEventsHomePage = ({ eventsData, t }) => {
           modules={[Pagination, Autoplay]}
           className="mySwiper"
         >
-          {eventsData.slice(0, 5).map((event) => (
-            <SwiperSlide key={event.id}>
-              <Link
-                href={`/events/${(event?.slug || event?.title)
-                  ?.toLowerCase()
-                  .replace(/\s+/g, "-")}-${event.id}`}
-                className="block"
-              >
-                <div className="ourEvents">
-                  <div className="ourEvent">
-                    <div className="ourEventImage">
-                      <Image
-                        src={`${process.env.NEXT_PUBLIC_STORAGE_URL}${event.image}`}
-                        alt={event.title}
-                        width={300}
-                        height={300}
-                      />
-                      <div className="ourEventImageDate">
-                        <span className="ourEventDate">
-                          {formatDate(event.event_start_date)}
-                        </span>
-                        <p>{formatStatus(event.event_status)}</p>
+          {eventsData?.slice(0, 5).map((event) => {
+            const slug = event?.slug || generateSlug(event?.title);
+
+            return (
+              <SwiperSlide key={event.id}>
+                <Link
+                  href={`/events/${slug}-${event.id}`}
+                  className="block"
+                >
+                  <div className="ourEvents">
+                    <div className="ourEvent">
+                      <div className="ourEventImage">
+                        <Image
+                          src={`${process.env.NEXT_PUBLIC_STORAGE_URL}${event.image}`}
+                          alt={event.title}
+                          width={300}
+                          height={300}
+                        />
+                        <div className="ourEventImageDate">
+                          <span className="ourEventDate">
+                            {formatDate(event.event_start_date)}
+                          </span>
+                          <p>{formatStatus(event.event_status)}</p>
+                        </div>
+                      </div>
+
+                      <div className="ourEventContent ourEventContentEvent">
+                        <span>{event.title}</span>
+                        <p>{event.sub_title}</p>
+                      </div>
+
+                      <div className="ourEventBottom">
+                        <span>{t?.learnMore || "Learn More"}</span>
+                        <img src="/icons/arrowTopRight.svg" alt="" />
                       </div>
                     </div>
-
-                    <div className="ourEventContent ourEventContentEvent">
-                      <span>{event.title}</span>
-                      <p>{event.sub_title}</p>
-                    </div>
-
-                    <div className="ourEventBottom">
-                      <span>{t?.learnMore || "Learn More"}</span>
-                      <img src="icons/arrowTopRight.svg" alt="" />
-                    </div>
                   </div>
-                </div>
-              </Link>
-            </SwiperSlide>
-          ))}
+                </Link>
+              </SwiperSlide>
+            );
+          })}
         </Swiper>
 
         <div className="events-custom-pagination"></div>
 
-        <div className="container flex justify-center seeMoreGlobal ">
+        <div className="container flex justify-center seeMoreGlobal">
           <Link href={"/events"}>
             <SeeMore t={t} />
           </Link>

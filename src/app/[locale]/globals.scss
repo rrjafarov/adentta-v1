@@ -5300,6 +5300,9 @@ ul {
 }
 // !    Blog Page
 // ? BlogPages.jsx
+
+
+
 .blogPage {
   .blogTop {
     padding-top: 4.41rem;
@@ -5357,7 +5360,6 @@ ul {
       font-style: normal;
       font-weight: 600;
       line-height: 4rem;
-      /* 100% */
     }
 
     p {
@@ -5373,12 +5375,10 @@ ul {
       /* 133.333% */
       letter-spacing: 0.054rem;
     }
-
     .blogFilter {
       padding-top: 2.82rem;
       display: flex;
       gap: 1.2rem;
-
       button {
         color: $adentta-01;
         font-size: 1.6rem;
@@ -5405,13 +5405,11 @@ ul {
   .blogCards {
     padding-top: 3.2rem;
     padding-bottom: 4.75rem;
-
     .ourBlog {
       display: flex;
       flex-direction: column;
       height: 100%;
       width: 100%;
-
       .blogCard {
         flex-grow: 1;
         width: 100%;
@@ -5421,12 +5419,10 @@ ul {
         border-radius: 3rem;
         border: 1px solid #dee4ec;
         height: 49.3rem !important;
-
         &:hover {
           img {
             transform: scale(1.1);
           }
-
           .blogCardBottom {
             img {
               transform: translate(3px, -5px);
@@ -5447,18 +5443,15 @@ ul {
           width: 100%;
           height: 25rem;
           overflow: hidden;
-
           img {
             width: 100%;
             height: 100%;
             object-fit: cover;
             transition: all 0.4s ease;
-
             &:hover {
               transform: scale(1.1);
             }
           }
-
           .blogCardImageDate {
             position: absolute;
             display: flex;
@@ -5482,7 +5475,6 @@ ul {
             }
           }
         }
-
         .blogCardContent {
           padding: 2.35rem 0 2rem 0;
           display: flex;
@@ -5505,7 +5497,7 @@ ul {
             -webkit-box-orient: vertical !important;
           }
 
-          p {
+          p,h3,h2,strong {
             color: #59649b;
             font-size: 1.5rem;
             font-style: normal;
@@ -5553,6 +5545,10 @@ ul {
     }
   }
 }
+
+
+
+
 
 @media screen and (max-width: 768px) {
   .blogFilter {
@@ -6148,7 +6144,7 @@ ul {
       }
 
       .eventCard {
-        height: 52.3rem;
+        height: 51.3rem;
         display: flex;
         justify-content: space-between;
         flex-direction: column;
@@ -6159,7 +6155,7 @@ ul {
 
         .eventCardImage {
           cursor: pointer;
-          height: 27.8rem;
+          height: 28.5rem;
           flex-shrink: 0;
           border-radius: 3rem;
           position: relative;
@@ -6758,7 +6754,6 @@ ul {
   .eventsDetailsBottomCard {
     padding-bottom: 4.93rem;
     padding-bottom: 4rem;
-
     .eventsDetailsBottomCardHeadText {
       display: flex;
       justify-content: center;
@@ -6774,18 +6769,15 @@ ul {
         line-height: normal;
       }
     }
-
     .ourEvent {
       background-color: #fff;
       border-radius: 3rem;
       display: flex;
       flex-direction: column;
-
       &:hover {
         img {
           transform: scale(1.1);
         }
-
         .eventCardBottom {
           img {
             transform: translate(3px, -5px);
@@ -6793,7 +6785,6 @@ ul {
           }
         }
       }
-
       .eventCard {
         display: flex;
         flex-direction: column;
@@ -6809,7 +6800,7 @@ ul {
           border-radius: 2rem;
           position: relative;
           overflow: hidden;
-          height: 29rem;
+          height: 28.5rem;
 
           img {
             width: 100%;
@@ -6875,13 +6866,12 @@ ul {
             font-style: normal;
             font-weight: 600;
             line-height: normal;
-            padding-bottom: 0.8rem;
+            padding-bottom: 0.5rem;
             text-align: start;
             display: -webkit-box;
             overflow: hidden;
             text-overflow: ellipsis;
-            -webkit-line-clamp: 2;
-            /* Maksimum göstəriləcək sətir sayı */
+            -webkit-line-clamp: 2 !important;
             -webkit-box-orient: vertical;
           }
 
@@ -8663,12 +8653,7 @@ ul {
 
 .careersSwiper {
   overflow: visible !important;
-  // .swiper-wrapper {
-  //   // .swiper-slide-active {
-  //   //   transform: scaleX(1) scaleY(1.1) !important;
-  //   //   transition: transform 0.5s ease-in-out !important;
-  //   // }
-  // }
+
 }
 
 // ? Careers.jsx
